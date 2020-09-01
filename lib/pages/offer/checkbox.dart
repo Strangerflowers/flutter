@@ -11,7 +11,7 @@ class SwitchAndCheckBoxTestRoute extends StatefulWidget {
 
 class _SwitchAndCheckBoxTestRouteState
     extends State<SwitchAndCheckBoxTestRoute> {
-  var flag = false;
+  // var flag = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +56,7 @@ class _SwitchAndCheckBoxTestRouteState
 
   //二级需求信息变量渲染
   Widget _checkboxContentListView(subList) {
-    List item = ['123', '4353'];
-    if (item != null) {
+    if (subList != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
@@ -104,11 +103,11 @@ class _SwitchAndCheckBoxTestRouteState
       child: Row(
         children: <Widget>[
           RoundCheckBox(
-            value: flag,
+            value: item.checkBoxFlag,
             onChanged: (selectedList) {
               print('点击单元框');
               setState(() {
-                this.flag = !this.flag;
+                item.checkBoxFlag = !item.checkBoxFlag;
               });
             },
           ),
@@ -129,11 +128,11 @@ class _SwitchAndCheckBoxTestRouteState
         children: <Widget>[
           // RoundCheckBox(),
           RoundCheckBox(
-            value: flag,
+            value: item.checkBoxFlag,
             onChanged: (selectedList) {
               print('点击单元框');
               setState(() {
-                this.flag = !this.flag;
+                item.checkBoxFlag = !item.checkBoxFlag;
               });
             },
           ),
@@ -145,7 +144,7 @@ class _SwitchAndCheckBoxTestRouteState
           Container(
             padding: EdgeInsets.only(right: 20),
             child: Text(
-              '数量120个',
+              '${item.num}${item.type}',
               style: TextStyle(color: Colors.black26),
             ),
           ),
