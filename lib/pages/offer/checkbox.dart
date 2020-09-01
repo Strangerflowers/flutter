@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provide/provide.dart';
 import './round_checkbox.dart';
+import '../../provide/demand_detail_provide.dart';
 
 class SwitchAndCheckBoxTestRoute extends StatefulWidget {
   @override
@@ -13,31 +15,34 @@ class _SwitchAndCheckBoxTestRouteState
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            _checkboxTitleListView(),
-            // _checkboxItem(),
-          ],
+    return Provide<DemandDetailProvide>(builder: (context, child, val) {
+      var goodsInfo = Provide.value<DemandDetailProvide>(context).goodsList;
+      return SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _checkboxTitleListView(goodsInfo.result.demandSkuDtoList),
+              // _checkboxItem(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   //一级需求信息变量渲染
-  Widget _checkboxTitleListView() {
-    List item = ['123', '4353'];
-    if (item != null) {
+  Widget _checkboxTitleListView(list) {
+    // List item = ['123', '4353'];
+    if (list != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: 2,
+            itemCount: list.length,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
-              return _checkboxItem();
+              return _checkboxItem(list[index]);
             },
           ),
         ),
@@ -50,18 +55,18 @@ class _SwitchAndCheckBoxTestRouteState
   }
 
   //二级需求信息变量渲染
-  Widget _checkboxContentListView() {
+  Widget _checkboxContentListView(subList) {
     List item = ['123', '4353'];
     if (item != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: subList.length,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
-              return _checkboxContent();
+              return _checkboxContent(subList[index]);
             },
           ),
         ),
@@ -73,19 +78,19 @@ class _SwitchAndCheckBoxTestRouteState
     }
   }
 
-  Widget _checkboxItem() {
+  Widget _checkboxItem(subList) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          _checkboxTitle(),
-          _checkboxContentListView(),
+          _checkboxTitle(subList),
+          _checkboxContentListView(subList.demandDetailDtoList),
         ],
       ),
     );
   }
 
-  Widget _checkboxTitle() {
+  Widget _checkboxTitle(item) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -107,19 +112,9 @@ class _SwitchAndCheckBoxTestRouteState
               });
             },
           ),
-          // Checkbox(
-          //   value: this.flag,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       this.flag = value;
-          //     });
-          //   },
-          //   activeColor: Colors.blue,
-          //   checkColor: Colors.white,
-          // ),
           Expanded(
             child: Container(
-              child: Text('电子产品-耳机-蓝牙耳机'),
+              child: Text('${item.productCategroyPath}'),
             ),
           ),
         ],
@@ -127,7 +122,7 @@ class _SwitchAndCheckBoxTestRouteState
     );
   }
 
-  Widget _checkboxContent() {
+  Widget _checkboxContent(item) {
     return Container(
       color: Colors.white,
       child: Row(
@@ -142,19 +137,9 @@ class _SwitchAndCheckBoxTestRouteState
               });
             },
           ),
-          // Checkbox(
-          //   value: this.flag,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       this.flag = value;
-          //     });
-          //   },
-          //   activeColor: Colors.blue,
-          //   checkColor: Colors.white,
-          // ),
           Expanded(
             child: Container(
-              child: Text('电子产品-耳机-蓝牙耳机'),
+              child: Text('${item.productCategroyPath}'),
             ),
           ),
           Container(
