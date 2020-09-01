@@ -14,6 +14,7 @@ class Routes {
   static String salesOrderList = '/saleslist'; //填写发货信息
   static String addProductPage = '/addproduct'; //报价添加产品
   static String selectproductPage = '/selectproduct'; //报价选择产品
+  static String choiceIndexPage = '/choice'; //报价选择产品
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -31,5 +32,6 @@ class Routes {
     router.define(salesOrderList, handler: saleasOrderListHandler);
     router.define(addProductPage, handler: addProductHandler);
     router.define(selectproductPage, handler: selectProductsPageHandler);
+    router.define(choiceIndexPage, handler: choiceIndexPageHandler);
   }
 }

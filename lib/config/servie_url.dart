@@ -42,4 +42,8 @@ const servicePath = {
       '/os_kernel_bid/mp/bid/dispatch/showDispatchProduct', //查询发货单商品信息
   'update': serviceUrl + '/os_kernel_bid/mp/bid/dispatch/update', //修改发货安排
   'look': serviceUrl + '/os_kernel_bid/mp/bid/dispatch/queryById', //查询发货单详细信息
+  'quoteNow':
+      serviceUrl + '/os_kernel_bid/app/suppliers/quoteNow', //供应商app-立即报价
+  'selectGoodsByProductId': serviceUrl +
+      '/os_kernel_bid/app/suppliers/selectGoodsByProductId', //供应商app-供应商选择报价产品
 };

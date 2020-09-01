@@ -12,7 +12,7 @@ class DemandDetailProvide with ChangeNotifier {
     FormData formData = FormData.fromMap({'demandId': id});
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
     request('demandDetail', formData: formData).then((val) {
-      // print('采购需求详情$val');
+      print('采购需求详情$val');
       goodsList = DemandDetailHome.fromJson(val);
       print('采购需求详情11111$goodsList');
       notifyListeners();

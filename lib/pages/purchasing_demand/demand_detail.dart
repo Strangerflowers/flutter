@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:provide/provide.dart';
 import '../../service/service_method.dart';
 import '../../provide/demand_detail_provide.dart';
+import './details/detail_bottom.dart';
 import '../../model/demand_detail_model.dart';
 import '../../routers/application.dart';
 
@@ -21,16 +22,43 @@ class DemandDetails extends StatelessWidget {
         future: _getBackDetailInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    ExpansionTileDome(),
-                    ProductInformation(),
-                  ],
+            return Stack(
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    constraints: BoxConstraints(
+                      // minWidth: 180,
+                      minHeight: MediaQuery.of(context).size.height - 126,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ExpansionTileDome(),
+                        ProductInformation(),
+                        // DemandDetailBottom(),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  bottom: -5,
+                  left: 0,
+                  right: 0,
+                  child: DemandDetailBottom(demandId),
+                )
+              ],
             );
+            // return SingleChildScrollView(
+            //   child: Container(
+            //     child: Column(
+            //       children: <Widget>[
+            //         ExpansionTileDome(),
+            //         ProductInformation(),
+            //         DemandDetailBottom(),
+            //       ],
+            //     ),
+            //   ),
+            // );
           } else {
             return Text('加载中......');
           }
@@ -61,11 +89,6 @@ class ExpansionTileDome extends StatelessWidget {
                 '基础信息',
                 style: TextStyle(color: Colors.black),
               ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
-              // leading: Icon(Icons.ac_unit),
               backgroundColor: Colors.white,
               children: <Widget>[
                 _mergeInformation(goodsInfo.result, context),
@@ -87,8 +110,7 @@ class ExpansionTileDome extends StatelessWidget {
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Column(
         children: <Widget>[
-          _purchaseInformation('采购计划编号', detailData.orgId),
-          _purchaseInformation('公司名称', detailData.orgName),
+          _purchaseInformation('需求方名称', detailData.orgName),
           _purchaseInformation('联系人', detailData.linkPerson),
           _purchaseInformation('联系电话', detailData.linkPhone),
           _purchaseInformation('发布日期', detailData.announceTime),
@@ -126,6 +148,7 @@ class ProductInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandDetailProvide>(context).goodsList;
+      print('7899${goodsInfo.result.demandSkuDtoList}');
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
@@ -134,15 +157,11 @@ class ProductInformation extends StatelessWidget {
                 '需求产品',
                 style: TextStyle(color: Colors.black),
               ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
+
               backgroundColor: Colors.white,
               children: <Widget>[
-                _recommedList(goodsInfo.result),
-                // _planMark(goodsInfo.result)
-                // _productItem(),
+                _recommedList(goodsInfo.result.demandSkuDtoList),
+                _planMark(goodsInfo.result),
               ],
               initiallyExpanded: true, //是否默认打开？
             ),
@@ -156,19 +175,19 @@ class ProductInformation extends StatelessWidget {
 
   // 一级循环渲染
   Widget _recommedList(result) {
+    print('r34ererefrd$result');
     // if (list.length > 0) {
     return Container(
       alignment: Alignment.bottomLeft,
       // height: ScreenUtil().setHeight(1000),
       child: SizedBox(
         child: ListView.builder(
-          itemCount: result.demandDetailDtoList.length,
+          itemCount: result.length,
+          // itemCount: result.demandDetailDtoList.length,
           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {
-            // return _planProductHeader(list[index]);
-            return _mergePlan(
-                result.demandDetailDtoList[index], result.categoryMap);
+            return _mergePlan(result[index], index);
           },
         ),
       ),
@@ -182,7 +201,7 @@ class ProductInformation extends StatelessWidget {
   }
 
   // 合并一二级
-  Widget _mergePlan(item, obj) {
+  Widget _mergePlan(item, index) {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -195,21 +214,20 @@ class ProductInformation extends StatelessWidget {
         ),
       ),
       child: Column(children: <Widget>[
-        _planProductHeader(item, obj),
-        _planProductChild(item.detailList),
-        // _planMark(item),
+        _planProductHeader(item),
+        _planProductChild(item.demandDetailDtoList),
       ]),
     );
   }
 
   //一级需求产品
-  Widget _planProductHeader(item, obj) {
+  Widget _planProductHeader(item) {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
       // padding: EdgeInsets.only(left: 20, right: 20),
       alignment: Alignment.centerLeft,
       child: Text(
-        '${obj.toString()}',
+        '${item.productCategroyPath}',
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: ScreenUtil().setSp(32),
@@ -222,14 +240,32 @@ class ProductInformation extends StatelessWidget {
   //二级需求信息
   Widget _planProduct(item) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-      child: Text(
-        '${item.productCategoryName}（${item.num}${item.typeName}）',
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          color: Color(0xFF969497),
-        ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Text(
+              '${item.productDescript}',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(30),
+                color: Color(0xFF969497),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                '${item.num}${item.type}',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30),
+                  color: Color(0xFF969497),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
     );
   }
 
@@ -270,6 +306,7 @@ class ProductInformation extends StatelessWidget {
               ),
             ),
             Container(
+              alignment: Alignment.centerLeft,
               child: Text(
                 '${item.remark}',
                 style: TextStyle(

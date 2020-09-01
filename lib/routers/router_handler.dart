@@ -10,6 +10,7 @@ import '../pages/sales_order/shipping_information_add.dart';
 import '../pages/sales_order/sales_index_page.dart';
 import '../pages/offer/add_quote_product_page.dart';
 import '../pages/offer/select_products_page.dart';
+import '../pages/offer/choice_index_page.dart';
 
 // handler 的单个配置
 Handler detailsHandler = Handler(
@@ -97,4 +98,13 @@ Handler selectProductsPageHandler = Handler(
   String id = params['id'].first;
   // print('index>details goodsId is ${goodsId}');
   return SelectProductsPage(id);
+});
+
+// ChoiceIndex  需求详情跳转到报价页面
+Handler choiceIndexPageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  print('添加产品$params');
+  String id = params['id'].first;
+  // print('index>details goodsId is ${goodsId}');
+  return ChoiceIndex(id);
 });
