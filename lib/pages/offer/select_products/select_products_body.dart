@@ -16,7 +16,6 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
       child: Container(
         child: Column(
           children: <Widget>[
-            Text('选择产品页面'),
             _checkboxTitle(),
           ],
         ),
@@ -50,7 +49,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
 
   Widget _checkboxTitle() {
     return Container(
-      padding: ,
+      padding: EdgeInsets.only(top: 10, bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(

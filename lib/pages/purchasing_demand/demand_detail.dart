@@ -61,11 +61,6 @@ class ExpansionTileDome extends StatelessWidget {
                 '基础信息',
                 style: TextStyle(color: Colors.black),
               ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
-              // leading: Icon(Icons.ac_unit),
               backgroundColor: Colors.white,
               children: <Widget>[
                 _mergeInformation(goodsInfo.result, context),
@@ -87,8 +82,7 @@ class ExpansionTileDome extends StatelessWidget {
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Column(
         children: <Widget>[
-          _purchaseInformation('采购计划编号', detailData.orgId),
-          _purchaseInformation('公司名称', detailData.orgName),
+          _purchaseInformation('需求方名称', detailData.orgName),
           _purchaseInformation('联系人', detailData.linkPerson),
           _purchaseInformation('联系电话', detailData.linkPhone),
           _purchaseInformation('发布日期', detailData.announceTime),
@@ -162,7 +156,8 @@ class ProductInformation extends StatelessWidget {
       // height: ScreenUtil().setHeight(1000),
       child: SizedBox(
         child: ListView.builder(
-          itemCount: result.demandDetailDtoList.length,
+          itemCount: 2,
+          // itemCount: result.demandDetailDtoList.length,
           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {
@@ -239,7 +234,7 @@ class ProductInformation extends StatelessWidget {
       // padding: EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
         child: ListView.builder(
-          itemCount: item.length,
+          itemCount: 2,
           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {
