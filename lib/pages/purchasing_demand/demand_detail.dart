@@ -275,7 +275,7 @@ class ProductInformation extends StatelessWidget {
       // padding: EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
         child: ListView.builder(
-          itemCount: item.length,
+          itemCount: 2,
           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {

@@ -1,10 +1,20 @@
+import 'package:bid/pages/personal_center/certification_info.dart';
+import 'package:bid/pages/personal_center/contact_info.dart';
+import 'package:bid/pages/personal_center/modify_password.dart';
+import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sprintf/sprintf.dart';
+import '../../common/constants.dart';
+import '../../routers/routers.dart';
+import '../../common/log_utils.dart';
 
 // 快速生成  stlss
 class PersonalCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<Map<String, Object>> listTitles = _initPageRouteMap();
     return Scaffold(
       // appBar: AppBar(
       //   title: Text('会员中心'),
@@ -15,11 +25,49 @@ class PersonalCenter extends StatelessWidget {
           _topHeader(),
           _orderTitle(),
           // _orderType(),
-          _actionList(),
+          _actionList(context, listTitles),
           _logout(),
         ],
       ),
     );
+  }
+
+  /** 
+   * 定义页面及其组件的关系
+   * 考虑要做权限控制.
+   * 此数据之后将从后台获取.
+   */
+  List<Map<String, Object>> _initPageRouteMap() {
+    return [
+      {
+        "code": "certificationInfo",
+        "name_en_us": "Certification Information",
+        "name_zh_cn": "认证资料",
+        "url": Routes.CERTIFICATE_INFO_PAGE,
+        "widget": new CertificationInfo()
+      },
+      {
+        "code": "contactInfo",
+        "name_en_us": "Contact Information",
+        "name_zh_cn": "联系信息",
+        "url": Routes.CONTACT_INFO_PAGE,
+        "widget": new ContactInfo()
+      },
+      {
+        "code": "withdrawAddress",
+        "name_en_us": "Certification Information",
+        "name_zh_cn": "退货地址",
+        "url": Routes.WITHDRAW_ADDRESS_PAGE,
+        "widget": new WithdrawAddress()
+      },
+      {
+        "code": "modifyPassword",
+        "name_en_us": "Modify Password",
+        "name_zh_cn": "修改密码",
+        "url": Routes.MODIFY_PASSWORD_PAGE,
+        "widget": new ModifyPassword()
+      },
+    ];
   }
 
   // 头部区域
@@ -108,7 +156,7 @@ class PersonalCenter extends StatelessWidget {
       ),
       child: ListTile(
         leading: Icon(Icons.list),
-        title: Text('认证资料'),
+        title: Text('我的订单'),
         trailing: Icon(Icons.keyboard_arrow_right),
       ),
     );
@@ -177,35 +225,37 @@ class PersonalCenter extends StatelessWidget {
   }
 
   // 通用ListTile
-  Widget _myListTile(String title) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            width: 1,
-            color: Colors.black12,
+  Widget _myListTile(BuildContext context, String title, String url) {
+    return InkWell(
+      onTap: () {
+        LogUtils.d('用户中心列表项', sprintf('%s被点击! 路由地址为url:%s',[title, url]));
+        Application.router.navigateTo(context, url);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: Colors.black12,
+            ),
           ),
         ),
-      ),
-      child: ListTile(
-        leading: Icon(Icons.blur_circular),
-        title: Text(title),
-        trailing: Icon(Icons.keyboard_arrow_right),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
       ),
     );
   }
 
-  Widget _actionList() {
+  Widget _actionList(
+      BuildContext context, List<Map<String, Object>> listTitles) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
-        children: <Widget>[
-          _myListTile('认证资料'),
-          _myListTile('联系信息'),
-          _myListTile('退货地址'),
-          _myListTile('修改密码'),
-        ],
+        children: _getItemWidgetList(context, listTitles),
       ),
     );
   }
@@ -235,5 +285,15 @@ class PersonalCenter extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /////////////////////////INTERNAL PROCESS FUNCTION //////////////////////
+  List<Widget> _getItemWidgetList(
+      BuildContext context, List<Map<String, Object>> listTitles) {
+    List<Widget> list = [];
+    for (Map item in listTitles) {
+      list.add(_myListTile(context, item['name'+Constants.UNDERLINE+Constants.DEFUAL_LANG], item['url']));
+    }
+    return list;
   }
 }

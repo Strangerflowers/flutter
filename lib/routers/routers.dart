@@ -10,11 +10,28 @@ class Routes {
   static String salesOrderDetail = '/salesdetail';
   static String addShipment = '/addshipment';
   static String salesOrderLook = '/look';
-  static String salesOrderAdd = '/add'; //填写发货信息
-  static String salesOrderList = '/saleslist'; //填写发货信息
-  static String addProductPage = '/addproduct'; //报价添加产品
-  static String selectproductPage = '/selectproduct'; //报价选择产品
-  static String choiceIndexPage = '/choice'; //报价选择产品
+  //填写发货信息
+  static String salesOrderAdd = '/add';
+  //填写发货信息
+  static String salesOrderList = '/saleslist';
+  //报价添加产品
+  static String addProductPage = '/addproduct';
+  //报价选择产品
+  static String selectproductPage = '/selectproduct';
+
+  static String choiceIndexPage = '/choice';
+
+  // ################################
+  //             用户中心
+  // ################################
+  // 认证资料
+  static String CERTIFICATE_INFO_PAGE = '/certificateInfo';
+  // 联系信息
+  static String CONTACT_INFO_PAGE = '/contactInfo';
+  // 退货地址
+  static String WITHDRAW_ADDRESS_PAGE = '/withdrawAddress';
+  // 修改密码
+  static String MODIFY_PASSWORD_PAGE = '/modifyPassword';
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -33,5 +50,9 @@ class Routes {
     router.define(addProductPage, handler: addProductHandler);
     router.define(selectproductPage, handler: selectProductsPageHandler);
     router.define(choiceIndexPage, handler: choiceIndexPageHandler);
+    router.define(CERTIFICATE_INFO_PAGE, handler: certificateInfoPageHandler);
+    router.define(CONTACT_INFO_PAGE, handler: contactInfoPageHandler);
+    router.define(WITHDRAW_ADDRESS_PAGE, handler: withdrawAddressPageHandler);
+    router.define(MODIFY_PASSWORD_PAGE, handler: modifyPasswordPageHandler);
   }
 }
