@@ -72,6 +72,7 @@ flutter:
   assets:
     - images/icon.png
     - images/r.jpg
+    - images/clear.png
 
   fonts:
     - family: iconfont

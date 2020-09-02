@@ -67,7 +67,7 @@ class ChoiceBottom extends StatelessWidget {
                     "demandDetailDtoList": [],
                   };
 
-                  if (ele.checkBoxFlag) {
+                  if (ele.checkBoxFlag==true) {
                     return arr.add(obj);
                   }
                   if (ele.demandDetailDtoList != null) {
