@@ -152,6 +152,8 @@ class DemandDetailDtoList {
   bool checkBoxFlag;
   String productCategroyPath;
   String productDescript;
+  List<Object> subjectItemList;
+  List<Object> specificationList;
   int num;
   int typeId;
   String type;
@@ -168,6 +170,8 @@ class DemandDetailDtoList {
       this.checkBoxFlag,
       this.productCategroyPath,
       this.productDescript,
+      this.subjectItemList,
+      this.specificationList,
       this.num,
       this.typeId,
       this.type,
@@ -184,6 +188,9 @@ class DemandDetailDtoList {
     checkBoxFlag = json['checkBoxFlag'];
     productCategroyPath = json['productCategroyPath'];
     productDescript = json['productDescript'];
+    subjectItemList = json['subjectItemList'];
+    specificationList = json['specificationList'];
+    // subjectItemList
     num = json['num'];
     typeId = json['typeId'];
     type = json['type'];
@@ -202,6 +209,9 @@ class DemandDetailDtoList {
     data['checkBoxFlag'] = this.checkBoxFlag;
     data['productCategroyPath'] = this.productCategroyPath;
     data['productDescript'] = this.productDescript;
+    data['subjectItemList'] = this.subjectItemList;
+    data['specificationList'] = this.specificationList;
+    // subjectItemList
     data['num'] = this.num;
     data['typeId'] = this.typeId;
     data['type'] = this.type;

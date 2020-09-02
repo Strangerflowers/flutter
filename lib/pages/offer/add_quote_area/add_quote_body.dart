@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import '../../../routers/application.dart';
 import '../../../provide/demand_detail_provide.dart';
+import '../select_products/select_skul.dart';
 
 class AddQuoteBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandDetailProvide>(context).offerPageData;
-      // print('报价选择商品页面${goodsInfo[0]['productCategroyPath']}');
+      // print('报价选择商品页面${goodsInfo}');
       return Container(
         // margin: EdgeInsets.all(5.0),
         padding: EdgeInsets.all(20),
@@ -26,8 +27,8 @@ class AddQuoteBody extends StatelessWidget {
 
   //循环一级数据
   Widget _dataListView(list, context) {
-    List item = ['123', '4353'];
-    if (item != null) {
+    // List item = ['123', '4353'];
+    if (list != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
@@ -130,11 +131,21 @@ class AddQuoteBody extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text('需求数量：${subItem.num}${subItem.type}'),
           ),
-          _addShipment(subItem, context),
+          _showAddProduct(subItem, context),
+          // _productItem(subItem),
+          // _addShipment(subItem, context),
           _buttom(),
         ],
       ),
     );
+  }
+
+  Widget _showAddProduct(subItem, context) {
+    if (subItem.subjectItemList != null) {
+      return _productItem(subItem, context);
+    } else {
+      return _addShipment(subItem, context);
+    }
   }
 
   // 添加产品
@@ -166,6 +177,69 @@ class AddQuoteBody extends StatelessWidget {
             Text('添加报价产品'),
           ],
         ),
+      ),
+    );
+  }
+
+  // 已选择的商品组件
+  Widget _productItem(subItem, context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: ScreenUtil().setWidth(120),
+                padding: EdgeInsets.only(top: 0, right: 10),
+                child: Image.asset('images/icon.png'),
+                // child: Image.network(subItem.subjectItemList[0].image),
+              ),
+              Expanded(
+                child: _right(subItem.subjectItemList[0]),
+              ),
+              InkWell(
+                onTap: () {
+                  // 跳转到商品列表页面
+                  Application.router.navigateTo(context,
+                      "/selectproduct?id=${subItem.productCategroyId}");
+                },
+                child: Container(
+                  child: Text('替换产品'),
+                ),
+              ),
+
+              // _right(),
+            ],
+          ),
+          SelectSkul(subItem.subjectItemList),
+        ],
+      ),
+    );
+  }
+
+  // 产品右边信息描述
+  Widget _right(childItem) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '${childItem.name}',
+              maxLines: 2,
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '${childItem.priceRange}',
+              style: TextStyle(
+                color: Color(0xFFCCCCCC),
+                fontSize: ScreenUtil().setSp(30),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

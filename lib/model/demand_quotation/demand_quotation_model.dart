@@ -74,16 +74,16 @@ class QuotataionDataResult {
 class QuotataionDataList {
   int id;
   String subjectId;
-  Null subjectName;
+  String subjectName;
   bool checkBoxFlag;
   String code;
   String name;
-  Null category1;
-  Null category2;
-  Null category3;
+  String category1;
+  String category2;
+  String category3;
   String unit;
-  Null packUnit;
-  Null image;
+  String packUnit;
+  String image;
   String description;
   String remark;
   int status;
@@ -91,13 +91,13 @@ class QuotataionDataList {
   int scaleLeft;
   int scaleRight;
   String createTime;
-  Null action;
+  String action;
   String priceRange;
-  Null updateTime;
-  Null priceValidStart;
-  Null priceValidEnd;
+  String updateTime;
+  String priceValidStart;
+  String priceValidEnd;
   List<SkuList> skuList;
-  Null supplier;
+  String supplier;
 
   QuotataionDataList(
       {this.id,
@@ -130,16 +130,16 @@ class QuotataionDataList {
   QuotataionDataList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     subjectId = json['subjectId'];
-    subjectName = json['subjectName'];
+    subjectName = json['subjectName'].toString();
     checkBoxFlag = json['checkBoxFlag'];
     code = json['code'];
     name = json['name'];
-    category1 = json['category1'];
-    category2 = json['category2'];
-    category3 = json['category3'];
+    category1 = json['category1'].toString();
+    category2 = json['category2'].toString();
+    category3 = json['category3'].toString();
     unit = json['unit'];
-    packUnit = json['packUnit'];
-    image = json['image'];
+    packUnit = json['packUnit'].toString();
+    image = json['image'].toString();
     description = json['description'];
     remark = json['remark'];
     status = json['status'];
@@ -147,18 +147,18 @@ class QuotataionDataList {
     scaleLeft = json['scaleLeft'];
     scaleRight = json['scaleRight'];
     createTime = json['createTime'];
-    action = json['action'];
+    action = json['action'].toString();
     priceRange = json['priceRange'];
-    updateTime = json['updateTime'];
-    priceValidStart = json['priceValidStart'];
-    priceValidEnd = json['priceValidEnd'];
+    updateTime = json['updateTime'].toString();
+    priceValidStart = json['priceValidStart'].toString();
+    priceValidEnd = json['priceValidEnd'].toString();
     if (json['skuList'] != null) {
       skuList = new List<SkuList>();
       json['skuList'].forEach((v) {
         skuList.add(new SkuList.fromJson(v));
       });
     }
-    supplier = json['supplier'];
+    supplier = json['supplier'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -201,10 +201,10 @@ class SkuList {
   int stock;
   int price;
   String expireTime;
-  Null image;
+  String image;
   int version;
   String createTime;
-  Null updateTime;
+  String updateTime;
   List<Items> items;
   int status;
   int cartId;
@@ -229,10 +229,10 @@ class SkuList {
     stock = json['stock'];
     price = json['price'];
     expireTime = json['expireTime'];
-    image = json['image'];
+    image = json['image'].toString();
     version = json['version'];
     createTime = json['createTime'];
-    updateTime = json['updateTime'];
+    updateTime = json['updateTime'].toString();
     if (json['items'] != null) {
       items = new List<Items>();
       json['items'].forEach((v) {

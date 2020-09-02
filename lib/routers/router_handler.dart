@@ -90,7 +90,7 @@ Handler saleasOrderListHandler = Handler(
 // AddQuoteProductPage 报价添加产品
 Handler addProductHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  print('添加产品$params');
+  // print('添加产品$params');
   String id = params['id'].first;
   // print('index>details goodsId is ${goodsId}');
   return AddQuoteProductPage(id);
@@ -108,7 +108,7 @@ Handler selectProductsPageHandler = Handler(
 // ChoiceIndex  需求详情跳转到报价页面
 Handler choiceIndexPageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  print('添加产品$params');
+  // print('添加产品$params');
   String id = params['id'].first;
   // print('index>details goodsId is ${goodsId}');
   return ChoiceIndex(id);

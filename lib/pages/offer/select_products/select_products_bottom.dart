@@ -1,3 +1,5 @@
+import 'package:bid/common/log_utils.dart';
+import 'package:bid/model/demand_quotation/demand_quotation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
@@ -40,26 +42,25 @@ class SelectProductsBottom extends StatelessWidget {
                 productData.add(ele);
               }
             });
-            print('选中的产品$productData');
 
             offerPageData.forEach((offer) {
-              print('99999offer33${offer['demandDetailDtoList'].length}');
               if (offer['demandDetailDtoList'].length > 0) {
                 offer['demandDetailDtoList'].forEach((suboffer) {
-                  print(
-                      '对比${suboffer.productCategroyId.toString() == id}===${suboffer.productCategroyId}===$id');
                   if (suboffer.productCategroyId.toString() == id) {
-                    print('8888');
-                    suboffer['subjectItem'] = [];
-                    print('00000777');
-                    suboffer['subjectItem'].add(productData[0]);
-                    print('00000');
+                    if (null != suboffer.subjectItemList) {
+                      suboffer.subjectItemList.add(productData[0]);
+                    } else {
+                      suboffer.subjectItemList = new List<QuotataionDataList>();
+                      suboffer.subjectItemList.add(productData[0]);
+                    }
+                    LogUtils.d("======================>", suboffer.toJson());
                   }
                 });
               }
             });
-            print('整合后的数据${offerPageData[0]['demandDetailDtoList']}');
-            return;
+            if (productData.length <= 0) {
+              return;
+            }
             Application.router.navigateTo(context, "/addproduct?id=1");
             // addproduct
             // applyBoxFit(fit, inputSize, outputSize)
