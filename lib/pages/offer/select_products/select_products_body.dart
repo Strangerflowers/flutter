@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+import '../../../provide/demand_quotation/demand_quotation_provide.dart';
 import '../round_checkbox.dart';
 
 class SelectProductsBody extends StatefulWidget {
@@ -12,30 +14,32 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            _checkboxTitle(),
-          ],
+    return Provide<DemandQuotationProvide>(builder: (context, child, val) {
+      var goodsInfo = Provide.value<DemandQuotationProvide>(context).goodsList;
+      return SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _checkboxTitleListView(goodsInfo.result.list),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   //一级需求信息变量渲染
-  Widget _checkboxTitleListView() {
-    List item = ['123', '4353'];
-    if (item != null) {
+  Widget _checkboxTitleListView(list) {
+    if (list != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: 2,
+            itemCount: list.length,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
-              return _checkboxTitle();
+              return _checkboxTitle(list[index], index);
             },
           ),
         ),
@@ -47,7 +51,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
     }
   }
 
-  Widget _checkboxTitle() {
+  Widget _checkboxTitle(item, index) {
     return Container(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       decoration: BoxDecoration(
@@ -62,23 +66,26 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
       child: Row(
         children: <Widget>[
           RoundCheckBox(
-            value: flag,
+            value: item.checkBoxFlag,
             onChanged: (selectedList) {
-              print('点击单元框');
               setState(() {
-                this.flag = !this.flag;
+                item.checkBoxFlag = !item.checkBoxFlag;
               });
+              if (item.checkBoxFlag == true) {
+                Provide.value<DemandQuotationProvide>(context)
+                    .changeSelectItem(index);
+              }
             },
           ),
           Expanded(
-            child: _productItem(),
+            child: _productItem(item),
           ),
         ],
       ),
     );
   }
 
-  Widget _productItem() {
+  Widget _productItem(item) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -88,7 +95,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
             child: Image.asset('images/icon.png'),
           ),
           Expanded(
-            child: _right(),
+            child: _right(item),
           ),
           // _right(),
         ],
@@ -97,21 +104,21 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
   }
 
   // 产品右边信息描述
-  Widget _right() {
+  Widget _right(item) {
     return Container(
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              '2函数返回的开始大幅亏损的方式打发士大夫3456789',
+              '${item.name}',
               maxLines: 2,
             ),
           ),
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              '￥20.00-200',
+              '${item.priceRange}',
               style: TextStyle(
                 color: Color(0xFFCCCCCC),
                 fontSize: ScreenUtil().setSp(30),

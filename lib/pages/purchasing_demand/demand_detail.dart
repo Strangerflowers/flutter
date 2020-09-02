@@ -275,7 +275,7 @@ class ProductInformation extends StatelessWidget {
       // padding: EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
         child: ListView.builder(
-          itemCount: 2,
+          itemCount: item.length,
           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {
@@ -290,6 +290,7 @@ class ProductInformation extends StatelessWidget {
   Widget _planMark(item) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        margin: EdgeInsets.only(bottom: 40),
         // padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
         child: Column(

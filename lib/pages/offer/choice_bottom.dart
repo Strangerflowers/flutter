@@ -22,12 +22,16 @@ class ChoiceBottom extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   RoundCheckBox(
-                    value: flag,
+                    value: Provide.value<DemandDetailProvide>(context)
+                        .selectAllFlag,
                     onChanged: (value) {
-                      print('点击单元框');
+                      this.flag = !this.flag;
+                      Provide.value<DemandDetailProvide>(context)
+                          .selectAll(flag);
                     },
                   ),
-                  Text('全选')
+                  Text(
+                      '全选${Provide.value<DemandDetailProvide>(context).selectAllFlag}')
                 ],
               ),
             ),
@@ -54,39 +58,61 @@ class ChoiceBottom extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
-                var res = Provide.value<DemandDetailProvide>(context)
+                var quotationData = Provide.value<DemandDetailProvide>(context)
                     .goodsList
                     .result
                     .demandSkuDtoList;
                 var arr = [];
-                res.forEach((ele) {
+                quotationData.forEach((ele) {
                   var obj = {
                     "productCategroyId": ele.productCategroyId,
                     "productCategroyPath": ele.productCategroyPath,
                     "checkBoxFlag": ele.checkBoxFlag,
-                    "demandDetailDtoList": [],
+                    "demandDetailDtoList": null,
                   };
-
-                  if (ele.checkBoxFlag) {
-                    return arr.add(obj);
-                  }
+                  var brr = [];
+                  // if (ele.checkBoxFlag == true) {
                   if (ele.demandDetailDtoList != null) {
-                    var brr = [];
                     ele.demandDetailDtoList.forEach((sub) {
-                      if (sub.checkBoxFlag) {
-                        return brr.add(sub);
+                      // var bobj = {
+                      //   "id": sub.id,
+                      //   "demandId": sub.demandId,
+                      //   "productCategroyId": sub.productCategroyId,
+                      //   "productCategroyPath": sub.productCategroyPath,
+                      //   "productDescript": sub.productDescript,
+                      //   "num": sub.num,
+                      //   "typeId": sub.typeId,
+                      //   "type": sub.type,
+                      //   "isQuotation": sub.isQuotation,
+                      //   "createBy": sub.createBy,
+                      //   "createTime": sub.createTime,
+                      //   "updateBy": sub.updateBy,
+                      //   "updateTime": sub.updateTime,
+                      //   "checkBoxFlag": sub.checkBoxFlag,
+                      // };
+                      if (sub.checkBoxFlag == true) {
+                        brr.add(sub);
                       }
                     });
-                    obj['demandDetailDtoList'] = brr;
+                    if (brr.length > 0) {
+                      obj['demandDetailDtoList'] = brr;
+                    }
+                    var show = obj['demandDetailDtoList'] == null;
+                    // print(
+                    // '判断传入的数据${obj['demandDetailDtoList'] != null}===show$show');
+                    if (obj['demandDetailDtoList'] != null) {
+                      arr.add(obj);
+                    }
                   }
-
-                  return arr.add(obj);
+                  return arr;
+                  // }
                 });
-
-                // print(
-                //     '9999999${Provide.value<DemandDetailProvide>(context).goodsList.result.demandSkuDtoList[0].checkBoxFlag}');
-                print('点击下一步跳转到添加产品页面$arr');
-                return;
+                // print('最后合并$arr');
+                Provide.value<DemandDetailProvide>(context)
+                    .changeorderPageData(arr);
+                if (arr.length <= 0) {
+                  return;
+                }
                 Application.router.navigateTo(context, "/addproduct?id=1");
                 // addproduct
                 // applyBoxFit(fit, inputSize, outputSize)

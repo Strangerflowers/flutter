@@ -16,6 +16,7 @@ import './provide/sales_add_shipment_provide.dart';
 import './provide/select/select_specifications_provide.dart';
 import './provide/sales_order/look.dart';
 import './provide/sales_order/add_infomation_provide.dart';
+import './provide/demand_quotation/demand_quotation_provide.dart';
 import 'package:fluro/fluro.dart';
 import './routers/application.dart';
 import './routers/routers.dart';
@@ -35,7 +36,8 @@ void main() {
   var salesOrderLook = SalesOrderLook();
   var salesAddPage = SalesAddPage(); //发货信息
   var selects = Selects(); //选着商品规格
-  var providers = Providers();
+  var demandQuotationProvide = DemandQuotationProvide(); //选着商品规格
+  var providers = Providers(); //选择商品页面
   providers
     ..provide(Provider<Counter>.value(counter))
     ..provide(Provider<QuotationDetailProvide>.value(quotationDetailProvide))
@@ -50,6 +52,7 @@ void main() {
     ..provide(Provider<SalesOrderLook>.value(salesOrderLook))
     ..provide(Provider<SalesAddPage>.value(salesAddPage))
     ..provide(Provider<Selects>.value(selects))
+    ..provide(Provider<DemandQuotationProvide>.value(demandQuotationProvide))
     ..provide(
         Provider<QuotationGoodsListProvide>.value(quotationGoodsListProvide));
   runApp(ProviderNode(child: MyApp(), providers: providers));
