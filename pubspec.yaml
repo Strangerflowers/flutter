@@ -50,6 +50,7 @@ dependencies:
   sprintf: ^4.0.0
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
+  flustars: ^0.3.2
 
 dev_dependencies:
   flutter_test:
