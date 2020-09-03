@@ -35,7 +35,6 @@ class DemandDetails extends StatelessWidget {
                       children: <Widget>[
                         ExpansionTileDome(),
                         ProductInformation(),
-                        // DemandDetailBottom(),
                       ],
                     ),
                   ),
@@ -48,17 +47,6 @@ class DemandDetails extends StatelessWidget {
                 )
               ],
             );
-            // return SingleChildScrollView(
-            //   child: Container(
-            //     child: Column(
-            //       children: <Widget>[
-            //         ExpansionTileDome(),
-            //         ProductInformation(),
-            //         DemandDetailBottom(),
-            //       ],
-            //     ),
-            //   ),
-            // );
           } else {
             return Text('加载中......');
           }
@@ -148,7 +136,7 @@ class ProductInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandDetailProvide>(context).goodsList;
-      print('7899${goodsInfo.result.demandSkuDtoList}');
+      // print('7899${goodsInfo.result.demandSkuDtoList}');
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(

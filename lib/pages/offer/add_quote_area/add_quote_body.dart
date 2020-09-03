@@ -19,6 +19,7 @@ class AddQuoteBody extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _dataListView(goodsInfo, context),
+            _planMark(),
           ],
         ),
       );
@@ -291,13 +292,50 @@ class AddQuoteBody extends StatelessWidget {
               },
             ),
           ),
-          Container(
-            child: Text(
-                '小计：${subItem.goodsPrice == null ? 0 : subItem.goodsPrice * subItem.num}'),
+          Expanded(
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                  '小计：${subItem.goodsPrice == null ? 0 : subItem.goodsPrice * subItem.num}'),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  // 备注
+  Widget _planMark() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        margin: EdgeInsets.only(bottom: 40),
+        // padding: EdgeInsets.only(left: 20, right: 20),
+        alignment: Alignment.centerLeft,
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                '备注',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                  color: Color(0xFF423F42),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '备注信息',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30),
+                    color: Color(0xFF575558),
+                    height: 1.5),
+              ),
+            )
+          ],
+        ));
   }
 }
 

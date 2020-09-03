@@ -34,7 +34,7 @@ class SelectProductsBottom extends StatelessWidget {
           onPressed: () {
             var offerPageData =
                 Provide.value<DemandDetailProvide>(context).offerPageData;
-            print('点击下一步跳转到添加产品页面==$offerPageData');
+            // print('点击下一步跳转到添加产品页面==$offerPageData');
             var productDatas = goodsInfo.result.list;
             var productData = [];
             productDatas.forEach((ele) {

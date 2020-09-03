@@ -36,6 +36,7 @@ class DemandDetailResult {
   String orgId;
   String orgName;
   int isQuotationMerchant;
+  String quotationId;
   String name;
   Null announceTime;
   String linkPhone;
@@ -53,6 +54,7 @@ class DemandDetailResult {
       this.orgId,
       this.orgName,
       this.isQuotationMerchant,
+      this.quotationId,
       this.name,
       this.announceTime,
       this.linkPhone,
@@ -70,6 +72,7 @@ class DemandDetailResult {
     orgId = json['orgId'];
     orgName = json['orgName'];
     isQuotationMerchant = json['isQuotationMerchant'];
+    quotationId = json['quotationId'].toString();
     name = json['name'];
     announceTime = json['announceTime'];
     linkPhone = json['linkPhone'];
@@ -94,6 +97,7 @@ class DemandDetailResult {
     data['orgId'] = this.orgId;
     data['orgName'] = this.orgName;
     data['isQuotationMerchant'] = this.isQuotationMerchant;
+    data['quotationId'] = this.quotationId;
     data['name'] = this.name;
     data['announceTime'] = this.announceTime;
     data['linkPhone'] = this.linkPhone;

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../routers/application.dart';
 import '../../../provide/demand_detail_provide.dart';
 import '../../../service/service_method.dart';
+import '../../index_page.dart';
 // import './round_checkbox.dart';
 // import '../../routers/application.dart';
 
 class AddQuoteBottom extends StatelessWidget {
+  var speciesNumber; //几种
+  var totalNumber; //共几件
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
@@ -33,7 +37,8 @@ class AddQuoteBottom extends StatelessWidget {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: '￥10.0',
+                                text:
+                                    '￥${Provide.value<DemandDetailProvide>(context).totalAmount == null ? 0 : Provide.value<DemandDetailProvide>(context).totalAmount}',
                                 style: TextStyle(
                                   color: Color(0xFFF8980B),
                                 ),
@@ -44,7 +49,7 @@ class AddQuoteBottom extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '2种三件',
+                        '${Provide.value<DemandDetailProvide>(context).speciesNumber}种${Provide.value<DemandDetailProvide>(context).totalNumber}件',
                         style: TextStyle(color: Color(0xFFA9A8AB)),
                       ),
                     ),
@@ -65,6 +70,7 @@ class AddQuoteBottom extends StatelessWidget {
               onPressed: () {
                 print('点击提交报价$goodsInfo');
                 List createQuotationDetailDtos = new List<Object>();
+
                 goodsInfo.forEach((ele) {
                   ele['demandDetailDtoList'].forEach((subele) {
                     print('循环遍历查看skuiid是否获取${subele.specificaId}');
@@ -86,16 +92,38 @@ class AddQuoteBottom extends StatelessWidget {
                       .id,
                   "remark": "string",
                   "subjectMgrInfoId": "0711547302f842e29f26f5658e72366b",
-                  "totalAmount": 10000000
+                  "totalAmount":
+                      Provide.value<DemandDetailProvide>(context).totalAmount
                 };
                 print('提交报价参数$formData');
                 request('createDemandQuotation', formData: formData)
                     .then((val) {
-                  print('提交报价返回数据$val');
+                  if (val['code'] == 0) {
+                    Fluttertoast.showToast(
+                      msg: '提交成功',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return IndexPage();
+                    }));
+                    // Application.router
+                    //     .navigateTo(context, "/choice?id=$demandId");
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: val['message'],
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
                 });
-                // Application.router.navigateTo(context, "/addproduct?id=1");
-                // addproduct
-                // applyBoxFit(fit, inputSize, outputSize)
               },
             ),
           ],
