@@ -8,6 +8,7 @@ class DemandDetailProvide with ChangeNotifier {
   DemandDetailHome goodsList;
   var offerPageData; //报价整合数据的数据
   var selectData = [];
+  var goodsPrice; //价格
   var quotationData;
   var parentFlagList = []; //存放父级勾选的值，用于对全选是否勾上
   var childFlagList = [];
@@ -120,6 +121,19 @@ class DemandDetailProvide with ChangeNotifier {
   // 报价页面数据
   changeorderPageData(list) {
     offerPageData = list;
+    notifyListeners();
+  }
+
+  changeGoodsPrice(price, specificaId) {
+    print('-------------->${specificaId}---$price');
+    offerPageData.forEach((ele) {
+      ele['demandDetailDtoList'].forEach((item) {
+        if (item.specificaId == specificaId) {
+          item.goodsPrice = price;
+          return;
+        }
+      });
+    });
     notifyListeners();
   }
 }

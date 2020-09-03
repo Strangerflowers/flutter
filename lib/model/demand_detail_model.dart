@@ -35,6 +35,7 @@ class DemandDetailResult {
   int id;
   String orgId;
   String orgName;
+  int isQuotationMerchant;
   String name;
   Null announceTime;
   String linkPhone;
@@ -51,6 +52,7 @@ class DemandDetailResult {
       {this.id,
       this.orgId,
       this.orgName,
+      this.isQuotationMerchant,
       this.name,
       this.announceTime,
       this.linkPhone,
@@ -67,6 +69,7 @@ class DemandDetailResult {
     id = json['id'];
     orgId = json['orgId'];
     orgName = json['orgName'];
+    isQuotationMerchant = json['isQuotationMerchant'];
     name = json['name'];
     announceTime = json['announceTime'];
     linkPhone = json['linkPhone'];
@@ -90,6 +93,7 @@ class DemandDetailResult {
     data['id'] = this.id;
     data['orgId'] = this.orgId;
     data['orgName'] = this.orgName;
+    data['isQuotationMerchant'] = this.isQuotationMerchant;
     data['name'] = this.name;
     data['announceTime'] = this.announceTime;
     data['linkPhone'] = this.linkPhone;
@@ -154,6 +158,8 @@ class DemandDetailDtoList {
   String productDescript;
   List<Object> subjectItemList;
   List<Object> specificationList;
+  int specificaId;
+  double goodsPrice;
   int num;
   int typeId;
   String type;
@@ -172,6 +178,8 @@ class DemandDetailDtoList {
       this.productDescript,
       this.subjectItemList,
       this.specificationList,
+      this.specificaId,
+      this.goodsPrice,
       this.num,
       this.typeId,
       this.type,
@@ -190,6 +198,8 @@ class DemandDetailDtoList {
     productDescript = json['productDescript'];
     subjectItemList = json['subjectItemList'];
     specificationList = json['specificationList'];
+    specificaId = json['specificaId'];
+    goodsPrice = json['goodsPrice'];
     // subjectItemList
     num = json['num'];
     typeId = json['typeId'];
@@ -211,6 +221,8 @@ class DemandDetailDtoList {
     data['productDescript'] = this.productDescript;
     data['subjectItemList'] = this.subjectItemList;
     data['specificationList'] = this.specificationList;
+    data['specificaId'] = this.specificaId;
+    data['goodsPrice'] = this.goodsPrice;
     // subjectItemList
     data['num'] = this.num;
     data['typeId'] = this.typeId;

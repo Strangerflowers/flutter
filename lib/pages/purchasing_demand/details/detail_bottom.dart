@@ -35,6 +35,7 @@ class DemandDetailBottom extends StatelessWidget {
   }
 
   void _dispatchAdd(context) {
+    Application.router.navigateTo(context, "/choice?id=$demandId");
     FormData formData = FormData.fromMap({"demandId": demandId});
     // var formData = {"demandId": demandId, "subjectMgrInfoId": "string"};
     print('立即报价参数$formData');

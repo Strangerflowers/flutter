@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../../../provide/demand_quotation/demand_quotation_provide.dart';
+import '../../../provide/demand_detail_provide.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectSkul extends StatefulWidget {
@@ -12,14 +13,36 @@ class SelectSkul extends StatefulWidget {
 }
 
 class _SelectSkulState extends State<SelectSkul> {
+  var result;
   var goodsItem;
+  var skugoodsItem;
+  List<String> skuldataList;
+  List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   void initState() {
-    goodsItem = widget.skulList[0];
+    skuldataList = [];
+    result = widget.skulList;
+    goodsItem = widget.skulList.subjectItemList[0];
+    goodsItem.skuList.forEach((ele) {
+      var valueArr = [];
+
+      ele.items.forEach((subele) {
+        valueArr.add(subele.value);
+      });
+      var obj = {
+        'id': ele.id,
+        "skul": valueArr.join(',').replaceAll(",", "-"),
+        "skulgood": ele,
+        "price": ele.price,
+      };
+      skulObjectData.add(obj);
+      return skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
+    });
+    print('skulObjectData$skulObjectData');
   }
 
   int currentIndex = 0;
   bool isSelect = false;
-
+  // var list = skuldataList;
   var list = [
     'Hamilton1',
     'Lafayette1',
@@ -33,7 +56,7 @@ class _SelectSkulState extends State<SelectSkul> {
   String showSelectItem; //展示最后确定的规格
   @override
   Widget build(BuildContext context) {
-    print('规格选择页面${goodsItem.skuList}');
+    // print('规格选择页面${goodsItem.skuList}');
     return Provide<DemandQuotationProvide>(builder: (context, child, val) {
       return Container(
         color: Colors.white,
@@ -51,17 +74,18 @@ class _SelectSkulState extends State<SelectSkul> {
   }
 
   // 合并商品
-  Widget _mergeItem() {
+  Widget _mergeItem(goodsItem) {
     return Container(
       child: Row(
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10),
+            // child: Image.network(goodsItem.image),
             child: Image.asset('images/icon.png'),
           ),
           Expanded(
-            child: _right(),
+            child: _right(goodsItem),
           ),
         ],
       ),
@@ -69,7 +93,7 @@ class _SelectSkulState extends State<SelectSkul> {
   }
 
   // 左侧商品
-  Widget _right() {
+  Widget _right(goodsItem) {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
@@ -81,7 +105,7 @@ class _SelectSkulState extends State<SelectSkul> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      '商品名称',
+                      goodsItem.name,
                       maxLines: 2,
                     ),
                   ),
@@ -99,17 +123,17 @@ class _SelectSkulState extends State<SelectSkul> {
                   ),
                 ],
               )),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '库存  999999',
-              maxLines: 2,
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.centerLeft,
+          //   child: Text(
+          //     '库存  999999',
+          //     maxLines: 2,
+          //   ),
+          // ),
           Row(
             children: <Widget>[
               Text(
-                '￥200.00',
+                '${goodsItem.priceRange}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
             ],
@@ -120,7 +144,7 @@ class _SelectSkulState extends State<SelectSkul> {
   }
 
   // 弹出底部菜单列表模态对话框
-  Future<int> _showModalBottomSheet(context) {
+  Future<int> _showModalBottomSheet(goodsItem, context) {
     return showModalBottomSheet<int>(
       context: context,
       // isScrollControlled: false,
@@ -129,7 +153,7 @@ class _SelectSkulState extends State<SelectSkul> {
           height: ScreenUtil().setHeight(700),
           child: Column(
             children: <Widget>[
-              _mergeItem(),
+              _mergeItem(skugoodsItem == null ? goodsItem : skugoodsItem),
               Container(
                 padding: EdgeInsets.only(left: 20),
                 alignment: Alignment.bottomLeft,
@@ -145,7 +169,8 @@ class _SelectSkulState extends State<SelectSkul> {
                     child: Container(
                       height: ScreenUtil().setHeight(400),
                       child: MultiSelectChip(
-                        list,
+                        skuldataList,
+                        // list,
                         showSelectItem,
                         onSelectionChanged: (selectedList) {
                           // selectedList选中的规格
@@ -175,6 +200,17 @@ class _SelectSkulState extends State<SelectSkul> {
                         setState(() {
                           showSelectItem = selectedItemsList.join('');
                         });
+                        skulObjectData.forEach((element) {
+                          if (element['skul'] == showSelectItem) {
+                            result.goodsPrice =
+                                double.parse(element['price'].toString());
+                            return result.specificaId = element['id'];
+                          }
+                        });
+                        // 选择规格时给一个默认的价格
+                        double price = result.goodsPrice / 100;
+                        Provide.value<DemandDetailProvide>(context)
+                            .changeGoodsPrice(price, result.specificaId);
                         Navigator.pop(context, 1);
                       },
                     ),
@@ -196,7 +232,7 @@ class _SelectSkulState extends State<SelectSkul> {
     return Container(
       child: InkWell(
         onTap: () async {
-          int type = await _showModalBottomSheet(context);
+          int type = await _showModalBottomSheet(goodsItem, context);
         },
         child: Row(
           children: <Widget>[
@@ -258,6 +294,7 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
     // if (selectedChoices1 != []) {}
     widget.reportList.forEach((item) {
       choices.add(Container(
+        // alignment: Alignment.bottomLeft,
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           label: Text(item),

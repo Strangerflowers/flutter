@@ -132,9 +132,7 @@ class AddQuoteBody extends StatelessWidget {
             child: Text('需求数量：${subItem.num}${subItem.type}'),
           ),
           _showAddProduct(subItem, context),
-          // _productItem(subItem),
-          // _addShipment(subItem, context),
-          _buttom(),
+          _buttom(subItem),
         ],
       ),
     );
@@ -207,11 +205,12 @@ class AddQuoteBody extends StatelessWidget {
                   child: Text('替换产品'),
                 ),
               ),
-
-              // _right(),
             ],
           ),
-          SelectSkul(subItem.subjectItemList),
+          SelectSkul(subItem),
+          // specificationList
+          // _inputPrice(subItem),
+          GoodsPrice(subItem),
         ],
       ),
     );
@@ -244,25 +243,147 @@ class AddQuoteBody extends StatelessWidget {
     );
   }
 
-  // 删除按钮
-  Widget _buttom() {
+  //输入报价金额item
+  Widget _inputPrice(item) {
     return Container(
-      padding: EdgeInsets.only(top: 10),
-      alignment: Alignment.centerLeft,
-      child: OutlineButton(
-        //自定义按钮颜色
-        color: Color(0xFF666666),
-        highlightColor: Colors.blue[700],
-        // colorBrightness: Brightness.dark,
-        splashColor: Color(0xFF333333),
-        child: Text("删除产品"),
-        textColor: Color(0xFF333333),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        onPressed: () {
-          print('点击提交报价');
-        },
+      child: TextFormField(
+        autofocus: false,
+        // controller: _unameController,
+        decoration: InputDecoration(
+          // TextInputType.number,
+          hintText:
+              "${item.specificaId == null ? item.subjectItemList[0].priceRange : item.specificaId}",
+          prefixIcon: Container(
+            width: ScreenUtil().setWidth(150),
+            margin: EdgeInsets.only(top: 15.0, right: 5.0),
+            child: Text('报价'),
+          ),
+          suffixIcon: Container(
+            width: ScreenUtil().setWidth(80),
+            margin: EdgeInsets.only(top: 15.0, right: 5.0),
+            child: Text('元'),
+          ),
+        ),
       ),
     );
+  }
+
+  // 删除按钮
+  Widget _buttom(subItem) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            alignment: Alignment.centerLeft,
+            child: OutlineButton(
+              //自定义按钮颜色
+              color: Color(0xFF666666),
+              highlightColor: Colors.blue[700],
+              // colorBrightness: Brightness.dark,
+              splashColor: Color(0xFF333333),
+              child: Text("删除产品"),
+              textColor: Color(0xFF333333),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              onPressed: () {
+                print('点击提交报价');
+              },
+            ),
+          ),
+          Container(
+            child: Text(
+                '小计：${subItem.goodsPrice == null ? 0 : subItem.goodsPrice * subItem.num}'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GoodsPrice extends StatefulWidget {
+  final skulList;
+  GoodsPrice(this.skulList);
+  @override
+  _GoodsPriceState createState() => _GoodsPriceState();
+}
+
+TextEditingController _priceController = new TextEditingController();
+
+class _GoodsPriceState extends State<GoodsPrice> {
+  var result;
+  var goodsItem;
+  var skugoodsItem;
+  List<String> skuldataList;
+  List skulObjectData = new List(); //先保存一份放价格
+  void initState() {
+    skuldataList = [];
+    result = widget.skulList;
+
+    goodsItem = widget.skulList.subjectItemList[0];
+    goodsItem.skuList.forEach((ele) {
+      var obj = {
+        'id': ele.id,
+        "price": ele.price,
+      };
+      return skulObjectData.add(obj);
+    });
+    // super.initState();
+    // _focusNode.addListener(() {
+    //   if (!_focusNode.hasFocus) {
+    //     // TextField has lost focus
+    //     // _showMessage();
+    //   }
+    // });
+    super.initState();
+  }
+
+  final priceFormKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Provide<DemandDetailProvide>(builder: (context, child, val) {
+      return Container(
+        child: TextFormField(
+          // autofocus: false,
+          autofocus: true,
+          onChanged: (value) {
+            setState(() {
+              print('是否进入修改页面${value}1');
+              result.goodsPrice = double.parse(value);
+              print('是否进入修改页面${result.goodsPrice}');
+            });
+
+            Provide.value<DemandDetailProvide>(context)
+                .changeGoodsPrice(value, result.specificaId);
+          },
+          onSaved: (value) {
+            this.result = value;
+            if (result.specificaId != null)
+              goodsItem.skuList.forEach((ele) {
+                var obj = {
+                  'id': ele.id,
+                  "price": ele.price,
+                };
+                return skulObjectData.add(obj);
+              });
+          },
+          decoration: InputDecoration(
+            hintText:
+                "${result.goodsPrice == null ? '请输入报价单价' : result.goodsPrice}",
+            prefixIcon: Container(
+              width: ScreenUtil().setWidth(150),
+              margin: EdgeInsets.only(top: 15.0, right: 5.0),
+              child: Text('报价'),
+            ),
+            suffixIcon: Container(
+              width: ScreenUtil().setWidth(80),
+              margin: EdgeInsets.only(top: 15.0, right: 5.0),
+              child: Text('元'),
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
