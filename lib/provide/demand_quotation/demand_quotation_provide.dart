@@ -22,13 +22,14 @@ class DemandQuotationProvide with ChangeNotifier {
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
     // print('获选带选择产品$formData');
     request('selectGoodsByProductId', formData: formData).then((val) {
+      // print('商品列表$val');
       goodsList = QuotataionData.fromJson(val);
       quotationData = goodsList.result.list;
-
+      print('99555559999---==${quotationData}');
       quotationData.forEach((ele) {
         ele.checkBoxFlag = false;
       });
-      // print('999999---==${quotationData}');
+      print('999999---==${quotationData}');
       // print('采购需求详情11111${quotationData[0].checkBoxFlag}');
       notifyListeners();
     });

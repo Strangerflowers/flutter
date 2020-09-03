@@ -41,7 +41,8 @@ class ProcurementPlan extends StatelessWidget {
   }
 
   Future _getBackDetailInfo(BuildContext context) async {
-    await Provide.value<QuotationPlanProvide>(context).getQuotationPlan('1');
+    await Provide.value<QuotationPlanProvide>(context)
+        .getQuotationPlan(goodsId);
     return '加载完成';
   }
 }

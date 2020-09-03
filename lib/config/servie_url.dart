@@ -47,6 +47,8 @@ const servicePath = {
       serviceUrl + '/os_kernel_bid/app/suppliers/quoteNow', //供应商app-立即报价
   'selectGoodsByProductId': serviceUrl +
       '/os_kernel_bid/app/suppliers/selectGoodsByProductId', //供应商app-供应商选择报价产品
+  'createDemandQuotation':
+      serviceUrl + '/os_kernel_bid/app/suppliers/createDemandQuotation', //提交报价
   'getWithdrawAddress':
       serviceUrl + '/os_kernel_bid/app/address/queryPage', // 个人中心-退货地址
   'getCertificationInfo':

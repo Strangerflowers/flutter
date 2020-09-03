@@ -1,13 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'dart:convert';
 import '../model/demand_detail_model.dart';
 
 class DemandDetailProvide with ChangeNotifier {
   DemandDetailHome goodsList;
+  var remark; //备注输入信息；
+  var speciesNumber; //几种
+  var totalNumber; //共几件
   var offerPageData; //报价整合数据的数据
   var selectData = [];
+  var totalAmount; //总价格
   var quotationData;
   var parentFlagList = []; //存放父级勾选的值，用于对全选是否勾上
   var childFlagList = [];
@@ -18,21 +24,31 @@ class DemandDetailProvide with ChangeNotifier {
     FormData formData = FormData.fromMap({'demandId': id});
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
     request('demandDetail', formData: formData).then((val) {
-      goodsList = DemandDetailHome.fromJson(val);
-      quotationData = goodsList.result.demandSkuDtoList;
-
-      quotationData.forEach((ele) {
-        ele.checkBoxFlag = false;
-        selectAllFlag = false;
-        if (ele.demandDetailDtoList != null) {
-          ele.demandDetailDtoList.forEach((ele) {
-            ele.checkBoxFlag = false;
-          });
-        }
-        return arr.add(ele);
-      });
-      quotationData = arr;
-      print('转化报价数据===$arr=====${quotationData[0].checkBoxFlag}');
+      if (val['code'] == 0) {
+        goodsList = DemandDetailHome.fromJson(val);
+        quotationData = goodsList.result.demandSkuDtoList;
+        quotationData.forEach((ele) {
+          ele.checkBoxFlag = false;
+          selectAllFlag = false;
+          if (ele.demandDetailDtoList != null) {
+            ele.demandDetailDtoList.forEach((ele) {
+              ele.checkBoxFlag = false;
+            });
+          }
+          return arr.add(ele);
+        });
+        quotationData = arr;
+      } else {
+        goodsList = null;
+        Fluttertoast.showToast(
+          msg: val['message'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
       notifyListeners();
     });
   }
@@ -120,6 +136,33 @@ class DemandDetailProvide with ChangeNotifier {
   // 报价页面数据
   changeorderPageData(list) {
     offerPageData = list;
+    speciesNumber = offerPageData.length;
+    totalNumber = 0;
+    offerPageData.forEach((ele) {
+      totalNumber += ele['demandDetailDtoList'].length;
+    });
+
+    notifyListeners();
+  }
+
+  changeGoodsPrice(price, specificaId) {
+    print('-------------->${specificaId}---$price');
+    totalAmount = 0;
+    offerPageData.forEach((ele) {
+      ele['demandDetailDtoList'].forEach((item) {
+        if (item.specificaId == specificaId) {
+          item.goodsPrice = price;
+          totalAmount += item.goodsPrice * item.num;
+          // print('1')
+          // return;
+        }
+      });
+    });
+    notifyListeners();
+  }
+
+  remarkFunc(text) {
+    remark = text;
     notifyListeners();
   }
 }

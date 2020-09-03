@@ -35,6 +35,8 @@ class DemandDetailResult {
   int id;
   String orgId;
   String orgName;
+  int isQuotationMerchant;
+  String quotationId;
   String name;
   Null announceTime;
   String linkPhone;
@@ -51,6 +53,8 @@ class DemandDetailResult {
       {this.id,
       this.orgId,
       this.orgName,
+      this.isQuotationMerchant,
+      this.quotationId,
       this.name,
       this.announceTime,
       this.linkPhone,
@@ -67,6 +71,8 @@ class DemandDetailResult {
     id = json['id'];
     orgId = json['orgId'];
     orgName = json['orgName'];
+    isQuotationMerchant = json['isQuotationMerchant'];
+    quotationId = json['quotationId'].toString();
     name = json['name'];
     announceTime = json['announceTime'];
     linkPhone = json['linkPhone'];
@@ -90,6 +96,8 @@ class DemandDetailResult {
     data['id'] = this.id;
     data['orgId'] = this.orgId;
     data['orgName'] = this.orgName;
+    data['isQuotationMerchant'] = this.isQuotationMerchant;
+    data['quotationId'] = this.quotationId;
     data['name'] = this.name;
     data['announceTime'] = this.announceTime;
     data['linkPhone'] = this.linkPhone;
@@ -152,6 +160,10 @@ class DemandDetailDtoList {
   bool checkBoxFlag;
   String productCategroyPath;
   String productDescript;
+  List<Object> subjectItemList;
+  List<Object> specificationList;
+  int specificaId;
+  double goodsPrice;
   int num;
   int typeId;
   String type;
@@ -168,6 +180,10 @@ class DemandDetailDtoList {
       this.checkBoxFlag,
       this.productCategroyPath,
       this.productDescript,
+      this.subjectItemList,
+      this.specificationList,
+      this.specificaId,
+      this.goodsPrice,
       this.num,
       this.typeId,
       this.type,
@@ -184,6 +200,11 @@ class DemandDetailDtoList {
     checkBoxFlag = json['checkBoxFlag'];
     productCategroyPath = json['productCategroyPath'];
     productDescript = json['productDescript'];
+    subjectItemList = json['subjectItemList'];
+    specificationList = json['specificationList'];
+    specificaId = json['specificaId'];
+    goodsPrice = json['goodsPrice'];
+    // subjectItemList
     num = json['num'];
     typeId = json['typeId'];
     type = json['type'];
@@ -202,6 +223,11 @@ class DemandDetailDtoList {
     data['checkBoxFlag'] = this.checkBoxFlag;
     data['productCategroyPath'] = this.productCategroyPath;
     data['productDescript'] = this.productDescript;
+    data['subjectItemList'] = this.subjectItemList;
+    data['specificationList'] = this.specificationList;
+    data['specificaId'] = this.specificaId;
+    data['goodsPrice'] = this.goodsPrice;
+    // subjectItemList
     data['num'] = this.num;
     data['typeId'] = this.typeId;
     data['type'] = this.type;

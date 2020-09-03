@@ -86,12 +86,13 @@ class ExpansionTileDome extends StatelessWidget {
   }
 
   Widget _mergeInformation(detailData, context) {
+    var statusType = {0: '已报价', 1: '报价未通过', 2: '报价通过', 3: '部分通过'};
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Column(
         children: <Widget>[
           _information('报价单编号', detailData.code),
-          _information('报价单状态', detailData.status),
+          _information('报价单状态', statusType[detailData.status]),
           _information('需求方名称', detailData.orgName),
           _information('联系人', detailData.linkPerson),
           _information('联系电话', detailData.linkPhone),

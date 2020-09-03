@@ -74,22 +74,6 @@ class ChoiceBottom extends StatelessWidget {
                   // if (ele.checkBoxFlag == true) {
                   if (ele.demandDetailDtoList != null) {
                     ele.demandDetailDtoList.forEach((sub) {
-                      // var bobj = {
-                      //   "id": sub.id,
-                      //   "demandId": sub.demandId,
-                      //   "productCategroyId": sub.productCategroyId,
-                      //   "productCategroyPath": sub.productCategroyPath,
-                      //   "productDescript": sub.productDescript,
-                      //   "num": sub.num,
-                      //   "typeId": sub.typeId,
-                      //   "type": sub.type,
-                      //   "isQuotation": sub.isQuotation,
-                      //   "createBy": sub.createBy,
-                      //   "createTime": sub.createTime,
-                      //   "updateBy": sub.updateBy,
-                      //   "updateTime": sub.updateTime,
-                      //   "checkBoxFlag": sub.checkBoxFlag,
-                      // };
                       if (sub.checkBoxFlag == true) {
                         brr.add(sub);
                       }
@@ -97,7 +81,7 @@ class ChoiceBottom extends StatelessWidget {
                     if (brr.length > 0) {
                       obj['demandDetailDtoList'] = brr;
                     }
-                    var show = obj['demandDetailDtoList'] == null;
+                    // var show = obj['demandDetailDtoList'] == null;
                     // print(
                     // '判断传入的数据${obj['demandDetailDtoList'] != null}===show$show');
                     if (obj['demandDetailDtoList'] != null) {
