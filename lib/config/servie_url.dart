@@ -49,4 +49,6 @@ const servicePath = {
       '/os_kernel_bid/app/suppliers/selectGoodsByProductId', //供应商app-供应商选择报价产品
   'getWithdrawAddress':
       serviceUrl + '/os_kernel_bid/app/address/queryPage', // 个人中心-退货地址
+  'getCertificationInfo':
+      serviceUrl + '/os_kernel_bid/app/suppliers/user/info', // 个人中心-认证资料
 };
