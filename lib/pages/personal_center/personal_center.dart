@@ -228,7 +228,7 @@ class PersonalCenter extends StatelessWidget {
   Widget _myListTile(BuildContext context, String title, String url) {
     return InkWell(
       onTap: () {
-        LogUtils.d('用户中心列表项', sprintf('%s被点击! 路由地址为url:%s',[title, url]));
+        LogUtils.d('用户中心列表项', sprintf('%s被点击! 路由地址为url:%s', [title, url]));
         Application.router.navigateTo(context, url);
       },
       child: Container(
@@ -292,7 +292,10 @@ class PersonalCenter extends StatelessWidget {
       BuildContext context, List<Map<String, Object>> listTitles) {
     List<Widget> list = [];
     for (Map item in listTitles) {
-      list.add(_myListTile(context, item['name'+Constants.UNDERLINE+Constants.DEFUAL_LANG], item['url']));
+      list.add(_myListTile(
+          context,
+          item['name' + Constants.UNDERLINE + Constants.DEFUAL_LANG],
+          item['url']));
     }
     return list;
   }

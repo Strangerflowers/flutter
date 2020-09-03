@@ -1,0 +1,15 @@
+{
+  "id": 5,
+  "userId": "b1c92883c44e4435bf394ab185f0a59b",
+  "receiverName": "肥猪流",
+  "mobile": "13812341209",
+  "areaCode": null,
+  "address": "100平的总统套房",
+  "defaultAddress": 2,
+  "status": 1,
+  "createTime": "2020-08-24 15:11:23",
+  "createBy": "测试人员小彭",
+  "updateTime": "2020-08-24 15:11:23",
+  "updateBy": "测试人员小彭",
+  "delFlag": 0
+}
