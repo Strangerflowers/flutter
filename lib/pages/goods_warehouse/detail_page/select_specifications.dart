@@ -4,13 +4,15 @@ import '../../../provide/goods_detail_provide.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailsSelectArea extends StatefulWidget {
+  // final goodsResult;
+  // DetailsSelectArea(this.goodsResult);
   @override
   _DetailsSelectAreaState createState() => _DetailsSelectAreaState();
 }
 
 class _DetailsSelectAreaState extends State<DetailsSelectArea> {
-  int currentIndex = 0;
-  bool isSelect = false;
+  List<String> skuldataList = new List();
+  List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   var list = [
     'Hamilton1',
     'Lafayette1',
@@ -25,6 +27,29 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   @override
   Widget build(BuildContext context) {
     return Provide<DetailsInfoProvide>(builder: (context, child, val) {
+      var goodsInfo =
+          Provide.value<DetailsInfoProvide>(context).goodsInfo.result;
+      skuldataList = [];
+      skulObjectData = [];
+      goodsInfo.skuList.forEach((ele) {
+        var valueArr = [];
+        ele.items.forEach((subele) {
+          // print('遍历规格处理${subele.value}');
+          valueArr.add(subele.value);
+        });
+
+        var obj = {
+          'id': ele.id,
+          "skul": valueArr.join(',').replaceAll(",", "-"),
+          "skulgood": ele,
+          "price": ele.price,
+        };
+        skulObjectData.add(obj);
+        skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
+
+        return;
+      });
+      print('处理规格数据$skulObjectData====$skuldataList');
       return Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -33,7 +58,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
         width: ScreenUtil().setWidth(750),
         child: InkWell(
           onTap: () {},
-          child: _select(context),
+          child: _select(goodsInfo, context),
           // child: _growView(),
         ),
       );
@@ -41,7 +66,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   }
 
   // 合并商品
-  Widget _mergeItem() {
+  Widget _mergeItem(goodsItem) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -51,7 +76,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
             child: Image.asset('images/icon.png'),
           ),
           Expanded(
-            child: _right(),
+            child: _right(goodsItem),
           ),
         ],
       ),
@@ -59,7 +84,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   }
 
   // 左侧商品
-  Widget _right() {
+  Widget _right(goodsItem) {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
@@ -71,7 +96,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      '商品名称',
+                      goodsItem.name,
                       maxLines: 2,
                     ),
                   ),
@@ -89,17 +114,17 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                   ),
                 ],
               )),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '库存  999999',
-              maxLines: 2,
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.centerLeft,
+          //   child: Text(
+          //     // '库存  999999',
+          //     maxLines: 2,
+          //   ),
+          // ),
           Row(
             children: <Widget>[
               Text(
-                '￥200.00',
+                '￥${goodsItem.priceRange}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
             ],
@@ -110,7 +135,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   }
 
   // 弹出底部菜单列表模态对话框
-  Future<int> _showModalBottomSheet(context) {
+  Future<int> _showModalBottomSheet(goodsItem, context) {
     return showModalBottomSheet<int>(
       context: context,
       // isScrollControlled: false,
@@ -119,7 +144,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
           height: ScreenUtil().setHeight(700),
           child: Column(
             children: <Widget>[
-              _mergeItem(),
+              _mergeItem(goodsItem),
               Container(
                 padding: EdgeInsets.only(left: 20),
                 alignment: Alignment.bottomLeft,
@@ -135,7 +160,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                     child: Container(
                       height: ScreenUtil().setHeight(400),
                       child: MultiSelectChip(
-                        list,
+                        skuldataList,
                         showSelectItem,
                         onSelectionChanged: (selectedList) {
                           // selectedList选中的规格
@@ -229,11 +254,11 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
     );
   }
 
-  Widget _select(context) {
+  Widget _select(goodsInfo, context) {
     return Container(
       child: InkWell(
         onTap: () async {
-          int type = await _showModalBottomSheet(context);
+          int type = await _showModalBottomSheet(goodsInfo, context);
         },
         child: Row(
           children: <Widget>[

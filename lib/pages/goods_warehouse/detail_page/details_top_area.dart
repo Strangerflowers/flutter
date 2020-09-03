@@ -6,32 +6,38 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DetailsTopArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // return Provide<DetailsInfoProvide>(
-    //   builder: (context, child, val) {
-    //     var goodsInfo =
-    //         Provide.value<DetailsInfoProvide>(context).goodsInfo.data.goodInfo;
-    //     if (goodsInfo != null) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          _goodsImage(),
-          _goodsPrice(),
-          _goodsName(),
-        ],
-      ),
+    return Provide<DetailsInfoProvide>(
+      builder: (context, child, val) {
+        var goodsInfo =
+            Provide.value<DetailsInfoProvide>(context).goodsInfo.result;
+        print('商品详情页数据$goodsInfo');
+        if (goodsInfo != null) {
+          return Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                _goodsImage(goodsInfo),
+                _goodsPrice(goodsInfo),
+                _goodsName(goodsInfo),
+              ],
+            ),
+          );
+        } else {
+          return Container(
+            child: Text('正在加载...'),
+          );
+        }
+      },
     );
-    //   } else {
-    //     return Container(
-    //       child: Text('正在加载...'),
-    //     );
-    //   }
-    // },
-    // );
   }
 
   // 商品图片
-  Widget _goodsImage() {
+  Widget _goodsImage(goodsResult) {
+    // return Image.network(
+    //   goodsResult.image,
+    //   width: ScreenUtil().setWidth(750),
+    //   fit: BoxFit.fill,
+    // );
     return Image.asset(
       'images/r.jpg',
       width: ScreenUtil().setWidth(750),
@@ -40,12 +46,12 @@ class DetailsTopArea extends StatelessWidget {
   }
 
   // 商品名称
-  Widget _goodsName() {
+  Widget _goodsName(goodsResult) {
     return Container(
       width: ScreenUtil().setWidth(740),
       padding: EdgeInsets.only(left: 15.0),
       child: Text(
-        'dsdfsd',
+        goodsResult.name,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(30),
         ),
@@ -53,14 +59,14 @@ class DetailsTopArea extends StatelessWidget {
     );
   }
 
-  // 商品编号
-  Widget _goodsPrice() {
+  // 商品价格
+  Widget _goodsPrice(goodsResult) {
     return Container(
       width: ScreenUtil().setWidth(730),
       padding: EdgeInsets.only(left: 15.0),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Text(
-        '￥200.00-240.00',
+        '${goodsResult.priceRange}',
         style: TextStyle(color: Color(0xFFF2A631)),
       ),
     );

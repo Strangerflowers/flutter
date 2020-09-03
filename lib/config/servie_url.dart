@@ -27,6 +27,8 @@ const servicePath = {
   'quotationDetailPlan': serviceUrl +
       '/os_kernel_bid/mp/purchase/quotation/demand', //报价单查询所属的采购计划单详情App
   "goodsList": serviceUrl + '/os_kernel_bid/goods/list', //商品库列表
+  'goodsDetail':
+      serviceUrl + '/os_kernel_bid/goods/info/1', //获取商品详情(包括spu、sku规格信息)
   'listDemand':
       serviceUrl + '/os_kernel_bid/app/suppliers/listDemand', //供应商app-采购-需求列表
   "demandDetail":

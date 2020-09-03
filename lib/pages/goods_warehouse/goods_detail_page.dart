@@ -38,15 +38,6 @@ class GoodsDetailsPage extends StatelessWidget {
           }
         },
       ),
-      // ======静态页面
-      // body: Container(
-      //   child: Column(
-      //     children: <Widget>[
-      //       DetailsTopArea(),
-      //       DetailsSelectArea(),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
