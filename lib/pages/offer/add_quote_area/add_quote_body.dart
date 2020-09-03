@@ -19,7 +19,7 @@ class AddQuoteBody extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _dataListView(goodsInfo, context),
-            _planMark(),
+            _planMark(context),
           ],
         ),
       );
@@ -305,7 +305,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 备注
-  Widget _planMark() {
+  Widget _planMark(context) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
         margin: EdgeInsets.only(bottom: 40),
@@ -326,12 +326,16 @@ class AddQuoteBody extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              child: Text(
-                '备注信息',
-                style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: Color(0xFF575558),
-                    height: 1.5),
+              child: TextFormField(
+                keyboardType: TextInputType.multiline,
+                // maxLines: whatever,
+                maxLines: 10,
+                minLines: 1,
+                autofocus: false,
+                onChanged: (value) {
+                  Provide.value<DemandDetailProvide>(context).remarkFunc(value);
+                },
+                // controller: _unameController,
               ),
             )
           ],
@@ -366,13 +370,6 @@ class _GoodsPriceState extends State<GoodsPrice> {
       };
       return skulObjectData.add(obj);
     });
-    // super.initState();
-    // _focusNode.addListener(() {
-    //   if (!_focusNode.hasFocus) {
-    //     // TextField has lost focus
-    //     // _showMessage();
-    //   }
-    // });
     super.initState();
   }
 

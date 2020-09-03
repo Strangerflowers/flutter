@@ -8,6 +8,7 @@ import '../model/demand_detail_model.dart';
 
 class DemandDetailProvide with ChangeNotifier {
   DemandDetailHome goodsList;
+  var remark; //备注输入信息；
   var speciesNumber; //几种
   var totalNumber; //共几件
   var offerPageData; //报价整合数据的数据
@@ -157,6 +158,11 @@ class DemandDetailProvide with ChangeNotifier {
         }
       });
     });
+    notifyListeners();
+  }
+
+  remarkFunc(text) {
+    remark = text;
     notifyListeners();
   }
 }

@@ -90,7 +90,7 @@ class AddQuoteBottom extends StatelessWidget {
                       .goodsList
                       .result
                       .id,
-                  "remark": "string",
+                  "remark": Provide.value<DemandDetailProvide>(context).remark,
                   "subjectMgrInfoId": "0711547302f842e29f26f5658e72366b",
                   "totalAmount":
                       Provide.value<DemandDetailProvide>(context).totalAmount
