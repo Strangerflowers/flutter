@@ -1,28 +1,82 @@
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/model/base/BaseRequestModel.dart';
+import 'package:bid/model/base/BaseResponseModel.dart';
+import 'package:bid/model/base/BaseResponseResultList.dart';
+import 'package:bid/model/base/ListModel.dart';
+import 'package:bid/model/user_center/WithdrawAddressModel.dart';
+import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
 
-class WithdrawAddress extends StatelessWidget {
-  final _itemList = [];
+class WithdrawAddress extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _WithdrawAddress();
+  }
+}
+
+class _WithdrawAddress extends State<WithdrawAddress> {
+  List<WithdrawAddressModel> _itemList = [
+    WithdrawAddressModel(receiverName: "##loading##")
+  ];
+  int _totalPage = 0;
+  int _pageNo = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _retrieveData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: 接口请求后台数据
-    _itemList.add('1111');
-    _itemList.add('2222');
-    _itemList.add('3333');
-
-    // TODO: implement build
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildItemList(),
+      // body: FutureBuilder(
+      //   future: request('getWithdrawAddress', formData: {}),
+      //   builder: _asyncBuilder,
+      // ),
     );
+  }
+
+  /** 
+   * 延迟构建页面
+   */
+  Widget _asyncBuilder(BuildContext context, AsyncSnapshot snapshot) {
+    //请求完成
+    if (snapshot.connectionState == ConnectionState.done) {
+      LogUtils.d('snapshot', snapshot);
+      LogUtils.d('snapshot.data', snapshot.data);
+      //发生错误
+      if (snapshot.hasError) {
+        return Text(snapshot.error.toString());
+      }
+      var data = snapshot.data;
+      LogUtils.d('[获取退货地址数据]', data);
+      BaseResponseModel<BaseResponseResultList> baseResponseModel =
+          BaseResponseModel.fromJson(
+              data, (json) => BaseResponseResultList.fromJson(json));
+      LogUtils.d('============>[baseResponseModel]', baseResponseModel);
+      if (baseResponseModel.code == 0) {
+        List<WithdrawAddressModel> withdrawAddressModelList =
+            ListModel.collectToList(baseResponseModel.result.list,
+                (json) => WithdrawAddressModel.fromJson(json));
+        LogUtils.d('\r\n=============>[withdrawAddressModelList]',
+            withdrawAddressModelList);
+        withdrawAddressModelList.forEach((element) => _itemList.add(element));
+      }
+      //请求成功，通过项目信息构建用于显示项目名称的ListView
+      return _buildItemList();
+    }
+    //请求未完成时弹出loading
+    return CircularProgressIndicator();
   }
 
   /**
    * 构建导航栏
    */
-  _buildAppBar() {
+  Widget _buildAppBar() {
     return AppBar(
       iconTheme: IconThemeData.fallback(),
       centerTitle: true,
@@ -55,9 +109,9 @@ class WithdrawAddress extends StatelessWidget {
   }
 
   /** 
-     * 构建列表项行数据
-     */
-  Widget _buildRow(Object item) {
+   * 构建列表项行数据
+   */
+  Widget _buildRow(WithdrawAddressModel item) {
     LogUtils.d('[构建列表项行数据]', item);
     return new Container(
       padding: const EdgeInsets.all(16.0),
@@ -71,23 +125,28 @@ class WithdrawAddress extends StatelessWidget {
                 new Container(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: new Text(
-                    '刘德华  18911112222',
+                    sprintf('%s  %s', [item.receiverName, item.mobile]),
                     style: new TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 new Text(
-                  '广东省广州市天河区科技大道198号优托邦购物中心A座19楼',
+                  item.address,
                   style: new TextStyle(color: Colors.grey[500], fontSize: 10),
                 ),
               ],
             ),
           ),
-          new Image.asset(
-            'images/edit.png',
-            width: 20.0,
-            height: 20.0,
+          FlatButton(
+            child: new Image.asset(
+              'images/edit.png',
+              width: 20.0,
+              height: 20.0,
+            ),
+            onPressed: () {
+              LogUtils.d('[编辑按钮]', '被点击了!');
+            },
           ),
         ],
       ),
@@ -98,33 +157,65 @@ class WithdrawAddress extends StatelessWidget {
    * 构建列表项
    */
   Widget _buildItemList() {
-    return new ListView.builder(
+    return new ListView.separated(
+        separatorBuilder: (context, index) => Divider(height: .0),
         padding: const EdgeInsets.all(16.0),
         // 列表项的数量，如果为null，则为无限列表。
-        //itemCount: itemList.length,
-        itemBuilder: (context, i) {
-          LogUtils.d('[构建列表项]', sprintf('原始i:%s', [i]));
-          // 语法 "i ~/ 2" 表示i除以2，但返回值是整形（向下取整），比如i为：1, 2, 3, 4, 5
-          // 时，结果为0, 1, 1, 2, 2， 这可以计算出ListView中减去分隔线后的实际列表项数量
-          //
-          //             item  Divider  item   Divider  item
-          //页面元素序号    0      1      2        3       4
-          //index          0             1                2
-          final index = i ~/ 2;
-          LogUtils.d('index', index);
-          // 如果是建议列表中最后一个单词对
-          if (index >= _itemList.length) {
-            // TODO: 请求接口拿数据,追加到_itemList数组内
-            LogUtils.d('[构建列表项][index >= itemList.length]', '重新发起请求!');
-            return Text('');
-          } 
-          // 在偶数行，该函数会为单词对添加一个ListTile row.
-          // 在奇数行，该函数会添加一个分割线widget，来分隔相邻的词对。
-          // 注意，在小屏幕上，分割线看起来可能比较吃力。
-          // 在每一列之前，添加一个1像素高的分隔线widget
-          if (i.isOdd) return new Divider();
-          LogUtils.d('=======>', sprintf('%s - 是否为奇数:%s',[i, i.isOdd]));
+        itemCount: _itemList.length,
+        itemBuilder: (context, index) {
+          LogUtils.d('[构建列表项]', sprintf('i:%s', [index]));
+          // 如果是建议列表中最后一个列表项
+          if (index >= (_itemList.length - 1)) {
+            if (_pageNo <= _totalPage) {
+              LogUtils.d('[构建列表项]', '重新发起请求!');
+              _retrieveData();
+              //加载时显示loading
+              return Container(
+                padding: const EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                child: SizedBox(
+                    width: 24.0,
+                    height: 24.0,
+                    child: CircularProgressIndicator(strokeWidth: 2.0)),
+              );
+            } else {
+              return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "没有更多了",
+                    style: TextStyle(color: Colors.grey),
+                  ));
+            }
+          }
           return _buildRow(_itemList[index]);
         });
+  }
+
+  void _retrieveData() {
+    _pageNo++;
+    LogUtils.d('[分页查询]',
+        sprintf('当前页:%s 每页显示数:%s', [_pageNo, BaseRequestModel.DEFAULT_LIMIT]));
+    request('getWithdrawAddress',
+            formData: BaseRequestModel(
+                page: _pageNo, limit: BaseRequestModel.DEFAULT_LIMIT))
+        .then((data) {
+      setState(() {
+        BaseResponseModel baseResponseModel =
+            BaseResponseModel<BaseResponseResultList>.fromJson(
+                data, (json) => BaseResponseResultList.fromJson(json));
+        if (baseResponseModel.code == 0) {
+          BaseResponseResultList result = baseResponseModel.result;
+          _totalPage = result.totalPage;
+          List<WithdrawAddressModel> withdrawAddressModelList =
+              ListModel.collectToList(
+                  result.list, (json) => WithdrawAddressModel.fromJson(json));
+          LogUtils.d('\r\n[_retrieveData]', withdrawAddressModelList);
+          //重新构建列表
+          _itemList.insertAll(_itemList.length - 1, withdrawAddressModelList);
+          LogUtils.d('_itemList', _itemList);
+        }
+      });
+    });
   }
 }
