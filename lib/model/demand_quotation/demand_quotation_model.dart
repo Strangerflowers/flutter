@@ -75,6 +75,7 @@ class QuotataionDataList {
   int id;
   String subjectId;
   Null subjectName;
+  bool checkBoxFlag;
   String code;
   String name;
   Null category1;
@@ -102,6 +103,7 @@ class QuotataionDataList {
       {this.id,
       this.subjectId,
       this.subjectName,
+      this.checkBoxFlag,
       this.code,
       this.name,
       this.category1,
@@ -129,6 +131,7 @@ class QuotataionDataList {
     id = json['id'];
     subjectId = json['subjectId'];
     subjectName = json['subjectName'];
+    checkBoxFlag = json['checkBoxFlag'];
     code = json['code'];
     name = json['name'];
     category1 = json['category1'];
@@ -163,6 +166,7 @@ class QuotataionDataList {
     data['id'] = this.id;
     data['subjectId'] = this.subjectId;
     data['subjectName'] = this.subjectName;
+    data['checkBoxFlag'] = this.checkBoxFlag;
     data['code'] = this.code;
     data['name'] = this.name;
     data['category1'] = this.category1;

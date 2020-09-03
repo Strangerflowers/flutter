@@ -28,24 +28,6 @@ class AddQuoteProductPage extends StatelessWidget {
                 minHeight: MediaQuery.of(context).size.height - 126,
               ),
               child: AddQuoteBody(),
-              // child: Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: <Widget>[
-              //     Column(
-              //       mainAxisAlignment: MainAxisAlignment.start,
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: <Widget>[
-              //         Container(
-              //           color: Colors.white,
-              //           padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-              //           alignment: Alignment.centerLeft,
-              //           child: Text('请选择你要报价的商品:'),
-              //         ),
-              //         SwitchAndCheckBoxTestRoute(),
-              //       ],
-              //     ),
-              //   ],
-              // ),
             ),
           ),
           Positioned(

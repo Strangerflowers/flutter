@@ -22,7 +22,6 @@ class _SwitchAndCheckBoxTestRouteState
           child: Column(
             children: <Widget>[
               _checkboxTitleListView(goodsInfo.result.demandSkuDtoList),
-              // _checkboxItem(),
             ],
           ),
         ),
@@ -42,7 +41,7 @@ class _SwitchAndCheckBoxTestRouteState
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
-              return _checkboxItem(list[index]);
+              return _checkboxItem(list[index], index);
             },
           ),
         ),
@@ -77,19 +76,20 @@ class _SwitchAndCheckBoxTestRouteState
     }
   }
 
-  Widget _checkboxItem(subList) {
+  Widget _checkboxItem(subList, index) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          _checkboxTitle(subList),
+          _checkboxTitle(subList, index),
           _checkboxContentListView(subList.demandDetailDtoList),
         ],
       ),
     );
   }
 
-  Widget _checkboxTitle(item) {
+  Widget _checkboxTitle(item, index) {
+    var parent = false;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -109,6 +109,10 @@ class _SwitchAndCheckBoxTestRouteState
               setState(() {
                 item.checkBoxFlag = !item.checkBoxFlag;
               });
+              parent = item.checkBoxFlag;
+              print('object${item.checkBoxFlag}');
+              Provide.value<DemandDetailProvide>(context)
+                  .selectParentAll(parent, index);
             },
           ),
           Expanded(
@@ -134,6 +138,7 @@ class _SwitchAndCheckBoxTestRouteState
               setState(() {
                 item.checkBoxFlag = !item.checkBoxFlag;
               });
+              Provide.value<DemandDetailProvide>(context).selectChild();
             },
           ),
           Expanded(

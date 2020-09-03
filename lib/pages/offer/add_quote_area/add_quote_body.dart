@@ -1,37 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import './round_checkbox.dart';
+import 'package:provide/provide.dart';
 import '../../../routers/application.dart';
+import '../../../provide/demand_detail_provide.dart';
 
 class AddQuoteBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(20),
-      color: Colors.white,
-      width: ScreenUtil().setWidth(750),
-      child: Column(
-        children: <Widget>[
-          _dataListView(context),
-        ],
-      ),
-    );
+    return Provide<DemandDetailProvide>(builder: (context, child, val) {
+      var goodsInfo = Provide.value<DemandDetailProvide>(context).offerPageData;
+      // print('报价选择商品页面${goodsInfo[0]['productCategroyPath']}');
+      return Container(
+        // margin: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(20),
+        color: Colors.white,
+        width: ScreenUtil().setWidth(750),
+        child: Column(
+          children: <Widget>[
+            _dataListView(goodsInfo, context),
+          ],
+        ),
+      );
+    });
   }
 
   //循环一级数据
-  Widget _dataListView(context) {
+  Widget _dataListView(list, context) {
     List item = ['123', '4353'];
     if (item != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: 2,
+            itemCount: list.length,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (context, index) {
-              return _merge(context);
+              return _merge(list[index], context);
             },
           ),
         ),
@@ -44,7 +49,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 合并一二级数据
-  Widget _merge(context) {
+  Widget _merge(item, context) {
     return Container(
       // decoration: BoxDecoration(
       //   color: Colors.white,
@@ -56,8 +61,8 @@ class AddQuoteBody extends StatelessWidget {
       margin: EdgeInsets.only(top: 20),
       child: Column(
         children: <Widget>[
-          _firstStage(),
-          _datasecondsListView(context),
+          _firstStage(item),
+          _datasecondsListView(item['demandDetailDtoList'], context),
           // _secondLevel(),
         ],
       ),
@@ -65,7 +70,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 一级数据
-  Widget _firstStage() {
+  Widget _firstStage(item) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -74,7 +79,7 @@ class AddQuoteBody extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.only(left: 10),
-              child: Text('电子产品-耳机-蓝牙耳机'),
+              child: Text('${item['productCategroyPath']}'),
             ),
           ),
         ],
@@ -83,18 +88,17 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   //遍历二级数据
-  Widget _datasecondsListView(context) {
-    List item = ['123', '4353'];
-    if (item != null) {
+  Widget _datasecondsListView(subList, context) {
+    if (subList != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: subList.length,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (context, index) {
-              return _secondLevel(context);
+              return _secondLevel(subList[index], context);
             },
           ),
         ),
@@ -107,7 +111,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 二级数据
-  Widget _secondLevel(context) {
+  Widget _secondLevel(subItem, context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -120,28 +124,26 @@ class AddQuoteBody extends StatelessWidget {
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
-            child: Text('对应产品：蓝牙无线耳头戴氏'),
+            child: Text('对应产品：${subItem.productDescript}'),
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text('需求数量：120个'),
+            child: Text('需求数量：${subItem.num}${subItem.type}'),
           ),
-          _addShipment(context),
+          _addShipment(subItem, context),
           _buttom(),
         ],
       ),
     );
   }
 
-  // 添加发货安排
-  Widget _addShipment(context) {
+  // 添加产品
+  Widget _addShipment(subItem, context) {
     return InkWell(
       onTap: () {
-        // // 跳转到详情页面
-        Application.router.navigateTo(context, "/selectproduct?id=1");
-        // Application.router.navigateTo(context,
-        //     "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId");
-        // print('点击跳转采购页面');
+        // 跳转到商品列表页面
+        Application.router.navigateTo(
+            context, "/selectproduct?id=${subItem.productCategroyId}");
       },
       child: Container(
         padding: EdgeInsets.all(20),

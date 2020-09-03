@@ -290,6 +290,7 @@ class ProductInformation extends StatelessWidget {
   Widget _planMark(item) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        margin: EdgeInsets.only(bottom: 40),
         // padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
         child: Column(
