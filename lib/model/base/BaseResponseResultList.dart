@@ -1,18 +1,18 @@
-class BaseResponseResult {
+class BaseResponseResultList {
   int totalCount;
   int pageSize;
   int totalPage;
   int currPage;
   List<Map<String, dynamic>> list;
 
-  BaseResponseResult(
+  BaseResponseResultList(
       {this.totalCount,
       this.pageSize,
       this.totalPage,
       this.currPage,
       this.list});
 
-  BaseResponseResult.fromJson(Map<String, dynamic> json) {
+  BaseResponseResultList.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
     pageSize = json['pageSize'];
     totalPage = json['totalPage'];

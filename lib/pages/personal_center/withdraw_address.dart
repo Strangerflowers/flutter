@@ -1,7 +1,7 @@
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/model/base/BaseRequestModel.dart';
 import 'package:bid/model/base/BaseResponseModel.dart';
-import 'package:bid/model/base/BaseResponseResult.dart';
+import 'package:bid/model/base/BaseResponseResultList.dart';
 import 'package:bid/model/base/ListModel.dart';
 import 'package:bid/model/user_center/WithdrawAddressModel.dart';
 import 'package:bid/service/service_method.dart';
@@ -54,7 +54,9 @@ class _WithdrawAddress extends State<WithdrawAddress> {
       }
       var data = snapshot.data;
       LogUtils.d('[获取退货地址数据]', data);
-      BaseResponseModel baseResponseModel = BaseResponseModel.fromJson(data);
+      BaseResponseModel<BaseResponseResultList> baseResponseModel =
+          BaseResponseModel.fromJson(
+              data, (json) => BaseResponseResultList.fromJson(json));
       LogUtils.d('============>[baseResponseModel]', baseResponseModel);
       if (baseResponseModel.code == 0) {
         List<WithdrawAddressModel> withdrawAddressModelList =
@@ -199,9 +201,11 @@ class _WithdrawAddress extends State<WithdrawAddress> {
                 page: _pageNo, limit: BaseRequestModel.DEFAULT_LIMIT))
         .then((data) {
       setState(() {
-        BaseResponseModel baseResponseModel = BaseResponseModel.fromJson(data);
+        BaseResponseModel baseResponseModel =
+            BaseResponseModel<BaseResponseResultList>.fromJson(
+                data, (json) => BaseResponseResultList.fromJson(json));
         if (baseResponseModel.code == 0) {
-          BaseResponseResult result = baseResponseModel.result;
+          BaseResponseResultList result = baseResponseModel.result;
           _totalPage = result.totalPage;
           List<WithdrawAddressModel> withdrawAddressModelList =
               ListModel.collectToList(
