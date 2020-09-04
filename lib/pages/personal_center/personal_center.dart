@@ -9,6 +9,7 @@ import 'package:sprintf/sprintf.dart';
 import '../../common/constants.dart';
 import '../../routers/routers.dart';
 import '../../common/log_utils.dart';
+import '../signup/signin.dart';
 
 // 快速生成  stlss
 class PersonalCenter extends StatelessWidget {
@@ -26,7 +27,7 @@ class PersonalCenter extends StatelessWidget {
           _orderTitle(),
           // _orderType(),
           _actionList(context, listTitles),
-          _logout(),
+          _logout(context),
         ],
       ),
     );
@@ -260,13 +261,14 @@ class PersonalCenter extends StatelessWidget {
     );
   }
 
-  Widget _logout() {
+  Widget _logout(context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: RaisedButton(
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
         onPressed: () {
+          Application.router.navigateTo(context, '/sigin');
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(

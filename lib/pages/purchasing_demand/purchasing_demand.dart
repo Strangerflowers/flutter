@@ -82,7 +82,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             // Search(),
             _orderType(),
             DemandContent(),
-            // _logout(),
+            _logout(),
             // _login(),
             _detail(),
             _choice(),
@@ -219,7 +219,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
     );
   }
 
-// 跳转登录页面
+// 跳转注册页面
   Widget _logout() {
     return Container(
       child: RaisedButton(

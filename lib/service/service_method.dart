@@ -35,7 +35,7 @@ Future request(
   }
 }
 
-// 获取首页主题内容
+//无请求头参数
 Future requestNoHeader(url, {formData}) async {
   try {
     print('开始获取数据..........');
@@ -86,7 +86,6 @@ Future requestGet(url, {formData}) async {
   }
 }
 
-// 获取首页主题内容
 Future getHomePageContent() async {
   try {
     Response response;

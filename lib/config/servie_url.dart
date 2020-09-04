@@ -17,8 +17,11 @@ const servicePath = {
       serviceUrl + '/os_kernel_userorgctr/app/user/sendLoginCaptcha', //登录获取验证码
   'sendRegCaptcha': serviceUrl +
       '/os_kernel_userorgctr/app/user/sendRegCaptcha', //注册获取验证码的话访问用户中心的
+  "register": serviceUrl + '/os_kernel_bid/app/suppliers/register', //注册接口
   'verifyRegCheckCode': serviceUrl +
       '/os_kernel_userorgctr/app/user/verifyRegCheckCode', //登录校验验证码
+  'checkAuditStatus': serviceUrl +
+      '/os_kernel_bid/app/suppliers/user/info', //查看返回的auditStatus的状态来判断跳转到哪个页面
 
   'quotationQueryPage':
       serviceUrl + '/os_kernel_bid/mp/purchase/quotation/queryPage', //报价列表查询

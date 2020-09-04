@@ -1,11 +1,10 @@
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
-import './signup_index.dart';
+import './register.dart';
+import '../../routers/application.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../index_page.dart';
-// import '../purchasing_demand/purchasing_demand.dart';
-// import 'package:oktoast/oktoast.dart';
 
 Dio dio = Dio();
 
@@ -50,10 +49,25 @@ class _FormTestRouteState extends State<FormTestRoute> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Container(
-                  child: Text('注册'),
-                  alignment: Alignment.topRight,
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context); //销毁当前页面
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          // return FormTestRoute();
+                          return Register();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    child: Text('注册'),
+                    alignment: Alignment.topRight,
+                  ),
                 ),
+
                 new Image.asset('images/icon.png'),
                 Container(
                   child: Row(
@@ -254,6 +268,12 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
+  _checkAuditStatus() async {
+    await requestGet('checkAuditStatus').then((val) {
+      print('---查看跳转页面------------------->>>>>>>>$val');
+    });
+  }
+
   void _choiceAction() {
     if ((_formKey.currentState as FormState).validate()) {
       var data = {
@@ -263,36 +283,19 @@ class _FormPageState extends State<FormPage> {
       getHttp(data).then((val) {
         if (val['code'] == 0) {
           print("返回的TGT${val['result']}");
-          getToken(val['result']).then((value) => {
-                if (val['code'] == 0)
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return IndexPage();
-                        },
-                      ),
-                    ),
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return IndexPage();
-                    //     },
-                    //   ),
-                    // )
-                  }
-                else
-                  {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("${val['message']}"),
-                      ),
-                    )
-                  },
-              });
+          getToken(val['result']).then((value) {
+            if (val['code'] == 0) {
+              _checkAuditStatus();
+              // Application.router.navigateTo(context, "/indexPage");
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("${val['message']}"),
+                ),
+              );
+            }
+          });
         } else {
           showDialog(
             context: context,
@@ -518,9 +521,10 @@ class _MobileFormPageState extends State<MobileFormPage> {
             print('响应数据1234$value  ---${value['code']}');
             // var data = json.decode(value.toString());
             if (value['code'] == 0) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return IndexPage();
-              }));
+              Application.router.navigateTo(context, "/indexPage");
+              // Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //   return IndexPage();
+              // }));
             } else {
               print('手机登录不成');
             }

@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import './signin.dart';
 import './authentication.dart';
+import '../../service/service_method.dart';
+import '../../routers/application.dart';
+import 'dart:convert' as convert;
 
 class SetPassword extends StatelessWidget {
+  final String mobile;
+  final String companyName;
+  final String companyShort;
+
+  SetPassword(this.mobile, this.companyName, this.companyShort);
+
   @override
   Widget build(BuildContext context) {
+    print('设置密码页面$mobile==$companyName===$companyShort');
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -13,13 +25,17 @@ class SetPassword extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: PasswordForm(),
+        child: PasswordForm(mobile, companyName, companyShort),
       ),
     );
   }
 }
 
 class PasswordForm extends StatefulWidget {
+  final String mobile;
+  final String companyName;
+  final String companyShort;
+  PasswordForm(this.mobile, this.companyName, this.companyShort);
   @override
   _PasswordFormState createState() => _PasswordFormState();
 }
@@ -33,6 +49,16 @@ TextEditingController _comPasswordController = new TextEditingController();
 GlobalKey<FormState> _setFormKey = GlobalKey<FormState>();
 
 class _PasswordFormState extends State<PasswordForm> {
+  var params;
+  void initState() {
+    params = {
+      "mobile": widget.mobile,
+      "companyName": widget.companyName,
+      "companyShort": widget.companyShort,
+    };
+    super.initState();
+  }
+
   String newPassword, comPassword;
   @override
   Widget build(BuildContext context) {
@@ -122,15 +148,42 @@ class _PasswordFormState extends State<PasswordForm> {
     );
   }
 
-  void _register() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return Authentication();
-          // return Register();
-        },
-      ),
-    );
+  void _register() async {
+    _setFormKey.currentState.save();
+    _setFormKey.currentState.validate();
+    var formData = {
+      "companyName": widget.companyName,
+      "mobile": widget.mobile,
+      "companyShort": widget.companyShort,
+      "password": newPassword,
+    };
+
+    print('注册信息$formData');
+    if ((_setFormKey.currentState as FormState).validate()) {
+      await request('register', formData: formData).then((val) {
+        print('----------------------$val');
+        if (val['code'] == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return FormTestRoute();
+                // return Register();
+              },
+            ),
+          );
+          // Application.router.navigateTo(context, "/setPassword?item=$item");
+        } else {
+          Fluttertoast.showToast(
+            msg: val['message'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
+      });
+    }
   }
 }

@@ -32,6 +32,12 @@ class Routes {
   static String WITHDRAW_ADDRESS_PAGE = '/withdrawAddress';
   // 修改密码
   static String MODIFY_PASSWORD_PAGE = '/modifyPassword';
+  // 注册设置密码
+  static String SET_PASSWORD_PAGE = '/setPassword';
+  // 需求详情首页
+  static String INDEX_PAGE = '/indexPage';
+  // 登录
+  static String SIGIN = '/sigin';
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -54,5 +60,8 @@ class Routes {
     router.define(CONTACT_INFO_PAGE, handler: contactInfoPageHandler);
     router.define(WITHDRAW_ADDRESS_PAGE, handler: withdrawAddressPageHandler);
     router.define(MODIFY_PASSWORD_PAGE, handler: modifyPasswordPageHandler);
+    router.define(SET_PASSWORD_PAGE, handler: registerSetPasswordHandler);
+    router.define(SIGIN, handler: siginHandler);
+    router.define(INDEX_PAGE, handler: homePageHandler);
   }
 }

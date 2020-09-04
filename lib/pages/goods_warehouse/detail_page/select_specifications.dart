@@ -14,18 +14,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   List<String> skuldataList = new List();
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   var selectGoodsResult; //存放动态商品数据
-  // void initState(){
-  //   selectGoodsResult =
-  // }
-  // var list = [
-  //   'Hamilton1',
-  //   'Lafayette1',
-  //   '1米',
-  //   'Mulligan1',
-  //   'Laurens1',
-  //   '黑-1米',
-  //   '白-1米'
-  // ];
+
   List<String> selectedItemsList = List(); //存放选中的规格
   String showSelectItem; //展示最后确定的规格
   @override

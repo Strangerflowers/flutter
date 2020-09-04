@@ -1,7 +1,9 @@
+import 'package:bid/pages/index_page.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/pages/signup/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import '../pages/quotation/quotataion_detail_page.dart';
@@ -16,6 +18,8 @@ import '../pages/offer/add_quote_product_page.dart';
 import '../pages/offer/select_products_page.dart';
 import '../pages/offer/choice_index_page.dart';
 import '../common/log_utils.dart';
+import '../pages/signup/setregister_password.dart';
+import '../pages/purchasing_demand/purchasing_demand.dart';
 
 // handler 的单个配置
 Handler detailsHandler = Handler(
@@ -145,4 +149,25 @@ Handler modifyPasswordPageHandler = Handler(
   LogUtils.d('跳转[修改密码]', '接收到参数$params');
   //String id = params['id'].first;
   return ModifyPassword();
+});
+// 注册设置密码
+Handler registerSetPasswordHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[修改密码]', '接收到参数$params');
+  String mobile = params['mobile'].first;
+  String companyName = params['companyName'].first;
+  String companyShort = params['companyShort'].first;
+  return SetPassword(mobile, companyName, companyShort);
+});
+
+// 登录页面
+Handler siginHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return FormTestRoute();
+});
+
+//登录成功之后跳转到首页
+Handler homePageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return IndexPage();
 });
