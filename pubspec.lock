@@ -133,8 +133,7 @@ packages:
       name: collection
       url: "https://pub.flutter-io.cn"
     source: hosted
-<<<<<<< HEAD
-    version: "1.14.13"
+    version: "1.14.12"
   common_utils:
     dependency: transitive
     description:
@@ -142,9 +141,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.1"
-=======
-    version: "1.14.12"
->>>>>>> ca2878a1fa2dc9daa822e90e51dd1b18768330a6
   convert:
     dependency: transitive
     description:
@@ -857,5 +853,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"

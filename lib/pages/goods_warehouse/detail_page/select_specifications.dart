@@ -13,15 +13,19 @@ class DetailsSelectArea extends StatefulWidget {
 class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   List<String> skuldataList = new List();
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
-  var list = [
-    'Hamilton1',
-    'Lafayette1',
-    '1米',
-    'Mulligan1',
-    'Laurens1',
-    '黑-1米',
-    '白-1米'
-  ];
+  var selectGoodsResult; //存放动态商品数据
+  // void initState(){
+  //   selectGoodsResult =
+  // }
+  // var list = [
+  //   'Hamilton1',
+  //   'Lafayette1',
+  //   '1米',
+  //   'Mulligan1',
+  //   'Laurens1',
+  //   '黑-1米',
+  //   '白-1米'
+  // ];
   List<String> selectedItemsList = List(); //存放选中的规格
   String showSelectItem; //展示最后确定的规格
   @override
@@ -34,7 +38,6 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
       goodsInfo.skuList.forEach((ele) {
         var valueArr = [];
         ele.items.forEach((subele) {
-          // print('遍历规格处理${subele.value}');
           valueArr.add(subele.value);
         });
 
@@ -49,7 +52,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
 
         return;
       });
-      print('处理规格数据$skulObjectData====$skuldataList');
+
       return Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -66,17 +69,25 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   }
 
   // 合并商品
-  Widget _mergeItem(goodsItem) {
+  Widget _mergeItem(selectGoodsItem, goodsItem) {
+    print('商品数据$goodsItem');
     return Container(
       child: Row(
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(120),
-            padding: EdgeInsets.only(top: 0, right: 10),
-            child: Image.asset('images/icon.png'),
+            padding: EdgeInsets.only(top: 0, right: 10, left: 10),
+            child: selectGoodsItem == null
+                ? Image.asset('images/icon.png')
+                : (selectGoodsItem.image == null
+                    ? Text(
+                        '暂无图片',
+                        style: TextStyle(fontSize: ScreenUtil().setSp(20)),
+                      )
+                    : Image.network(selectGoodsItem.image)),
           ),
           Expanded(
-            child: _right(goodsItem),
+            child: _right(selectGoodsItem, goodsItem),
           ),
         ],
       ),
@@ -84,7 +95,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   }
 
   // 左侧商品
-  Widget _right(goodsItem) {
+  Widget _right(selectGoodsItem, goodsItem) {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
@@ -114,17 +125,22 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                   ),
                 ],
               )),
-          // Container(
-          //   alignment: Alignment.centerLeft,
-          //   child: Text(
-          //     // '库存  999999',
-          //     maxLines: 2,
-          //   ),
-          // ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: selectGoodsItem == null
+                ? Text(
+                    '库存  999999',
+                    maxLines: 2,
+                  )
+                : Text(
+                    '库存：${selectGoodsItem.stock}',
+                    maxLines: 2,
+                  ),
+          ),
           Row(
             children: <Widget>[
               Text(
-                '￥${goodsItem.priceRange}',
+                '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
             ],
@@ -140,118 +156,110 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
       context: context,
       // isScrollControlled: false,
       builder: (context) => GestureDetector(
-        child: Container(
-          height: ScreenUtil().setHeight(700),
-          child: Column(
-            children: <Widget>[
-              _mergeItem(goodsItem),
-              Container(
-                padding: EdgeInsets.only(left: 20),
-                alignment: Alignment.bottomLeft,
-                height: ScreenUtil().setHeight(40),
-                child: Text(
-                  '规格',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+        child: StatefulBuilder(builder: (context, StateSetter setState) {
+          // print('动态更新模态框数据');
+          return Container(
+            height: ScreenUtil().setHeight(700),
+            child: Column(
+              children: <Widget>[
+                _mergeItem(selectGoodsResult, goodsItem),
+                Container(
+                  padding: EdgeInsets.only(left: 20),
+                  alignment: Alignment.bottomLeft,
+                  height: ScreenUtil().setHeight(40),
+                  child: Text(
+                    '规格',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Container(
-                      height: ScreenUtil().setHeight(400),
-                      child: MultiSelectChip(
-                        skuldataList,
-                        showSelectItem,
-                        onSelectionChanged: (selectedList) {
-                          // selectedList选中的规格
-                          print('单选的回调$selectedList');
-                          setState(() {
-                            selectedItemsList = selectedList;
-                          });
-                        },
+                Stack(
+                  children: <Widget>[
+                    SingleChildScrollView(
+                      child: Container(
+                        height: ScreenUtil().setHeight(400),
+                        child: MultiSelectChip(
+                          skuldataList,
+                          showSelectItem,
+                          onSelectionChanged: (selectedList) {
+                            print('单选的回调$selectGoodsResult');
+
+                            setState(() {
+                              selectedItemsList = selectedList;
+                            });
+
+                            print('选择规格${selectedItemsList.join(' ')}');
+                            skulObjectData.forEach((element) {
+                              if (element['skul'] ==
+                                  selectedItemsList.join(' ')) {
+                                print('进入条件判断$selectGoodsResult');
+                                return selectGoodsResult = element['skulgood'];
+
+                                // return result.specificaId = element['id'];
+                              }
+                            });
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    right: 20,
-                    left: 20,
-                    child: FlatButton(
-                      //自定义按钮颜色
-                      color: Color(0xFF2A83FF),
-                      highlightColor: Colors.blue[700],
-                      colorBrightness: Brightness.dark,
-                      splashColor: Colors.blue,
-                      child: Text("确定"),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      onPressed: () {
-                        setState(() {
-                          showSelectItem = selectedItemsList.join('');
-                        });
-                        Navigator.pop(context, 1);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                    // Positioned(
+                    //   bottom: 0.0,
+                    //   right: 20,
+                    //   left: 20,
+                    //   child: FlatButton(
+                    //     //自定义按钮颜色
+                    //     color: Color(0xFF2A83FF),
+                    //     highlightColor: Colors.blue[700],
+                    //     colorBrightness: Brightness.dark,
+                    //     splashColor: Colors.blue,
+                    //     child: Text("确定"),
+                    //     textColor: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(20.0)),
+                    //     onPressed: () {
+                    //       setState(() {
+                    //         showSelectItem = selectedItemsList.join('');
+                    //       });
+                    //       Navigator.pop(context, 1);
+                    //     },
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
         onVerticalDragStart: (_) {},
       ),
       isDismissible: false,
       isScrollControlled: false,
       // isScrollControlled: true,
-
-      // (BuildContext context) {
-      //   return Container(
-      //     child: Column(
-      //       children: <Widget>[
-      //         _mergeItem(),
-      //         Stack(
-      //           children: <Widget>[
-      //             Container(
-      //               height: ScreenUtil().setHeight(600),
-      //               child: MultiSelectChip(
-      //                 list,
-      //                 // selectedItemsList,
-      //                 onSelectionChanged: (selectedList) {
-      //                   // selectedList选中的规格
-      //                   print('单选的回调$selectedList');
-      //                   setState(() {
-      //                     selectedItemsList = selectedList;
-      //                   });
-      //                 },
-      //               ),
-      //             ),
-      //             Positioned(
-      //               bottom: 0.0,
-      //               right: 20,
-      //               left: 20,
-      //               child: FlatButton(
-      //                 //自定义按钮颜色
-      //                 color: Color(0xFF2A83FF),
-      //                 highlightColor: Colors.blue[700],
-      //                 colorBrightness: Brightness.dark,
-      //                 splashColor: Colors.blue,
-      //                 child: Text("确定"),
-      //                 textColor: Colors.white,
-      //                 shape: RoundedRectangleBorder(
-      //                     borderRadius: BorderRadius.circular(20.0)),
-      //                 onPressed: () {
-      //                   Navigator.pop(context, 1);
-      //                 },
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ],
-      //     ),
-      //   );
-      // },
     );
+  }
+
+  // 弹框动态更新数据
+  Future<int> showMyDialogWithStateBuilder(goodsItem, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          bool selected = false;
+          return new AlertDialog(
+            title: new Text("StatefulBuilder"),
+            content:
+                new StatefulBuilder(builder: (context, StateSetter setState) {
+              return Container(
+                child: new CheckboxListTile(
+                    title: new Text("选项"),
+                    value: selected,
+                    onChanged: (bool) {
+                      setState(() {
+                        selected = !selected;
+                      });
+                    }),
+              );
+            }),
+          );
+        });
   }
 
   Widget _select(goodsInfo, context) {
@@ -259,6 +267,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
       child: InkWell(
         onTap: () async {
           int type = await _showModalBottomSheet(goodsInfo, context);
+          // int type = await showMyDialogWithStateBuilder(goodsInfo, context);
         },
         child: Row(
           children: <Widget>[
