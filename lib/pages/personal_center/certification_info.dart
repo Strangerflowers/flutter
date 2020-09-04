@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/string_utils.dart';
 import 'package:bid/model/base/BaseResponseModel.dart';
+import 'package:bid/model/base/DataModel.dart';
 import 'package:bid/model/user_center/CertificationInfoModel.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
@@ -61,17 +62,28 @@ class CertificationInfo extends StatelessWidget {
         LogUtils.d('============>[baseResponseModel]', baseResponseModel);
         CertificationInfoModel certificationInfoModel =
             baseResponseModel.result;
-        Map<String, dynamic> certInfoModelMap = certificationInfoModel.toJson();
-        List<DataModel> dataModelList = _initDataModelList();
-        certInfoModelMap['companyDetailAddr'] = StringUtils.defaultIfEmpty(
-                certificationInfoModel.companyDistrictName, '') +
-            StringUtils.defaultIfEmpty(
-                certificationInfoModel.companyDetailAddr, '');
-        dataModelList.forEach((e) => e.value =
-            null != certInfoModelMap[e.code] ? certInfoModelMap[e.code] : '');
-        LogUtils.d('[dataModelList]', dataModelList);
-        //请求成功，通过项目信息构建用于显示项目名称的ListView
-        return _buildBody(dataModelList);
+        if (null != certificationInfoModel) {
+          Map<String, dynamic> certInfoModelMap =
+              certificationInfoModel.toJson();
+          List<DataModel> dataModelList = _initDataModelList();
+          certInfoModelMap['companyDetailAddr'] = StringUtils.defaultIfEmpty(
+                  certificationInfoModel.companyDistrictName, '') +
+              StringUtils.defaultIfEmpty(
+                  certificationInfoModel.companyDetailAddr, '');
+          dataModelList.forEach((e) => e.value =
+              null != certInfoModelMap[e.code] ? certInfoModelMap[e.code] : '');
+          LogUtils.d('[dataModelList]', dataModelList);
+          //请求成功，通过项目信息构建用于显示项目名称的ListView
+          return _buildBody(dataModelList);
+        } else {
+          return Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                "查无数据!",
+                style: TextStyle(color: Colors.grey),
+              ));
+        }
       }
     }
     //请求未完成时弹出loading
@@ -84,8 +96,8 @@ class CertificationInfo extends StatelessWidget {
   Widget _buildRow(DataModel dataModel) {
     // 需要预处理显示文本的字段
     var preprocessMap = {
-      "companyDetailAddr": _preprocessText,
-      "businessScope": _preprocessText
+      "companyDetailAddr": StringUtils.preprocessText,
+      "businessScope": StringUtils.preprocessText
     };
     dataModel.value = preprocessMap.containsKey(dataModel.code)
         ? preprocessMap[dataModel.code](dataModel.value, 15)
@@ -157,27 +169,6 @@ class CertificationInfo extends StatelessWidget {
   }
 
   /** 
-   * 预处理经营范围的描述内容，每10个字符换一次行
-   */
-  String _preprocessText(String text, int wordSize) {
-    int length = text.length;
-    int totalGroup = 0;
-    if (length % wordSize == 0) {
-      totalGroup = length ~/ wordSize;
-    } else {
-      totalGroup = length ~/ wordSize + 1;
-    }
-    String returnNewline = "\r\n";
-    String finalText = '';
-    for (int group = 0; group < totalGroup; group++) {
-      int startIdx = group * wordSize + 1;
-      int endIdx = group == totalGroup - 1 ? length - 1 : startIdx + wordSize;
-      finalText += text.substring(startIdx, endIdx) + returnNewline;
-    }
-    return finalText;
-  }
-
-  /** 
    * 构建页面内容
    */
   Widget _buildBody(List<DataModel> dataModelList) {
@@ -210,35 +201,5 @@ class CertificationInfo extends StatelessWidget {
       DataModel(code: 'contactMobile', label: '手机号码', value: ''),
     ];
     return dataModelList;
-  }
-}
-
-/** 
- * 数据对象
- */
-class DataModel {
-  String code;
-  String label;
-  String value;
-
-  DataModel({this.code, this.label, this.value});
-
-  DataModel.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    label = json['label'];
-    value = json['value'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['label'] = this.label;
-    data['value'] = this.value;
-    return data;
-  }
-
-  @override
-  String toString() {
-    return this.toJson().toString();
   }
 }

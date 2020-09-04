@@ -123,11 +123,16 @@ class _WithdrawAddress extends State<WithdrawAddress> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 new Container(
+                  // decoration: BoxDecoration(
+                  //     border: Border(
+                  //         bottom:
+                  //             BorderSide(width: 1, color: Color(0xffe5e5e5)))),
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: new Text(
                     sprintf('%s  %s', [item.receiverName, item.mobile]),
                     style: new TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 13,
                     ),
                   ),
                 ),
@@ -138,16 +143,25 @@ class _WithdrawAddress extends State<WithdrawAddress> {
               ],
             ),
           ),
-          FlatButton(
-            child: new Image.asset(
-              'images/edit.png',
-              width: 20.0,
-              height: 20.0,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.zero,
+              // decoration: BoxDecoration(
+              //     border: Border(
+              //         bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                child: new Image.asset(
+                  'images/edit.png',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+                onTap: () {
+                  LogUtils.d('[编辑按钮]', '被点击了!');
+                },
+              ),
             ),
-            onPressed: () {
-              LogUtils.d('[编辑按钮]', '被点击了!');
-            },
-          ),
+          )
         ],
       ),
     );

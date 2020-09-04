@@ -55,4 +55,6 @@ const servicePath = {
       serviceUrl + '/os_kernel_bid/app/address/queryPage', // 个人中心-退货地址
   'getCertificationInfo':
       serviceUrl + '/os_kernel_bid/app/suppliers/user/info', // 个人中心-认证资料
+  'getContactInfo':
+      serviceUrl + '/os_kernel_bid/app/contacts/queryPage', // 个人中心-联系信息
 };
