@@ -3,6 +3,7 @@ import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/pages/signup/authentication.dart';
 import 'package:bid/pages/signup/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
@@ -170,4 +171,10 @@ Handler siginHandler = Handler(
 Handler homePageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return IndexPage();
+});
+
+//资料认证
+Handler authenticationHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return Authentication();
 });

@@ -38,6 +38,8 @@ class Routes {
   static String INDEX_PAGE = '/indexPage';
   // 登录
   static String SIGIN = '/sigin';
+  // 资料认证
+  static String AUTHENTICATION = '/authentication';
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -63,5 +65,6 @@ class Routes {
     router.define(SET_PASSWORD_PAGE, handler: registerSetPasswordHandler);
     router.define(SIGIN, handler: siginHandler);
     router.define(INDEX_PAGE, handler: homePageHandler);
+    router.define(AUTHENTICATION, handler: authenticationHandler);
   }
 }

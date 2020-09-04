@@ -270,7 +270,13 @@ class _FormPageState extends State<FormPage> {
 
   _checkAuditStatus() async {
     await requestGet('checkAuditStatus').then((val) {
-      print('---查看跳转页面------------------->>>>>>>>$val');
+      print(
+          '---查看跳转页面------------------->>>>>>>>${val['result']['auditStatus']}');
+      if (val['result']['auditStatus'] == 0) {
+        Application.router.navigateTo(context, "/indexPage");
+      } else {
+        Application.router.navigateTo(context, "/authentication");
+      }
     });
   }
 
@@ -521,10 +527,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
             print('响应数据1234$value  ---${value['code']}');
             // var data = json.decode(value.toString());
             if (value['code'] == 0) {
-              Application.router.navigateTo(context, "/indexPage");
-              // Navigator.push(context, MaterialPageRoute(builder: (context) {
-              //   return IndexPage();
-              // }));
+              _checkAuditStatus();
             } else {
               print('手机登录不成');
             }
@@ -532,5 +535,17 @@ class _MobileFormPageState extends State<MobileFormPage> {
         } else {}
       });
     } else {}
+  }
+
+  _checkAuditStatus() async {
+    await requestGet('checkAuditStatus').then((val) {
+      print(
+          '---查看跳转页面------------------->>>>>>>>${val['result']['auditStatus']}');
+      if (val['result']['auditStatus'] == 0) {
+        Application.router.navigateTo(context, "/indexPage");
+      } else {
+        Application.router.navigateTo(context, "/authentication");
+      }
+    });
   }
 }
