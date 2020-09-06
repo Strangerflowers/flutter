@@ -151,6 +151,7 @@ class FormDemoState extends State<FormDemo> {
                 ),
                 TextFormField(
                   // 输入模式设置为手机号
+                  autovalidate: true,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     prefixIcon: Container(
