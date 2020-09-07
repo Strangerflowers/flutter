@@ -25,13 +25,22 @@ class Routes {
   //             用户中心
   // ################################
   // 认证资料
-  static String CERTIFICATE_INFO_PAGE = '/certificateInfo';
+  static const String CERTIFICATE_INFO_PAGE = '/certificateInfo';
   // 联系信息
-  static String CONTACT_INFO_PAGE = '/contactInfo';
+  static const String CONTACT_INFO_PAGE = '/contactInfo';
+  // 新增联系信息
+  static const String ADD_CONTATCT_INFO_PAGE = '/addContactInfo';
+  // 编辑联系信息
+  static const String EDIT_CONTATCT_INFO_PAGE = '/editContactInfo';
   // 退货地址
-  static String WITHDRAW_ADDRESS_PAGE = '/withdrawAddress';
+  static const String WITHDRAW_ADDRESS_PAGE = '/withdrawAddress';
+  // 新增退货地址
+  static const String ADD_WITHDRAW_ADDRESS_PAGE = '/addWithdrawAddress';
+  // 编辑退货地址
+  static const String EDIT_WITHDRAW_ADDRESS_PAGE = 'editWithdrawAddress';
   // 修改密码
-  static String MODIFY_PASSWORD_PAGE = '/modifyPassword';
+  static const String MODIFY_PASSWORD_PAGE = '/modifyPassword';
+
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -52,7 +61,13 @@ class Routes {
     router.define(choiceIndexPage, handler: choiceIndexPageHandler);
     router.define(CERTIFICATE_INFO_PAGE, handler: certificateInfoPageHandler);
     router.define(CONTACT_INFO_PAGE, handler: contactInfoPageHandler);
+    router.define(ADD_CONTATCT_INFO_PAGE, handler: addContactInfoPageHandler);
+    router.define(EDIT_CONTATCT_INFO_PAGE, handler: editContactInfoPageHandler);
     router.define(WITHDRAW_ADDRESS_PAGE, handler: withdrawAddressPageHandler);
+    router.define(ADD_WITHDRAW_ADDRESS_PAGE,
+        handler: addWithdrawAddressPageHandler);
+    router.define(EDIT_WITHDRAW_ADDRESS_PAGE,
+        handler: editWithdrawAddressPageHandler);
     router.define(MODIFY_PASSWORD_PAGE, handler: modifyPasswordPageHandler);
   }
 }

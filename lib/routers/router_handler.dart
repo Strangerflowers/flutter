@@ -1,5 +1,9 @@
+import 'package:bid/pages/personal_center/add_contact_info.dart';
+import 'package:bid/pages/personal_center/add_withdraw_address.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
+import 'package:bid/pages/personal_center/edit_contact_info.dart';
+import 'package:bid/pages/personal_center/edit_withdraw_address.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:flutter/material.dart';
@@ -145,4 +149,36 @@ Handler modifyPasswordPageHandler = Handler(
   LogUtils.d('跳转[修改密码]', '接收到参数$params');
   //String id = params['id'].first;
   return ModifyPassword();
+});
+
+// 修改密码
+Handler editContactInfoPageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[编辑联系信息]', '接收到参数$params');
+  //String id = params['id'].first;
+  return EditContactInfo();
+});
+
+// 添加联系信息
+Handler addContactInfoPageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[添加联系信息]]', '接收到参数$params');
+  //String id = params['id'].first;
+  return AddContactInfo();
+});
+
+// 修改退货地址
+Handler editWithdrawAddressPageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[编辑退货地址]', '接收到参数$params');
+  //String id = params['id'].first;
+  return EditWithdrawAddress();
+});
+
+// 添加退货地址
+Handler addWithdrawAddressPageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[添加退货地址]]', '接收到参数$params');
+  //String id = params['id'].first;
+  return AddWithdrawAddress();
 });

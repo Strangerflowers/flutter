@@ -4,6 +4,8 @@ import 'package:bid/model/base/BaseResponseModel.dart';
 import 'package:bid/model/base/BaseResponseResultList.dart';
 import 'package:bid/model/base/ListModel.dart';
 import 'package:bid/model/user_center/WithdrawAddressModel.dart';
+import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
@@ -106,6 +108,7 @@ class _WithdrawAddress extends State<WithdrawAddress> {
    */
   void _addRecieveAddr() {
     LogUtils.d('[添加退货地址]', '被点击!');
+    Application.router.navigateTo(context, Routes.ADD_WITHDRAW_ADDRESS_PAGE);
   }
 
   /** 
@@ -158,6 +161,10 @@ class _WithdrawAddress extends State<WithdrawAddress> {
                 ),
                 onTap: () {
                   LogUtils.d('[编辑按钮]', '被点击了!');
+                  Application.router.navigateTo(
+                      context,
+                      sprintf("%s?id=%s",
+                          [Routes.EDIT_WITHDRAW_ADDRESS_PAGE, '123456']));
                 },
               ),
             ),

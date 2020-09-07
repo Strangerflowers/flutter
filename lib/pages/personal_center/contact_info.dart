@@ -5,6 +5,8 @@ import 'package:bid/model/base/BaseResponseResultList.dart';
 import 'package:bid/model/base/DataModel.dart';
 import 'package:bid/model/base/ListModel.dart';
 import 'package:bid/model/user_center/ContactInfoModel.dart';
+import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,7 @@ class ContactInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: FutureBuilder(
         future: request('getContactInfo', formData: {}),
         builder: _asyncBuilder,
@@ -25,7 +27,7 @@ class ContactInfo extends StatelessWidget {
   /**
        * 构建导航栏
        */
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       iconTheme: IconThemeData.fallback(),
       centerTitle: true,
@@ -40,13 +42,14 @@ class ContactInfo extends StatelessWidget {
       actions: <Widget>[
         FlatButton(
             child: Text(
-              "添加退货地址",
+              "添加联系信息",
               style: TextStyle(
                 color: Colors.grey,
               ),
             ),
             onPressed: () {
-              print('pressed');
+              Application.router
+                  .navigateTo(context, Routes.ADD_CONTATCT_INFO_PAGE);
             })
       ],
     );
@@ -76,7 +79,7 @@ class ContactInfo extends StatelessWidget {
             (json) => ContactInfoModel.fromJson(json));
         LogUtils.d('[contactInfoModelList]', contactInfoModelList);
         //请求成功，通过项目信息构建用于显示项目名称的ListView
-        return _buildBody(contactInfoModelList);
+        return _buildBody(context, contactInfoModelList);
       }
     }
     //请求未完成时弹出loading
@@ -89,22 +92,23 @@ class ContactInfo extends StatelessWidget {
   /** 
    * 构建页面内容
    */
-  Widget _buildBody(List<ContactInfoModel> contactInfoModelList) {
+  Widget _buildBody(
+      BuildContext context, List<ContactInfoModel> contactInfoModelList) {
     List<Widget> itemList = [];
-    contactInfoModelList.forEach((e) => itemList.add(_buildRow(e)));
+    contactInfoModelList.forEach((e) => itemList.add(_buildRow(context, e)));
     return ListView(
       children: itemList,
     );
   }
 
-  Widget _buildRow(ContactInfoModel contactInfoModel) {
+  Widget _buildRow(BuildContext context, ContactInfoModel contactInfoModel) {
     return Center(
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: _buildTitleRow(contactInfoModel),
+              title: _buildTitleRow(context, contactInfoModel),
               subtitle: _buildSubTitlRow(contactInfoModel),
             )
           ],
@@ -135,7 +139,8 @@ class ContactInfo extends StatelessWidget {
     return _dataModelList;
   }
 
-  Widget _buildTitleRow(ContactInfoModel contactInfoModel) {
+  Widget _buildTitleRow(
+      BuildContext context, ContactInfoModel contactInfoModel) {
     return new Container(
       child: new Row(children: [
         Expanded(
@@ -160,6 +165,8 @@ class ContactInfo extends StatelessWidget {
               ),
               onTap: () {
                 LogUtils.d('[编辑按钮]', '被点击了!');
+                Application.router
+                    .navigateTo(context, Routes.EDIT_CONTATCT_INFO_PAGE);
               },
             ),
           ),
