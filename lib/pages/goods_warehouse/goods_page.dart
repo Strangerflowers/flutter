@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:provide/provide.dart';
@@ -74,13 +76,15 @@ class _GoodsPageState extends State<GoodsPage> {
   void _getGoodsList() async {
     var formData = {
       'pageNum': 1,
+      "status": 1,
       'pageSize': 10,
-      "status": 0,
     };
+    print('商品库列表数据传参$formData');
     await requestGet('goodsList', formData: formData).then((val) {
+      print('商品列表数据$val');
       // var data = json.decode(val.toString());
       GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
-      Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.list);
+      Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
     });
   }
 
@@ -233,12 +237,19 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                     highlightColor: Colors.blue[700],
                     // colorBrightness: Brightness.dark,
                     splashColor: Colors.grey,
-                    child: Text(
-                      '下架',
-                      style: TextStyle(
-                        color: Color(0xFF4389ED),
-                      ),
-                    ),
+                    child: item.status == 1
+                        ? Text(
+                            '上架',
+                            style: TextStyle(
+                              color: Color(0xFF4389ED),
+                            ),
+                          )
+                        : Text(
+                            '下架',
+                            style: TextStyle(
+                              color: Color(0xFF4389ED),
+                            ),
+                          ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: Color(0xFF4389ED),
@@ -246,7 +257,28 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                       ),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('提示'),
+                              content: Text('确认删除吗？'),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  child: Text('取消'),
+                                  onPressed: () {},
+                                ),
+                                CupertinoDialogAction(
+                                  child: Text('确认'),
+                                  onPressed: () {
+                                    _onOrOffline(item.id, item.status);
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    },
                   ),
                 ),
               )
@@ -255,6 +287,38 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
         ],
       ),
     );
+  }
+
+  void _onOrOffline(id, status) {
+    var url;
+    if (status == 1) {
+      url = 'offline';
+    } else {
+      url = 'online';
+    }
+
+    requestPostSpl(url, spl: id.toString()).then((val) {
+      if (val['code'] == 0) {
+        Fluttertoast.showToast(
+          msg: val['message'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else {
+        // goodsList = null;
+        Fluttertoast.showToast(
+          msg: val['message'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    });
   }
 
   void _getGoodsBackList(BuildContext context) async {

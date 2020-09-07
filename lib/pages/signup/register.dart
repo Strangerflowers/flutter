@@ -56,7 +56,7 @@ class FormDemo extends StatefulWidget {
 class FormDemoState extends State<FormDemo> {
   final registerFormKey = GlobalKey<FormState>();
   String mobile, code, companyName, companyShort;
-
+  var errorMobileText = null;
   void registerForm() async {
     registerFormKey.currentState.save();
     registerFormKey.currentState.validate();
@@ -108,6 +108,13 @@ class FormDemoState extends State<FormDemo> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text:
+                          '${this.companyName == null ? "" : this.companyName}',
+                    ),
+                  ), //判断keyword是否为空
+                  // 保持光标在最后
                   decoration: InputDecoration(
                     prefixIcon: Container(
                       width: ScreenUtil().setWidth(120),
@@ -131,6 +138,13 @@ class FormDemoState extends State<FormDemo> {
                   },
                 ),
                 TextFormField(
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text:
+                          '${this.companyShort == null ? "" : this.companyShort}',
+                    ),
+                  ), //判断keyword是否为空
+                  // 保持光标在最后
                   decoration: InputDecoration(
                     prefixIcon: Container(
                       width: ScreenUtil().setWidth(120),
@@ -159,19 +173,20 @@ class FormDemoState extends State<FormDemo> {
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('账号'),
                     ),
+                    errorText: errorMobileText,
                     hintText: "请输入手机号",
                   ),
                   onSaved: (value) {
                     this.mobile = value;
                   },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "用户名不能为空";
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value.isEmpty) {
+                  //     return "手机号码不能为空";
+                  //   }
+                  //   return null;
+                  // },
                   onChanged: (v) {
-                    validateMibile(v);
+                    // validateMibile(v);
                   },
                 ),
                 TextFormField(
@@ -249,7 +264,15 @@ class FormDemoState extends State<FormDemo> {
   // 获取验证码
   void _getPhoneCode() async {
     registerFormKey.currentState.save();
-    // validateMibile();
+    if (mobile.isEmpty) {
+      setState(() {
+        errorMobileText = "手机号码不能为空";
+      });
+    } else {
+      setState(() {
+        errorMobileText = null;
+      });
+    }
     var flag = validateMibile(mobile.toString()) == null ? true : false;
     // registerFormKey.currentState.validate();
     if (flag) {

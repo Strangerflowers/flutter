@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
 import 'dart:io';
 import '../config/servie_url.dart';
@@ -24,6 +25,35 @@ Future request(
       response = await dio.post(servicePath[url]);
     } else {
       response = await dio.post(servicePath[url], data: formData);
+    }
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('后端接口异常');
+    }
+  } catch (e) {
+    print(e);
+  }
+}
+
+// 拼接参数
+Future requestPostSpl(
+  url, {
+  spl,
+}) async {
+  try {
+    Response response;
+    Dio dio = new Dio();
+    // dio.options.contentType = "application/json";
+    // dio.options.responseType = "ResponseType.plain";
+    dio.options.headers = {
+      "X-OS-KERNEL-TOKEN":
+          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aGFuZ3NhbjEiLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbjEiLCJfdXNlcl9uYW1lIjoi5byg5LiJIiwiZXhwIjoxNjAxNzE0NDg0LCJ1c2VySWQiOiIwN2UwOTY1M2IyMDQzMjQwZGZmNDk4ODZhODhmYTk4MyJ9.6rChGbeaWFv_tilidm0W5ZQBSICViEMQA-ETrXv8Mnk",
+    };
+    if (spl == null) {
+      response = await dio.post(servicePath[url]);
+    } else {
+      response = await dio.post(servicePath[url] + '/' + spl);
     }
     if (response.statusCode == 200) {
       return response.data;

@@ -41,7 +41,8 @@ dependencies:
   city_pickers: ^0.1.30
   flutter_picker: ^1.1.5
   flutter_swiper: ^1.1.6
-  # image_picker: ^0.6.7+4
+  image_picker: ^0.6.7+4
+  sy_flutter_qiniu_storage: ^0.2.1
   multi_image_picker: ^4.7.10
   fluttertoast: ^7.0.2
   provide: ^1.0.2
@@ -51,6 +52,10 @@ dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
   flustars: ^0.3.2
+  easy_alert: ^0.0.8
+  flutter_spinkit: ^4.1.2+1
+  # flutter_picker: ^1.1.5
+  xyz_address_picker: ^1.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+// import 'package:bid/pages/component/showPicker.dart';
+import 'package:bid/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
@@ -83,7 +85,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             _orderType(),
             DemandContent(),
             _logout(),
-            // _login(),
+            _login(),
             _detail(),
             _choice(),
           ],
@@ -244,17 +246,28 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
     return Container(
       child: RaisedButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return FormTestRoute();
-                // return Register();
-              },
-            ),
-          );
+          Application.router.navigateTo(context, "/authentication");
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) {
+          //       return ShowPicker();
+          //       // return Register();
+          //     },
+          //   ),
+          // );
+          // ShowPicker
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) {
+          //       return FormTestRoute();
+          //       // return Register();
+          //     },
+          //   ),
+          // );
         },
-        child: Text('登录'),
+        child: Text('资料认证'),
       ),
     );
   }
@@ -288,8 +301,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return GoodsDetailsPage('1');
-                // return Register();
+                // return GoodsDetailsPage('1');
+                return MyImage();
               },
             ),
           );
