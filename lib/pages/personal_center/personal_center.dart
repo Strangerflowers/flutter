@@ -3,8 +3,10 @@ import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:bid/routers/application.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
 import '../../common/constants.dart';
 import '../../routers/routers.dart';
@@ -268,15 +270,7 @@ class PersonalCenter extends StatelessWidget {
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
         onPressed: () {
-          Application.router.navigateTo(context, '/sigin');
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return FormTestRoute();
-          //     },
-          //   ),
-          // );
+          _logOut(context);
         },
         child: Text(
           '登录',
@@ -287,6 +281,58 @@ class PersonalCenter extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _logOut(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('退出登录提示'),
+            content: Text('确定退出登录？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final result = await prefs.clear();
+                  if (result) {
+                    Navigator.of(context).pop('cancel');
+                    Application.router.navigateTo(context, '/sigin');
+                  }
+                },
+              ),
+            ],
+          );
+        });
+
+    // 苹果风格
+    // showCupertinoDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return CupertinoAlertDialog(
+    //         title: Text('提示'),
+    //         content: Text('确定要退出登录吗？'),
+    //         actions: <Widget>[
+    //           CupertinoDialogAction(
+    //             child: Text('取消'),
+    //             onPressed: () {},
+    //           ),
+    //           CupertinoDialogAction(
+    //             child: Text('确认'),
+    //             onPressed: () {
+    //               Application.router.navigateTo(context, '/sigin');
+    //             },
+    //           ),
+    //         ],
+    //       );
+    //     });
   }
 
   /////////////////////////INTERNAL PROCESS FUNCTION //////////////////////
