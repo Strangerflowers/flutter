@@ -10,6 +10,7 @@ import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:bid/pages/signup/authentication.dart';
 import 'package:bid/pages/signup/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:fluro/fluro.dart';
 import '../pages/quotation/quotataion_detail_page.dart';
 import '../pages/quotation/procurement_plan.dart';
@@ -212,4 +213,12 @@ Handler addWithdrawAddressPageHandler = Handler(
   LogUtils.d('跳转[添加退货地址]]', '接收到参数$params');
   //String id = params['id'].first;
   return AddWithdrawAddress();
+});
+
+// 通过验证码修改密码
+Handler modifyPasswordByCodePageHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  LogUtils.d('跳转[修改密码]]', '接收到参数$params');
+  //String id = params['id'].first;
+  return ModifyPasswordByCode();
 });

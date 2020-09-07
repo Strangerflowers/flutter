@@ -40,6 +40,8 @@ class Routes {
   static const String EDIT_WITHDRAW_ADDRESS_PAGE = 'editWithdrawAddress';
   // 修改密码
   static String MODIFY_PASSWORD_PAGE = '/modifyPassword';
+  // 通过验证码修改密码
+  static String MODIFY_PASSWORD_BY_CODE_PAGE = '/modifyPasswordByCode';
   // 注册设置密码
   static String SET_PASSWORD_PAGE = '/setPassword';
   // 需求详情首页
@@ -80,5 +82,7 @@ class Routes {
     router.define(SIGIN, handler: siginHandler);
     router.define(INDEX_PAGE, handler: homePageHandler);
     router.define(AUTHENTICATION, handler: authenticationHandler);
+    router.define(MODIFY_PASSWORD_BY_CODE_PAGE,
+        handler: modifyPasswordByCodePageHandler);
   }
 }

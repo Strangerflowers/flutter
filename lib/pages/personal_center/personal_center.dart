@@ -1,6 +1,7 @@
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
+import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:bid/routers/application.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,8 +68,9 @@ class PersonalCenter extends StatelessWidget {
         "code": "modifyPassword",
         "name_en_us": "Modify Password",
         "name_zh_cn": "修改密码",
-        "url": Routes.MODIFY_PASSWORD_PAGE,
-        "widget": new ModifyPassword()
+        "url": Routes.MODIFY_PASSWORD_BY_CODE_PAGE,
+        // "url": Routes.MODIFY_PASSWORD_PAGE,
+        "widget": new ModifyPasswordByCode()
       },
     ];
   }

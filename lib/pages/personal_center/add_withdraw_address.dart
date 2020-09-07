@@ -15,11 +15,12 @@ class AddWithdrawAddress extends StatefulWidget {
 class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
   final addressFormKey = GlobalKey<FormState>();
   String areaCode, companyAddressName;
+  bool check;
   var params = {
     'receiverName': '',
     'mobile': '',
     'address': '',
-    'defaultAddress': '',
+    'defaultAddress': 1,
     'areaCode': '',
     'companyAddressName': ''
   };
@@ -76,6 +77,7 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
       list.add(_buildRow(label));
     }
     list.insert(2, _selectAddress("所在地区:"));
+    // list.insert(4, _checkBox());
     // 确认按钮
     list.add(_buildSubmitBtn());
     return Form(
@@ -131,12 +133,7 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                 textAlign: TextAlign.left, //文本对齐方式
                 style: TextStyle(fontSize: 20.0, color: Colors.blue), //输入文本的样式
                 //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
-                onChanged: (value) {
-                  // var key = item['value'];
-                  // setState(() {
-                  //   params[key] = value;
-                  // });
-                },
+                onChanged: (value) {},
                 onSaved: (val) {
                   var key = item['value'];
                   setState(() {
@@ -215,6 +212,20 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _checkBox() {
+    return Container(
+      child: Checkbox(
+        value: check,
+        onChanged: (value) {
+          setState(() {
+            check = value;
+          });
+        },
+        activeColor: Colors.black,
       ),
     );
   }

@@ -71,4 +71,6 @@ const servicePath = {
   'saveAddress': serviceUrl + '/os_kernel_bid/app/address/save', //新增退货地址
   'updateAddress': serviceUrl + '/os_kernel_bid/app/address/update', //编辑退货地址
   'showEdit': serviceUrl + '/os_kernel_bid/app/address/info', //回显地址
+  "getModifyPasswordCode": serviceUrl +
+      "/os_kernel_userorgctr/app/user/getVerificationCode", //修改密码获取验证码
 };
