@@ -1,8 +1,8 @@
 // const serviceUrl = 'http://osapi-dev.gtland.cn';
 final isProd = const bool.fromEnvironment('dart.vm.product');
 const serviceUrl = 'http://osapi-dev.gtland.cn';
-// const updateServiceUrl = 'http://api-dev.gtland.cn';
-const updateServiceUrl = "https://api-pre.myutopa.com";
+const updateServiceUrl = 'http://api-dev.gtland.cn';
+// const updateServiceUrl = "https://api-pre.myutopa.com";
 // const localUrl = 'http://10.10.25.73:8010';
 const localUrl = "http://10.10.25.99:8010";
 
