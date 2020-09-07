@@ -66,4 +66,6 @@ const servicePath = {
       serviceUrl + '/os_kernel_bid/app/suppliers/user/update', //更新供应商数据
   'getAddress':
       serviceUrl + '/os_kernel_appsysctr/app/district/loadDistrict', //获取地址
+  'getContactInfo':
+      serviceUrl + '/os_kernel_bid/app/contacts/queryPage', // 个人中心-联系信息
 };

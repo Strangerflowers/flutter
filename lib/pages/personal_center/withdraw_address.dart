@@ -4,6 +4,8 @@ import 'package:bid/model/base/BaseResponseModel.dart';
 import 'package:bid/model/base/BaseResponseResultList.dart';
 import 'package:bid/model/base/ListModel.dart';
 import 'package:bid/model/user_center/WithdrawAddressModel.dart';
+import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
@@ -106,6 +108,7 @@ class _WithdrawAddress extends State<WithdrawAddress> {
    */
   void _addRecieveAddr() {
     LogUtils.d('[添加退货地址]', '被点击!');
+    Application.router.navigateTo(context, Routes.ADD_WITHDRAW_ADDRESS_PAGE);
   }
 
   /** 
@@ -123,11 +126,16 @@ class _WithdrawAddress extends State<WithdrawAddress> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 new Container(
+                  // decoration: BoxDecoration(
+                  //     border: Border(
+                  //         bottom:
+                  //             BorderSide(width: 1, color: Color(0xffe5e5e5)))),
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: new Text(
                     sprintf('%s  %s', [item.receiverName, item.mobile]),
                     style: new TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 13,
                     ),
                   ),
                 ),
@@ -138,16 +146,29 @@ class _WithdrawAddress extends State<WithdrawAddress> {
               ],
             ),
           ),
-          FlatButton(
-            child: new Image.asset(
-              'images/edit.png',
-              width: 20.0,
-              height: 20.0,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.zero,
+              // decoration: BoxDecoration(
+              //     border: Border(
+              //         bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                child: new Image.asset(
+                  'images/edit.png',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+                onTap: () {
+                  LogUtils.d('[编辑按钮]', '被点击了!');
+                  Application.router.navigateTo(
+                      context,
+                      sprintf("%s?id=%s",
+                          [Routes.EDIT_WITHDRAW_ADDRESS_PAGE, '123456']));
+                },
+              ),
             ),
-            onPressed: () {
-              LogUtils.d('[编辑按钮]', '被点击了!');
-            },
-          ),
+          )
         ],
       ),
     );
