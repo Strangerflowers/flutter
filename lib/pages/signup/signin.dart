@@ -1,11 +1,11 @@
 import 'package:bid/service/service_method.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import './signup_index.dart';
+import './register.dart';
+import '../../routers/application.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../index_page.dart';
-// import '../purchasing_demand/purchasing_demand.dart';
-// import 'package:oktoast/oktoast.dart';
 
 Dio dio = Dio();
 
@@ -50,10 +50,25 @@ class _FormTestRouteState extends State<FormTestRoute> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Container(
-                  child: Text('注册'),
-                  alignment: Alignment.topRight,
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context); //销毁当前页面
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          // return FormTestRoute();
+                          return Register();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    child: Text('注册'),
+                    alignment: Alignment.topRight,
+                  ),
                 ),
+
                 new Image.asset('images/icon.png'),
                 Container(
                   child: Row(
@@ -177,6 +192,20 @@ String validatePassword(value) {
 }
 
 class _FormPageState extends State<FormPage> {
+  String token;
+  void initState() {
+    // setUserData();
+    super.initState();
+  }
+
+  setUserData(val) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('token', val['result']['token']);
+      prefs.setString('userId', val['result']['userId']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -254,45 +283,44 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
+  _checkAuditStatus() async {
+    await requestGet('checkAuditStatus').then((val) {
+      if (val['result']['auditStatus'] == 0) {
+        Application.router.navigateTo(context, "/indexPage");
+      } else {
+        Application.router.navigateTo(context, "/authentication");
+      }
+    });
+  }
+
   void _choiceAction() {
     if ((_formKey.currentState as FormState).validate()) {
       var data = {
         'loginAcc': _unameController.text.toString(),
         'pwd': _pwdController.text.toString()
       };
-      getHttp(data).then((val) {
+      getHttp(data).then((val) async {
+        final prefs = await SharedPreferences.getInstance();
         if (val['code'] == 0) {
-          print("返回的TGT${val['result']}");
-          getToken(val['result']).then((value) => {
-                if (val['code'] == 0)
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return IndexPage();
-                        },
-                      ),
-                    ),
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return IndexPage();
-                    //     },
-                    //   ),
-                    // )
-                  }
-                else
-                  {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("${val['message']}"),
-                      ),
-                    )
-                  },
+          getToken(val['result']).then((value) {
+            print("返回的TGT===>${value['result']['token']}");
+            if (value['code'] == 0) {
+              setState(() {
+                prefs.setString('token', value['result']['token']);
+                prefs.setString('userId', value['result']['userId']);
               });
+              print('持久胡========》${prefs.getString('token')}');
+              _checkAuditStatus();
+              // Application.router.navigateTo(context, "/indexPage");
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("${val['message']}"),
+                ),
+              );
+            }
+          });
         } else {
           showDialog(
             context: context,
@@ -328,7 +356,7 @@ class _FormPageState extends State<FormPage> {
   // 获取token
   Future getToken(String TypeText) async {
     try {
-      print('传参TypeText$TypeText');
+      // print('传参TypeText$TypeText');
       var data = {
         "tgt": TypeText,
         "serviceUrl": "https://www.baidu.com",
@@ -338,7 +366,7 @@ class _FormPageState extends State<FormPage> {
       resposne = await Dio().post(
           "http://osapi-dev.gtland.cn/os_kernel_authcctr/app/authc/token/getAndSetTime",
           data: data);
-      print(resposne.data);
+      // print(resposne.data);
       return resposne.data;
     } catch (e) {
       return print(e);
@@ -384,6 +412,14 @@ String validateCode(value) {
 }
 
 class _MobileFormPageState extends State<MobileFormPage> {
+  setUserData(val) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('token', val['result']['token']);
+      prefs.setString('userId', val['result']['userId']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -497,9 +533,12 @@ class _MobileFormPageState extends State<MobileFormPage> {
 
   // 手机验证码登录
   void _phoneAction() async {
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
       isMobilesignin = true;
     });
+    // final prefs = await SharedPreferences.getInstance();
+    // final token = prefs.getString('token') ?? '';
     if ((_mobileformKey.currentState as FormState).validate()) {
       var data = {
         'loginAcc': _mobileController.text.toString(),
@@ -512,15 +551,14 @@ class _MobileFormPageState extends State<MobileFormPage> {
             "serviceUrl": "https://www.baidu.com",
             "setExpirationSeconds": "518400"
           };
-
           request('getToken', formData: tgt).then((value) {
-            print('响应数据$value ');
-            print('响应数据1234$value  ---${value['code']}');
             // var data = json.decode(value.toString());
             if (value['code'] == 0) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return IndexPage();
-              }));
+              setState(() {
+                prefs.setString('token', value['result']['token']);
+                prefs.setString('userId', value['result']['userId']);
+              });
+              _checkAuditStatus();
             } else {
               print('手机登录不成');
             }
@@ -528,5 +566,17 @@ class _MobileFormPageState extends State<MobileFormPage> {
         } else {}
       });
     } else {}
+  }
+
+  _checkAuditStatus() async {
+    await requestGet('checkAuditStatus').then((val) {
+      print(
+          '---查看跳转页面------------------->>>>>>>>${val['result']['auditStatus']}');
+      if (val['result']['auditStatus'] == 0) {
+        Application.router.navigateTo(context, "/indexPage");
+      } else {
+        Application.router.navigateTo(context, "/authentication");
+      }
+    });
   }
 }

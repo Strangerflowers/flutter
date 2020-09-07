@@ -2,6 +2,7 @@
 final isProd = const bool.fromEnvironment('dart.vm.product');
 const serviceUrl = 'http://osapi-dev.gtland.cn';
 const updateServiceUrl = 'http://api-dev.gtland.cn';
+// const updateServiceUrl = "https://api-pre.myutopa.com";
 // const localUrl = 'http://10.10.25.73:8010';
 const localUrl = "http://10.10.25.99:8010";
 
@@ -17,8 +18,12 @@ const servicePath = {
       serviceUrl + '/os_kernel_userorgctr/app/user/sendLoginCaptcha', //登录获取验证码
   'sendRegCaptcha': serviceUrl +
       '/os_kernel_userorgctr/app/user/sendRegCaptcha', //注册获取验证码的话访问用户中心的
+  "register": serviceUrl + '/os_kernel_bid/app/suppliers/register', //注册接口
   'verifyRegCheckCode': serviceUrl +
       '/os_kernel_userorgctr/app/user/verifyRegCheckCode', //登录校验验证码
+  'checkAuditStatus': serviceUrl +
+      '/os_kernel_bid/app/suppliers/user/info', //查看返回的auditStatus的状态来判断跳转到哪个页面
+  'getCategory': serviceUrl + '/os_kernel_bid/mall/category', //获取供应商类型
 
   'quotationQueryPage':
       serviceUrl + '/os_kernel_bid/mp/purchase/quotation/queryPage', //报价列表查询
@@ -55,13 +60,19 @@ const servicePath = {
       serviceUrl + '/os_kernel_bid/app/address/queryPage', // 个人中心-退货地址
   'getCertificationInfo':
       serviceUrl + '/os_kernel_bid/app/suppliers/user/info', // 个人中心-认证资料
+  'offline': serviceUrl + '/os_kernel_bid/goods/offline', //下架商品
+  'online': serviceUrl + '/os_kernel_bid/goods/online', //上架商品
+  'suppliersUpdate':
+      serviceUrl + '/os_kernel_bid/app/suppliers/user/update', //更新供应商数据
+  'getAddress':
+      serviceUrl + '/os_kernel_appsysctr/app/district/loadDistrict', //获取地址
   'getContactInfo':
       serviceUrl + '/os_kernel_bid/app/contacts/queryPage', // 个人中心-联系信息
-
   "getContactInfoById":
       serviceUrl + '/os_kernel_bid/app/contacts/info', //查询联系人信息
-
   "editContactInfo": serviceUrl + '/os_kernel_bid/app/contacts/update', // 编辑联系人
-
   "saveContactInfo": serviceUrl + '/os_kernel_bid/app/contacts/save', // 新增联系人
+  'saveAddress': serviceUrl + '/os_kernel_bid/app/address/save', //新增退货地址
+  'updateAddress': serviceUrl + '/os_kernel_bid/app/address/update', //编辑退货地址
+  'showEdit': serviceUrl + '/os_kernel_bid/app/address/info', //回显地址
 };

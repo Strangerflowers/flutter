@@ -24,7 +24,7 @@ class GoodsDetailsPage extends StatelessWidget {
         future: _getBackInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Container(
+            return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   DetailsTopArea(),
@@ -43,6 +43,7 @@ class GoodsDetailsPage extends StatelessWidget {
 
   Future _getBackInfo(BuildContext context) async {
     await Provide.value<DetailsInfoProvide>(context).getGoodsInfo(goodsId);
+    // return Provide.value<DetailsInfoProvide>(context).goodsInfo.result;
     return '加载完成';
   }
 }

@@ -39,8 +39,15 @@ class Routes {
   // 编辑退货地址
   static const String EDIT_WITHDRAW_ADDRESS_PAGE = 'editWithdrawAddress';
   // 修改密码
-  static const String MODIFY_PASSWORD_PAGE = '/modifyPassword';
-
+  static String MODIFY_PASSWORD_PAGE = '/modifyPassword';
+  // 注册设置密码
+  static String SET_PASSWORD_PAGE = '/setPassword';
+  // 需求详情首页
+  static String INDEX_PAGE = '/indexPage';
+  // 登录
+  static String SIGIN = '/sigin';
+  // 资料认证
+  static String AUTHENTICATION = '/authentication';
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -69,5 +76,9 @@ class Routes {
     router.define(EDIT_WITHDRAW_ADDRESS_PAGE,
         handler: editWithdrawAddressPageHandler);
     router.define(MODIFY_PASSWORD_PAGE, handler: modifyPasswordPageHandler);
+    router.define(SET_PASSWORD_PAGE, handler: registerSetPasswordHandler);
+    router.define(SIGIN, handler: siginHandler);
+    router.define(INDEX_PAGE, handler: homePageHandler);
+    router.define(AUTHENTICATION, handler: authenticationHandler);
   }
 }
