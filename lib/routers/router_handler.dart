@@ -1,8 +1,8 @@
-import 'package:bid/pages/personal_center/add_contact_info.dart';
+import 'package:bid/pages/personal_center/edit_contact_info.dart';
 import 'package:bid/pages/personal_center/add_withdraw_address.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
-import 'package:bid/pages/personal_center/edit_contact_info.dart';
+import 'package:bid/pages/personal_center/add_contact_info.dart';
 import 'package:bid/pages/personal_center/edit_withdraw_address.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
@@ -155,8 +155,8 @@ Handler modifyPasswordPageHandler = Handler(
 Handler editContactInfoPageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   LogUtils.d('跳转[编辑联系信息]', '接收到参数$params');
-  //String id = params['id'].first;
-  return EditContactInfo();
+  String id = params['id'].first;
+  return EditContactInfo(id);
 });
 
 // 添加联系信息

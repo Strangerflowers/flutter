@@ -57,4 +57,11 @@ const servicePath = {
       serviceUrl + '/os_kernel_bid/app/suppliers/user/info', // 个人中心-认证资料
   'getContactInfo':
       serviceUrl + '/os_kernel_bid/app/contacts/queryPage', // 个人中心-联系信息
+
+  "getContactInfoById":
+      serviceUrl + '/os_kernel_bid/app/contacts/info', //查询联系人信息
+
+  "editContactInfo": serviceUrl + '/os_kernel_bid/app/contacts/update', // 编辑联系人
+
+  "saveContactInfo": serviceUrl + '/os_kernel_bid/app/contacts/save', // 新增联系人
 };

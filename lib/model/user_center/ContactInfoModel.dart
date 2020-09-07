@@ -1,3 +1,6 @@
+import 'package:flustars/flustars.dart';
+import 'package:sprintf/sprintf.dart';
+
 class ContactInfoModel {
   int id;
   String userId;
@@ -64,5 +67,26 @@ class ContactInfoModel {
     data['updateBy'] = this.updateBy;
     data['delFlag'] = this.delFlag;
     return data;
+  }
+
+  @override
+  String toString() {
+    String prefix = "{";
+    String suffix = "}";
+    String nonNullFmt = "\"%s\":\"%s\",";
+    String nullFmt = "\"%s\":%s,";
+    StringBuffer sb = new StringBuffer();
+    sb.write(prefix);
+    this.toJson().forEach((key, value) {
+      if (null != value) {
+        sb.write(sprintf(nonNullFmt, [key, value]));
+      } else {
+        sb.write(sprintf(nullFmt, [key, value]));
+      }
+    });
+    String finalText = sb.toString();
+    finalText = finalText.substring(0, finalText.length - 1);
+    finalText = finalText + suffix;
+    return finalText;
   }
 }
