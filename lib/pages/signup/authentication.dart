@@ -1,6 +1,7 @@
 // 资料认证页面
 import 'package:bid/pages/component/select_component.dart/address.dart';
 import 'package:bid/pages/signup/auth_bottom.dart';
+import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -87,14 +88,17 @@ class Authentication extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            child: Text(
-              right,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+          Expanded(
+            child: Container(
+              width: ScreenUtil().setWidth(500),
+              child: Text(
+                right == null ? '' : right,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -386,9 +390,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   ),
                   child: ListTile(
                     title: Text(
-                      categorythree,
+                      categorythree == null ? '请选择' : categorythree,
                       style: TextStyle(
-                          color: categorythree.length > 0
+                          color: categorythree != null
                               ? Colors.black
                               : Color(0xFFD7D7D7)),
                     ),
@@ -961,6 +965,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           print('fdffdfd=====>${formData}');
           await request('suppliersUpdate', formData: formData).then((val) {
             print('更新企业认证$val;');
+            if (val['code'] == 0) {
+              Application.router.navigateTo(context, "/indexPage");
+            }
           });
           // if (val['code'] == 0) {
           //   // res = _func(val['result']);

@@ -68,4 +68,7 @@ const servicePath = {
       serviceUrl + '/os_kernel_appsysctr/app/district/loadDistrict', //获取地址
   'getContactInfo':
       serviceUrl + '/os_kernel_bid/app/contacts/queryPage', // 个人中心-联系信息
+  'saveAddress': serviceUrl + '/os_kernel_bid/app/address/save', //新增退货地址
+  'updateAddress': serviceUrl + '/os_kernel_bid/app/address/update', //编辑退货地址
+  'showEdit': serviceUrl + '/os_kernel_bid/app/address/info', //回显地址
 };

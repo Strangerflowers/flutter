@@ -202,8 +202,8 @@ Handler addContactInfoPageHandler = Handler(
 Handler editWithdrawAddressPageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   LogUtils.d('跳转[编辑退货地址]', '接收到参数$params');
-  //String id = params['id'].first;
-  return EditWithdrawAddress();
+  String id = params['id'].first;
+  return EditWithdrawAddress(id);
 });
 
 // 添加退货地址

@@ -161,10 +161,12 @@ class _WithdrawAddress extends State<WithdrawAddress> {
                 ),
                 onTap: () {
                   LogUtils.d('[编辑按钮]', '被点击了!');
-                  Application.router.navigateTo(
-                      context,
-                      sprintf("%s?id=%s",
-                          [Routes.EDIT_WITHDRAW_ADDRESS_PAGE, '123456']));
+                  Application.router.navigateTo(context,
+                      Routes.EDIT_WITHDRAW_ADDRESS_PAGE + '?id=${item.id}');
+                  // Application.router.navigateTo(
+                  //     context,
+                  //     sprintf("%s?id=%s",
+                  //         [Routes.EDIT_WITHDRAW_ADDRESS_PAGE, item.id]));
                 },
               ),
             ),
