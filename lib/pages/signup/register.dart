@@ -73,6 +73,7 @@ class FormDemoState extends State<FormDemo> {
 
   String mobile, code, companyName, companyShort;
   var errorMobileText = null;
+
   void registerForm() async {
     setState(() {
       autovalidateOther = true;
@@ -87,28 +88,55 @@ class FormDemoState extends State<FormDemo> {
     };
     var item = {
       "mobile": mobile,
-      'code': code,
+      // 'code': code,
       'companyName': companyName,
       'companyShort': companyShort
-    }.toString();
+    };
 
-    print('object$formData');
-    if ((registerFormKey.currentState as FormState).validate()) {
-      await request('verifyRegCheckCode', formData: formData).then((val) {
-        print('// 校验验证码$val====${val['code'] == 0}');
-        if (val['code'] == 0) {
-          print('判断是否跑进校验');
-          Application.router.navigateTo(context,
-              "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
-          // Application.router.navigateTo(context, "/setPassword?item=$item");
-        } else {
-          Toast.toast(
-            context,
-            msg: val['message'],
-          );
-        }
-      });
-    }
+    // checkNameAndMobile
+    print('校验公司名称$item');
+    await request('checkNameAndMobile', formData: item).then((ele) {
+      print('校验公司名称$ele====${ele['code'] == 0}');
+      if (ele['code'] == 0) {
+        request('verifyRegCheckCode', formData: formData).then((val) {
+          print('$val====${val['code'] == 0}');
+          if (val['code'] == 0) {
+            print('判断是否跑进校验');
+            Application.router.navigateTo(context,
+                "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
+            // Application.router.navigateTo(context, "/setPassword?item=$item");
+          } else {
+            Toast.toast(
+              context,
+              msg: val['message'],
+            );
+          }
+        });
+      } else {
+        Toast.toast(
+          context,
+          msg: ele['message'],
+        );
+      }
+    });
+
+    // print('object$formData');
+    // if ((registerFormKey.currentState as FormState).validate()) {
+    //   // await request('verifyRegCheckCode', formData: formData).then((val) {
+    //   //   print('// 校验验证码$val====${val['code'] == 0}');
+    //   //   if (val['code'] == 0) {
+    //   //     print('判断是否跑进校验');
+    //   //     Application.router.navigateTo(context,
+    //   //         "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
+    //   //     // Application.router.navigateTo(context, "/setPassword?item=$item");
+    //   //   } else {
+    //   //     Toast.toast(
+    //   //       context,
+    //   //       msg: val['message'],
+    //   //     );
+    //   //   }
+    //   // });
+    // }
   }
 
   @override
@@ -307,6 +335,7 @@ class FormDemoState extends State<FormDemo> {
     if (flag) {
       var data = {'mobile': this.mobile};
       print('获取验证码注册$data');
+
       await requestGet('sendRegCaptcha', formData: data).then((val) {
         Toast.toast(
           context,
