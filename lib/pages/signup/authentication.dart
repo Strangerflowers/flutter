@@ -947,24 +947,25 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
+          authFormKey.currentState.save();
           var formData = {
             "auditStatus": 1,
-            "supplierType": supplierType.toString(),
-            "companyCode": companyCode.toString(),
-            "companyDetailAddr": companyDetailAddr.toString(),
-            "companyMobile": companyMobile.toString(),
+            "supplierType": supplierType,
+            "companyCode": companyCode,
+            "companyDetailAddr": companyDetailAddr,
+            "companyMobile": companyMobile,
             "businessLicenseIssuedRegistrationMark":
-                businessLicenseIssuedRegistrationMark.toString(),
-            "businessLicenseIssuedKey": businessLicenseIssuedKey.toString(),
-            "businessScope": businessScope.toString(),
-            "bank": bank.toString(),
-            "account": account.toString(),
-            "companyTelephone": companyTelephone.toString(),
-            "socialCreditCode": socialCreditCode.toString(),
-            "contactName": contactName.toString(),
-            "contactMobile": contactMobile.toString()
+                businessLicenseIssuedRegistrationMark,
+            "businessLicenseIssuedKey": businessLicenseIssuedKey,
+            "businessScope": businessScope,
+            "bank": bank,
+            "account": account,
+            "companyTelephone": companyTelephone,
+            "socialCreditCode": socialCreditCode,
+            "contactName": contactName,
+            "contactMobile": contactMobile
           };
-          authFormKey.currentState.save();
+
           print('fdffdfd=====>${formData}');
           await request('suppliersUpdate', formData: formData).then((val) {
             print('更新企业认证$val;');

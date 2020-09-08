@@ -10,6 +10,9 @@ class StringUtils extends TextUtil {
    */
   static String preprocessText(String text, int wordSize) {
     int length = text.length;
+    if (length <= wordSize) {
+      return text;
+    }
     int totalGroup = 0;
     if (length % wordSize == 0) {
       totalGroup = length ~/ wordSize;
@@ -19,7 +22,7 @@ class StringUtils extends TextUtil {
     String returnNewline = "\r\n";
     String finalText = '';
     for (int group = 0; group < totalGroup; group++) {
-      int startIdx = group * wordSize + 1;
+      int startIdx = group * wordSize;
       int endIdx = group == totalGroup - 1 ? length - 1 : startIdx + wordSize;
       finalText += text.substring(startIdx, endIdx) + returnNewline;
     }

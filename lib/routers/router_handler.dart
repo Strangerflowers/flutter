@@ -1,13 +1,10 @@
-<<<<<<< HEAD
-import 'package:bid/pages/personal_center/edit_contact_info.dart';
-=======
 import 'package:bid/pages/index_page.dart';
 import 'package:bid/pages/personal_center/add_contact_info.dart';
->>>>>>> e1de1621c2f29f5955e2582b39eb0bf79a7f22c7
 import 'package:bid/pages/personal_center/add_withdraw_address.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/add_contact_info.dart';
+import 'package:bid/pages/personal_center/edit_contact_info.dart';
 import 'package:bid/pages/personal_center/edit_withdraw_address.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';

@@ -2,7 +2,8 @@ import 'package:bid/common/log_utils.dart';
 import 'package:bid/model/user_center/ContactInfoModel.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
-import 'package:bid/service/service_method%20copy.dart';
+// import 'package:bid/service/service_method%20copy.dart';
+import 'package:bid/service/service_method.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 

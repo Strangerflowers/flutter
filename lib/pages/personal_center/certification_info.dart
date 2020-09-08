@@ -125,7 +125,8 @@ class CertificationInfo extends StatelessWidget {
     // 需要预处理显示文本的字段
     var preprocessMap = {
       "companyDetailAddr": StringUtils.preprocessText,
-      "businessScope": StringUtils.preprocessText
+      "businessScope": StringUtils.preprocessText,
+      "supplierTypeName": StringUtils.preprocessText,
     };
     dataModel.value = preprocessMap.containsKey(dataModel.code)
         ? preprocessMap[dataModel.code](dataModel.value, 15)
