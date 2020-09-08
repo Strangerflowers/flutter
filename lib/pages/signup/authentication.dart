@@ -65,7 +65,7 @@ class Authentication extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _headerItemRow('资料认证状态', asditText[result['auditStatus'].toString()]),
-          _headerItemRow('供养商编号', result['companyPortalId']),
+          _headerItemRow('供养商编号', result['companyNum']),
           _headerItemRow('公司名称', result['companyName']),
           _headerItemRow('公司简称', result['companyShort']),
         ],
@@ -197,27 +197,29 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   var data;
   void initState() {
-    data = widget.data;
-    categorythree = data['supplierTypeName'];
-    supplierType = data['supplierType'];
-    companyAddressName = data['companyDistrictName'];
-    auditStatus = data['auditStatus'];
-    supplierType = data['supplierType'];
-    companyCode = data['companyCode'];
-    companyDetailAddr = data['companyDetailAddr']; //详细地址
-    companyMobile = data['companyMobile']; //公司电话
-    businessLicenseIssuedRegistrationMark =
-        data['businessLicenseIssuedRegistrationMark']; //营业执照编号
-    businessLicenseIssuedKey = data['businessLicenseIssuedKey']; //图片key
-    businessScope = data['businessScope']; //经营范围
-    bank = data['bank']; //银行
-    account = data['account']; //银行账号
-    companyTelephone = data['companyTelephone']; //公司固定电话
-    socialCreditCode = data['socialCreditCode']; //社会信用代码
-    contactName = data['contactName']; //联系人
-    contactMobile = data['contactMobile']; //联系号码
+    setState(() {
+      data = widget.data;
+      categorythree = data['supplierTypeName'];
+      supplierType = data['supplierType'];
+      companyAddressName = data['companyDistrictName'];
+      auditStatus = data['auditStatus'];
+      supplierType = data['supplierType'];
+      companyCode = data['companyCode'];
+      companyDetailAddr = data['companyDetailAddr']; //详细地址
+      companyMobile = data['companyMobile']; //公司电话
+      businessLicenseIssuedRegistrationMark =
+          data['businessLicenseIssuedRegistrationMark']; //营业执照编号
+      businessLicenseIssuedKey = data['businessLicenseIssuedKey']; //图片key
+      businessScope = data['businessScope']; //经营范围
+      bank = data['bank']; //银行
+      account = data['account']; //银行账号
+      companyTelephone = data['companyTelephone']; //公司固定电话
+      socialCreditCode = data['socialCreditCode']; //社会信用代码
+      contactName = data['contactName']; //联系人
+      contactMobile = data['contactMobile']; //联系号码
+    });
     _getCategory();
-    _getAddress();
+    // _getAddress();
     super.initState();
   }
 
@@ -947,20 +949,20 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         onPressed: () async {
           var formData = {
             "auditStatus": 1,
-            "supplierType": supplierType,
-            "companyCode": companyCode,
-            "companyDetailAddr": companyDetailAddr,
-            "companyMobile": companyMobile,
+            "supplierType": supplierType.toString(),
+            "companyCode": companyCode.toString(),
+            "companyDetailAddr": companyDetailAddr.toString(),
+            "companyMobile": companyMobile.toString(),
             "businessLicenseIssuedRegistrationMark":
-                businessLicenseIssuedRegistrationMark,
-            "businessLicenseIssuedKey": businessLicenseIssuedKey,
-            "businessScope": businessScope,
-            "bank": bank,
-            "account": account,
-            "companyTelephone": companyTelephone,
-            "socialCreditCode": socialCreditCode,
-            "contactName": contactName,
-            "contactMobile": contactMobile
+                businessLicenseIssuedRegistrationMark.toString(),
+            "businessLicenseIssuedKey": businessLicenseIssuedKey.toString(),
+            "businessScope": businessScope.toString(),
+            "bank": bank.toString(),
+            "account": account.toString(),
+            "companyTelephone": companyTelephone.toString(),
+            "socialCreditCode": socialCreditCode.toString(),
+            "contactName": contactName.toString(),
+            "contactMobile": contactMobile.toString()
           };
           authFormKey.currentState.save();
           print('fdffdfd=====>${formData}');

@@ -5,18 +5,34 @@ import 'package:bid/common/string_utils.dart';
 import 'package:bid/model/base/BaseResponseModel.dart';
 import 'package:bid/model/base/DataModel.dart';
 import 'package:bid/model/user_center/CertificationInfoModel.dart';
+import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 
+// class CertificationInfo extends StatefulWidget {
+//   @override
+//   _CertificationInfoState createState() => _CertificationInfoState();
+// }
+
+// class _CertificationInfoState extends State<CertificationInfo> {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Container();
+// //   }
+// // }
+
 class CertificationInfo extends StatelessWidget {
+//   //包裹你定义的需要更新的weight
+//   // GlobalKey<CertificationInfo> textKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       // body: _buildBody(),
       body: FutureBuilder(
-        future: requestGet('getCertificationInfo', formData: null),
+        future: requestGet('getCertificationInfo'),
         builder: _asyncBuilder,
       ),
     );
@@ -25,7 +41,7 @@ class CertificationInfo extends StatelessWidget {
   /**
        * 构建导航栏
        */
-  Widget _buildAppBar() {
+  Widget _buildAppBar(context) {
     return AppBar(
       iconTheme: IconThemeData.fallback(),
       centerTitle: true,
@@ -37,7 +53,19 @@ class CertificationInfo extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      actions: <Widget>[],
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            "更新资料认证",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          onPressed: () {
+            Application.router.navigateTo(context, "/authentication");
+          },
+        )
+      ],
     );
   }
 
