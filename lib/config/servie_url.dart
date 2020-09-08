@@ -73,4 +73,6 @@ const servicePath = {
   'showEdit': serviceUrl + '/os_kernel_bid/app/address/info', //回显地址
   "getModifyPasswordCode": serviceUrl +
       "/os_kernel_userorgctr/app/user/getVerificationCode", //修改密码获取验证码
+  'resetPwdByCode':
+      serviceUrl + '/os_kernel_userorgctr/app/user/resetPwdByCode', //修改密码
 };

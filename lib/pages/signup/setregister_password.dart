@@ -49,6 +49,8 @@ TextEditingController _comPasswordController = new TextEditingController();
 GlobalKey<FormState> _setFormKey = GlobalKey<FormState>();
 
 class _PasswordFormState extends State<PasswordForm> {
+  bool autovalidatePwd = false;
+  bool btnFlag = false;
   var params;
   void initState() {
     params = {
@@ -71,6 +73,7 @@ class _PasswordFormState extends State<PasswordForm> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              autovalidate: autovalidatePwd,
               controller: _newPasswordController,
               obscureText: true, //是否是密码形式
               // 输入模式设置为手机号
@@ -91,14 +94,16 @@ class _PasswordFormState extends State<PasswordForm> {
               onSaved: (value) {
                 this.newPassword = value;
               },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "登录密码不能为空";
-                }
-                return null;
-              },
+              validator: validatePwd,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return "登录密码不能为空";
+              //   }
+              //   return null;
+              // },
             ),
             TextFormField(
+              autovalidate: autovalidatePwd,
               controller: _comPasswordController,
               obscureText: true,
               // 输入模式设置为手机号
@@ -112,13 +117,23 @@ class _PasswordFormState extends State<PasswordForm> {
                 hintText: "再次输入登录密码",
               ),
               onSaved: (value) {
-                this.newPassword = value;
+                this.comPassword = value;
+              },
+              onChanged: (value) {
+                this.comPassword = value;
               },
               validator: (value) {
-                if (value.isEmpty) {
+                _setFormKey.currentState.save();
+                print('确认密码校验$newPassword==$comPassword');
+                if (comPassword.isEmpty) {
                   return "确认不能为空";
+                } else {
+                  if (this.newPassword != this.comPassword) {
+                    return "两次密码不一致";
+                  } else {
+                    return null;
+                  }
                 }
-                return null;
               },
             ),
             SizedBox(
@@ -148,7 +163,30 @@ class _PasswordFormState extends State<PasswordForm> {
     );
   }
 
+  // 密码校验
+  String validatePwd(String value) {
+    print('密码验证码$value');
+    // 正则匹配手机号
+    RegExp exp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,18}$');
+
+    if (value.isEmpty) {
+      return '密码不能为空';
+    } else {
+      if (!exp.hasMatch(value)) {
+        return '8-18位数字大小写字母的组合';
+      } else {
+        return null;
+      }
+    }
+  }
+
   void _register() async {
+    // if (btnFlag == true) {
+    //   return;
+    // }
+    setState(() {
+      autovalidatePwd = true;
+    });
     _setFormKey.currentState.save();
     _setFormKey.currentState.validate();
     var formData = {
@@ -157,7 +195,9 @@ class _PasswordFormState extends State<PasswordForm> {
       "companyShort": widget.companyShort,
       "password": newPassword,
     };
-
+    // setState(() {
+    //   btnFlag = true;
+    // });
     print('注册信息$formData');
     if ((_setFormKey.currentState as FormState).validate()) {
       await request('register', formData: formData).then((val) {
@@ -174,6 +214,9 @@ class _PasswordFormState extends State<PasswordForm> {
           );
           // Application.router.navigateTo(context, "/setPassword?item=$item");
         } else {
+          // setState(() {
+          //   btnFlag = false;
+          // });
           Fluttertoast.showToast(
             msg: val['message'],
             toastLength: Toast.LENGTH_SHORT,

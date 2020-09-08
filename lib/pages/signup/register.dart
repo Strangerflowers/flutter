@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import '../../service/service_method.dart';
+import 'package:bid/common/toast.dart';
 import './setregister_password.dart';
 import '../../routers/application.dart';
 
@@ -54,12 +55,32 @@ class FormDemo extends StatefulWidget {
 }
 
 class FormDemoState extends State<FormDemo> {
+  bool autovalidateMobile = false;
+  bool autovalidateOther = false;
   final registerFormKey = GlobalKey<FormState>();
+  FocusNode _focusNode = FocusNode();
+  void initState() {
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        // TextField has lost focus
+        // 失去焦点收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+        // _showMessage();
+      }
+    });
+    super.initState();
+  }
+
   String mobile, code, companyName, companyShort;
   var errorMobileText = null;
   void registerForm() async {
+    setState(() {
+      autovalidateOther = true;
+      autovalidateMobile = true;
+    });
     registerFormKey.currentState.save();
     registerFormKey.currentState.validate();
+
     var formData = {
       "mobile": mobile,
       "checkCode": code,
@@ -81,13 +102,9 @@ class FormDemoState extends State<FormDemo> {
               "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
           // Application.router.navigateTo(context, "/setPassword?item=$item");
         } else {
-          Fluttertoast.showToast(
+          Toast.toast(
+            context,
             msg: val['message'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-            textColor: Colors.white,
-            fontSize: 16.0,
           );
         }
       });
@@ -108,6 +125,8 @@ class FormDemoState extends State<FormDemo> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  autovalidate: autovalidateOther,
+                  focusNode: _focusNode,
                   controller: TextEditingController.fromValue(
                     TextEditingValue(
                       text:
@@ -133,11 +152,14 @@ class FormDemoState extends State<FormDemo> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return "用户名不能为空";
+                    } else {
+                      return null;
                     }
-                    return null;
+                    // return null;
                   },
                 ),
                 TextFormField(
+                  autovalidate: autovalidateOther,
                   controller: TextEditingController.fromValue(
                     TextEditingValue(
                       text:
@@ -165,7 +187,7 @@ class FormDemoState extends State<FormDemo> {
                 ),
                 TextFormField(
                   // 输入模式设置为手机号
-                  autovalidate: true,
+                  autovalidate: autovalidateMobile,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     prefixIcon: Container(
@@ -179,6 +201,7 @@ class FormDemoState extends State<FormDemo> {
                   onSaved: (value) {
                     this.mobile = value;
                   },
+                  validator: validateMibile,
                   // validator: (value) {
                   //   if (value.isEmpty) {
                   //     return "手机号码不能为空";
@@ -186,10 +209,11 @@ class FormDemoState extends State<FormDemo> {
                   //   return null;
                   // },
                   onChanged: (v) {
-                    // validateMibile(v);
+                    this.mobile = v;
                   },
                 ),
                 TextFormField(
+                  autovalidate: autovalidateOther,
                   decoration: InputDecoration(
                     prefixIcon: Container(
                       width: ScreenUtil().setWidth(120),
@@ -251,18 +275,23 @@ class FormDemoState extends State<FormDemo> {
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
-    if (value.isEmpty) {
+    if (mobile.isEmpty) {
       print('手机校验为空');
       return '手机号码不能为空';
-    } else if (!exp.hasMatch(value)) {
-      print('手机校验规则不对');
-      return '请输入正确的账号';
+    } else {
+      if (!exp.hasMatch(mobile)) {
+        print('手机校验规则不对');
+        return '请输入正确的账号';
+      } else {
+        return null;
+      }
     }
   }
 
   //
   // 获取验证码
   void _getPhoneCode() async {
+    autovalidateMobile = true;
     registerFormKey.currentState.save();
     if (mobile.isEmpty) {
       setState(() {
@@ -279,6 +308,10 @@ class FormDemoState extends State<FormDemo> {
       var data = {'mobile': this.mobile};
       print('获取验证码注册$data');
       await requestGet('sendRegCaptcha', formData: data).then((val) {
+        Toast.toast(
+          context,
+          msg: val['message'],
+        );
         print('----------------------$val');
       });
     } else {

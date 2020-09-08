@@ -1,6 +1,10 @@
+import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:bid/common/toast.dart';
 import 'package:flutter/physics.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/log_utils.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -47,7 +51,10 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
     var data = {'mobile': params['mobile']};
     print('获取验证码注册$data');
     await requestGet('getModifyPasswordCode', formData: data).then((val) {
-      print('----------------------$val');
+      Toast.toast(
+        context,
+        msg: val['message'],
+      );
     });
   }
 
@@ -235,9 +242,37 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
       "mobile": params['mobile']
     };
 
-    print('获取验证码注册$data');
-    await requestGet('getModifyPasswordCode', formData: data).then((val) {
+    print('修改密码$data');
+    await request('resetPwdByCode', formData: data).then((val) {
       print('----------------------$val');
+      if (val['code'] == 0) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                // title: Text('退出登录提示'),
+                content: Text('您已成功修改密码，请重新登录!'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('确认'),
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      final result = await prefs.clear();
+                      if (result) {
+                        Navigator.of(context).pop('cancel');
+                        Application.router.navigateTo(context, '/sigin');
+                      }
+                    },
+                  ),
+                ],
+              );
+            });
+      } else {
+        Toast.toast(
+          context,
+          msg: val['message'],
+        );
+      }
     });
   }
 }

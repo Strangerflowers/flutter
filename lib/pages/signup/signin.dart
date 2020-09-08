@@ -572,10 +572,13 @@ class _MobileFormPageState extends State<MobileFormPage> {
     await requestGet('checkAuditStatus').then((val) {
       print(
           '---查看跳转页面------------------->>>>>>>>${val['result']['auditStatus']}');
-      if (val['result']['auditStatus'] == 0) {
-        Application.router.navigateTo(context, "/indexPage");
+      if (val['result'] == null) {
       } else {
-        Application.router.navigateTo(context, "/authentication");
+        if (val['result']['auditStatus'] == 0) {
+          Application.router.navigateTo(context, "/indexPage");
+        } else {
+          Application.router.navigateTo(context, "/authentication");
+        }
       }
     });
   }

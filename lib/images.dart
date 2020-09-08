@@ -92,37 +92,38 @@ class MyImage extends StatefulWidget {
 
 class _MyImageState extends State<MyImage> {
   double _process = 0.0;
-
+  String updateToken;
   @override
   void initState() {
-    _getUpdateToken();
+    // _getUpdateToken();
     super.initState();
   }
 
   void _getUpdateToken() async {
     // 调本地接口
-    var data = {
-      'token':
-          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdGVzdCIsInVzZXJfbmFtZSI6InB0ZXN0IiwiX3VzZXJfbmFtZSI6ImhpbnMiLCJleHAiOjE1OTk5NzUwMzcsInVzZXJJZCI6IjBlMDhlMTUzYjA0YTExZTliMzFiYjA2ZWJmMTRhNDc2In0.lMd37OTGQ-TQB-fAT6II3d0Ckd62Xyf55YIcCt5QJkQ'
-    };
+    // var data = {
+    //   'token':
+    //       'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdGVzdCIsInVzZXJfbmFtZSI6InB0ZXN0IiwiX3VzZXJfbmFtZSI6ImhpbnMiLCJleHAiOjE1OTk5NzUwMzcsInVzZXJJZCI6IjBlMDhlMTUzYjA0YTExZTliMzFiYjA2ZWJmMTRhNDc2In0.lMd37OTGQ-TQB-fAT6II3d0Ckd62Xyf55YIcCt5QJkQ'
+    // };
     print('获取七牛云同肯');
     await request('getpictrueToken').then(
       (value) {
+        updateToken = value['upToken'];
         print('获取图片上传的token${value['upToken']}');
-        var keys = {'token': value['upToken']};
-        requestNoHeader('getKey', formData: data).then(
-          (value) {
-            print('获取图片上传的token$value');
-          },
-        );
+        // var keys = {'token': value['upToken']};
+        // requestNoHeader('getKey', formData: data).then(
+        //   (value) {
+        //     print('获取图片上传的token$value');
+        //   },
+        // );
       },
     );
   }
 
   _onUpload() async {
     Dio dio = new Dio();
-    String token =
-        "WrWenNoo1MR7n9ukB2WayIaOhkD9BU7ZJPjVcKn_:otjdGOWdpVNPEdOnHizgeVkDT5I=:eyJzY29wZSI6Im9zLXByZS1wcm9kIiwicmV0dXJuQm9keSI6IntcImtleVwiOiAkKGtleSksIFwiaGFzaFwiOiAkKGV0YWcpLCBcIndpZHRoXCI6ICQoaW1hZ2VJbmZvLndpZHRoKSwgXCJoZWlnaHRcIjogJChpbWFnZUluZm8uaGVpZ2h0KSxcImZzaXplXCI6JChmc2l6ZSl9IiwiZGVhZGxpbmUiOjE1OTk0MTcxMDB9";
+    String token = updateToken;
+    // "WrWenNoo1MR7n9ukB2WayIaOhkD9BU7ZJPjVcKn_:otjdGOWdpVNPEdOnHizgeVkDT5I=:eyJzY29wZSI6Im9zLXByZS1wcm9kIiwicmV0dXJuQm9keSI6IntcImtleVwiOiAkKGtleSksIFwiaGFzaFwiOiAkKGV0YWcpLCBcIndpZHRoXCI6ICQoaW1hZ2VJbmZvLndpZHRoKSwgXCJoZWlnaHRcIjogJChpbWFnZUluZm8uaGVpZ2h0KSxcImZzaXplXCI6JChmc2l6ZSl9IiwiZGVhZGxpbmUiOjE1OTk0MTcxMDB9";
     File file = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (file == null) {
       return;
@@ -144,6 +145,7 @@ class _MyImageState extends State<MyImage> {
     });
 
     //上传文件
+    print('获取参数${updateToken}');
     // var formData = {file.path, token, _key(file)};
     var result = await dio.post('https://up-z2.qbox.me/', data: formData);
     // var result = await syStorage.upload(file.path, token, _key(file));
@@ -163,30 +165,29 @@ class _MyImageState extends State<MyImage> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: const Text('七牛云存储SDK demo'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Row(
             children: <Widget>[
-              LinearProgressIndicator(
-                value: _process,
+              Text(
+                '*',
+                style: TextStyle(color: Colors.red),
               ),
-              RaisedButton(
-                child: Text('上传'),
-                onPressed: _onUpload,
-              ),
-              RaisedButton(
-                child: Text('取消上传'),
-                onPressed: _onCancel,
-              ),
+              Text('营业执照')
             ],
           ),
-        ),
+          // buildGridView(),
+          FloatingActionButton(
+            onPressed: () {
+              _getUpdateToken();
+              _onUpload();
+              // _multiImage();
+            },
+            tooltip: 'Pick Image',
+            child: Icon(Icons.add_a_photo),
+          ),
+        ],
       ),
     );
   }
