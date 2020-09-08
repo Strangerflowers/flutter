@@ -1,9 +1,9 @@
 class CertificationInfoModel {
   int id;
-  Null userId;
+  String userId;
   String companyPortalId;
-  Null subjectMgrInfoId;
-  Null loginAccount;
+  String subjectMgrInfoId;
+  String loginAccount;
   int auditStatus;
   String account;
   String companyName;
@@ -25,8 +25,8 @@ class CertificationInfoModel {
   String contactName;
   String contactMobile;
   int status;
-  Null isUpload;
-  Null contactsDtoList;
+  String isUpload;
+  String contactsDtoList;
 
   CertificationInfoModel(
       {this.id,

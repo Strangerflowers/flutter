@@ -57,6 +57,7 @@ dependencies:
   # flutter_picker: ^1.1.5
   xyz_address_picker: ^1.0.1
   flutter_app_upgrade: ^1.1.0
+  package_info: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

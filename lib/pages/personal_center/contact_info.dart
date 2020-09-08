@@ -165,8 +165,11 @@ class ContactInfo extends StatelessWidget {
               ),
               onTap: () {
                 LogUtils.d('[编辑按钮]', '被点击了!');
-                Application.router
-                    .navigateTo(context, Routes.EDIT_CONTATCT_INFO_PAGE);
+                Application.router.navigateTo(
+                    context,
+                    Routes.EDIT_CONTATCT_INFO_PAGE +
+                        "?id=" +
+                        contactInfoModel.id.toString());
               },
             ),
           ),
