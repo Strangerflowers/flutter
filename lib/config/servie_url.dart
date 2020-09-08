@@ -79,4 +79,6 @@ const servicePath = {
       "/os_kernel_userorgctr/app/user/getVerificationCode", //修改密码获取验证码
   'resetPwdByCode':
       serviceUrl + '/os_kernel_userorgctr/app/user/resetPwdByCode', //修改密码
+  "checkNameAndMobile": serviceUrl +
+      "/os_kernel_bid/app/suppliers/checkNameAndMobile", //校验手机号码与公司名称是否重复
 };

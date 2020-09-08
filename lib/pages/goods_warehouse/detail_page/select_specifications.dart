@@ -22,38 +22,44 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
     return Provide<DetailsInfoProvide>(builder: (context, child, val) {
       var goodsInfo =
           Provide.value<DetailsInfoProvide>(context).goodsInfo.result;
-      skuldataList = [];
-      skulObjectData = [];
-      goodsInfo.skuList.forEach((ele) {
-        var valueArr = [];
-        ele.items.forEach((subele) {
-          valueArr.add(subele.value);
+      if (goodsInfo != null) {
+        skuldataList = [];
+        skulObjectData = [];
+        goodsInfo.skuList.forEach((ele) {
+          var valueArr = [];
+          ele.items.forEach((subele) {
+            valueArr.add(subele.value);
+          });
+
+          var obj = {
+            'id': ele.id,
+            "skul": valueArr.join(',').replaceAll(",", "-"),
+            "skulgood": ele,
+            "price": ele.price,
+          };
+          skulObjectData.add(obj);
+          skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
+
+          return;
         });
 
-        var obj = {
-          'id': ele.id,
-          "skul": valueArr.join(',').replaceAll(",", "-"),
-          "skulgood": ele,
-          "price": ele.price,
-        };
-        skulObjectData.add(obj);
-        skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
-
-        return;
-      });
-
-      return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 10, bottom: 10),
-        padding: EdgeInsets.all(20),
-        // height: ScreenUtil().setHeight(70),
-        width: ScreenUtil().setWidth(750),
-        child: InkWell(
-          onTap: () {},
-          child: _select(goodsInfo, context),
-          // child: _growView(),
-        ),
-      );
+        return Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.all(20),
+          // height: ScreenUtil().setHeight(70),
+          width: ScreenUtil().setWidth(750),
+          child: InkWell(
+            onTap: () {},
+            child: _select(goodsInfo, context),
+            // child: _growView(),
+          ),
+        );
+      } else {
+        return Container(
+          child: Text('暂无数据'),
+        );
+      }
     });
   }
 

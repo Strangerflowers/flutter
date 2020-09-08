@@ -1,7 +1,7 @@
 class GoodsSearchList {
   int code;
   bool success;
-  Null message;
+  String message;
   GoodsSearchResult result;
   int timestamp;
 
@@ -11,7 +11,7 @@ class GoodsSearchList {
   GoodsSearchList.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     success = json['success'];
-    message = json['message'];
+    message = json['message'].toString();
     result = json['result'] != null
         ? new GoodsSearchResult.fromJson(json['result'])
         : null;
@@ -82,19 +82,19 @@ class GoodsSearchResultList {
   int category3;
   String unit;
   String packUnit;
-  Null image;
+  String image;
   String description;
   String remark;
   int status;
-  Null auditStatus;
-  Null expireTime;
+  int auditStatus;
+  String expireTime;
   int version;
   String createTime;
   String updateTime;
   int scaleLeft;
   int scaleRight;
   String priceRange;
-  Null action;
+  String action;
 
   GoodsSearchResultList(
       {this.id,
@@ -132,19 +132,19 @@ class GoodsSearchResultList {
     category3 = json['category3'];
     unit = json['unit'];
     packUnit = json['packUnit'];
-    image = json['image'];
+    image = json['image'].toString();
     description = json['description'];
     remark = json['remark'];
     status = json['status'];
     auditStatus = json['auditStatus'];
-    expireTime = json['expireTime'];
+    expireTime = json['expireTime'].toString();
     version = json['version'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];
     scaleLeft = json['scaleLeft'];
     scaleRight = json['scaleRight'];
     priceRange = json['priceRange'];
-    action = json['action'];
+    action = json['action'].toString();
   }
 
   Map<String, dynamic> toJson() {

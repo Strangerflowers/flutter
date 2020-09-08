@@ -33,16 +33,20 @@ class DetailsTopArea extends StatelessWidget {
 
   // 商品图片
   Widget _goodsImage(goodsResult) {
-    // return Image.network(
-    //   goodsResult.image,
+    return Container(
+      height: ScreenUtil().setHeight(300),
+      child: Image.network(
+        goodsResult.image,
+        width: ScreenUtil().setWidth(750),
+        fit: BoxFit.fill,
+      ),
+    );
+
+    // return Image.asset(
+    //   'images/r.jpg',
     //   width: ScreenUtil().setWidth(750),
     //   fit: BoxFit.fill,
     // );
-    return Image.asset(
-      'images/r.jpg',
-      width: ScreenUtil().setWidth(750),
-      fit: BoxFit.fill,
-    );
   }
 
   // 商品名称

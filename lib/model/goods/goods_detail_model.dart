@@ -1,7 +1,7 @@
 class GoodsDetail {
   int code;
   bool success;
-  Null message;
+  String message;
   GoodsDetailResult result;
   int timestamp;
 
@@ -11,7 +11,7 @@ class GoodsDetail {
   GoodsDetail.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     success = json['success'];
-    message = json['message'];
+    message = json['message'].toString();
     result = json['result'] != null
         ? new GoodsDetailResult.fromJson(json['result'])
         : null;
@@ -42,7 +42,7 @@ class GoodsDetailResult {
   int category3;
   String unit;
   String packUnit;
-  Null image;
+  String image;
   String description;
   String remark;
   int status;
@@ -50,13 +50,13 @@ class GoodsDetailResult {
   int scaleLeft;
   int scaleRight;
   String createTime;
-  Null action;
+  String action;
   String priceRange;
   String updateTime;
-  Null priceValidStart;
-  Null priceValidEnd;
+  String priceValidStart;
+  String priceValidEnd;
   List<GoodsDetailSkuList> skuList;
-  Null supplier;
+  String supplier;
 
   GoodsDetailResult(
       {this.id,
@@ -96,7 +96,7 @@ class GoodsDetailResult {
     category3 = json['category3'];
     unit = json['unit'];
     packUnit = json['packUnit'];
-    image = json['image'];
+    image = json['image'].toString();
     description = json['description'];
     remark = json['remark'];
     status = json['status'];
@@ -107,15 +107,15 @@ class GoodsDetailResult {
     action = json['action'];
     priceRange = json['priceRange'];
     updateTime = json['updateTime'];
-    priceValidStart = json['priceValidStart'];
-    priceValidEnd = json['priceValidEnd'];
+    priceValidStart = json['priceValidStart'].toString();
+    priceValidEnd = json['priceValidEnd'].toString();
     if (json['skuList'] != null) {
       skuList = new List<GoodsDetailSkuList>();
       json['skuList'].forEach((v) {
         skuList.add(new GoodsDetailSkuList.fromJson(v));
       });
     }
-    supplier = json['supplier'];
+    supplier = json['supplier'].toString();
   }
 
   Map<String, dynamic> toJson() {
