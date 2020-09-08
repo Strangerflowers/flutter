@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:provide/provide.dart';
@@ -16,10 +17,10 @@ class QuotationIndexPage extends StatefulWidget {
 }
 
 class _QuotationIndexPageState extends State<QuotationIndexPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       appBar: AppBar(
         title: Text('报价单'),
       ),
-      body: SingleChildScrollView(
+      body: Container(
         child: Column(
           children: <Widget>[
             QuotationTabs(),
@@ -177,8 +178,10 @@ class QuotationGoodsList extends StatefulWidget {
 }
 
 class _QuotationGoodsListState extends State<QuotationGoodsList> {
+  GlobalKey<RefreshFooterState> _footerkey =
+      new GlobalKey<RefreshFooterState>();
   List<QuotationHomeList> list = [];
-  @override
+  // @override
   void initState() {
     // _getQuotationList();
     super.initState();
@@ -188,20 +191,44 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
   Widget build(BuildContext context) {
     return Provide<QuotationGoodsListProvide>(builder: (context, child, data) {
       if (data.goodsList != null) {
-        if (data.goodsList != []) {
-          return Container(
-            child: _recommedList(data.goodsList),
-          );
-        } else {
-          return Container(
-            child: Text('暂无数据'),
-          );
-        }
+        // if (data.goodsList != []) {
+        return Expanded(
+          child: Container(
+            // height: ,
+            // margin: EdgeInsets.only(bottom: 200),
+            child: EasyRefresh(
+              refreshFooter: ClassicsFooter(
+                key: _footerkey,
+                bgColor: Colors.white,
+                textColor: Colors.pink,
+                moreInfoColor: Colors.pink,
+                showMore: true,
+                noMoreText: '',
+                moreInfo: '加载中',
+                loadReadyText: '上拉加载',
+              ),
+              child: _recommedList(data.goodsList),
+              loadMore: () async {
+                // 上拉加载更多的回调方法
+                print('上拉加载更多......');
+              },
+            ),
+          ),
+        );
+
+        // return Container(
+        //   child: _recommedList(data.goodsList),
+        // );
       } else {
         return Container(
           child: Text('暂无数据'),
         );
       }
+      // } else {
+      //   return Container(
+      //     child: Text('暂无数据'),
+      //   );
+      // }
     });
   }
 
@@ -209,10 +236,11 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
   Widget _recommedList(list) {
     if (list.length > 0) {
       return Container(
-        height: ScreenUtil().setHeight(1000),
+        // height: ScreenUtil().setHeight(1000),
         child: SizedBox(
           child: ListView.builder(
             itemCount: list.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             itemBuilder: (contex, index) {
               return _merge(list[index], index);
             },
@@ -345,10 +373,11 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
   Widget _goodlsList(arr) {
     if (arr.length > 0) {
       return Container(
-        height: ScreenUtil().setHeight(1000),
+        // height: ScreenUtil().setHeight(1000),
         child: SizedBox(
           child: ListView.builder(
             itemCount: arr.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             itemBuilder: (contex, index) {
               return _mergeGoods(arr[index]);
             },
