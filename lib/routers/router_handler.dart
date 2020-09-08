@@ -3,30 +3,29 @@ import 'package:bid/pages/personal_center/add_contact_info.dart';
 import 'package:bid/pages/personal_center/add_withdraw_address.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
-import 'package:bid/pages/personal_center/add_contact_info.dart';
 import 'package:bid/pages/personal_center/edit_contact_info.dart';
 import 'package:bid/pages/personal_center/edit_withdraw_address.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
+import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:bid/pages/signup/authentication.dart';
 import 'package:bid/pages/signup/signin.dart';
-import 'package:flutter/material.dart';
-import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:fluro/fluro.dart';
-import '../pages/quotation/quotataion_detail_page.dart';
-import '../pages/quotation/procurement_plan.dart';
-import '../pages/purchasing_demand/demand_detail.dart';
-import '../pages/sales_order/sales_order_detail_page.dart';
-import '../pages/sales_order/sales_add_shipment.dart';
-import '../pages/sales_order/shipping_information_look.dart';
-import '../pages/sales_order/shipping_information_add.dart';
-import '../pages/sales_order/sales_index_page.dart';
-import '../pages/offer/add_quote_product_page.dart';
-import '../pages/offer/select_products_page.dart';
-import '../pages/offer/choice_index_page.dart';
+import 'package:flutter/material.dart';
+
 import '../common/log_utils.dart';
+import '../pages/offer/add_quote_product_page.dart';
+import '../pages/offer/choice_index_page.dart';
+import '../pages/offer/select_products_page.dart';
+import '../pages/purchasing_demand/demand_detail.dart';
+import '../pages/quotation/procurement_plan.dart';
+import '../pages/quotation/quotataion_detail_page.dart';
+import '../pages/sales_order/sales_add_shipment.dart';
+import '../pages/sales_order/sales_index_page.dart';
+import '../pages/sales_order/sales_order_detail_page.dart';
+import '../pages/sales_order/shipping_information_add.dart';
+import '../pages/sales_order/shipping_information_look.dart';
 import '../pages/signup/setregister_password.dart';
-import '../pages/purchasing_demand/purchasing_demand.dart';
 
 // handler 的单个配置
 Handler detailsHandler = Handler(

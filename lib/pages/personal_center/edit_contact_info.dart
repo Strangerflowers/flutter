@@ -1,12 +1,14 @@
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/model/base/BaseResponseModel.dart';
-import 'package:bid/model/user_center/CertificationInfoModel.dart';
 import 'package:bid/model/user_center/ContactInfoModel.dart';
+import 'package:bid/model/vo/ContactInfoVo.dart';
 import 'package:bid/routers/application.dart';
-import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 
 class EditContactInfo extends StatefulWidget {
   String id;
@@ -23,6 +25,8 @@ class _EditContactInfo extends State<EditContactInfo> {
   static const String TAG = "EditContactInfo";
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ContactInfoModel contactInfoModel;
+  ContactInfoVo contactInfoVo;
+  bool loaded = false;
 
   _EditContactInfo(this.id);
 
@@ -35,32 +39,43 @@ class _EditContactInfo extends State<EditContactInfo> {
       request('editContactInfo', formData: contactInfoModel).then((res) {
         LogUtils.debug(TAG, res, StackTrace.current);
         Widget content;
-        if (null != res) {
-          content = res['code'] == 0 ? new Text('编辑成功!') : new Text('编辑失败!');
+        if (null != res && res['code'] == 0) {
+          Application.router.pop(context);
         } else {
           content = new Text('编辑失败!');
+          showDialog(
+              context: context,
+              builder: (ctx) => new AlertDialog(
+                    content: content,
+                  ));
         }
-
-        showDialog(
-            context: context,
-            builder: (ctx) => new AlertDialog(
-                  content: content,
-                ));
       });
-      // Application.router.navigateTo(context, Routes.CONTACT_INFO_PAGE);
     }
   }
 
   @override
+  void initState() {
+    _initModel();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    contactInfoModel = new ContactInfoModel();
     return Scaffold(
       appBar: _buildAppBar(),
-      body: FutureBuilder(
+      body: _buildCacheableBody(),
+    );
+  }
+
+  Widget _buildCacheableBody() {
+    if (!loaded) {
+      return FutureBuilder(
         future: requestGet('getContactInfoById', formData: {"id": this.id}),
         builder: _asyncBuilder,
-      ),
-    );
+      );
+    } else {
+      return _buildBody();
+    }
   }
 
   /** 
@@ -69,8 +84,12 @@ class _EditContactInfo extends State<EditContactInfo> {
   Widget _asyncBuilder(BuildContext context, AsyncSnapshot snapshot) {
     //请求完成
     if (snapshot.connectionState == ConnectionState.done) {
-      LogUtils.d('snapshot', snapshot);
-      LogUtils.d('snapshot.data', snapshot.data.toString());
+      LogUtils.debug(
+          TAG, sprintf('snapshot:%s', [snapshot]), StackTrace.current);
+      LogUtils.debug(
+          TAG,
+          sprintf('snapshot.data:%s', [snapshot.data.toString()]),
+          StackTrace.current);
       //发生错误
       if (snapshot.hasError) {
         return Text(snapshot.error.toString());
@@ -81,9 +100,15 @@ class _EditContactInfo extends State<EditContactInfo> {
         BaseResponseModel<ContactInfoModel> baseResponseModel =
             BaseResponseModel.fromJson(
                 data, (json) => ContactInfoModel.fromJson(json));
-        LogUtils.d('============>[baseResponseModel]', baseResponseModel);
+        LogUtils.debug(
+            TAG,
+            sprintf(
+                '============>[baseResponseModel]: %s', [baseResponseModel]),
+            StackTrace.current);
         contactInfoModel = baseResponseModel.result;
+        contactInfoVo.areaName = contactInfoModel.areaCode;
         if (null != contactInfoModel) {
+          loaded = true;
           return _buildBody();
         } else {
           return Container(
@@ -197,7 +222,7 @@ class _EditContactInfo extends State<EditContactInfo> {
                 //合法检测回调
                 validator: (value) {
                   if (value.isEmpty) {
-                    return '账号不能为空';
+                    return '联系人不能为空';
                   }
                   return null;
                 },
@@ -466,25 +491,32 @@ class _EditContactInfo extends State<EditContactInfo> {
             ),
           ),
           Expanded(
-            child: Container(
-              child: TextFormField(
-                  controller: new TextEditingController(
-                      text: contactInfoModel.areaCode),
-                  //合法检测回调
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return '所在地区不能为空';
-                    }
-                    return null;
-                  },
-                  //表单数据保存
-                  onSaved: (value) {
-                    contactInfoModel.areaCode = value;
-                  },
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请输入',
-                  )),
+            child: InkWell(
+              onTap: _showSelect,
+              child: StatefulBuilder(builder: (context, StateSetter setState) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Color(0xFFD7D7D7),
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      StringUtils.defaultIfEmpty(
+                          contactInfoVo.areaName, StringUtils.EMPTY),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    trailing: Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Color(0xFFD1D1D1),
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         ],
@@ -496,5 +528,36 @@ class _EditContactInfo extends State<EditContactInfo> {
     return Expanded(
       child: toWrap,
     );
+  }
+
+  void _showSelect() async {
+    LogUtils.debug(TAG, '点击弹窗类型选着框', StackTrace.current);
+    Result result = await CityPickers.showCityPicker(
+        context: context,
+        cancelWidget: Text('取消', style: TextStyle(color: Colors.black54)),
+        confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
+    LogUtils.debug(
+        TAG, sprintf('省市区控件选择的结果为: %s', [result]), StackTrace.current);
+
+    setState(() {
+      _formKey.currentState.save();
+      contactInfoModel.areaCode = result.areaId;
+      contactInfoVo.areaName =
+          result.provinceName + result.cityName + result.areaName;
+      LogUtils.debug(
+          TAG,
+          sprintf('contactInfoModel:%s', [contactInfoModel.toString()]),
+          StackTrace.current);
+      LogUtils.debug(
+          TAG,
+          sprintf('contactInfoVo:%s', [contactInfoVo.toString()]),
+          StackTrace.current);
+    });
+  }
+
+  void _initModel() {
+    contactInfoModel = new ContactInfoModel();
+    contactInfoVo = new ContactInfoVo();
+    contactInfoModel.defaultContact = 2;
   }
 }

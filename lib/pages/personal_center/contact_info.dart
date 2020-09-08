@@ -10,7 +10,14 @@ import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 
-class ContactInfo extends StatelessWidget {
+class ContactInfo extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _ContactInfo();
+  }
+}
+
+class _ContactInfo extends State<ContactInfo> {
   List<DataModel> _dataModelList = [];
 
   @override
@@ -61,15 +68,16 @@ class ContactInfo extends StatelessWidget {
   Widget _asyncBuilder(BuildContext context, AsyncSnapshot snapshot) {
     //请求完成
     if (snapshot.connectionState == ConnectionState.done) {
-      LogUtils.d('snapshot', snapshot);
-      LogUtils.d('snapshot.data', snapshot.data.toString());
+      LogUtils.debug('snapshot', snapshot, StackTrace.current);
+      LogUtils.debug(
+          'snapshot.data', snapshot.data.toString(), StackTrace.current);
       //发生错误
       if (snapshot.hasError) {
         return Text(snapshot.error.toString());
       }
 
       var data = snapshot.data;
-      if (null != data) {
+      if (null != data && data['success'] == true) {
         BaseResponseModel<BaseResponseResultList> baseResponseModel =
             BaseResponseModel.fromJson(
                 data, (json) => BaseResponseResultList.fromJson(json));
@@ -80,6 +88,14 @@ class ContactInfo extends StatelessWidget {
         LogUtils.d('[contactInfoModelList]', contactInfoModelList);
         //请求成功，通过项目信息构建用于显示项目名称的ListView
         return _buildBody(context, contactInfoModelList);
+      } else {
+        return Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "查无数据!",
+              style: TextStyle(color: Colors.grey),
+            ));
       }
     }
     //请求未完成时弹出loading
