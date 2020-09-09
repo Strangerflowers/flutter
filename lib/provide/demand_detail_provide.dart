@@ -24,20 +24,33 @@ class DemandDetailProvide with ChangeNotifier {
     FormData formData = FormData.fromMap({'demandId': id});
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
     request('demandDetail', formData: formData).then((val) {
+      print('获取详情页数据$val');
       if (val['code'] == 0) {
-        goodsList = DemandDetailHome.fromJson(val);
-        quotationData = goodsList.result.demandSkuDtoList;
-        quotationData.forEach((ele) {
-          ele.checkBoxFlag = false;
-          selectAllFlag = false;
-          if (ele.demandDetailDtoList != null) {
-            ele.demandDetailDtoList.forEach((ele) {
-              ele.checkBoxFlag = false;
-            });
-          }
-          return arr.add(ele);
-        });
-        quotationData = arr;
+        // goodsList = DemandDetailHome.fromJson(val);
+        if (val['result'] != null) {
+          goodsList = DemandDetailHome.fromJson(val);
+          quotationData = goodsList.result.demandSkuDtoList;
+          quotationData.forEach((ele) {
+            ele.checkBoxFlag = false;
+            selectAllFlag = false;
+            if (ele.demandDetailDtoList != null) {
+              ele.demandDetailDtoList.forEach((ele) {
+                ele.checkBoxFlag = false;
+              });
+            }
+            return arr.add(ele);
+          });
+          quotationData = arr;
+        } else {
+          Fluttertoast.showToast(
+            msg: '暂无数据',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
       } else {
         goodsList = null;
         Fluttertoast.showToast(

@@ -21,7 +21,9 @@ class DemandDetails extends StatelessWidget {
       body: FutureBuilder(
         future: _getBackDetailInfo(context),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          print(
+              'snapshot.hasData=====>${snapshot.hasData}1111${snapshot.data}');
+          if (snapshot.data != null) {
             return Stack(
               children: <Widget>[
                 SingleChildScrollView(
@@ -48,7 +50,7 @@ class DemandDetails extends StatelessWidget {
               ],
             );
           } else {
-            return Text('加载中......');
+            return Text('暂无数据');
           }
         },
       ),
@@ -58,7 +60,7 @@ class DemandDetails extends StatelessWidget {
   Future _getBackDetailInfo(BuildContext context) async {
     await Provide.value<DemandDetailProvide>(context)
         .getDemandDetailData(demandId);
-    return '加载完成';
+    return Provide.value<DemandDetailProvide>(context).goodsList;
   }
 }
 
