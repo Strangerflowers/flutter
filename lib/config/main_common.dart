@@ -1,27 +1,40 @@
+import 'package:bid/config/config_reader.dart';
+import 'package:bid/config/environment.dart';
+import 'package:bid/config/service_url_holder.dart';
+import 'package:bid/pages/index_page.dart';
+import 'package:bid/provide/demand_detail_provide.dart';
+import 'package:bid/provide/demand_quotation/demand_quotation_provide.dart';
+import 'package:bid/provide/goods_detail_provide.dart';
+import 'package:bid/provide/goods_list.dart';
+import 'package:bid/provide/goods_list_provide.dart';
+import 'package:bid/provide/purchasing_list_provide.dart';
+import 'package:bid/provide/quotation_detail.dart';
+import 'package:bid/provide/quotation_detail_plan_provide.dart';
+import 'package:bid/provide/quotation_list.dart';
+import 'package:bid/provide/sales_add_shipment_provide.dart';
+import 'package:bid/provide/sales_order/add_infomation_provide.dart';
+import 'package:bid/provide/sales_order/look.dart';
+import 'package:bid/provide/sales_order_detail_provide.dart';
+import 'package:bid/provide/sales_order_list_provide.dart';
+import 'package:bid/provide/select/select_specifications_provide.dart';
+import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provide/provide.dart';
-import './pages/index_page.dart';
-import './provide/goods_list.dart';
-import './provide/quotation_list.dart';
-import './provide/quotation_detail.dart';
-import './provide/goods_list_provide.dart';
-import './provide/quotation_detail_plan_provide.dart';
-import './provide/goods_detail_provide.dart';
-import './provide/purchasing_list_provide.dart';
-import './provide/demand_detail_provide.dart';
-import './provide/sales_order_list_provide.dart';
-import './provide/sales_order_detail_provide.dart';
-import './provide/sales_add_shipment_provide.dart';
-import './provide/select/select_specifications_provide.dart';
-import './provide/sales_order/look.dart';
-import './provide/sales_order/add_infomation_provide.dart';
-import './provide/demand_quotation/demand_quotation_provide.dart';
-import 'package:fluro/fluro.dart';
-import './routers/application.dart';
-import './routers/routers.dart';
 
-void main() {
+/** 
+ * 公共的启动Main方法.
+ * @author: DANTE FUNG
+ * @date: 2020-9-9 15:53:14
+ */
+Future<void> mainCommon(String env) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // 加载app_xxx_config.json配置文件
+  await ConfigReader.initialize(env);
+  // 初始化api接口地址定义
+  ServiceUrlHolder.initialize();
   var counter = Counter();
   var quotationGoodsListProvide = QuotationGoodsListProvide();
   var quotationDetailProvide = QuotationDetailProvide();

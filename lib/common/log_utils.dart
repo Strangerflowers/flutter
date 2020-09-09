@@ -18,7 +18,15 @@ abstract class LogUtils {
   }
 
   static void info(String tag, Object message, StackTrace current) {
-    _printLog(tag, '[INFO] -> ', message);
+    programInfo = XFCustomTrace(current);
+    _printLog(
+        tag,
+        '[INFO] ' +
+            programInfo.fileName +
+            ' - 第' +
+            programInfo.lineNumber.toString() +
+            '行 -> ',
+        message);
   }
 
   static void d(String tag, Object message) {
