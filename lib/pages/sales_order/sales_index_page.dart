@@ -54,7 +54,7 @@ class _SalesTabsState extends State<SalesTabs> {
       if (data.goodsList != []) {
         return Container(
           margin: EdgeInsets.only(bottom: 20),
-          height: ScreenUtil().setHeight(83),
+          height: ScreenUtil().setHeight(93),
           // width: ScreenUtil().setWidth(750),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -100,7 +100,7 @@ class _SalesTabsState extends State<SalesTabs> {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 12.0),
+                padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
                 // padding: EdgeInsets.only(bottom: 20),
                 child: Text(
                   item,
