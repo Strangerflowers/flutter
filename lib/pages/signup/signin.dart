@@ -2,6 +2,7 @@ import 'package:bid/service/service_method.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import './register.dart';
+import 'package:bid/common/toast.dart';
 import '../../routers/application.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
@@ -285,10 +286,19 @@ class _FormPageState extends State<FormPage> {
 
   _checkAuditStatus() async {
     await requestGet('checkAuditStatus').then((val) {
-      if (val['result']['auditStatus'] == 0) {
-        Application.router.navigateTo(context, "/indexPage");
+      if (val['code'] == 0) {
+        if (val['result']['auditStatus'] == 0) {
+          Navigator.pop(context);
+          Application.router.navigateTo(context, "/indexPage");
+        } else {
+          Navigator.pop(context);
+          Application.router.navigateTo(context, "/authentication");
+        }
       } else {
-        Application.router.navigateTo(context, "/authentication");
+        Toast.toast(
+          context,
+          msg: val['message'],
+        );
       }
     });
   }
@@ -313,21 +323,29 @@ class _FormPageState extends State<FormPage> {
               _checkAuditStatus();
               // Application.router.navigateTo(context, "/indexPage");
             } else {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("${val['message']}"),
-                ),
+              Toast.toast(
+                context,
+                msg: value['message'],
               );
+              // showDialog(
+              //   context: context,
+              //   builder: (context) => AlertDialog(
+              //     title: Text("${val['message']}"),
+              //   ),
+              // );
             }
           });
         } else {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text("${val['message']}"),
-            ),
+          Toast.toast(
+            context,
+            msg: val['message'],
           );
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => AlertDialog(
+          //     title: Text("${val['message']}"),
+          //   ),
+          // );
         }
       });
     } else {
@@ -560,25 +578,39 @@ class _MobileFormPageState extends State<MobileFormPage> {
               });
               _checkAuditStatus();
             } else {
-              print('手机登录不成');
+              Toast.toast(
+                context,
+                msg: value['message'],
+              );
+              // print('手机登录不成');
             }
           });
-        } else {}
+        } else {
+          Toast.toast(
+            context,
+            msg: val['message'],
+          );
+        }
       });
     } else {}
   }
 
   _checkAuditStatus() async {
     await requestGet('checkAuditStatus').then((val) {
-      print(
-          '---查看跳转页面------------------->>>>>>>>${val['result']['auditStatus']}');
-      if (val['result'] == null) {
-      } else {
+      print('---查看跳转页面------------->${val['result']['auditStatus']}');
+      if (val['code'] == 0) {
         if (val['result']['auditStatus'] == 0) {
+          Navigator.pop(context);
           Application.router.navigateTo(context, "/indexPage");
         } else {
+          Navigator.pop(context);
           Application.router.navigateTo(context, "/authentication");
         }
+      } else {
+        Toast.toast(
+          context,
+          msg: val['message'],
+        );
       }
     });
   }

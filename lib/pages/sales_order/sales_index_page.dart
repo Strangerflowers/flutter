@@ -93,7 +93,7 @@ class _SalesTabsState extends State<SalesTabs> {
         _getSaleasOrderList();
         print('$isClick');
       },
-      child: Expanded(
+      child: Container(
         child: Container(
           alignment: Alignment.center,
           width: ScreenUtil().setWidth(187),

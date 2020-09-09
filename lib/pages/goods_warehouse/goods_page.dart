@@ -103,6 +103,7 @@ class _GoodsPageState extends State<GoodsPage> {
             return _typeWell(list[index], index);
           },
           itemCount: list.length,
+          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           scrollDirection: Axis.horizontal,
         ),
         // ),
@@ -140,7 +141,7 @@ class _GoodsPageState extends State<GoodsPage> {
           });
           _getGoodsList();
         },
-        child: Expanded(
+        child: Container(
           // flex: 1,
           child: Container(
             alignment: Alignment.center,
@@ -276,10 +277,11 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     // print('判断拿到的数据$list');
     if (list.length > 0) {
       return Container(
-        height: ScreenUtil().setHeight(1000),
+        // height: ScreenUtil().setHeight(1000),
         child: SizedBox(
           child: ListView.builder(
             itemCount: list.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             itemBuilder: (contex, index) {
               return _mergeItem(list[index]);
             },

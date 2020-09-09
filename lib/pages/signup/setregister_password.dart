@@ -20,6 +20,12 @@ class SetPassword extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           "设置密码",
         ),

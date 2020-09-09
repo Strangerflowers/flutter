@@ -106,7 +106,7 @@ class _QuotationTabsState extends State<QuotationTabs> {
         // });
         // print('$isClick');
       },
-      child: Expanded(
+      child: Container(
         child: Container(
           alignment: Alignment.center,
           width: ScreenUtil().setWidth(187),
