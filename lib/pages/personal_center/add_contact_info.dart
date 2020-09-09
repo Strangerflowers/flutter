@@ -1,11 +1,14 @@
+import 'package:bid/common/bean_utils.dart';
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/model/user_center/ContactInfoModel.dart';
+import 'package:bid/model/vo/ContactInfoVo.dart';
 import 'package:bid/routers/application.dart';
-import 'package:bid/routers/routers.dart';
-// import 'package:bid/service/service_method%20copy.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 
 class AddContactInfo extends StatefulWidget {
   @override
@@ -18,35 +21,43 @@ class _AddContactInfo extends State<AddContactInfo> {
   static const String TAG = "AddContactInfo";
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ContactInfoModel contactInfoModel;
+  ContactInfoVo contactInfoVo;
 
   void _onSubmit() {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      LogUtils.debug(TAG, contactInfoModel, StackTrace.current);
-      request('saveContactInfo', formData: contactInfoModel).then((res) {
-        LogUtils.debug(TAG, res, StackTrace.current);
+      ContactInfoVo payload = BeanUtils.copyProperties(
+          contactInfoModel.toJson(),
+          contactInfoVo.toJson(),
+          (json) => ContactInfoVo.fromJson(json));
+      LogUtils.debug(
+          TAG, sprintf('请求payload:%s', [payload]), StackTrace.current);
+      request('saveContactInfo', formData: payload).then((res) {
+        LogUtils.debug(TAG, sprintf('响应:%s', [res]), StackTrace.current);
         Widget content;
-        if (null != res) {
-          content = res['code'] == 0 ? new Text('新增成功!') : new Text('新增失败!');
+        if (null != res && res['code'] == 0) {
+          Application.router.pop(context);
         } else {
           content = new Text('新增失败!');
+          showDialog(
+              context: context,
+              builder: (ctx) => new AlertDialog(
+                    content: content,
+                  ));
         }
-
-        showDialog(
-            context: context,
-            builder: (ctx) => new AlertDialog(
-                  content: content,
-                ));
       });
-      // Application.router.navigateTo(context, Routes.CONTACT_INFO_PAGE);
     }
   }
 
   @override
+  void initState() {
+    _initModel();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    contactInfoModel = new ContactInfoModel();
-    contactInfoModel.defaultContact = 2;
     return Scaffold(
       appBar: _buildAppBar(),
       body: Center(
@@ -141,7 +152,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                 //合法检测回调
                 validator: (value) {
                   if (value.isEmpty) {
-                    return '账号不能为空';
+                    return '联系人不能为空';
                   }
                   return null;
                 },
@@ -401,7 +412,7 @@ class _AddContactInfo extends State<AddContactInfo> {
               ),
             ),
           ),
-          Expanded(
+          /* Expanded(
             child: Container(
               child: TextFormField(
                   //合法检测回调
@@ -420,6 +431,35 @@ class _AddContactInfo extends State<AddContactInfo> {
                     hintText: '请输入',
                   )),
             ),
+          ), */
+          Expanded(
+            child: InkWell(
+              onTap: _showSelect,
+              child: StatefulBuilder(builder: (context, StateSetter setState) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Color(0xFFD7D7D7),
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      StringUtils.defaultIfEmpty(
+                          contactInfoVo.areaName, StringUtils.EMPTY),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    trailing: Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Color(0xFFD1D1D1),
+                    ),
+                  ),
+                );
+              }),
+            ),
           ),
         ],
       ),
@@ -430,5 +470,36 @@ class _AddContactInfo extends State<AddContactInfo> {
     return Expanded(
       child: toWrap,
     );
+  }
+
+  void _showSelect() async {
+    LogUtils.debug(TAG, '点击弹窗类型选着框', StackTrace.current);
+    Result result = await CityPickers.showCityPicker(
+        context: context,
+        cancelWidget: Text('取消', style: TextStyle(color: Colors.black54)),
+        confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
+    LogUtils.debug(
+        TAG, sprintf('省市区控件选择的结果为: %s', [result]), StackTrace.current);
+
+    setState(() {
+      _formKey.currentState.save();
+      contactInfoModel.areaCode = result.areaId;
+      contactInfoVo.areaName =
+          result.provinceName + result.cityName + result.areaName;
+      LogUtils.debug(
+          TAG,
+          sprintf('contactInfoModel:%s', [contactInfoModel.toString()]),
+          StackTrace.current);
+      LogUtils.debug(
+          TAG,
+          sprintf('contactInfoVo:%s', [contactInfoVo.toString()]),
+          StackTrace.current);
+    });
+  }
+
+  void _initModel() {
+    contactInfoModel = new ContactInfoModel();
+    contactInfoVo = new ContactInfoVo();
+    contactInfoModel.defaultContact = 2;
   }
 }

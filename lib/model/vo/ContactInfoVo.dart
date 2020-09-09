@@ -2,7 +2,7 @@ import 'package:bid/common/string_utils.dart';
 import 'package:flustars/flustars.dart';
 import 'package:sprintf/sprintf.dart';
 
-class ContactInfoModel {
+class ContactInfoVo {
   int id;
   String userId;
   String contactName;
@@ -10,6 +10,7 @@ class ContactInfoModel {
   String email;
   String fax;
   String areaCode;
+  String areaName;
   String address;
   int defaultContact;
   String createTime;
@@ -18,7 +19,7 @@ class ContactInfoModel {
   String updateBy;
   int delFlag;
 
-  ContactInfoModel(
+  ContactInfoVo(
       {this.id,
       this.userId,
       this.contactName,
@@ -26,6 +27,7 @@ class ContactInfoModel {
       this.email,
       this.fax,
       this.areaCode,
+      this.areaName,
       this.address,
       this.defaultContact,
       this.createTime,
@@ -34,7 +36,7 @@ class ContactInfoModel {
       this.updateBy,
       this.delFlag});
 
-  ContactInfoModel.fromJson(Map<String, dynamic> json) {
+  ContactInfoVo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
     contactName = json['contactName'];
@@ -42,6 +44,7 @@ class ContactInfoModel {
     email = json['email'];
     fax = json['fax'];
     areaCode = json['areaCode'];
+    areaName = json['areaName'];
     address = json['address'];
     defaultContact = json['defaultContact'];
     createTime = json['createTime'];
@@ -60,6 +63,7 @@ class ContactInfoModel {
     data['email'] = this.email;
     data['fax'] = this.fax;
     data['areaCode'] = this.areaCode;
+    data['areaName'] = this.areaName;
     data['address'] = this.address;
     data['defaultContact'] = this.defaultContact;
     data['createTime'] = this.createTime;
