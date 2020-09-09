@@ -431,19 +431,37 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   // 上下架按钮
   Widget _buttom(item) {
-    var color;
-    if (item.auditStatus == 0) {
-      color = 0xFFbbbbbb;
+    print('${item.action == 'null'}');
+
+    // var color;
+    // if (item.auditStatus == 0) {
+    //   color = 0xFFbbbbbb;
+    // } else {
+    //   color = 0xFF4389ED;
+    // }
+    String text;
+    String url;
+    if (item.status == 0 && item.auditStatus == -1 && item.action == 'null') {
+      text = '上架';
+      url = 'online';
+    } else if (item.status == 1 &&
+        item.auditStatus == 1 &&
+        item.action == 'online') {
+      // text = '上架';
+      // url = 'online';
+      text = '下架';
+      url = 'offline';
+    } else if (item.status == -1 &&
+        item.auditStatus == 1 &&
+        item.action == 'offline') {
+      text = '上架';
+      url = 'online';
     } else {
-      color = 0xFF4389ED;
+      return Container(
+        child: Text(''),
+      );
     }
 
-    String text;
-    if (item.status == -1 && item.auditStatus == 1) {
-      text = '上架';
-    } else {
-      text = '下架';
-    }
     return Expanded(
       child: Container(
         alignment: Alignment.topRight,
@@ -453,39 +471,35 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           // colorBrightness: Brightness.dark,
           splashColor: Colors.grey,
           child: Text(
-            text,
+            '$text',
             style: TextStyle(
               // color: Color(0xFF4389ED),
-              color: Color(color),
+              color: Color(0xFF4389ED),
             ),
           ),
           shape: RoundedRectangleBorder(
             side: BorderSide(
               // color: Color(0xFF4389ED),
-              color: Color(color),
+              color: Color(0xFF4389ED),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(20.0),
           ),
           onPressed: () {
-            if (item.auditStatus == 0) {
-              return null;
-            } else {
-              _showStatusAlert(item);
-            }
+            _showStatusAlert(item, url, text);
           },
         ),
       ),
     );
   }
 
-  _showStatusAlert(item) {
+  _showStatusAlert(item, url, text) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('退出登录提示'),
-          content: Text('${item.status == 1 ? '确定要下架吗？' : '确定要上架吗？'}'),
+          title: Text('${text}提示'),
+          content: Text('${text}需提交审核，确定要$text吗？'),
           actions: <Widget>[
             FlatButton(
               child: Text('取消'),
@@ -496,7 +510,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
             FlatButton(
               child: Text('确认'),
               onPressed: () {
-                _onOrOffline(item.id, item.status);
+                _onOrOffline(item.id, url);
+                Navigator.of(context).pop('cancel');
                 // }
               },
             ),
@@ -506,13 +521,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     );
   }
 
-  void _onOrOffline(id, status) {
-    var url;
-    if (status == 1) {
-      url = 'offline';
-    } else {
-      url = 'online';
-    }
+  void _onOrOffline(id, url) {
     print('上下架传参${id}');
     requestPostSpl(url, spl: id.toString()).then((val) {
       print('上下架状态$val');
