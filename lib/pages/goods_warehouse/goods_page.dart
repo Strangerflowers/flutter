@@ -103,6 +103,7 @@ class _GoodsPageState extends State<GoodsPage> {
             return _typeWell(list[index], index);
           },
           itemCount: list.length,
+          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
           scrollDirection: Axis.horizontal,
         ),
         // ),
@@ -130,44 +131,47 @@ class _GoodsPageState extends State<GoodsPage> {
     isClick = (index == Provide.value<GoodsWarehose>(context).provideIndex
         ? true
         : false);
-    return InkWell(
-      onTap: () {
-        Provide.value<GoodsWarehose>(context).activeIndex(index);
-        setState(() {
-          currentStatus =
-              strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
-        });
-        _getGoodsList();
-      },
-      child: Expanded(
+    return Container(
+      child: InkWell(
+        onTap: () {
+          Provide.value<GoodsWarehose>(context).activeIndex(index);
+          setState(() {
+            currentStatus =
+                strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
+          });
+          _getGoodsList();
+        },
         child: Container(
-          alignment: Alignment.center,
-          width: ScreenUtil().setWidth(187),
-          // padding: EdgeInsets.fromLTRB(5.0, 10.0, 0, 10.0),
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 12.0),
-                // padding: EdgeInsets.only(bottom: 20),
-                child: Text(
-                  item,
-                  style: TextStyle(
-                    color: isClick ? Color(0xFF4389ED) : Colors.black,
-                    // decoration: TextDecoration.underline, //给文字添加下划线
-                    fontSize: ScreenUtil().setSp(30),
-                    // height: 1.5,
+          // flex: 1,
+          child: Container(
+            alignment: Alignment.center,
+            width: ScreenUtil().setWidth(250),
+            // padding: EdgeInsets.fromLTRB(5.0, 10.0, 0, 10.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
+                  // padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    item,
+                    style: TextStyle(
+                      color: isClick ? Color(0xFF4389ED) : Colors.black,
+                      // decoration: TextDecoration.underline, //给文字添加下划线
+                      fontSize: ScreenUtil().setSp(30),
+                      // height: 1.5,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 20,
-                height: 2,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      color: isClick ? Color(0xFF4389ED) : Colors.white),
+                SizedBox(
+                  width: 20,
+                  height: 2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: isClick ? Color(0xFF4389ED) : Colors.white),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -273,10 +277,11 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     // print('判断拿到的数据$list');
     if (list.length > 0) {
       return Container(
-        height: ScreenUtil().setHeight(1000),
+        // height: ScreenUtil().setHeight(1000),
         child: SizedBox(
           child: ListView.builder(
             itemCount: list.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             itemBuilder: (contex, index) {
               return _mergeItem(list[index]);
             },

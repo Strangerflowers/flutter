@@ -70,7 +70,7 @@ class DemandDetailResult {
   DemandDetailResult.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orgId = json['orgId'];
-    orgName = json['orgName'];
+    orgName = json['orgName'].toString();
     isQuotationMerchant = json['isQuotationMerchant'];
     quotationId = json['quotationId'].toString();
     name = json['name'];
