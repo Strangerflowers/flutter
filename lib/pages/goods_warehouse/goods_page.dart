@@ -84,6 +84,10 @@ class _GoodsPageState extends State<GoodsPage> {
   @override
   Widget build(BuildContext context) {
     return Provide<GoodsWarehose>(builder: (context, child, counter) {
+      if (Provide.value<GoodsWarehose>(context).provideIndex != null &&
+          currentStatus == 1) {
+        Provide.value<GoodsWarehose>(context).activeIndex(0);
+      }
       return Container(
         margin: EdgeInsets.only(bottom: 20),
         height: ScreenUtil().setHeight(90),
@@ -186,6 +190,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     // TODO: implement initState
     super.initState();
   }
+
+  var auditStatusType = {1: '审核通过', 0: '待审核', -1: '不通过'};
 
   @override
   Widget build(BuildContext context) {
@@ -332,68 +338,171 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                 '${item.priceRange}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.topRight,
-                  child: FlatButton(
-                    // color: Colors.blue,
-                    highlightColor: Colors.blue[700],
-                    // colorBrightness: Brightness.dark,
-                    splashColor: Colors.grey,
-                    child: item.status == 1
-                        ? Text(
-                            '上架',
-                            style: TextStyle(
-                              color: Color(0xFF4389ED),
-                            ),
-                          )
-                        : Text(
-                            '下架',
-                            style: TextStyle(
-                              color: Color(0xFF4389ED),
-                            ),
-                          ),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xFF4389ED),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
+              _buttom(item),
+              // Expanded(
+              //   child: Container(
+              //     alignment: Alignment.topRight,
+              //     child: FlatButton(
+              //       // color: Colors.blue,
+              //       highlightColor: Colors.blue[700],
+              //       // colorBrightness: Brightness.dark,
+              //       splashColor: Colors.grey,
+              //       child: (item.status == -1 && item.auditStatus == 1)
+              //           ? Text(
+              //               '上架',
+              //               style: TextStyle(
+              //                 color: Color(0xFF4389ED),
+              //               ),
+              //             )
+              //           : Text(
+              //               '下架',
+              //               style: TextStyle(
+              //                 color: Color(0xFF4389ED),
+              //               ),
+              //             ),
+              //       shape: RoundedRectangleBorder(
+              //         side: BorderSide(
+              //           color: Color(0xFF4389ED),
+              //           width: 1,
+              //         ),
+              //         borderRadius: BorderRadius.circular(20.0),
+              //       ),
+              //       onPressed: () {
+              //         showDialog(
+              //           context: context,
+              //           builder: (context) {
+              //             return AlertDialog(
+              //               title: Text('退出登录提示'),
+              //               content: Text(
+              //                   '${item.status == 1 ? '确定要下架吗？' : '确定要上架吗？'}'),
+              //               actions: <Widget>[
+              //                 FlatButton(
+              //                   child: Text('取消'),
+              //                   onPressed: () {
+              //                     Navigator.of(context).pop('cancel');
+              //                   },
+              //                 ),
+              //                 FlatButton(
+              //                   child: Text('确认'),
+              //                   onPressed: () {
+              //                     _onOrOffline(item.id, item.status);
+              //                     // }
+              //                   },
+              //                 ),
+              //               ],
+              //             );
+              //           },
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // )
+            ],
+          ),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '请求：${item.status}-${item.auditStatus}-${item.action}',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24),
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('退出登录提示'),
-                            content: Text(
-                                '${item.status == 1 ? '确定要下架吗？' : '确定要上架吗？'}'),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('取消'),
-                                onPressed: () {
-                                  Navigator.of(context).pop('cancel');
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('确认'),
-                                onPressed: () {
-                                  _onOrOffline(item.id, item.status);
-                                  // }
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
                   ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '审核状态：${auditStatusType[item.auditStatus]}',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  // 上下架按钮
+  Widget _buttom(item) {
+    var color;
+    if (item.auditStatus == 0) {
+      color = 0xFFbbbbbb;
+    } else {
+      color = 0xFF4389ED;
+    }
+
+    String text;
+    if (item.status == -1 && item.auditStatus == 1) {
+      text = '上架';
+    } else {
+      text = '下架';
+    }
+    return Expanded(
+      child: Container(
+        alignment: Alignment.topRight,
+        child: FlatButton(
+          // color: Colors.blue,
+          highlightColor: Colors.blue[700],
+          // colorBrightness: Brightness.dark,
+          splashColor: Colors.grey,
+          child: Text(
+            text,
+            style: TextStyle(
+              // color: Color(0xFF4389ED),
+              color: Color(color),
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              // color: Color(0xFF4389ED),
+              color: Color(color),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          onPressed: () {
+            if (item.auditStatus == 0) {
+              return null;
+            } else {
+              _showStatusAlert(item);
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  _showStatusAlert(item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('退出登录提示'),
+          content: Text('${item.status == 1 ? '确定要下架吗？' : '确定要上架吗？'}'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop('cancel');
+              },
+            ),
+            FlatButton(
+              child: Text('确认'),
+              onPressed: () {
+                _onOrOffline(item.id, item.status);
+                // }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
