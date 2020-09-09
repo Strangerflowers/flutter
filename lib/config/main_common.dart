@@ -1,5 +1,4 @@
 import 'package:bid/config/config_reader.dart';
-import 'package:bid/config/environment.dart';
 import 'package:bid/config/service_url_holder.dart';
 import 'package:bid/pages/index_page.dart';
 import 'package:bid/provide/demand_detail_provide.dart';
