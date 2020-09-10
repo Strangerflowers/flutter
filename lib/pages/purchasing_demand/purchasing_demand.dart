@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:provide/provide.dart';
 import '../../provide/purchasing_list_provide.dart';
 import '../../routers/application.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../signup/signin.dart';
 import '../signup/register.dart';
 import '../goods_warehouse/goods_detail_page.dart';
@@ -25,9 +25,22 @@ class PurchasingDemand extends StatefulWidget {
 }
 
 class _PurchasingDemandState extends State<PurchasingDemand> {
+  FocusNode myFocusNode;
+  var inputText;
+
   @override
   void initState() {
     super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -60,34 +73,11 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       //   ),
       //   preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
       // ),
-      body:
-          // FutureBuilder(
-          //     future: _getBackDetailInfo(context),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.hasData) {
-          //         //
-          //         return ListView(
-          //           children: <Widget>[
-          //             _orderType(),
-          //             DemandContent(),
-          //           ],
-          //         );
-          //       } else {
-          //         return Container(
-          //           child: Text('暂无数据'),
-          //         );
-          //       }
-          //     })
-          Center(
+      body: Center(
         child: ListView(
           children: <Widget>[
-            // Search(),
             _orderType(),
             DemandContent(),
-            // _logout(),
-            // _login(),
-            // _detail(),
-            // _choice(),
           ],
         ),
       ),
@@ -114,6 +104,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       ),
       child: Column(
         children: <Widget>[
+          // Search(),
           Container(
             height: ScreenUtil().setHeight(70),
             padding: EdgeInsets.only(left: 20),
@@ -123,11 +114,15 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
               borderRadius: BorderRadius.circular(29.5),
             ),
             child: TextField(
+              focusNode: myFocusNode,
               decoration: InputDecoration(
                 hintText: 'Search',
                 icon: Icon(Icons.search),
                 border: InputBorder.none,
               ),
+              onChanged: (value) {
+                inputText = value;
+              },
             ),
           ),
           Row(
@@ -316,7 +311,32 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
 }
 
 // 需求列表
-class DemandContent extends StatelessWidget {
+class DemandContent extends StatefulWidget {
+  @override
+  _DemandContentState createState() => _DemandContentState();
+}
+
+class _DemandContentState extends State<DemandContent> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    // WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+// class DemandContent extends StatelessWidget {
+  var hasToken;
   @override
   Widget build(BuildContext context) {
     // return Provide<PurchasingListProvide>(builder: (context, child, data) {
@@ -326,26 +346,107 @@ class DemandContent extends StatelessWidget {
         child: FutureBuilder(
           future: _getBackDetailInfo(context),
           builder: (context, snapshot) {
-            print('99999${snapshot.hasData}');
-            return Container(
-              child: _demandListView(),
-            );
+            print(
+                '99999111111${snapshot.hasData}===${hasToken != null}==${hasToken != ''}');
+            if (true) {
+              if (hasToken != '' && hasToken != null) {
+                return Container(
+                  child: _demandListView(),
+                );
+              } else {
+                return _logOut(context);
+              }
+            } else {
+              return Container(
+                child: Text('暂无数据'),
+              );
+            }
           },
         ),
       ),
     );
-    //   } else {
-    //     return Container(
-    //       child: Text('暂无数据'),
-    //     );
-    //   }
+    // } else {
+    //   return _logOut(context);
+    //   // return Container(
+    //   //   child: RaisedButton(
+    //   //     color: Colors.white,
+    //   //     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+    //   //     onPressed: () {
+    //   //       _logOut(context);
+    //   //     },
+    //   //     child: Text(
+    //   //       '您还未登录，请前往登录',
+    //   //       style: TextStyle(
+    //   //         color: Color(0xFFD47776),
+    //   //         fontSize: ScreenUtil().setSp(40),
+    //   //       ),
+    //   //     ),
+    //   //   ),
+    //   // );
+    // }
     // });
+    // return InkWell(
+    //   child: Container(
+    //     child: FutureBuilder(
+    //       future: _getBackDetailInfo(context),
+    //       builder: (context, snapshot) {
+    //         print('99999${snapshot.hasData}');
+    //         return Container(
+    //           child: _demandListView(),
+    //         );
+    //       },
+    //     ),
+    //   ),
+    // );
+    // //   } else {
+    // //     return Container(
+    // //       child: Text('暂无数据'),
+    // //     );
+    // //   }
+    // // });
+  }
+
+  _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    hasToken = token;
+    return token;
+  }
+
+  Widget _logOut(context) {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    return AlertDialog(
+      title: Text('提示'),
+      content: Text('您还未登录，请先登录'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('确认'),
+          onPressed: () async {
+            final prefs = await SharedPreferences.getInstance();
+            final result = await prefs.clear();
+            if (result) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  "/loginPage", ModalRoute.withName("/loginPage"));
+              // Navigator.of(context).pop('cancel');
+              // Application.router.navigateTo(context, '/sigin');
+            }
+          },
+        ),
+      ],
+    );
+    //   },
+    // );
   }
 
   // 循环渲染
 
   // 获取响应数据
   Future _getBackDetailInfo(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    hasToken = token;
     var formData = {
       "isAll": true,
       "limit": 10,
@@ -362,7 +463,7 @@ class DemandContent extends StatelessWidget {
       Provide.value<PurchasingListProvide>(context)
           .getGoodsList(goodsList.result.list);
 
-      return '加载完成';
+      return Provide.value<PurchasingListProvide>(context).goodsList;
     });
   }
 
@@ -568,6 +669,51 @@ class DemandContent extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class Search extends StatefulWidget {
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ScreenUtil().setHeight(70),
+      padding: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(bottom: 15.0, top: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(29.5),
+      ),
+      child: TextField(
+        focusNode: myFocusNode,
+        decoration: InputDecoration(
+          hintText: 'Search',
+          icon: Icon(Icons.search),
+          border: InputBorder.none,
+        ),
       ),
     );
   }

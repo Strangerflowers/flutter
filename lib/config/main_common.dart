@@ -1,6 +1,7 @@
 import 'package:bid/config/config_reader.dart';
 import 'package:bid/config/service_url_holder.dart';
 import 'package:bid/pages/index_page.dart';
+import 'package:bid/pages/signup/signin.dart';
 import 'package:bid/provide/demand_detail_provide.dart';
 import 'package:bid/provide/demand_quotation/demand_quotation_provide.dart';
 import 'package:bid/provide/goods_detail_provide.dart';
@@ -91,6 +92,10 @@ class MyApp extends StatelessWidget {
           onGenerateRoute: Application.router.generator,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(primaryColor: Colors.blueAccent),
+          routes: {
+            '/loginPage': (ctx) => FormTestRoute(),
+            // '/homePage': (ctx) => MainPage(),
+          },
           home: IndexPage()),
     );
   }
