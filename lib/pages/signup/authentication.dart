@@ -1,21 +1,17 @@
 // 资料认证页面
-import 'package:bid/pages/component/select_component.dart/address.dart';
-import 'package:bid/pages/signup/auth_bottom.dart';
+
 import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:bid/common/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:city_pickers/city_pickers.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:xyz_address_picker/xyz_address_picker.dart';
+import 'package:bid/common/xyz_picker.dart';
 import '../../images.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../service/service_method.dart';
-import 'dart:convert';
-import 'package:flutter_picker/flutter_picker.dart';
+// import 'package:bid/common/xyz_picker.dart';
 
 class Authentication extends StatelessWidget {
   @override
@@ -151,11 +147,17 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     //
     await requestGet('getCategory').then((val) {
       if (val['code'] == 0) {
-        res = _func(val['result']);
-        categoryoneList = res;
-        categorytwoList = categoryoneList[0]['subCategorys'];
-        categorythreeList = categorytwoList[0]['subCategorys'];
+        print('响应供应商类型:${val}');
+        if (val['result'] != null && val['result'].length > 0) {
+          res = _func(val['result']);
+          categoryoneList = res;
+          categorytwoList = categoryoneList[0]['subCategorys'];
+          categorythreeList = categorytwoList[0]['subCategorys'];
+        } else {
+          Toast.toast(context, msg: '供应商类型列表暂无数据');
+        }
       } else {
+        Toast.toast(context, msg: val['message']);
         // Application.router.navigateTo(context, "/authentication");
       }
     });
@@ -196,9 +198,15 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   }
 
   var data;
+  // 存放供应商类型字段
+  var typeList;
   void initState() {
     setState(() {
       data = widget.data;
+      typeList = data['supplierTypeName'];
+      // categoryone = typeList[0];
+      // categorytwo = typeList[1];
+      // categorythree = typeList[2];
       categorythree = data['supplierTypeName'];
       supplierType = data['supplierType'];
       companyAddressName = data['companyDistrictName'];
@@ -278,6 +286,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       isScrollControlled: true,
       builder: (context) => GestureDetector(
         child: StatefulBuilder(builder: (context, StateSetter setState) {
+          // TODO: 待改进
           return AddressPicker(
             province: categoryone,
             city: categorytwo,
@@ -326,6 +335,14 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
+    typeList = typeList.split('/');
+    setState(() {
+      categoryone = typeList[0];
+      categorytwo = typeList[1];
+      categorythree = typeList[2];
+    });
+
+    print('供应商类型$typeList');
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
