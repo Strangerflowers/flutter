@@ -1,12 +1,16 @@
+import 'package:bid/common/log_utils.dart';
 import 'package:bid/config/config_reader.dart';
 
 abstract class ServiceUrlHolder {
+  static String TAG = "ServiceUrlHolder";
+
   static void initialize() {
     String osapiUrl = ConfigReader.getAppOsApiUrl();
+    String apiUrl = ConfigReader.getAppApiUrl();
     ServiceUrlMapper.urlMapper.forEach(
         (key, value) => ServiceUrlMapper.urlMapper[key] = osapiUrl + value);
-    ServiceUrlMapper.customizeUrlMapper
-        .forEach((key, value) => ServiceUrlMapper.urlMapper[key] = value);
+    ServiceUrlMapper.customizeUrlMapper.forEach(
+        (key, value) => ServiceUrlMapper.urlMapper[key] = apiUrl + value);
     ServiceUrlMapper.thirdUrlMapper
         .forEach((key, value) => ServiceUrlMapper.urlMapper[key] = value);
   }
