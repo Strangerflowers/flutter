@@ -73,7 +73,6 @@ class _GoodsPageState extends State<GoodsPage> {
   int currentStatus = 1;
   @override
   void initState() {
-    // _getGoodsList();
     super.initState();
   }
 
@@ -199,7 +198,6 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   @override
   Widget build(BuildContext context) {
-    // _getGoodsBackList(context);
     return Provide<GoodsWarehose>(builder: (context, child, data) {
       print('provide======${data.goodsList}');
       if (data.goodsList != null) {
@@ -233,35 +231,6 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
             ),
           ),
         );
-        // return Container(
-        //   color: Colors.white,
-        //   padding: EdgeInsets.all(10),
-        //   child: EasyRefresh(
-        //     refreshFooter: ClassicsFooter(
-        //       key: _footerkey,
-        //       bgColor: Colors.white,
-        //       textColor: Colors.pink,
-        //       moreInfoColor: Colors.pink,
-        //       showMore: true,
-        //       noMoreText: '无',
-        //       moreInfo: '加载中',
-        //       loadReadyText: '上拉加载',
-        //     ),
-        //     child: ListView.builder(
-        //       itemCount: data.goodsList.length,
-        //       shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-        //       // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-        //       itemBuilder: (contex, index) {
-        //         return _recommedList(data.goodsList);
-        //       },
-        //     ),
-        //     loadMore: () async {
-        //       // 上拉加载更多的回调方法
-        //       // _getMoreList();
-        //       print('上拉加载更多......');
-        //     },
-        //   ),
-        // );
       } else {
         return Container(
           child: Text('暂无数据'),
@@ -344,64 +313,6 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
               _buttom(item),
-              // Expanded(
-              //   child: Container(
-              //     alignment: Alignment.topRight,
-              //     child: FlatButton(
-              //       // color: Colors.blue,
-              //       highlightColor: Colors.blue[700],
-              //       // colorBrightness: Brightness.dark,
-              //       splashColor: Colors.grey,
-              //       child: (item.status == -1 && item.auditStatus == 1)
-              //           ? Text(
-              //               '上架',
-              //               style: TextStyle(
-              //                 color: Color(0xFF4389ED),
-              //               ),
-              //             )
-              //           : Text(
-              //               '下架',
-              //               style: TextStyle(
-              //                 color: Color(0xFF4389ED),
-              //               ),
-              //             ),
-              //       shape: RoundedRectangleBorder(
-              //         side: BorderSide(
-              //           color: Color(0xFF4389ED),
-              //           width: 1,
-              //         ),
-              //         borderRadius: BorderRadius.circular(20.0),
-              //       ),
-              //       onPressed: () {
-              //         showDialog(
-              //           context: context,
-              //           builder: (context) {
-              //             return AlertDialog(
-              //               title: Text('退出登录提示'),
-              //               content: Text(
-              //                   '${item.status == 1 ? '确定要下架吗？' : '确定要上架吗？'}'),
-              //               actions: <Widget>[
-              //                 FlatButton(
-              //                   child: Text('取消'),
-              //                   onPressed: () {
-              //                     Navigator.of(context).pop('cancel');
-              //                   },
-              //                 ),
-              //                 FlatButton(
-              //                   child: Text('确认'),
-              //                   onPressed: () {
-              //                     _onOrOffline(item.id, item.status);
-              //                     // }
-              //                   },
-              //                 ),
-              //               ],
-              //             );
-              //           },
-              //         );
-              //       },
-              //     ),
-              //   ),
-              // )
             ],
           ),
           Container(
@@ -436,14 +347,6 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   // 上下架按钮
   Widget _buttom(item) {
-    print('${item.action == 'null'}');
-
-    // var color;
-    // if (item.auditStatus == 0) {
-    //   color = 0xFFbbbbbb;
-    // } else {
-    //   color = 0xFF4389ED;
-    // }
     String text;
     String url;
     if (item.status == 0 && item.auditStatus == -1 && item.action == 'null') {
@@ -531,7 +434,6 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     requestPostSpl(url, spl: id.toString()).then((val) {
       print('上下架状态$val');
       if (val['code'] == 0) {
-        // _getGoodsList();
         Fluttertoast.showToast(
           msg: val['message'],
           toastLength: Toast.LENGTH_SHORT,
@@ -540,6 +442,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        _reflesGoodsList();
       } else {
         // goodsList = null;
         Fluttertoast.showToast(
@@ -554,12 +457,20 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     });
   }
 
-  void _getGoodsBackList(BuildContext context) async {
-    // Future _getBackDetailInfo(BuildContext context) async {
-    // await Provide.value<GoodsWarehose>(context).getGoodsList();
-    print('加载完成');
-    // return '加载完成';
-    // }
+  // 获取商品库列表数据
+  void _reflesGoodsList() async {
+    var strtusType = {0: 1, 1: 0, 2: -1};
+    var formData = {
+      'pageNum': 1,
+      "status": strtusType[Provide.value<GoodsWarehose>(context).provideIndex],
+      'pageSize': 10,
+    };
+    print('商品库列表数据传参$formData');
+    await requestGet('goodsList', formData: formData).then((val) {
+      // var data = json.decode(val.toString());
+      GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
+      Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
+    });
   }
 
   // 上拉加载更多
