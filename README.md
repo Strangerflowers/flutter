@@ -1,5 +1,7 @@
 # os-kernel-bid-supplier-wbvue
 
+## 项目简介
+
 招采供应商端前端
 
 ## 环境准备
@@ -90,6 +92,22 @@ profile 模式运行:
 flutter run --profile
 ```
 
+## 原生命令方式
+
+该命令启动开发环境
+
+```
+flutter run -t lib/main_dev.dart
+```
+
+该命令启动测试环境
+
+```
+flutter run -t lib/main_test.dart
+```
+
+## 批处理脚本方式
+
 该命令默认启动开发环境
 
 ```
@@ -105,6 +123,32 @@ flutter run --profile
 该命令指定启动测试环境
 
 ## 打包
+
+### 原生命令方式
+
+先清除/build 目录:
+
+```
+flutter clean
+```
+
+开发环境打包:
+
+```
+flutter build apk -t lib/main_dev.dart
+```
+
+测试环境打包:
+
+```
+flutter build apk -t lib/main_test.dart
+```
+
+生产环境打包:
+
+```
+flutter build apk -t lib/main_prod.dart
+```
 
 ### 命令行参数方式
 
