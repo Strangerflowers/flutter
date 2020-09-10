@@ -543,6 +543,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
       await requestGet('sendResetPwdCaptcha',
           formData: {'mobile': _mobileController.text.toString()}).then(
         (value) {
+          Toast.toast(context, msg: value['message']);
           setState(() {
             isMobilesignin = true;
           });

@@ -3,6 +3,7 @@ import 'package:bid/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:async';
 import 'package:provide/provide.dart';
 import '../../provide/purchasing_list_provide.dart';
@@ -17,7 +18,6 @@ import '../quotation/quotation_index_page.dart';
 import '../../service/service_method.dart';
 import '../../model/purchasing_list_model.dart';
 import '../../pages/offer/choice_index_page.dart';
-// import '../../pages/offer/index.dart';
 
 class PurchasingDemand extends StatefulWidget {
   @override
@@ -25,59 +25,22 @@ class PurchasingDemand extends StatefulWidget {
 }
 
 class _PurchasingDemandState extends State<PurchasingDemand> {
-  FocusNode myFocusNode;
+  // FocusNode myFocusNode;
   var inputText;
 
   @override
   void initState() {
     super.initState();
-
-    myFocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
-
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: new PreferredSize(
-      //   child: new Container(
-      //     padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      //     child: new Padding(
-      //       padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 20.0),
-      //       child: new Text(
-      //         '需求',
-      //         style: new TextStyle(
-      //           fontSize: 20.0,
-      //           // fontWeight: FontWeight.w500,
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //     ),
-      //     decoration: new BoxDecoration(
-      //         gradient: new LinearGradient(
-      //             colors: [Color(0xFF53AEFE), Color(0xFF2B85FF)]),
-      //         boxShadow: [
-      //           new BoxShadow(
-      //             color: Color(0xFF2B85FF),
-      //             blurRadius: 20.0,
-      //             spreadRadius: 1.0,
-      //           )
-      //         ]),
-      //   ),
-      //   preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
-      // ),
       body: Center(
         child: ListView(
           children: <Widget>[
-            _orderType(),
-            DemandContent(),
+            _orderType(inputText),
+            DemandContent(inputText),
           ],
         ),
       ),
@@ -85,7 +48,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   }
 
 //类别
-  Widget _orderType() {
+  Widget _orderType(inputText) {
     return Container(
       // margin: EdgeInsets.only(top: 5),
       width: ScreenUtil().setWidth(750),
@@ -104,27 +67,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       ),
       child: Column(
         children: <Widget>[
-          // Search(),
-          Container(
-            height: ScreenUtil().setHeight(70),
-            padding: EdgeInsets.only(left: 20),
-            margin: EdgeInsets.only(bottom: 15.0, top: 15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(29.5),
-            ),
-            child: TextField(
-              focusNode: myFocusNode,
-              decoration: InputDecoration(
-                hintText: 'Search',
-                icon: Icon(Icons.search),
-                border: InputBorder.none,
-              ),
-              onChanged: (value) {
-                inputText = value;
-              },
-            ),
-          ),
+          Search(inputText),
           Row(
             children: <Widget>[
               InkWell(
@@ -215,123 +158,25 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       // color: Colors.blueAccent,
     );
   }
-
-// 跳转注册页面
-  Widget _logout() {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                // return FormTestRoute();
-                return Register();
-              },
-            ),
-          );
-        },
-        child: Text('注册'),
-      ),
-    );
-  }
-
-  // 跳转登录页面
-  Widget _login() {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Application.router.navigateTo(context, "/authentication");
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return ShowPicker();
-          //       // return Register();
-          //     },
-          //   ),
-          // );
-          // ShowPicker
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return FormTestRoute();
-          //       // return Register();
-          //     },
-          //   ),
-          // );
-        },
-        child: Text('资料认证'),
-      ),
-    );
-  }
-
-  // 跳转登录页面
-  Widget _choice() {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return ChoiceIndex('1');
-                // return Register();
-              },
-            ),
-          );
-        },
-        child: Text('登录'),
-      ),
-    );
-  }
-
-  // 跳转到商品详情页面
-  Widget _detail() {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                // return GoodsDetailsPage('1');
-                return MyImage();
-              },
-            ),
-          );
-        },
-        child: Text('商品详情'),
-      ),
-    );
-  }
-
-  // 获取需求列表数据
 }
 
+// 获取需求列表数据
 // 需求列表
 class DemandContent extends StatefulWidget {
+  final inputText;
+  DemandContent(this.inputText);
   @override
   _DemandContentState createState() => _DemandContentState();
 }
 
 class _DemandContentState extends State<DemandContent> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -347,7 +192,7 @@ class _DemandContentState extends State<DemandContent> {
           future: _getBackDetailInfo(context),
           builder: (context, snapshot) {
             print(
-                '99999111111${snapshot.hasData}===${hasToken != null}==${hasToken != ''}');
+                '99999111111${snapshot.hasData}===${hasToken != null}==${widget.inputText}');
             if (true) {
               if (hasToken != '' && hasToken != null) {
                 return Container(
@@ -365,45 +210,6 @@ class _DemandContentState extends State<DemandContent> {
         ),
       ),
     );
-    // } else {
-    //   return _logOut(context);
-    //   // return Container(
-    //   //   child: RaisedButton(
-    //   //     color: Colors.white,
-    //   //     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-    //   //     onPressed: () {
-    //   //       _logOut(context);
-    //   //     },
-    //   //     child: Text(
-    //   //       '您还未登录，请前往登录',
-    //   //       style: TextStyle(
-    //   //         color: Color(0xFFD47776),
-    //   //         fontSize: ScreenUtil().setSp(40),
-    //   //       ),
-    //   //     ),
-    //   //   ),
-    //   // );
-    // }
-    // });
-    // return InkWell(
-    //   child: Container(
-    //     child: FutureBuilder(
-    //       future: _getBackDetailInfo(context),
-    //       builder: (context, snapshot) {
-    //         print('99999${snapshot.hasData}');
-    //         return Container(
-    //           child: _demandListView(),
-    //         );
-    //       },
-    //     ),
-    //   ),
-    // );
-    // //   } else {
-    // //     return Container(
-    // //       child: Text('暂无数据'),
-    // //     );
-    // //   }
-    // // });
   }
 
   _getToken() async {
@@ -675,26 +481,65 @@ class _DemandContentState extends State<DemandContent> {
 }
 
 class Search extends StatefulWidget {
+  final inputText;
+  Search(this.inputText);
   @override
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
-  FocusNode myFocusNode;
-
+class _SearchState extends State<Search> with WidgetsBindingObserver {
+  final _searchKey = new GlobalKey<FormState>();
+  FocusNode _focusNode;
+  // 当前键盘是否是激活状态
+  bool isKeyboardActived = false;
+  var currentText;
   @override
   void initState() {
     super.initState();
-
-    myFocusNode = FocusNode();
+    currentText = widget.inputText;
+    _focusNode = FocusNode();
+    // 监听输入框焦点变化
+    _focusNode.addListener(_onFocus);
+    // 创建一个界面变化的观察者
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 当前是安卓系统并且在焦点聚焦的情况下
+      if (Platform.isAndroid && _focusNode.hasFocus) {
+        if (isKeyboardActived) {
+          isKeyboardActived = false;
+          _searchKey.currentState.save();
+          _getSearch();
+          // 使输入框失去焦点
+          _focusNode.unfocus();
+          return;
+        }
+        isKeyboardActived = true;
+      }
+    });
+  }
 
+  // 既然有监听当然也要有卸载，防止内存泄漏嘛
+  @override
+  void dispose() {
     super.dispose();
+    _focusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  // 焦点变化时触发的函数
+  _onFocus() {
+    if (_focusNode.hasFocus) {
+      // 聚焦时候的操作
+      return;
+    }
+
+    // 失去焦点时候的操作
+    isKeyboardActived = false;
   }
 
   @override
@@ -707,14 +552,49 @@ class _SearchState extends State<Search> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(29.5),
       ),
-      child: TextField(
-        focusNode: myFocusNode,
-        decoration: InputDecoration(
-          hintText: 'Search',
-          icon: Icon(Icons.search),
-          border: InputBorder.none,
+      child: Form(
+        key: _searchKey,
+        child: TextFormField(
+          focusNode: _focusNode,
+          decoration: InputDecoration(
+            hintText: 'Search',
+            icon: Icon(Icons.search),
+            border: InputBorder.none,
+          ),
+          onChanged: (value) {
+            setState(() {
+              currentText = value;
+            });
+          },
+          onSaved: (value) {
+            setState(() {
+              currentText = value;
+            });
+          },
         ),
       ),
     );
+  }
+
+  // 获取响应数据
+  void _getSearch() async {
+    var formData = {
+      "isAll": true,
+      "limit": 10,
+      "order": "string",
+      "page": 1,
+      "params": {"name": currentText, "productDescript": ""}
+    };
+    await request('listDemand', formData: formData).then((val) {
+      print('采购需求=====$val');
+      // var data = json.decode(val.toString());
+      // print('采购需求转换数据json.decode$data');
+      Purchasing goodsList = Purchasing.fromJson(val);
+      print('采购需求$val');
+      Provide.value<PurchasingListProvide>(context)
+          .getGoodsList(goodsList.result.list);
+
+      return Provide.value<PurchasingListProvide>(context).goodsList;
+    });
   }
 }
