@@ -240,7 +240,13 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             _addressItem('详细地址'),
             _componyPhoneItem('公司电话'),
             _componyNumberItem('营业执照编号'),
-            MyImage(),
+            MyImage(businessLicenseIssuedKey, data['businessLicenseIssuedUrl'],
+                (val) {
+              setState(() {
+                businessLicenseIssuedKey = val;
+                print('获取上传图片的key值$businessLicenseIssuedKey');
+              });
+            }),
             // ImagePickerPage(),
             _rangeItem('经营范围'),
             _bankOfDepositItem('开户银行'),

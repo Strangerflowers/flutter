@@ -2,7 +2,6 @@
 import 'package:bid/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:bid/common/home_loading.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
