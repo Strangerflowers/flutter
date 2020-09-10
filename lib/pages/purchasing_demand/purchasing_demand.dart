@@ -193,12 +193,15 @@ class _DemandContentState extends State<DemandContent> {
           builder: (context, snapshot) {
             print(
                 '99999111111${snapshot.hasData}===${hasToken != null}==${widget.inputText}');
-            if (true) {
+            if (snapshot.hasData) {
               if (hasToken != '' && hasToken != null) {
                 return Container(
                   child: _demandListView(),
                 );
               } else {
+                // return Container(
+                //   // child: Text('正在加载中。。。。。。'),
+                // );
                 return _logOut(context);
               }
             } else {
