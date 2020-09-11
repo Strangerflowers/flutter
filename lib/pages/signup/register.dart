@@ -82,45 +82,46 @@ class FormDemoState extends State<FormDemo> {
       autovalidateMobile = true;
     });
     registerFormKey.currentState.save();
-    registerFormKey.currentState.validate();
+    // registerFormKey.currentState.validate();
+    if ((registerFormKey.currentState as FormState).validate()) {
+      var formData = {
+        "mobile": mobile,
+        "checkCode": code,
+      };
+      var item = {
+        "mobile": mobile,
+        // 'code': code,
+        'companyName': companyName,
+        'companyShort': companyShort
+      };
 
-    var formData = {
-      "mobile": mobile,
-      "checkCode": code,
-    };
-    var item = {
-      "mobile": mobile,
-      // 'code': code,
-      'companyName': companyName,
-      'companyShort': companyShort
-    };
-
-    // checkNameAndMobile
-    print('校验公司名称$item');
-    await request('checkNameAndMobile', formData: item).then((ele) {
-      print('校验公司名称$ele====${ele['code'] == 0}');
-      if (ele['code'] == 0) {
-        request('verifyRegCheckCode', formData: formData).then((val) {
-          print('$val====${val['code'] == 0}');
-          if (val['code'] == 0) {
-            print('判断是否跑进校验');
-            Application.router.navigateTo(context,
-                "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
-            // Application.router.navigateTo(context, "/setPassword?item=$item");
-          } else {
-            Toast.toast(
-              context,
-              msg: val['message'],
-            );
-          }
-        });
-      } else {
-        Toast.toast(
-          context,
-          msg: ele['message'],
-        );
-      }
-    });
+      // checkNameAndMobile
+      print('校验公司名称$item');
+      await request('checkNameAndMobile', formData: item).then((ele) {
+        print('校验公司名称$ele====${ele['code'] == 0}');
+        if (ele['code'] == 0) {
+          request('verifyRegCheckCode', formData: formData).then((val) {
+            print('$val====${val['code'] == 0}');
+            if (val['code'] == 0) {
+              print('判断是否跑进校验');
+              Application.router.navigateTo(context,
+                  "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
+              // Application.router.navigateTo(context, "/setPassword?item=$item");
+            } else {
+              Toast.toast(
+                context,
+                msg: val['message'],
+              );
+            }
+          });
+        } else {
+          Toast.toast(
+            context,
+            msg: ele['message'],
+          );
+        }
+      });
+    }
 
     // print('object$formData');
     // if ((registerFormKey.currentState as FormState).validate()) {
@@ -259,10 +260,11 @@ class FormDemoState extends State<FormDemo> {
                     suffixIcon: Container(
                       padding: EdgeInsets.only(top: 10),
                       child: LoginFormCode(
-                        changeCount,
-                        60,
-                        true,
-                        (val) {
+                        key: childKey,
+                        isChange: changeCount,
+                        countdown: 60,
+                        available: true,
+                        onTapCallback: (val) {
                           print('父组件拿到子组件的方法$val');
                           _getPhoneCode();
                         },
