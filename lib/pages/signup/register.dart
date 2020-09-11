@@ -1,3 +1,4 @@
+import 'package:bid/common/count_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +56,7 @@ class FormDemo extends StatefulWidget {
 }
 
 class FormDemoState extends State<FormDemo> {
+  // bool isChangeCount
   bool autovalidateMobile = false;
   bool autovalidateOther = false;
   final registerFormKey = GlobalKey<FormState>();
@@ -248,13 +250,27 @@ class FormDemoState extends State<FormDemo> {
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('验证码'),
                     ),
-                    suffixIcon: InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Text('获取验证码'),
+                    suffixIcon: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: LoginFormCode(
+                        errorMobileText == null && autovalidateMobile == true
+                            ? true
+                            : false,
+                        60,
+                        true,
+                        (val) {
+                          print('父组件拿到子组件的方法$val');
+                          _getPhoneCode();
+                        },
                       ),
-                      onTap: _getPhoneCode,
                     ),
+                    //     InkWell(
+                    //   child: Container(
+                    //     padding: EdgeInsets.only(top: 15),
+                    //     child: Text('获取验证码'),
+                    //   ),
+                    //   onTap: _getPhoneCode,
+                    // ),
                     hintText: "请输入验证码",
                   ),
                   onSaved: (value) {
@@ -298,13 +314,14 @@ class FormDemoState extends State<FormDemo> {
 
   // 验证手机号码
   String validateMibile(String value) {
-    print('手机校验$value');
+    errorMobileText = null;
+    print('手机校验$value==$mobile');
     // 正则匹配手机号
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
     if (mobile.isEmpty) {
-      print('手机校验为空');
+      print('手机校验为空====$mobile');
       return '手机号码不能为空';
     } else {
       if (!exp.hasMatch(mobile)) {
@@ -322,6 +339,7 @@ class FormDemoState extends State<FormDemo> {
     autovalidateMobile = true;
     registerFormKey.currentState.save();
     if (mobile.isEmpty) {
+      print('查看进度$mobile');
       setState(() {
         errorMobileText = "手机号码不能为空";
       });
@@ -343,8 +361,6 @@ class FormDemoState extends State<FormDemo> {
         );
         print('----------------------$val');
       });
-    } else {
-      validateMibile(mobile.toString());
     }
   }
 }
