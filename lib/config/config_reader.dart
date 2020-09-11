@@ -1,8 +1,7 @@
-import 'package:bid/common/log_utils.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'dart:convert';
 
+import 'package:bid/common/log_utils.dart';
+import 'package:flutter/services.dart';
 import 'package:sprintf/sprintf.dart';
 
 /** 

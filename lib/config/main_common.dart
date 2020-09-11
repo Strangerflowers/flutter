@@ -1,3 +1,5 @@
+import 'package:bid/common/network.dart';
+import 'package:bid/common/pocket_capture.dart';
 import 'package:bid/config/config_reader.dart';
 import 'package:bid/config/service_url_holder.dart';
 import 'package:bid/pages/index_page.dart';
@@ -35,6 +37,11 @@ Future<void> mainCommon(String env) async {
   await ConfigReader.initialize(env);
   // 初始化api接口地址定义
   ServiceUrlHolder.initialize();
+  // 初始化代理配置监听
+  Packetcapture.initUniLinks(callBack: (host, port) {
+    Network.setHttpProxy(host, port);
+  });
+
   var counter = Counter();
   var quotationGoodsListProvide = QuotationGoodsListProvide();
   var quotationDetailProvide = QuotationDetailProvide();

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/network.dart';
 import 'package:bid/config/service_url_holder.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,32 +16,43 @@ Future request(
   formData,
 }) async {
   try {
-    Response response;
-    Dio dio = new Dio();
+    // Dio dio = new Dio();
+    // // 设置代理 便于本地 charles 抓包
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.findProxy = (uri) {
+    //     return "PROXY 10.10.25.80:8888";
+    //   };
+    // };
+
     // dio.options.contentType = "application/json";
     // dio.options.responseType = "ResponseType.plain";
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    dio.options.headers = {
+
+    Options options = new Options();
+    options.headers = {
       "X-OS-KERNEL-TOKEN": token,
-      // "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aGFuZ3NhbjEiLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbjEiLCJfdXNlcl9uYW1lIjoi5byg5LiJIiwiZXhwIjoxNjAxNzE0NDg0LCJ1c2VySWQiOiIwN2UwOTY1M2IyMDQzMjQwZGZmNDk4ODZhODhmYTk4MyJ9.6rChGbeaWFv_tilidm0W5ZQBSICViEMQA-ETrXv8Mnk",
     };
     String requestUrl = ServiceUrlHolder.getUrl(url);
     LogUtils.info(
         TAG,
         sprintf('开始获取数据，请求地址:%s, 请求参数:%s  ....', [requestUrl, formData]),
         StackTrace.current);
-
+    var responseData;
     if (formData == null) {
-      response = await dio.post(requestUrl);
+      responseData = await Network.post(
+        requestUrl,
+        options: options,
+      );
     } else {
-      response = await dio.post(requestUrl, data: formData);
+      responseData = await Network.post(
+        requestUrl,
+        data: formData,
+        options: options,
+      );
     }
-    if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      throw Exception('后端接口异常');
-    }
+    return responseData;
   } catch (e) {
     print(e);
   }
@@ -52,16 +64,21 @@ Future requestPostSpl(
   spl,
 }) async {
   try {
-    Response response;
-    Dio dio = new Dio();
+    // Dio dio = new Dio();
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.findProxy = (uri) {
+    //     return "PROXY 10.10.25.80:8888";
+    //   };
+    // };
     // dio.options.contentType = "application/json";
     // dio.options.responseType = "ResponseType.plain";
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
-    dio.options.headers = {
+    Options options = new Options();
+    options.headers = {
       "X-OS-KERNEL-TOKEN": token,
-      // "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aGFuZ3NhbjEiLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbjEiLCJfdXNlcl9uYW1lIjoi5byg5LiJIiwiZXhwIjoxNjAxNzE0NDg0LCJ1c2VySWQiOiIwN2UwOTY1M2IyMDQzMjQwZGZmNDk4ODZhODhmYTk4MyJ9.6rChGbeaWFv_tilidm0W5ZQBSICViEMQA-ETrXv8Mnk",
     };
 
     String requestUrl = ServiceUrlHolder.getUrl(url);
@@ -70,16 +87,19 @@ Future requestPostSpl(
         sprintf('开始获取数据，请求地址:%s, 请求参数:%s  ....', [requestUrl, spl]),
         StackTrace.current);
 
+    var responseData;
     if (spl == null) {
-      response = await dio.post(requestUrl);
+      responseData = await Network.post(
+        requestUrl,
+        options: options,
+      );
     } else {
-      response = await dio.post(requestUrl + '/' + spl);
+      responseData = await Network.post(
+        requestUrl + '/' + spl,
+        options: options,
+      );
     }
-    if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      throw Exception('后端接口异常');
-    }
+    return responseData;
   } catch (e) {
     print(e);
   }
@@ -88,27 +108,36 @@ Future requestPostSpl(
 //无请求头参数
 Future requestNoHeader(url, {formData}) async {
   try {
-    Response response;
-    Dio dio = new Dio();
+    // Dio dio = new Dio();
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.findProxy = (uri) {
+    //     return "PROXY 10.10.25.80:8888";
+    //   };
+    // };
 
-    dio.options.contentType = "application/json";
+    Options options = new Options();
+    options.contentType = "application/json";
 
     String requestUrl = ServiceUrlHolder.getUrl(url);
     LogUtils.debug(
         TAG,
         sprintf('开始获取数据，请求地址:%s, 请求参数:%s  ....', [requestUrl, formData]),
         StackTrace.current);
-
+    var responseData;
     if (formData == null) {
-      response = await dio.post(requestUrl);
+      responseData = await Network.post(
+        requestUrl,
+        options: options,
+      );
     } else {
-      response = await dio.post(requestUrl, data: formData);
+      responseData = await Network.post(
+        requestUrl,
+        options: options,
+        data: formData,
+      );
     }
-    if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      throw Exception('后端接口异常');
-    }
+    return responseData;
   } catch (e) {
     print(e);
   }
@@ -118,13 +147,19 @@ Future requestNoHeader(url, {formData}) async {
 Future requestGet(url, {formData}) async {
   try {
     Response response;
-    Dio dio = new Dio();
+    // Dio dio = new Dio();
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.findProxy = (uri) {
+    //     return "PROXY 10.10.25.80:8888";
+    //   };
+    // };
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    // dio.options.contentType = "application/x-www-form-urlencoded";
-    dio.options.headers = {
+
+    Options options = new Options();
+    options.headers = {
       "X-OS-KERNEL-TOKEN": token,
-      // "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aGFuZ3NhbjEiLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbjEiLCJfdXNlcl9uYW1lIjoi5byg5LiJIiwiZXhwIjoxNjAxNzE0NDg0LCJ1c2VySWQiOiIwN2UwOTY1M2IyMDQzMjQwZGZmNDk4ODZhODhmYTk4MyJ9.6rChGbeaWFv_tilidm0W5ZQBSICViEMQA-ETrXv8Mnk",
     };
 
     String requestUrl = ServiceUrlHolder.getUrl(url);
@@ -132,17 +167,20 @@ Future requestGet(url, {formData}) async {
         TAG,
         sprintf('开始获取数据，请求地址:%s, 请求参数:%s  ....', [requestUrl, formData]),
         StackTrace.current);
-
+    var responseData;
     if (formData == null) {
-      response = await dio.get(requestUrl);
+      responseData = await Network.get(
+        requestUrl,
+        options: options,
+      );
     } else {
-      response = await dio.get(requestUrl, queryParameters: formData);
+      responseData = await Network.get(
+        requestUrl,
+        options: options,
+        queryParameters: formData,
+      );
     }
-    if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      throw Exception('后端接口异常');
-    }
+    return responseData;
   } catch (e) {
     print(e);
   }

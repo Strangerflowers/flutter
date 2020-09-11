@@ -1,4 +1,3 @@
-import 'package:bid/common/log_utils.dart';
 import 'package:bid/config/config_reader.dart';
 
 abstract class ServiceUrlHolder {
@@ -21,8 +20,6 @@ abstract class ServiceUrlHolder {
 }
 
 class ServiceUrlMapper {
-  static String updateServiceUrl = 'http://api-dev.gtland.cn';
-
   /// 第三方固定url地址
   static Map<String, String> thirdUrlMapper = {
     "getKey": 'https://up-z2.qbox.me/',

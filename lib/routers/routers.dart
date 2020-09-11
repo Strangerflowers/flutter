@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import './router_handler.dart';
 
+enum PopPage {
+  popUp, //返回上一页
+  popNone, //留在当前页
+  popUntil, //返回到第一页
+}
+
 class Routes {
   static String root = "/";
   static String detailsPage = '/detail';
