@@ -1,5 +1,4 @@
 // 资料认证页面
-
 import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
 import 'package:bid/common/toast.dart';
@@ -11,7 +10,6 @@ import '../../images.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../service/service_method.dart';
-// import 'package:bid/common/xyz_picker.dart';
 
 class Authentication extends StatelessWidget {
   @override
@@ -341,8 +339,6 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       categorytwo = typeList[1];
       categorythree = typeList[2];
     });
-
-    print('供应商类型$typeList');
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -971,6 +967,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
           authFormKey.currentState.save();
+          if (supplierType.isEmpty) {
+            // || companyCode.isEmpty
+            Toast.toast(context, msg: '供应商类型不能为空');
+            return;
+          }
           var formData = {
             "auditStatus": 1,
             "supplierType": supplierType,
@@ -1064,27 +1065,6 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             tooltip: 'Pick Image',
             child: Icon(Icons.add_a_photo),
           ),
-          // GridView.count(
-          //   padding: EdgeInsets.all(8),
-          //   crossAxisCount: 3,
-          //   mainAxisSpacing: 5,
-          //   crossAxisSpacing: 5,
-          //   shrinkWrap: true,
-          //   children: _getImagesFromAsset(_images),
-          // )
-          // StreamBuilder(
-          //   stream: _imageStream,
-          //   builder: (context, snapshot) {
-          //     if (!snapshot.hasData) return Container();
-          //     List<Asset> datas = snapshot.data;
-          //     return ListView.builder(
-          //       itemCount: datas.length,
-          //       itemBuilder: (context, idx) {
-          //         // return _imageTile(datas[idx]);
-          //       },
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
@@ -1224,62 +1204,3 @@ class _imageTile extends StatelessWidget {
     );
   }
 }
-
-// class Test{
-//   List<Asset> images = List<Asset>();
-
-//   // 选择照片并上传
-//   Future<void> uploadImages() async {
-//     setState(() {
-//       images = List<Asset>();
-//     });
-//     List<Asset> resultList;
-
-//     try {
-//       resultList = await MultiImagePicker.pickImages(
-//         // 选择图片的最大数量
-//         maxImages: 9,
-//         // 是否支持拍照
-//         enableCamera: true,
-//         materialOptions: MaterialOptions(
-//             // 显示所有照片，值为 false 时显示相册
-//             startInAllView: true,
-//             allViewTitle: '所有照片',
-//             actionBarColor: '#2196F3',
-//             textOnNothingSelected: '没有选择照片'
-//         ),
-//       );
-//     } on Exception catch (e) {
-//       e.toString();
-//     }
-
-//     if (!mounted) return;
-//     images = (resultList == null) ? [] : resultList;
-//     // 上传照片时一张一张上传
-//     for(int i = 0; i < images.length; i++) {
-//       // 获取 ByteData
-//       ByteData byteData = await images[i].getByteData();
-//       List<int> imageData = byteData.buffer.asUint8List();
-
-//       MultipartFile multipartFile = MultipartFile.fromBytes(
-//         imageData,
-//         // 文件名
-//         filename: 'some-file-name.jpg',
-//         // 文件类型
-//         contentType: MediaType("image", "jpg"),
-//       );
-//       FormData formData = FormData.fromMap({
-//         // 后端接口的参数名称
-//         "files": multipartFile
-//       });
-//       // 后端接口 url
-//       String url = ''；
-//       // 后端接口的其他参数
-//       Map<String, dynamic> params = Map();
-//       // 使用 dio 上传图片
-//       var response = await dio.post(url, data: formData, queryParameters: params);
-//       //
-//       // do something with response...
-//     }
-//   }
-// }
