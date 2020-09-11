@@ -204,6 +204,14 @@ Please input:
 根据提示键入 ：dev 或 test 或 prod
 然后按下回车即可.
 
+## 更新日志
+
+**2020-9-11** `feature:` 通过 scheme 协议,实现外链唤起 APP 时动态注入代理 IP 和端口。实现原理参见 confluence：[flutter 通过外链唤起 app 注入代理设置](http://10.186.140.17:8090/pages/viewpage.action?pageId=9374383)
+
+**2020-9-10** `feature:`升级打包脚本 tool_package.bat，支持命令行参数
+
+**2020-9-09** `feature:`重构原有代码实现多环境切换;添加 run_dev.bat、run_test.bat 脚本便于启动不同运行环境;添加 tool_package.bat 脚本便于不同环境打包.
+
 ## 联系
 
 **邮箱:** fenghaolin@utopa.com.cn
