@@ -4,6 +4,7 @@ import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sprintf/sprintf.dart';
 import '../../common/log_utils.dart';
 
@@ -14,8 +15,10 @@ class AddWithdrawAddress extends StatefulWidget {
 
 class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
   final addressFormKey = GlobalKey<FormState>();
+  bool autoValidate = false;
   String areaCode, companyAddressName;
-  bool check;
+  bool check = false;
+  String addressErroeText = '';
   var params = {
     'receiverName': '',
     'mobile': '',
@@ -61,6 +64,9 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
     setState(() {
       addressFormKey.currentState.save();
       areaCode = result.areaId;
+      setState(() {
+        addressErroeText = "";
+      });
       companyAddressName =
           result.provinceName + result.cityName + result.areaName;
     });
@@ -77,7 +83,7 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
       list.add(_buildRow(label));
     }
     list.insert(2, _selectAddress("所在地区:"));
-    // list.insert(4, _checkBox());
+    list.insert(4, _checkBox());
     // 确认按钮
     list.add(_buildSubmitBtn());
     return Form(
@@ -91,29 +97,37 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
   Widget _buildRow(item) {
     return new Container(
       decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+        color: Colors.white,
+        // border: Border(
+        //   bottom: BorderSide(
+        //     width: 1,
+        //     color: Color(0xffe5e5e5),
+        //   ),
+        // ),
+      ),
       child: new Row(
         children: [
-          new Container(
-            padding: EdgeInsets.all(15),
-            child: new Text(
-              '${item['label']}',
-              style: TextStyle(
-                decoration: TextDecoration.none,
-                color: Color(0xFF888888),
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                //fontFamily: defaultFontFamily,
-              ),
-            ),
-          ),
+          // new Container(
+          //   padding: EdgeInsets.all(15),
+          //   child: new Text(
+          //     '${item['label']}',
+          //     style: TextStyle(
+          //       decoration: TextDecoration.none,
+          //       color: Color(0xFF888888),
+          //       fontSize: 14,
+          //       fontWeight: FontWeight.bold,
+          //       //fontFamily: defaultFontFamily,
+          //     ),
+          //   ),
+          // ),
           new Expanded(
             child: new Container(
-              height: 30.0,
+              padding: EdgeInsets.all(15),
+              // height: 30.0,
               decoration: BoxDecoration(
                   //border: new Border.all(color: Colors.red),
                   ),
+              // child: new Expanded(
               child: TextFormField(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
@@ -122,16 +136,57 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                   ),
                 ),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  prefixIcon: Container(
+                    width: ScreenUtil().setWidth(140.0),
+                    // padding: EdgeInsets.only(right: 20),
+                    child: Center(
+                      child: RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                          text: '*',
+                          style:
+                              TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '${item['label']}',
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                color: Color(0xFF888888),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                //fontFamily: defaultFontFamily,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // ),
+                    //  Text(
+                    //             '${item['label']}',
+                    //             style: TextStyle(
+                    //               decoration: TextDecoration.none,
+                    //               color: Color(0xFF888888),
+                    //               fontSize: 14,
+                    //               fontWeight: FontWeight.bold,
+                    //               //fontFamily: defaultFontFamily,
+                    //             ),
+                    //           ),
+                  ),
+                  // border: InputBorder.none,
                 ),
                 //controller: controller,
                 //maxLength: 30, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
                 maxLines: 1, //最大行数
                 autocorrect: true, //是否自动更正
-                autofocus: true, //是否自动对焦
+                autofocus: false, //是否自动对焦
+                autovalidate: autoValidate,
                 obscureText: false, //是否是密码
                 textAlign: TextAlign.left, //文本对齐方式
-                style: TextStyle(fontSize: 20.0, color: Colors.blue), //输入文本的样式
+                style: TextStyle(
+                  fontSize: 20.0,
+                ), //输入文本的样式
                 //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
                 onChanged: (value) {},
                 onSaved: (val) {
@@ -140,9 +195,33 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                     params[key] = val;
                   });
                 },
+                validator: (value) {
+                  if (item['value'] == 'mobile') {
+                    // 正则匹配手机号
+                    RegExp exp = RegExp(
+                        r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
+                    if (value.isEmpty) {
+                      print('手机校验为空');
+                      return '手机号码不能为空';
+                    } else {
+                      if (!exp.hasMatch(value)) {
+                        print('手机校验规则不对');
+                        return '请输入正确的账号';
+                      } else {
+                        return null;
+                      }
+                    }
+                  } else {
+                    if (value.isEmpty) {
+                      return "不能为空";
+                    }
+                    return null;
+                  }
+                },
                 enabled: true, //是否禁用
               ),
             ),
+            // ),
           ),
           // FlatButton(
           //   onPressed: () {
@@ -168,65 +247,105 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
       decoration: BoxDecoration(
           border:
               Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
-      child: new Row(
-        children: [
-          new Container(
-            padding: EdgeInsets.all(15),
-            child: new Text(
-              label,
-              style: TextStyle(
-                decoration: TextDecoration.none,
-                color: Color(0xFF888888),
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                //fontFamily: defaultFontFamily,
+      child: Column(
+        children: <Widget>[
+          new Row(
+            children: [
+              new Container(
+                color: Colors.white,
+                padding: EdgeInsets.all(15),
+                child: new Text(
+                  label,
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Color(0xFF888888),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    //fontFamily: defaultFontFamily,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: _showSelect,
-              child: StatefulBuilder(builder: (context, StateSetter setState) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Color(0xFFD7D7D7),
+              Expanded(
+                child: InkWell(
+                  onTap: _showSelect,
+                  child:
+                      StatefulBuilder(builder: (context, StateSetter setState) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: Color(0xFFD7D7D7),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      companyAddressName == null ? '' : companyAddressName,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    trailing: Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color(0xFFD1D1D1),
-                    ),
-                  ),
-                );
-              }),
-            ),
+                      child: ListTile(
+                        title: Text(
+                          companyAddressName == null ? '' : companyAddressName,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Color(0xFFD1D1D1),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
           ),
+          _showErrorText(),
+
+          // Text(addressErroeText),
         ],
       ),
     );
   }
 
+  // 所选地区报错提示
+  Widget _showErrorText() {
+    var content;
+    if (addressErroeText != '') {
+      //如果数据不为空，则显示Text
+      content = Container(
+        alignment: Alignment.bottomLeft,
+        padding: EdgeInsets.only(left: 20),
+        child: new Text(
+          '数据不为空',
+          style: TextStyle(
+              color: Color.fromRGBO(255, 113, 66, 1),
+              fontSize: ScreenUtil().setSp(24)),
+        ),
+      );
+    } else {
+      //当数据为空我们需要隐藏这个Text
+      //我们又不能返回一个null给当前的Widget Tree
+      //只能返回一个长宽为0的widget占位
+      content = new Container(height: 0.0, width: 0.0);
+    }
+    return content;
+  }
+
   Widget _checkBox() {
-    return Container(
-      child: Checkbox(
-        value: check,
-        onChanged: (value) {
-          setState(() {
-            check = value;
-          });
-        },
-        activeColor: Colors.black,
-      ),
+    return Row(
+      children: <Widget>[
+        new Checkbox(
+          value: this.check,
+          activeColor: Colors.blue,
+          onChanged: (bool val) {
+            // val 是布尔值
+            this.setState(() {
+              this.check = !this.check;
+              params['defaultAddress'] = val == true ? 1 : 0;
+            });
+          },
+        ),
+        Container(
+          child: Text('设为默认地址'),
+        ),
+      ],
     );
   }
 
@@ -246,22 +365,38 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
             disabledColor: Colors.grey,
             disabledTextColor: Colors.black,
             onPressed: () {
+              autoValidate = true;
               addressFormKey.currentState.save();
-              var formData = {
-                "receiverName": params['receiverName'],
-                "mobile": params['mobile'],
-                "areaCode": areaCode,
-                "address": params['address'],
-                "defaultAddress": 1
-              };
-              LogUtils.d('[确认修改按钮]', formData);
-              request('saveAddress', formData: formData).then((value) {
-                if (value['code'] == 0) {
-                  Application.router
-                      .navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+              // addressFormKey.currentState.validate();
+              if (areaCode == null) {
+                setState(() {
+                  addressErroeText = "不能为空";
+                });
+              }
+              if ((addressFormKey.currentState as FormState).validate()) {
+                if (areaCode == null) {
+                  setState(() {
+                    addressErroeText = "不能为空";
+                  });
+                  return;
                 }
-                LogUtils.d('[返回值]', value);
-              });
+                print('校验不通过时是否执行');
+                var formData = {
+                  "receiverName": params['receiverName'],
+                  "mobile": params['mobile'],
+                  "areaCode": areaCode,
+                  "address": params['address'],
+                  "defaultAddress": 1
+                };
+                LogUtils.d('[确认修改按钮]', formData);
+                request('saveAddress', formData: formData).then((value) {
+                  if (value['code'] == 0) {
+                    Application.router
+                        .navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+                  }
+                  LogUtils.d('[返回值]', value);
+                });
+              }
             },
 
             // shape: RoundedRectangleBorder(
