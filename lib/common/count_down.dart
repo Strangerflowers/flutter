@@ -100,9 +100,11 @@ class _LoginFormCodeState extends State<LoginFormCode> {
                     setState(() {});
                     widget.onTapCallback(_verifyStr);
                   }
-                : () {
-                    widget.onTapCallback(_verifyStr);
-                  },
+                : (_seconds == widget.countdown && widget.isChange == false)
+                    ? () {
+                        widget.onTapCallback(_verifyStr);
+                      }
+                    : null,
           )
         : InkWell(
             child: Text(

@@ -333,12 +333,15 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
-    typeList = typeList.split('/');
-    setState(() {
-      categoryone = typeList[0];
-      categorytwo = typeList[1];
-      categorythree = typeList[2];
-    });
+    if (typeList.isEmpty) {
+      typeList = typeList.split('/');
+      setState(() {
+        categoryone = typeList[0];
+        categorytwo = typeList[1];
+        categorythree = typeList[2];
+      });
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(

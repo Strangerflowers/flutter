@@ -56,7 +56,7 @@ class FormDemo extends StatefulWidget {
 }
 
 class FormDemoState extends State<FormDemo> {
-  // bool isChangeCount
+  bool changeCount = false;
   bool autovalidateMobile = false;
   bool autovalidateOther = false;
   final registerFormKey = GlobalKey<FormState>();
@@ -240,6 +240,12 @@ class FormDemoState extends State<FormDemo> {
                   // },
                   onChanged: (v) {
                     this.mobile = v;
+                    setState(() {
+                      changeCount = validateMibile(mobile.toString()) == null
+                          ? true
+                          : false;
+                    });
+                    print('获取验证码倒计时$changeCount');
                   },
                 ),
                 TextFormField(
@@ -253,9 +259,7 @@ class FormDemoState extends State<FormDemo> {
                     suffixIcon: Container(
                       padding: EdgeInsets.only(top: 10),
                       child: LoginFormCode(
-                        errorMobileText == null && autovalidateMobile == true
-                            ? true
-                            : false,
+                        changeCount,
                         60,
                         true,
                         (val) {
