@@ -16,17 +16,6 @@ Future request(
   formData,
 }) async {
   try {
-    // Dio dio = new Dio();
-    // // 设置代理 便于本地 charles 抓包
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.findProxy = (uri) {
-    //     return "PROXY 10.10.25.80:8888";
-    //   };
-    // };
-
-    // dio.options.contentType = "application/json";
-    // dio.options.responseType = "ResponseType.plain";
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
@@ -64,15 +53,6 @@ Future requestPostSpl(
   spl,
 }) async {
   try {
-    // Dio dio = new Dio();
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.findProxy = (uri) {
-    //     return "PROXY 10.10.25.80:8888";
-    //   };
-    // };
-    // dio.options.contentType = "application/json";
-    // dio.options.responseType = "ResponseType.plain";
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
@@ -108,14 +88,6 @@ Future requestPostSpl(
 //无请求头参数
 Future requestNoHeader(url, {formData}) async {
   try {
-    // Dio dio = new Dio();
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.findProxy = (uri) {
-    //     return "PROXY 10.10.25.80:8888";
-    //   };
-    // };
-
     Options options = new Options();
     options.contentType = "application/json";
 
@@ -146,14 +118,6 @@ Future requestNoHeader(url, {formData}) async {
 // get请求方法
 Future requestGet(url, {formData}) async {
   try {
-    Response response;
-    // Dio dio = new Dio();
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.findProxy = (uri) {
-    //     return "PROXY 10.10.25.80:8888";
-    //   };
-    // };
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
