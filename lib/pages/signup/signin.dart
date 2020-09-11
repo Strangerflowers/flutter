@@ -1,3 +1,4 @@
+import 'package:bid/common/count_down.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -403,38 +404,21 @@ class MobileFormPage extends StatefulWidget {
   _MobileFormPageState createState() => _MobileFormPageState();
 }
 
-TextEditingController _mobileController = new TextEditingController();
-TextEditingController _codeController = new TextEditingController();
+// TextEditingController _mobileController = new TextEditingController();
+// TextEditingController _codeController = new TextEditingController();
 // bool pwdShow = false; //密码是否显示明文
-GlobalKey _mobileformKey = new GlobalKey<FormState>();
-bool _mobileAutoFocus = true;
-bool isMobilesignin = false; //是否已获取验证码
-
-// 验证手机号码
-String validateMibile(value) {
-  print('$value,手机号码验证');
-  // 正则匹配手机号
-  RegExp exp = RegExp(
-      r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
-
-  if (value.isEmpty) {
-    return '用户名不能为空';
-  } else if (!exp.hasMatch(value)) {
-    return '请输入正确的账号';
-  }
-}
-
-// 验证验证码
-String validateCode(value) {
-  // 正则匹配手机号
-  // RegExp exp = RegExp(r'^\s{0}$|^[0-9]{6}$');
-
-  if (value.isEmpty) {
-    return '验证码不能为空';
-  }
-}
+// GlobalKey _mobileformKey = new GlobalKey<FormState>();
 
 class _MobileFormPageState extends State<MobileFormPage> {
+  // bool _mobileAutoFocus = true;
+  bool isMobilesignin = false; //是否已获取验证码
+  bool changeCount = false;
+  var errorMobileText;
+  bool autovalidateMobile = false;
+  bool autovalidateCode = false;
+  String loginAcc, captcha;
+  // final sendCodeFormKey = GlobalKey<FormState>();
+  final _mobileformKey = GlobalKey<FormState>();
   setUserData(val) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -447,57 +431,119 @@ class _MobileFormPageState extends State<MobileFormPage> {
   Widget build(BuildContext context) {
     return Form(
       key: _mobileformKey, //设置globalKey，用于后面获取FormState
-      autovalidate: true, //开启自动校验
+      // autovalidate: true, //开启自动校验
       child: Column(
         children: <Widget>[
           Container(
             child: Column(
               children: <Widget>[
                 TextFormField(
-                  autofocus: false,
-                  // 输入模式设置为手机号
-                  keyboardType: TextInputType.phone,
-                  controller: _mobileController,
-                  decoration: InputDecoration(
-                    // labelText: "用户名",
-                    hintText: "请输入手机",
-                    prefixIcon: Icon(Icons.phone),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        _mobileController.text = "";
-                      },
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text:
+                          '${loginAcc == null ? "" : loginAcc}', //判断keyword是否为空
+                      // 保持光标在最后
+                      selection: TextSelection.fromPosition(
+                        TextPosition(
+                            affinity: TextAffinity.downstream,
+                            offset: '${loginAcc}'.length),
+                      ),
                     ),
                   ),
+                  autofocus: false,
+                  autovalidate: autovalidateMobile,
+                  // 输入模式设置为手机号
+                  keyboardType: TextInputType.phone,
+                  // controller: _mobileController,
+                  decoration: InputDecoration(
+                      // labelText: "用户名",
+                      errorText: errorMobileText,
+                      hintText: "请输入手机",
+                      prefixIcon: Icon(Icons.phone),
+                      suffixIcon: FlatButton(
+                        onPressed: () {
+                          _mobileformKey.currentState.save();
+                          setState(() {
+                            loginAcc = '';
+                          });
+                        },
+                        child: new Image.asset(
+                          'images/clear.png',
+                          width: 20.0,
+                          height: 20.0,
+                        ),
+                      )
+                      //  IconButton(
+                      //   icon: Icon(Icons.clear),
+                      //   onPressed: () {
+                      //     _mobileController.text = "";
+                      //   },
+                      // ),
+                      ),
                   // 校验手机号码
                   validator: validateMibile,
                   onChanged: (v) {
-                    validateMibile(v);
+                    _mobileformKey.currentState.save();
+                    this.loginAcc = v;
+                    setState(() {
+                      changeCount = validateMibile(v) == null ? true : false;
+                    });
+                  },
+                  onSaved: (value) {
+                    this.loginAcc = value;
                   },
                 ),
                 TextFormField(
-                  controller: _codeController,
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text: '${captcha == null ? "" : captcha}', //判断keyword是否为空
+                      // 保持光标在最后
+                      selection: TextSelection.fromPosition(
+                        TextPosition(
+                            affinity: TextAffinity.downstream,
+                            offset: '${captcha}'.length),
+                      ),
+                    ),
+                  ),
+                  // controller: _codeController,
                   decoration: InputDecoration(
                     // labelText: "密码",
                     hintText: "请输入验证码",
                     prefixIcon: Icon(Icons.lock),
-                    suffixIcon: InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Text('获取验证码'),
+                    suffixIcon: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: LoginFormCode(
+                        key: childKey,
+                        isChange: changeCount,
+                        countdown: 60,
+                        available: true,
+                        onTapCallback: (val) {
+                          _getPhoneCode();
+                        },
                       ),
-                      onTap: _getPhoneCode,
                     ),
+                    // InkWell(
+                    //   child: Container(
+                    //     padding: EdgeInsets.only(top: 15),
+                    //     child: Text('获取验证码'),
+                    //   ),
+                    //   onTap: _getPhoneCode,
+                    // ),
                   ),
                   obscureText: false,
+                  autovalidate: autovalidateCode,
                   //验证码
-                  validator: validateCode,
-                  onChanged: (value) {
-                    validateCode(value);
-                    // if (isMobilesignin) {
-                    //   validateCode(value);
-                    // }
+                  validator: (value) {
+                    print('校验码:$value');
+                    if (value.isEmpty) {
+                      return "验证码不能为空";
+                    }
+                    return null;
                   },
+                  onSaved: (value) {
+                    this.captcha = value;
+                  },
+                  onChanged: (value) {},
                 ),
               ],
             ),
@@ -531,32 +577,62 @@ class _MobileFormPageState extends State<MobileFormPage> {
     );
   }
 
+  // 验证手机号码
+  String validateMibile(value) {
+    errorMobileText = null;
+    print('$value,手机号码验证');
+    // 正则匹配手机号
+    RegExp exp = RegExp(
+        r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
+
+    if (value.isEmpty) {
+      return '用户名不能为空';
+    } else if (!exp.hasMatch(value)) {
+      return '请输入正确的账号';
+    }
+  }
+
   // 获取验证码
   void _getPhoneCode() async {
-    bool flag;
-    flag = validateMibile(_mobileController.text.toString()) == null
-        ? true
-        : false;
+    _mobileformKey.currentState.save();
+    autovalidateMobile = true;
 
-    print('1234567890$flag');
+    if (loginAcc.isEmpty) {
+      setState(() {
+        errorMobileText = "手机号码不能为空";
+      });
+    } else {
+      setState(() {
+        errorMobileText = null;
+      });
+    }
+    bool flag;
+    flag = validateMibile(loginAcc) == null ? true : false;
+
     if (flag) {
-      await requestGet('sendResetPwdCaptcha',
-          formData: {'mobile': _mobileController.text.toString()}).then(
+      await requestGet('sendResetPwdCaptcha', formData: {'mobile': loginAcc})
+          .then(
         (value) {
           Toast.toast(context, msg: value['message']);
           setState(() {
             isMobilesignin = true;
           });
           print('获取登录验证码$value');
+          if (value['code'] != 0) {
+            // 失败的时候调用清除倒计时操作
+            // childKey.currentState.restTimer();
+
+          }
         },
       );
-    } else {
-      validateMibile(_mobileController.text.toString());
     }
   }
 
   // 手机验证码登录
   void _phoneAction() async {
+    autovalidateCode = true;
+    autovalidateMobile = true;
+    _mobileformKey.currentState.save();
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isMobilesignin = true;
@@ -564,10 +640,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
     // final prefs = await SharedPreferences.getInstance();
     // final token = prefs.getString('token') ?? '';
     if ((_mobileformKey.currentState as FormState).validate()) {
-      var data = {
-        'loginAcc': _mobileController.text.toString(),
-        'captcha': _codeController.text.toString()
-      };
+      var data = {'loginAcc': loginAcc, 'captcha': captcha};
       await request('login', formData: data).then((val) {
         if (val['code'] == 0) {
           var tgt = {

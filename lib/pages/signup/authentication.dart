@@ -1,21 +1,15 @@
 // 资料认证页面
-import 'package:bid/pages/component/select_component.dart/address.dart';
-import 'package:bid/pages/signup/auth_bottom.dart';
 import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:bid/common/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:city_pickers/city_pickers.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:xyz_address_picker/xyz_address_picker.dart';
+import 'package:bid/common/xyz_picker.dart';
 import '../../images.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../service/service_method.dart';
-import 'dart:convert';
-import 'package:flutter_picker/flutter_picker.dart';
 
 class Authentication extends StatelessWidget {
   @override
@@ -27,25 +21,33 @@ class Authentication extends StatelessWidget {
       body: FutureBuilder(
           future: requestGet('checkAuditStatus'),
           builder: (context, snapshot) {
-            var data = snapshot.data;
-            print('响应数据====>${snapshot.data}');
-            if (snapshot.hasData) {
-              return Stack(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 50),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        _headerData(data['result']),
-                        AuthenticationForm(data['result']),
-                      ],
+            if (snapshot.connectionState == ConnectionState.done) {
+              var data = snapshot.data;
+              print('响应数据====>${snapshot.data}');
+              if (snapshot.hasData) {
+                return Stack(children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 50),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          _headerData(data['result']),
+                          AuthenticationForm(data['result']),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ]);
-            } else {
-              return Container(child: Text('暂无数据'));
+                ]);
+              } else {
+                return Container(child: Text('暂无数据'));
+              }
             }
+            return SizedBox(
+              width: 24.0,
+              height: 24.0,
+              child: Text('正在加载中。。。。。。'),
+              // child: CircularProgressIndicator(strokeWidth: 2.0),
+            );
           }),
     );
   }
@@ -151,11 +153,17 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     //
     await requestGet('getCategory').then((val) {
       if (val['code'] == 0) {
-        res = _func(val['result']);
-        categoryoneList = res;
-        categorytwoList = categoryoneList[0]['subCategorys'];
-        categorythreeList = categorytwoList[0]['subCategorys'];
+        print('响应供应商类型:${val}');
+        if (val['result'] != null && val['result'].length > 0) {
+          res = _func(val['result']);
+          categoryoneList = res;
+          categorytwoList = categoryoneList[0]['subCategorys'];
+          categorythreeList = categorytwoList[0]['subCategorys'];
+        } else {
+          Toast.toast(context, msg: '供应商类型列表暂无数据');
+        }
       } else {
+        Toast.toast(context, msg: val['message']);
         // Application.router.navigateTo(context, "/authentication");
       }
     });
@@ -196,10 +204,24 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   }
 
   var data;
+  // 存放供应商类型字段
+  var typeList;
   void initState() {
     setState(() {
       data = widget.data;
-      categorythree = data['supplierTypeName'];
+      typeList = data['supplierTypeName'];
+      if (typeList != null) {
+        typeList = typeList.split('/');
+        setState(() {
+          categoryone = typeList[0];
+          categorytwo = typeList[1];
+          categorythree = typeList[2];
+        });
+      }
+      // categoryone = typeList[0];
+      // categorytwo = typeList[1];
+      // categorythree = typeList[2];
+      // categorythree = data['supplierTypeName'];
       supplierType = data['supplierType'];
       companyAddressName = data['companyDistrictName'];
       auditStatus = data['auditStatus'];
@@ -240,7 +262,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             _addressItem('详细地址'),
             _componyPhoneItem('公司电话'),
             _componyNumberItem('营业执照编号'),
-            MyImage(),
+            MyImage(
+                businessLicenseIssuedKey,
+                data['businessLicenseIssuedUrl'] == null
+                    ? ''
+                    : data['businessLicenseIssuedUrl'], (val) {
+              setState(() {
+                businessLicenseIssuedKey = val;
+                print('获取上传图片的key值$businessLicenseIssuedKey');
+              });
+            }),
             // ImagePickerPage(),
             _rangeItem('经营范围'),
             _bankOfDepositItem('开户银行'),
@@ -272,6 +303,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       isScrollControlled: true,
       builder: (context) => GestureDetector(
         child: StatefulBuilder(builder: (context, StateSetter setState) {
+          // TODO: 待改进
           return AddressPicker(
             province: categoryone,
             city: categorytwo,
@@ -320,6 +352,15 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
+    // if (typeList != null) {
+    //   typeList = typeList.split('/');
+    //   setState(() {
+    //     categoryone = typeList[0];
+    //     categorytwo = typeList[1];
+    //     categorythree = typeList[2];
+    //   });
+    // }
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -948,6 +989,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
           authFormKey.currentState.save();
+          if (supplierType.isEmpty) {
+            // || companyCode.isEmpty
+            Toast.toast(context, msg: '供应商类型不能为空');
+            return;
+          }
           var formData = {
             "auditStatus": 1,
             "supplierType": supplierType,
@@ -1041,27 +1087,6 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             tooltip: 'Pick Image',
             child: Icon(Icons.add_a_photo),
           ),
-          // GridView.count(
-          //   padding: EdgeInsets.all(8),
-          //   crossAxisCount: 3,
-          //   mainAxisSpacing: 5,
-          //   crossAxisSpacing: 5,
-          //   shrinkWrap: true,
-          //   children: _getImagesFromAsset(_images),
-          // )
-          // StreamBuilder(
-          //   stream: _imageStream,
-          //   builder: (context, snapshot) {
-          //     if (!snapshot.hasData) return Container();
-          //     List<Asset> datas = snapshot.data;
-          //     return ListView.builder(
-          //       itemCount: datas.length,
-          //       itemBuilder: (context, idx) {
-          //         // return _imageTile(datas[idx]);
-          //       },
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
@@ -1201,62 +1226,3 @@ class _imageTile extends StatelessWidget {
     );
   }
 }
-
-// class Test{
-//   List<Asset> images = List<Asset>();
-
-//   // 选择照片并上传
-//   Future<void> uploadImages() async {
-//     setState(() {
-//       images = List<Asset>();
-//     });
-//     List<Asset> resultList;
-
-//     try {
-//       resultList = await MultiImagePicker.pickImages(
-//         // 选择图片的最大数量
-//         maxImages: 9,
-//         // 是否支持拍照
-//         enableCamera: true,
-//         materialOptions: MaterialOptions(
-//             // 显示所有照片，值为 false 时显示相册
-//             startInAllView: true,
-//             allViewTitle: '所有照片',
-//             actionBarColor: '#2196F3',
-//             textOnNothingSelected: '没有选择照片'
-//         ),
-//       );
-//     } on Exception catch (e) {
-//       e.toString();
-//     }
-
-//     if (!mounted) return;
-//     images = (resultList == null) ? [] : resultList;
-//     // 上传照片时一张一张上传
-//     for(int i = 0; i < images.length; i++) {
-//       // 获取 ByteData
-//       ByteData byteData = await images[i].getByteData();
-//       List<int> imageData = byteData.buffer.asUint8List();
-
-//       MultipartFile multipartFile = MultipartFile.fromBytes(
-//         imageData,
-//         // 文件名
-//         filename: 'some-file-name.jpg',
-//         // 文件类型
-//         contentType: MediaType("image", "jpg"),
-//       );
-//       FormData formData = FormData.fromMap({
-//         // 后端接口的参数名称
-//         "files": multipartFile
-//       });
-//       // 后端接口 url
-//       String url = ''；
-//       // 后端接口的其他参数
-//       Map<String, dynamic> params = Map();
-//       // 使用 dio 上传图片
-//       var response = await dio.post(url, data: formData, queryParameters: params);
-//       //
-//       // do something with response...
-//     }
-//   }
-// }

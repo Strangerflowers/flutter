@@ -191,21 +191,34 @@ class _DemandContentState extends State<DemandContent> {
         child: FutureBuilder(
           future: _getBackDetailInfo(context),
           builder: (context, snapshot) {
-            print(
-                '99999111111${snapshot.hasData}===${hasToken != null}==${widget.inputText}');
-            if (true) {
-              if (hasToken != '' && hasToken != null) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              print(
+                  '99999111111${snapshot.hasData}===${hasToken != null}==${widget.inputText}');
+              var data = snapshot.data;
+              if (null != data && data['success'] == true) {
                 return Container(
                   child: _demandListView(),
                 );
               } else {
-                return _logOut(context);
+                if (hasToken != '') {
+                  return Container(
+                    child: Text('暂无数据'),
+                  );
+                } else {
+                  return _logOut(context);
+                }
               }
-            } else {
-              return Container(
-                child: Text('暂无数据'),
-              );
             }
+
+            return SizedBox(
+              width: 24.0,
+              height: 24.0,
+              child: Text('正在加载中。。。。。。'),
+              // child: CircularProgressIndicator(strokeWidth: 2.0),
+            );
           },
         ),
       ),
@@ -213,6 +226,7 @@ class _DemandContentState extends State<DemandContent> {
   }
 
   _getToken() async {
+    hasToken = null;
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
     hasToken = token;
@@ -250,6 +264,7 @@ class _DemandContentState extends State<DemandContent> {
 
   // 获取响应数据
   Future _getBackDetailInfo(BuildContext context) async {
+    hasToken = null;
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
     hasToken = token;

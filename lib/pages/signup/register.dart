@@ -1,3 +1,4 @@
+import 'package:bid/common/count_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +56,7 @@ class FormDemo extends StatefulWidget {
 }
 
 class FormDemoState extends State<FormDemo> {
+  bool changeCount = false;
   bool autovalidateMobile = false;
   bool autovalidateOther = false;
   final registerFormKey = GlobalKey<FormState>();
@@ -80,45 +82,46 @@ class FormDemoState extends State<FormDemo> {
       autovalidateMobile = true;
     });
     registerFormKey.currentState.save();
-    registerFormKey.currentState.validate();
+    // registerFormKey.currentState.validate();
+    if ((registerFormKey.currentState as FormState).validate()) {
+      var formData = {
+        "mobile": mobile,
+        "checkCode": code,
+      };
+      var item = {
+        "mobile": mobile,
+        // 'code': code,
+        'companyName': companyName,
+        'companyShort': companyShort
+      };
 
-    var formData = {
-      "mobile": mobile,
-      "checkCode": code,
-    };
-    var item = {
-      "mobile": mobile,
-      // 'code': code,
-      'companyName': companyName,
-      'companyShort': companyShort
-    };
-
-    // checkNameAndMobile
-    print('校验公司名称$item');
-    await request('checkNameAndMobile', formData: item).then((ele) {
-      print('校验公司名称$ele====${ele['code'] == 0}');
-      if (ele['code'] == 0) {
-        request('verifyRegCheckCode', formData: formData).then((val) {
-          print('$val====${val['code'] == 0}');
-          if (val['code'] == 0) {
-            print('判断是否跑进校验');
-            Application.router.navigateTo(context,
-                "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
-            // Application.router.navigateTo(context, "/setPassword?item=$item");
-          } else {
-            Toast.toast(
-              context,
-              msg: val['message'],
-            );
-          }
-        });
-      } else {
-        Toast.toast(
-          context,
-          msg: ele['message'],
-        );
-      }
-    });
+      // checkNameAndMobile
+      print('校验公司名称$item');
+      await request('checkNameAndMobile', formData: item).then((ele) {
+        print('校验公司名称$ele====${ele['code'] == 0}');
+        if (ele['code'] == 0) {
+          request('verifyRegCheckCode', formData: formData).then((val) {
+            print('$val====${val['code'] == 0}');
+            if (val['code'] == 0) {
+              print('判断是否跑进校验');
+              Application.router.navigateTo(context,
+                  "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
+              // Application.router.navigateTo(context, "/setPassword?item=$item");
+            } else {
+              Toast.toast(
+                context,
+                msg: val['message'],
+              );
+            }
+          });
+        } else {
+          Toast.toast(
+            context,
+            msg: ele['message'],
+          );
+        }
+      });
+    }
 
     // print('object$formData');
     // if ((registerFormKey.currentState as FormState).validate()) {
@@ -237,7 +240,14 @@ class FormDemoState extends State<FormDemo> {
                   //   return null;
                   // },
                   onChanged: (v) {
+                    registerFormKey.currentState.save();
                     this.mobile = v;
+                    setState(() {
+                      changeCount = validateMibile(mobile.toString()) == null
+                          ? true
+                          : false;
+                    });
+                    print('获取验证码倒计时$changeCount');
                   },
                 ),
                 TextFormField(
@@ -248,13 +258,26 @@ class FormDemoState extends State<FormDemo> {
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('验证码'),
                     ),
-                    suffixIcon: InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Text('获取验证码'),
+                    suffixIcon: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: LoginFormCode(
+                        key: childKey,
+                        isChange: changeCount,
+                        countdown: 60,
+                        available: true,
+                        onTapCallback: (val) {
+                          print('父组件拿到子组件的方法$val');
+                          _getPhoneCode();
+                        },
                       ),
-                      onTap: _getPhoneCode,
                     ),
+                    //     InkWell(
+                    //   child: Container(
+                    //     padding: EdgeInsets.only(top: 15),
+                    //     child: Text('获取验证码'),
+                    //   ),
+                    //   onTap: _getPhoneCode,
+                    // ),
                     hintText: "请输入验证码",
                   ),
                   onSaved: (value) {
@@ -298,13 +321,14 @@ class FormDemoState extends State<FormDemo> {
 
   // 验证手机号码
   String validateMibile(String value) {
-    print('手机校验$value');
+    errorMobileText = null;
+    print('手机校验$value==$mobile');
     // 正则匹配手机号
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
     if (mobile.isEmpty) {
-      print('手机校验为空');
+      print('手机校验为空====$mobile');
       return '手机号码不能为空';
     } else {
       if (!exp.hasMatch(mobile)) {
@@ -322,6 +346,7 @@ class FormDemoState extends State<FormDemo> {
     autovalidateMobile = true;
     registerFormKey.currentState.save();
     if (mobile.isEmpty) {
+      print('查看进度$mobile');
       setState(() {
         errorMobileText = "手机号码不能为空";
       });
@@ -343,8 +368,6 @@ class FormDemoState extends State<FormDemo> {
         );
         print('----------------------$val');
       });
-    } else {
-      validateMibile(mobile.toString());
     }
   }
 }
