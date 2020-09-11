@@ -83,7 +83,7 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
       list.add(_buildRow(label));
     }
     list.insert(2, _selectAddress("所在地区:"));
-    list.insert(4, _checkBox());
+    // list.insert(4, _checkBox());
     // 确认按钮
     list.add(_buildSubmitBtn());
     return Form(
@@ -107,19 +107,6 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
       ),
       child: new Row(
         children: [
-          // new Container(
-          //   padding: EdgeInsets.all(15),
-          //   child: new Text(
-          //     '${item['label']}',
-          //     style: TextStyle(
-          //       decoration: TextDecoration.none,
-          //       color: Color(0xFF888888),
-          //       fontSize: 14,
-          //       fontWeight: FontWeight.bold,
-          //       //fontFamily: defaultFontFamily,
-          //     ),
-          //   ),
-          // ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(15),
@@ -161,24 +148,12 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                         ),
                       ),
                     ),
-
-                    // ),
-                    //  Text(
-                    //             '${item['label']}',
-                    //             style: TextStyle(
-                    //               decoration: TextDecoration.none,
-                    //               color: Color(0xFF888888),
-                    //               fontSize: 14,
-                    //               fontWeight: FontWeight.bold,
-                    //               //fontFamily: defaultFontFamily,
-                    //             ),
-                    //           ),
                   ),
                   // border: InputBorder.none,
                 ),
                 //controller: controller,
                 //maxLength: 30, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
-                maxLines: 1, //最大行数
+                maxLines: null, //最大行数
                 autocorrect: true, //是否自动更正
                 autofocus: false, //是否自动对焦
                 autovalidate: autoValidate,
@@ -223,19 +198,6 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
             ),
             // ),
           ),
-          // FlatButton(
-          //   onPressed: () {
-          //     setState(() {
-          //       params[item['value']] = null;
-          //     });
-          //     // LogUtils.d(sprintf("[%s]", [item['label']), "被点击了删除按钮!");
-          //   },
-          //   child: new Image.asset(
-          //     'images/clear.png',
-          //     width: 20.0,
-          //     height: 20.0,
-          //   ),
-          // )
         ],
       ),
     );
