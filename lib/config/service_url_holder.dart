@@ -46,7 +46,7 @@ class ServiceUrlMapper {
         '/os_kernel_userorgctr/app/user/verifyRegCheckCode', //登录校验验证码
     'checkAuditStatus':
         '/os_kernel_bid/app/suppliers/user/info', //查看返回的auditStatus的状态来判断跳转到哪个页面
-    'getCategory': '/os_kernel_bid/mall/category', //获取供应商类型
+    'getCategory': '/os_kernel_bid/mall/category/all', //获取供应商类型
 
     'quotationQueryPage':
         '/os_kernel_bid/mp/purchase/quotation/queryPage', //报价列表查询

@@ -21,25 +21,33 @@ class Authentication extends StatelessWidget {
       body: FutureBuilder(
           future: requestGet('checkAuditStatus'),
           builder: (context, snapshot) {
-            var data = snapshot.data;
-            print('响应数据====>${snapshot.data}');
-            if (snapshot.hasData) {
-              return Stack(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 50),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        _headerData(data['result']),
-                        AuthenticationForm(data['result']),
-                      ],
+            if (snapshot.connectionState == ConnectionState.done) {
+              var data = snapshot.data;
+              print('响应数据====>${snapshot.data}');
+              if (snapshot.hasData) {
+                return Stack(children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 50),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          _headerData(data['result']),
+                          AuthenticationForm(data['result']),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ]);
-            } else {
-              return Container(child: Text('暂无数据'));
+                ]);
+              } else {
+                return Container(child: Text('暂无数据'));
+              }
             }
+            return SizedBox(
+              width: 24.0,
+              height: 24.0,
+              child: Text('正在加载中。。。。。。'),
+              // child: CircularProgressIndicator(strokeWidth: 2.0),
+            );
           }),
     );
   }
@@ -202,10 +210,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     setState(() {
       data = widget.data;
       typeList = data['supplierTypeName'];
+      if (typeList != null) {
+        typeList = typeList.split('/');
+        setState(() {
+          categoryone = typeList[0];
+          categorytwo = typeList[1];
+          categorythree = typeList[2];
+        });
+      }
       // categoryone = typeList[0];
       // categorytwo = typeList[1];
       // categorythree = typeList[2];
-      categorythree = data['supplierTypeName'];
+      // categorythree = data['supplierTypeName'];
       supplierType = data['supplierType'];
       companyAddressName = data['companyDistrictName'];
       auditStatus = data['auditStatus'];
@@ -336,14 +352,14 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
-    if (typeList != null) {
-      typeList = typeList.split('/');
-      setState(() {
-        categoryone = typeList[0];
-        categorytwo = typeList[1];
-        categorythree = typeList[2];
-      });
-    }
+    // if (typeList != null) {
+    //   typeList = typeList.split('/');
+    //   setState(() {
+    //     categoryone = typeList[0];
+    //     categorytwo = typeList[1];
+    //     categorythree = typeList[2];
+    //   });
+    // }
 
     return Container(
       margin: EdgeInsets.only(bottom: 20),

@@ -240,6 +240,7 @@ class FormDemoState extends State<FormDemo> {
                   //   return null;
                   // },
                   onChanged: (v) {
+                    registerFormKey.currentState.save();
                     this.mobile = v;
                     setState(() {
                       changeCount = validateMibile(mobile.toString()) == null
