@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:bid/model/base/DataModel.dart';
+import 'package:bid/model/user_center/CertificationInfoModel.dart';
 import '../../common/constants.dart';
 import '../../routers/routers.dart';
 import '../../common/log_utils.dart';
+import 'package:bid/service/service_method.dart';
 import '../signup/signin.dart';
 
 // 快速生成  stlss
@@ -24,15 +27,45 @@ class PersonalCenter extends StatelessWidget {
       //   title: Text('会员中心'),
       //   centerTitle: true, //文字居中
       // ),
-      body: ListView(
-        children: <Widget>[
-          _topHeader(),
-          _orderTitle(),
-          // _orderType(),
-          _actionList(context, listTitles),
-          _logout(context),
-        ],
-      ),
+      body: FutureBuilder(
+          future: requestGet('getCertificationInfo'),
+          builder: (context, snapshot) {
+            //请求完成
+            if (snapshot.connectionState == ConnectionState.done) {
+              LogUtils.d('snapshot', snapshot);
+              LogUtils.d('snapshot.data', snapshot.data.toString());
+              //发生错误
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+
+              var data = snapshot.data['result'];
+
+              if (null != data) {
+                return ListView(
+                  children: <Widget>[
+                    _topHeader(data),
+                    _actionList(context, listTitles),
+                    _logout(context),
+                  ],
+                );
+              } else {
+                return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "查无数据!",
+                      style: TextStyle(color: Colors.grey),
+                    ));
+              }
+            }
+            // }
+            //请求未完成时弹出loading
+            return SizedBox(
+                width: 24.0,
+                height: 24.0,
+                child: CircularProgressIndicator(strokeWidth: 2.0));
+          }),
     );
   }
 
@@ -76,7 +109,7 @@ class PersonalCenter extends StatelessWidget {
   }
 
   // 头部区域
-  Widget _topHeader() {
+  Widget _topHeader(data) {
     return Container(
       width: ScreenUtil().setWidth(750),
       // height: ScreenUtil().setHeight(330),
@@ -109,13 +142,13 @@ class PersonalCenter extends StatelessWidget {
               ),
             ),
           ),
-          _headerRight(),
+          _headerRight(data),
         ],
       ),
     );
   }
 
-  Widget _headerRight() {
+  Widget _headerRight(data) {
     return Container(
       width: ScreenUtil().setWidth(500),
       padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -125,7 +158,7 @@ class PersonalCenter extends StatelessWidget {
             alignment: Alignment.centerLeft,
             // margin: EdgeInsets.only(top: 10),
             child: Text(
-              '俊翔音乐设备有限公司',
+              '${data['companyName']}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(36),
                 color: Colors.white,
@@ -137,7 +170,7 @@ class PersonalCenter extends StatelessWidget {
             margin: EdgeInsets.only(top: 10),
             alignment: Alignment.centerLeft,
             child: Text(
-              '编号 sdffsdf1234734',
+              '编号   ${data['companyNum']}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: Colors.white,
@@ -313,28 +346,6 @@ class PersonalCenter extends StatelessWidget {
             ],
           );
         });
-
-    // 苹果风格
-    // showCupertinoDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return CupertinoAlertDialog(
-    //         title: Text('提示'),
-    //         content: Text('确定要退出登录吗？'),
-    //         actions: <Widget>[
-    //           CupertinoDialogAction(
-    //             child: Text('取消'),
-    //             onPressed: () {},
-    //           ),
-    //           CupertinoDialogAction(
-    //             child: Text('确认'),
-    //             onPressed: () {
-    //               Application.router.navigateTo(context, '/sigin');
-    //             },
-    //           ),
-    //         ],
-    //       );
-    //     });
   }
 
   /////////////////////////INTERNAL PROCESS FUNCTION //////////////////////

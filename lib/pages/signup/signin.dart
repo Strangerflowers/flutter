@@ -677,6 +677,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
   _checkAuditStatus() async {
     await requestGet('checkAuditStatus').then((val) {
       print('---查看跳转页面------------->${val['result']['auditStatus']}');
+      // TODO :当审核还没有通过的时候一直停留在当前页面
       if (val['code'] == 0) {
         if (val['result']['auditStatus'] == 0) {
           Navigator.pop(context);
