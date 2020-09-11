@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sy_flutter_qiniu_storage/sy_flutter_qiniu_storage.dart';
 import 'package:bid/service/service_method.dart';
@@ -113,46 +114,54 @@ class _MyImageState extends State<MyImage> {
   Widget build(BuildContext context) {
     print('网络图片${url}');
     return Center(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
-              Text('营业执照')
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Container(
-                child: url == ''
-                    ? _image == null
-                        ? Text('')
-                        : Image.file(
-                            _image,
-                            width: 200,
-                            height: 100,
-                          )
-                    : Image.network(
-                        url,
-                        width: 200,
-                        height: 100,
-                      ),
-              ),
-              FloatingActionButton(
-                onPressed: () {
-                  _getUpdateToken();
-                  _onUpload();
-                  // _multiImage();
-                },
-                tooltip: 'Pick Image',
-                child: Icon(Icons.add_a_photo),
-              ),
-            ],
-          ),
-        ],
+      child: Container(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  '*',
+                  style: TextStyle(color: Colors.red),
+                ),
+                Text('营业执照')
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  child: url == ''
+                      ? _image == null
+                          ? Container(
+                              width: ScreenUtil().setWidth(100),
+                              height: ScreenUtil().setHeight(100),
+                              // padding: EdgeInsets.only(left: 20),
+                              child: Text(''),
+                            )
+                          : Image.file(
+                              _image,
+                              width: 200,
+                              height: 100,
+                            )
+                      : Image.network(
+                          url,
+                          width: 200,
+                          height: 100,
+                        ),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    _getUpdateToken();
+                    _onUpload();
+                    // _multiImage();
+                  },
+                  tooltip: 'Pick Image',
+                  child: Icon(Icons.add_a_photo),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

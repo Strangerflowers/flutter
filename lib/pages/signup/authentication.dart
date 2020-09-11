@@ -246,8 +246,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             _addressItem('详细地址'),
             _componyPhoneItem('公司电话'),
             _componyNumberItem('营业执照编号'),
-            MyImage(businessLicenseIssuedKey, data['businessLicenseIssuedUrl'],
-                (val) {
+            MyImage(
+                businessLicenseIssuedKey,
+                data['businessLicenseIssuedUrl'] == null
+                    ? ''
+                    : data['businessLicenseIssuedUrl'], (val) {
               setState(() {
                 businessLicenseIssuedKey = val;
                 print('获取上传图片的key值$businessLicenseIssuedKey');
@@ -333,7 +336,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
-    if (!typeList.isEmpty) {
+    if (typeList != null) {
       typeList = typeList.split('/');
       setState(() {
         categoryone = typeList[0];
