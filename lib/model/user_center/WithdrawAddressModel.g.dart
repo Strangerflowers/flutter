@@ -2,21 +2,25 @@
 
 part of 'WithdrawAddressModel.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
 WithdrawAddressModel _$WithdrawAddressModelFromJson(Map<String, dynamic> json) {
-  return WithdrawAddressModel()
-    ..id = json['id'] as num
-    ..userId = json['userId'] as String
-    ..receiverName = json['receiverName'] as String
-    ..mobile = json['mobile'] as String
-    ..areaCode = json['areaCode'] as String
-    ..address = json['address'] as String
-    ..defaultAddress = json['defaultAddress'] as num
-    ..status = json['status'] as num
-    ..createTime = json['createTime'] as String
-    ..createBy = json['createBy'] as String
-    ..updateTime = json['updateTime'] as String
-    ..updateBy = json['updateBy'] as String
-    ..delFlag = json['delFlag'] as num;
+  return WithdrawAddressModel(
+      id: json['id'] as num,
+      userId: json['userId'] as String,
+      receiverName: json['receiverName'] as String,
+      mobile: json['mobile'] as String,
+      areaCode: json['areaCode'] as String,
+      address: json['address'] as String,
+      defaultAddress: json['defaultAddress'] as num,
+      status: json['status'] as num,
+      createTime: json['createTime'] as String,
+      createBy: json['createBy'] as String,
+      updateTime: json['updateTime'] as String,
+      updateBy: json['updateBy'] as String,
+      delFlag: json['delFlag'] as num);
 }
 
 Map<String, dynamic> _$WithdrawAddressModelToJson(

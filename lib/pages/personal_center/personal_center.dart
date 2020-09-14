@@ -3,10 +3,12 @@ import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/provide/app_global/user_info.dart';
 import 'package:bid/routers/application.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:bid/model/base/DataModel.dart';
@@ -338,6 +340,8 @@ class PersonalCenter extends StatelessWidget {
                   final prefs = await SharedPreferences.getInstance();
                   final result = await prefs.clear();
                   if (result) {
+                    // 退出登录时，清除之前的登录缓存
+                    Provide.value<UserModel>(context).user = null;
                     Navigator.of(context).pop('cancel');
                     Application.router.navigateTo(context, '/sigin');
                   }

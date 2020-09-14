@@ -195,29 +195,35 @@ class _DemandContentState extends State<DemandContent> {
               if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               }
-              print(
-                  '99999111111${snapshot.hasData}===${hasToken != null}==${widget.inputText}');
-              var data = snapshot.data;
-              if (null != data && data['success'] == true) {
-                return Container(
-                  child: _demandListView(),
-                );
-              } else {
-                if (hasToken != '') {
-                  return Container(
-                    child: Text('暂无数据'),
-                  );
-                } else {
-                  return _logOut(context);
-                }
-              }
+              return Container(
+                child: _demandListView(),
+              );
+              // print(
+              //     '99999111111${snapshot.toString()}===${hasToken != null}==${widget.inputText}');
+              // var data = snapshot.data;
+              // if (snapshot != null) {
+              //   return Container(
+              //     child: _demandListView(),
+              //   );
+              // } else {
+              //   if (hasToken != '') {
+              //     return Container(
+              //       child: Text('暂无数据'),
+              //     );
+              //   } else {
+              //     return _logOut(context);
+              //   }
+              // }
             }
-
-            return SizedBox(
-              width: 24.0,
-              height: 24.0,
-              child: Text('正在加载中。。。。。。'),
-              // child: CircularProgressIndicator(strokeWidth: 2.0),
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  value: .7,
+                ),
+              ),
             );
           },
         ),
@@ -273,18 +279,19 @@ class _DemandContentState extends State<DemandContent> {
       "limit": 10,
       "order": "string",
       "page": 1,
-      "params": {"name": "", "productDescript": ""}
+      "params": {
+        "name": "",
+      }
     };
     await request('listDemand', formData: formData).then((val) {
-      print('采购需求=====$val');
       // var data = json.decode(val.toString());
       // print('采购需求转换数据json.decode$data');
       Purchasing goodsList = Purchasing.fromJson(val);
-      print('采购需求$val');
       Provide.value<PurchasingListProvide>(context)
           .getGoodsList(goodsList.result.list);
 
-      return Provide.value<PurchasingListProvide>(context).goodsList;
+      // return Provide.value<PurchasingListProvide>(context).goodsList;
+      return "加载完成";
     });
   }
 

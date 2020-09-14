@@ -21,9 +21,13 @@ class DemandDetails extends StatelessWidget {
       body: FutureBuilder(
         future: _getBackDetailInfo(context),
         builder: (context, snapshot) {
-          print(
-              'snapshot.hasData=====>${snapshot.hasData}1111${snapshot.data}');
-          if (snapshot.data != null) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            print(
+                'snapshot.hasData====================================>${Provide.value<DemandDetailProvide>(context).goodsList}');
+            // if (snapshot.data != null) {
             return Stack(
               children: <Widget>[
                 SingleChildScrollView(
@@ -49,9 +53,20 @@ class DemandDetails extends StatelessWidget {
                 )
               ],
             );
-          } else {
-            return Text('暂无数据');
+            // } else {
+            //   return Text('暂无数据');
+            // }
           }
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+                value: .7,
+              ),
+            ),
+          );
         },
       ),
     );
@@ -61,6 +76,7 @@ class DemandDetails extends StatelessWidget {
     await Provide.value<DemandDetailProvide>(context)
         .getDemandDetailData(demandId);
     return Provide.value<DemandDetailProvide>(context).goodsList;
+    // return "加载完成";
   }
 }
 
@@ -89,7 +105,7 @@ class ExpansionTileDome extends StatelessWidget {
         );
       } else {
         return Container(
-          child: Text('正在加载...'),
+          child: Text(''),
         );
       }
     });
@@ -158,7 +174,7 @@ class ProductInformation extends StatelessWidget {
           ),
         );
       } else {
-        return Container(child: Text('加载中......'));
+        return Container(child: Text('暂无数据'));
       }
     });
   }

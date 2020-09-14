@@ -6,14 +6,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:bid/common/xyz_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../images.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../service/service_method.dart';
 
+// class Authentication extends StatefulWidget {
+//   @override
+//   _AuthenticationState createState() => _AuthenticationState();
+// }
+
+// class _AuthenticationState extends State<Authentication> {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Container();
+// //   }
+// // }
+
 class Authentication extends StatelessWidget {
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return Scaffold(
       appBar: AppBar(
         title: Text("资料认证"),
@@ -250,6 +269,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   String username, password;
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return Form(
       key: authFormKey,
       child: Container(
@@ -988,6 +1008,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
+          var prefs = await SharedPreferences.getInstance();
           authFormKey.currentState.save();
           if (supplierType.isEmpty) {
             // || companyCode.isEmpty
@@ -1012,24 +1033,23 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             "contactMobile": contactMobile
           };
 
-          print('fdffdfd=====>${formData}');
+          // print('fdffdfd=====>${formData}');
           await request('suppliersUpdate', formData: formData).then((val) {
-            print('更新企业认证$val;');
             if (val['code'] == 0) {
-              Application.router.navigateTo(context, "/indexPage");
+              prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
+              // setState(() {});
+              Toast.toast(context, msg: "更新企业认证成功！请等待审核通过");
+              if (val['result']['auditStatus'] == 0) {
+                Navigator.pop(context);
+                Application.router.navigateTo(context, "/indexPage");
+              } else {
+                Navigator.pop(context);
+                Application.router.navigateTo(context, "/certificateInfo");
+              }
+            } else {
+              Toast.toast(context, msg: val['message']);
             }
           });
-          // if (val['code'] == 0) {
-          //   // res = _func(val['result']);
-          //   provinceList = val['result'];
-          //   cityList = provinceList[0]['cityList'];
-          //   streetList = cityList[0]['districtList'];
-          // } else {
-          //   // Application.router.navigateTo(context, "/authentication");
-          // }
-          // suppliersUpdate
-          // _dispatchAdd(context);
-          // Application.router.navigateTo(context, "/demanddetail?id=1");
         },
       ),
     );

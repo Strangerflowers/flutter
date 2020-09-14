@@ -1,5 +1,6 @@
 import 'package:bid/common/count_down.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import './register.dart';
@@ -40,6 +41,7 @@ class _FormTestRouteState extends State<FormTestRoute> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '注册页面',
@@ -200,17 +202,14 @@ String validatePassword(value) {
 
 class _FormPageState extends State<FormPage> {
   String token;
+  var prefs;
   void initState() {
-    // setUserData();
+    setUserData();
     super.initState();
   }
 
-  setUserData(val) async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setString('token', val['result']['token']);
-      prefs.setString('userId', val['result']['userId']);
-    });
+  setUserData() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -293,6 +292,7 @@ class _FormPageState extends State<FormPage> {
   _checkAuditStatus() async {
     await requestGet('checkAuditStatus').then((val) {
       if (val['code'] == 0) {
+        prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
         if (val['result']['auditStatus'] == 0) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/indexPage");
@@ -309,36 +309,33 @@ class _FormPageState extends State<FormPage> {
     });
   }
 
-  void _choiceAction() {
+  void _choiceAction() async {
     if ((_formKey.currentState as FormState).validate()) {
       var data = {
         'loginAcc': _unameController.text.toString(),
         'pwd': _pwdController.text.toString()
       };
-      getHttp(data).then((val) async {
-        final prefs = await SharedPreferences.getInstance();
+      request('login', formData: data).then((val) {
+        print('账号密码响应数据$val');
         if (val['code'] == 0) {
-          getToken(val['result']).then((value) {
-            print("返回的TGT===>${value['result']['token']}");
+          var tgt = {
+            "tgt": val['result'],
+            "serviceUrl": "https://www.baidu.com",
+            "setExpirationSeconds": "518400"
+          };
+          request('getToken', formData: tgt).then((value) {
             if (value['code'] == 0) {
               setState(() {
                 prefs.setString('token', value['result']['token']);
                 prefs.setString('userId', value['result']['userId']);
               });
-              print('持久胡========》${prefs.getString('token')}');
               _checkAuditStatus();
-              // Application.router.navigateTo(context, "/indexPage");
             } else {
               Toast.toast(
                 context,
                 msg: value['message'],
               );
-              // showDialog(
-              //   context: context,
-              //   builder: (context) => AlertDialog(
-              //     title: Text("${val['message']}"),
-              //   ),
-              // );
+              // print('手机登录不成');
             }
           });
         } else {
@@ -346,14 +343,42 @@ class _FormPageState extends State<FormPage> {
             context,
             msg: val['message'],
           );
-          // showDialog(
-          //   context: context,
-          //   builder: (context) => AlertDialog(
-          //     title: Text("${val['message']}"),
-          //   ),
-          // );
         }
       });
+      // getHttp(data).then((val) async {
+      //   final prefs = await SharedPreferences.getInstance();
+      //   if (val['code'] == 0) {
+      //     getToken(val['result']).then((value) {
+      //       print("返回的TGT===>${value['result']['token']}");
+      //       if (value['code'] == 0) {
+      //         setState(() {
+      //           prefs.setString('token', value['result']['token']);
+      //           prefs.setString('userId', value['result']['userId']);
+      //         });
+      //         print('持久胡========》${prefs.getString('token')}');
+      //         _checkAuditStatus();
+      //         // Application.router.navigateTo(context, "/indexPage");
+      //       } else {
+      //         Toast.toast(
+      //           context,
+      //           msg: value['message'],
+      //         );
+
+      //       }
+      //     });
+      //   } else {
+      //     Toast.toast(
+      //       context,
+      //       msg: val['message'],
+      //     );
+      //     // showDialog(
+      //     //   context: context,
+      //     //   builder: (context) => AlertDialog(
+      //     //     title: Text("${val['message']}"),
+      //     //   ),
+      //     // );
+      //   }
+      // });
     } else {
       setState(() {
         _accountAutoFocus = true;
@@ -419,12 +444,15 @@ class _MobileFormPageState extends State<MobileFormPage> {
   String loginAcc, captcha;
   // final sendCodeFormKey = GlobalKey<FormState>();
   final _mobileformKey = GlobalKey<FormState>();
-  setUserData(val) async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setString('token', val['result']['token']);
-      prefs.setString('userId', val['result']['userId']);
-    });
+  var prefs;
+  @override
+  void initState() {
+    setUserData();
+    super.initState();
+  }
+
+  setUserData() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -633,12 +661,11 @@ class _MobileFormPageState extends State<MobileFormPage> {
     autovalidateCode = true;
     autovalidateMobile = true;
     _mobileformKey.currentState.save();
-    final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       isMobilesignin = true;
     });
-    // final prefs = await SharedPreferences.getInstance();
-    // final token = prefs.getString('token') ?? '';
+
     if ((_mobileformKey.currentState as FormState).validate()) {
       var data = {'loginAcc': loginAcc, 'captcha': captcha};
       await request('login', formData: data).then((val) {
@@ -679,6 +706,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
       print('---查看跳转页面------------->${val['result']['auditStatus']}');
       // TODO :当审核还没有通过的时候一直停留在当前页面
       if (val['code'] == 0) {
+        prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
         if (val['result']['auditStatus'] == 0) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/indexPage");

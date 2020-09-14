@@ -87,7 +87,12 @@ class CertificationInfo extends StatelessWidget {
         BaseResponseModel<CertificationInfoModel> baseResponseModel =
             BaseResponseModel.fromJson(
                 data, (json) => CertificationInfoModel.fromJson(json));
-        LogUtils.d('============>[baseResponseModel]', baseResponseModel);
+        LogUtils.d('============>[baseResponseModel]',
+            baseResponseModel.result.auditStatus);
+        if (baseResponseModel.result.auditStatus == 0) {
+          Navigator.pop(context);
+          Application.router.navigateTo(context, "/indexPage");
+        }
         CertificationInfoModel certificationInfoModel =
             baseResponseModel.result;
         if (null != certificationInfoModel) {
@@ -159,11 +164,13 @@ class CertificationInfo extends StatelessWidget {
             width: 150,
             height: 150,
             padding: const EdgeInsets.all(16.0),
-            child: Image.network(
-              dataModel.value,
-              width: 150,
-              height: 150,
-            ),
+            child: dataModel.value == null
+                ? Text('')
+                : Image.network(
+                    dataModel.value,
+                    width: 150,
+                    height: 150,
+                  ),
           ),
         ]),
       );
