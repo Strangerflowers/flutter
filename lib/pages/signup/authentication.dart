@@ -12,23 +12,32 @@ import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../service/service_method.dart';
 
-// class Authentication extends StatefulWidget {
+class Authentication extends StatefulWidget {
+  @override
+  _AuthenticationState createState() => _AuthenticationState();
+}
+
+class _AuthenticationState extends State<Authentication> {
+  var _futureBuilderFuture;
+  // final AsyncMemoizer _memoizer = AsyncMemoizer();
 //   @override
-//   _AuthenticationState createState() => _AuthenticationState();
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
 // }
 
-// class _AuthenticationState extends State<Authentication> {
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Container();
-// //   }
-// // }
+// class Authentication extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+    _futureBuilderFuture = _gerData();
+  }
 
-class Authentication extends StatelessWidget {
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  Future _gerData() async {
+    var response = await requestGet('checkAuditStatus');
+
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +47,7 @@ class Authentication extends StatelessWidget {
         title: Text("资料认证"),
       ),
       body: FutureBuilder(
-          future: requestGet('checkAuditStatus'),
+          future: _futureBuilderFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var data = snapshot.data;
@@ -226,39 +235,39 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   // 存放供应商类型字段
   var typeList;
   void initState() {
-    setState(() {
-      data = widget.data;
-      typeList = data['supplierTypeName'];
-      if (typeList != null) {
-        typeList = typeList.split('/');
-        setState(() {
-          categoryone = typeList[0];
-          categorytwo = typeList[1];
-          categorythree = typeList[2];
-        });
-      }
-      // categoryone = typeList[0];
-      // categorytwo = typeList[1];
-      // categorythree = typeList[2];
-      // categorythree = data['supplierTypeName'];
-      supplierType = data['supplierType'];
-      companyAddressName = data['companyDistrictName'];
-      auditStatus = data['auditStatus'];
-      supplierType = data['supplierType'];
-      companyCode = data['companyCode'];
-      companyDetailAddr = data['companyDetailAddr']; //详细地址
-      companyMobile = data['companyMobile']; //公司电话
-      businessLicenseIssuedRegistrationMark =
-          data['businessLicenseIssuedRegistrationMark']; //营业执照编号
-      businessLicenseIssuedKey = data['businessLicenseIssuedKey']; //图片key
-      businessScope = data['businessScope']; //经营范围
-      bank = data['bank']; //银行
-      account = data['account']; //银行账号
-      companyTelephone = data['companyTelephone']; //公司固定电话
-      socialCreditCode = data['socialCreditCode']; //社会信用代码
-      contactName = data['contactName']; //联系人
-      contactMobile = data['contactMobile']; //联系号码
-    });
+    // setState(() {
+    data = widget.data;
+    typeList = data['supplierTypeName'];
+    if (typeList != null) {
+      typeList = typeList.split('/');
+      // setState(() {
+      categoryone = typeList[0];
+      categorytwo = typeList[1];
+      categorythree = typeList[2];
+      // });
+    }
+    // categoryone = typeList[0];
+    // categorytwo = typeList[1];
+    // categorythree = typeList[2];
+    // categorythree = data['supplierTypeName'];
+    supplierType = data['supplierType'];
+    companyAddressName = data['companyDistrictName'];
+    auditStatus = data['auditStatus'];
+    supplierType = data['supplierType'];
+    companyCode = data['companyCode'];
+    companyDetailAddr = data['companyDetailAddr']; //详细地址
+    companyMobile = data['companyMobile']; //公司电话
+    businessLicenseIssuedRegistrationMark =
+        data['businessLicenseIssuedRegistrationMark']; //营业执照编号
+    businessLicenseIssuedKey = data['businessLicenseIssuedKey']; //图片key
+    businessScope = data['businessScope']; //经营范围
+    bank = data['bank']; //银行
+    account = data['account']; //银行账号
+    companyTelephone = data['companyTelephone']; //公司固定电话
+    socialCreditCode = data['socialCreditCode']; //社会信用代码
+    contactName = data['contactName']; //联系人
+    contactMobile = data['contactMobile']; //联系号码
+    // });
     _getCategory();
     // _getAddress();
     super.initState();
@@ -406,7 +415,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                     context: context,
                     onChnage: (int index, String id, String name) {
                       if (index == 0) {
-                        this.setState(() {
+                        setState(() {
                           res.forEach((ele) {
                             if (ele['id'] == id) {
                               return categorytwoList = ele['subCategorys'];
@@ -428,14 +437,14 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                           });
                           break;
                         case 1:
-                          this.setState(() {
+                          setState(() {
                             categorytwo = name;
                           });
                           break;
                         case 2:
-                          this.setState(() {
+                          setState(() {
                             categorythree = name;
-                            this.supplierType = id;
+                            supplierType = id;
                           });
                           break;
                       }
@@ -552,23 +561,28 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             autofocus: false,
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text:
-                    '${this.companyDetailAddr == null ? "" : this.companyDetailAddr}',
+                text: '${companyDetailAddr == null ? "" : companyDetailAddr}',
+                // 保持光标在最后
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${companyDetailAddr}'.length),
+                ),
               ),
             ),
             // controller: this.companyDetailAddr,
-            keyboardType: TextInputType.multiline,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.multiline,
+            maxLines: 1, //不限制行数
             decoration: InputDecoration(
               // labelText: "用户名",
               hintText: "请输入",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.companyDetailAddr = value;
+              companyDetailAddr = value;
             },
             onChanged: (value) {
-              this.companyDetailAddr = value;
+              companyDetailAddr = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -600,18 +614,26 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.companyMobile == null ? "" : this.companyMobile}',
+                text: '${companyMobile == null ? "" : companyMobile}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${companyMobile}'.length),
+                ),
               ),
             ),
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             decoration: InputDecoration(
               hintText: "请输入",
             ),
             onSaved: (value) {
-              this.companyMobile = value;
+              companyMobile = value;
+            },
+            onChanged: (value) {
+              companyMobile = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -643,12 +665,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
                 text:
-                    '${this.businessLicenseIssuedRegistrationMark == null ? "" : this.businessLicenseIssuedRegistrationMark}',
+                    '${businessLicenseIssuedRegistrationMark == null ? "" : businessLicenseIssuedRegistrationMark}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset:
+                          '${businessLicenseIssuedRegistrationMark}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -657,10 +685,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.businessLicenseIssuedRegistrationMark = value;
+              businessLicenseIssuedRegistrationMark = value;
             },
             onChanged: (value) {
-              this.businessLicenseIssuedRegistrationMark = value;
+              businessLicenseIssuedRegistrationMark = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -692,11 +720,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.businessScope == null ? "" : this.businessScope}',
+                text: '${businessScope == null ? "" : businessScope}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${businessScope}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -705,7 +738,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.businessScope = value;
+              businessScope = value;
+            },
+            onChanged: (value) {
+              businessScope = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -737,11 +773,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.bank == null ? "" : this.bank}',
+                text: '${bank == null ? "" : bank}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${bank}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -750,7 +791,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.bank = value;
+              bank = value;
+            },
+            onChanged: (value) {
+              bank = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -782,11 +826,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.account == null ? "" : this.account}',
+                text: '${account == null ? "" : account}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${account}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -795,7 +844,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.account = value;
+              account = value;
+            },
+            onChanged: (value) {
+              account = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -827,12 +879,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text:
-                    '${this.companyTelephone == null ? "" : this.companyTelephone}',
+                text: '${companyTelephone == null ? "" : companyTelephone}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${companyTelephone}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -841,7 +897,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.companyTelephone = value;
+              companyTelephone = value;
+            },
+            onChanged: (value) {
+              companyTelephone = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -873,12 +932,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text:
-                    '${this.socialCreditCode == null ? "" : this.socialCreditCode}',
+                text: '${socialCreditCode == null ? "" : socialCreditCode}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${socialCreditCode}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -887,7 +950,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.socialCreditCode = value;
+              socialCreditCode = value;
+            },
+            onChanged: (value) {
+              socialCreditCode = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -919,11 +985,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.contactName == null ? "" : this.contactName}',
+                text: '${contactName == null ? "" : contactName}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${contactName}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -932,7 +1003,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.contactName = value;
+              contactName = value;
+            },
+            onChanged: (value) {
+              contactName = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -964,11 +1038,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           TextFormField(
             autofocus: false,
             // keyboardType: TextInputType.phone,
-            keyboardType: TextInputType.phone,
-            maxLines: null, //不限制行数
+            // keyboardType: TextInputType.phone,
+            maxLines: 1, //不限制行数
             controller: TextEditingController.fromValue(
               TextEditingValue(
-                text: '${this.contactMobile == null ? "" : this.contactMobile}',
+                text: '${contactMobile == null ? "" : contactMobile}',
+                selection: TextSelection.fromPosition(
+                  TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: '${contactMobile}'.length),
+                ),
               ),
             ),
             decoration: InputDecoration(
@@ -977,7 +1056,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
-              this.contactMobile = value;
+              contactMobile = value;
+            },
+            onChanged: (value) {
+              contactMobile = value;
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -1033,7 +1115,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             "contactMobile": contactMobile
           };
 
-          // print('fdffdfd=====>${formData}');
+          print(
+              'fdff-----------------------------------------------------------------------------------------------------------dfd=====>${formData}');
           await request('suppliersUpdate', formData: formData).then((val) {
             if (val['code'] == 0) {
               prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
