@@ -70,11 +70,15 @@ class _AuthenticationState extends State<Authentication> {
                 return Container(child: Text('暂无数据'));
               }
             }
-            return SizedBox(
-              width: 24.0,
-              height: 24.0,
-              child: Text('正在加载中。。。。。。'),
-              // child: CircularProgressIndicator(strokeWidth: 2.0),
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  value: .7,
+                ),
+              ),
             );
           }),
     );
