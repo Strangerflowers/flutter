@@ -1020,7 +1020,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             validator: (value) {
               if (value.isEmpty) {
                 return "不能为空";
-              } else if (value.length < 10) {
+              } else if (value.length > 10) {
                 return "长度不能超过10个";
               }
               return null;
@@ -1108,47 +1108,49 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
           authFormKey.currentState.save();
-          if (supplierType.isEmpty) {
-            // || companyCode.isEmpty
-            Toast.toast(context, msg: '供应商类型不能为空');
-            return;
-          }
-          var formData = {
-            "auditStatus": 1,
-            "supplierType": supplierType,
-            "companyCode": companyCode,
-            "companyDetailAddr": companyDetailAddr,
-            "companyMobile": companyMobile,
-            "businessLicenseIssuedRegistrationMark":
-                businessLicenseIssuedRegistrationMark,
-            "businessLicenseIssuedKey": businessLicenseIssuedKey,
-            "businessScope": businessScope,
-            "bank": bank,
-            "account": account,
-            "companyTelephone": companyTelephone,
-            "socialCreditCode": socialCreditCode,
-            "contactName": contactName,
-            "contactMobile": contactMobile
-          };
-
-          print(
-              'fdff-----------------------------------------------------------------------------------------------------------dfd=====>${formData}');
-          await request('suppliersUpdate', formData: formData).then((val) {
-            if (val['code'] == 0) {
-              prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
-              // setState(() {});
-              Toast.toast(context, msg: "更新企业认证成功！请等待审核通过");
-              if (val['result']['auditStatus'] == 0) {
-                Navigator.pop(context);
-                Application.router.navigateTo(context, "/indexPage");
-              } else {
-                Navigator.pop(context);
-                Application.router.navigateTo(context, "/certificateInfo");
-              }
-            } else {
-              Toast.toast(context, msg: val['message']);
+          if ((authFormKey.currentState as FormState).validate()) {
+            if (supplierType.isEmpty) {
+              // || companyCode.isEmpty
+              Toast.toast(context, msg: '供应商类型不能为空');
+              return;
             }
-          });
+            var formData = {
+              "auditStatus": 1,
+              "supplierType": supplierType,
+              "companyCode": companyCode,
+              "companyDetailAddr": companyDetailAddr,
+              "companyMobile": companyMobile,
+              "businessLicenseIssuedRegistrationMark":
+                  businessLicenseIssuedRegistrationMark,
+              "businessLicenseIssuedKey": businessLicenseIssuedKey,
+              "businessScope": businessScope,
+              "bank": bank,
+              "account": account,
+              "companyTelephone": companyTelephone,
+              "socialCreditCode": socialCreditCode,
+              "contactName": contactName,
+              "contactMobile": contactMobile
+            };
+
+            print(
+                'fdff-----------------------------------------------------------------------------------------------------------dfd=====>${formData}');
+            await request('suppliersUpdate', formData: formData).then((val) {
+              if (val['code'] == 0) {
+                prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
+                // setState(() {});
+                Toast.toast(context, msg: "更新企业认证成功！请等待审核通过");
+                if (val['result']['auditStatus'] == 0) {
+                  Navigator.pop(context);
+                  Application.router.navigateTo(context, "/indexPage");
+                } else {
+                  Navigator.pop(context);
+                  Application.router.navigateTo(context, "/certificateInfo");
+                }
+              } else {
+                Toast.toast(context, msg: val['message']);
+              }
+            });
+          }
         },
       ),
     );
