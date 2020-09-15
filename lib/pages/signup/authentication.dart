@@ -19,14 +19,6 @@ class Authentication extends StatefulWidget {
 
 class _AuthenticationState extends State<Authentication> {
   var _futureBuilderFuture;
-  // final AsyncMemoizer _memoizer = AsyncMemoizer();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-
-// class Authentication extends StatelessWidget {
   @override
   void initState() {
     super.initState();
@@ -285,6 +277,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     ScreenUtil.init(context, width: 750, height: 1334);
     return Form(
       key: authFormKey,
+      autovalidate: true,
       child: Container(
         color: Colors.white,
         padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
@@ -385,15 +378,6 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   // 下拉选择供应商类型
   Widget _selectItem(title, data) {
-    // if (typeList != null) {
-    //   typeList = typeList.split('/');
-    //   setState(() {
-    //     categoryone = typeList[0];
-    //     categorytwo = typeList[1];
-    //     categorythree = typeList[2];
-    //   });
-    // }
-
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -563,6 +547,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             controller: TextEditingController.fromValue(
               TextEditingValue(
                 text: '${companyDetailAddr == null ? "" : companyDetailAddr}',
@@ -574,9 +559,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 ),
               ),
             ),
-            // controller: this.companyDetailAddr,
-            // keyboardType: TextInputType.multiline,
-            maxLines: 1, //不限制行数
+            maxLines: null, //不限制行数
             decoration: InputDecoration(
               // labelText: "用户名",
               hintText: "请输入",
@@ -591,6 +574,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             validator: (value) {
               if (value.isEmpty) {
                 return "请输入详细地址";
+              } else if (value.length > 50) {
+                return "长度不能超过50个";
               }
               return null;
             },
@@ -627,6 +612,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -640,8 +626,13 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyMobile = value;
             },
             validator: (value) {
+              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
+              // RegExp exp = RegExp(r'^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$');
+
               if (value.isEmpty) {
                 return "请输入";
+              } else if (!exp.hasMatch(value)) {
+                return "号码格式不对";
               }
               return null;
             },
@@ -668,6 +659,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -723,6 +715,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -750,6 +743,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             validator: (value) {
               if (value.isEmpty) {
                 return "请输入";
+              } else if (value.length > 200) {
+                return "长度不能超过200个字符";
               }
               return null;
             },
@@ -767,15 +762,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
+              // Text(
+              //   '*',
+              //   style: TextStyle(color: Colors.red),
+              // ),
               Text(title)
             ],
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -801,8 +797,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               bank = value;
             },
             validator: (value) {
-              if (value.isEmpty) {
-                return "请输入";
+              if (value.length > 50) {
+                return "长度不能超过50个";
               }
               return null;
             },
@@ -829,6 +825,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -882,6 +879,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -907,8 +905,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyTelephone = value;
             },
             validator: (value) {
-              if (value.isEmpty) {
-                return "请输入";
+              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
+              if (!exp.hasMatch(value)) {
+                return "格式错误";
               }
               return null;
             },
@@ -935,6 +934,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -960,8 +960,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               socialCreditCode = value;
             },
             validator: (value) {
+              RegExp exp =
+                  RegExp(r'^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$');
               if (value.isEmpty) {
                 return "请输入";
+              } else if (!exp.hasMatch(value)) {
+                return "格式错误";
               }
               return null;
             },
@@ -988,6 +992,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -1014,7 +1019,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             },
             validator: (value) {
               if (value.isEmpty) {
-                return "请输入";
+                return "不能为空";
+              } else if (value.length < 10) {
+                return "长度不能超过10个";
               }
               return null;
             },
@@ -1041,6 +1048,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
+            autovalidate: true,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -1066,8 +1074,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               contactMobile = value;
             },
             validator: (value) {
+              RegExp exp = RegExp(
+                  r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
               if (value.isEmpty) {
                 return "请输入";
+              } else if (!exp.hasMatch(value)) {
+                return "手机号码错误";
               }
               return null;
             },
