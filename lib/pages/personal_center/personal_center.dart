@@ -343,6 +343,7 @@ class PersonalCenter extends StatelessWidget {
                     // 退出登录时，清除之前的登录缓存
                     Provide.value<UserModel>(context).user = null;
                     Navigator.of(context).pop('cancel');
+                    Navigator.pop(context);
                     Application.router.navigateTo(context, '/sigin');
                   }
                 },

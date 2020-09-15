@@ -60,7 +60,7 @@ class _FormTestRouteState extends State<FormTestRoute> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context); //销毁当前页面
+                      // Navigator.pop(context); //销毁当前页面
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -257,12 +257,28 @@ class _FormPageState extends State<FormPage> {
                     //校验密码
                     validator: validatePassword,
                   ),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    alignment: Alignment.bottomRight,
+                    child: InkWell(
+                      onTap: () {
+                        Application.router
+                            .navigateTo(context, "/modifyPasswordByCode");
+                      },
+                      child: Text(
+                        '忘记密码',
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                            color: Color(0xFF649FEA)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
             // 登录按钮
             Padding(
-              padding: const EdgeInsets.only(top: 28.0),
+              padding: const EdgeInsets.only(top: 20.0),
               // width:200.0,
               child: Row(
                 children: <Widget>[
@@ -573,12 +589,28 @@ class _MobileFormPageState extends State<MobileFormPage> {
                   },
                   onChanged: (value) {},
                 ),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      Application.router
+                          .navigateTo(context, "/modifyPasswordByCode");
+                    },
+                    child: Text(
+                      '忘记密码',
+                      style: TextStyle(
+                          fontSize: ScreenUtil().setSp(30),
+                          color: Color(0xFF649FEA)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           // 登录按钮
           Padding(
-            padding: const EdgeInsets.only(top: 28.0),
+            padding: const EdgeInsets.only(top: 20.0),
             // width:200.0,
             child: Row(
               children: <Widget>[

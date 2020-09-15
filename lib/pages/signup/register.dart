@@ -11,17 +11,14 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: '注册页面',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("注册新账号"),
-        ),
-        body: SingleChildScrollView(
-          child: HomeContent(),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("注册新账号"),
       ),
+      body: SingleChildScrollView(
+        child: HomeContent(),
+      ),
+      // ),
     );
   }
 }
