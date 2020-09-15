@@ -332,7 +332,14 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10),
-            child: Image.asset('images/icon.png'),
+            child: subItem.mainKey == null
+                ? Image.asset('images/icon.png')
+                : Image.network(
+                    subItem.mainKey,
+                    fit: BoxFit.cover,
+                    width: ScreenUtil().setWidth(150),
+                    height: ScreenUtil().setHeight(150),
+                  ),
           ),
           Expanded(
             child: _right(subItem),
