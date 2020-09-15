@@ -18,35 +18,36 @@ class ChoiceBottom extends StatelessWidget {
         width: ScreenUtil().setWidth(750),
         child: Row(
           children: <Widget>[
-            Container(
-              child: Row(
-                children: <Widget>[
-                  RoundCheckBox(
-                    value: Provide.value<DemandDetailProvide>(context)
-                        .selectAllFlag,
-                    onChanged: (value) {
-                      this.flag = !this.flag;
-                      Provide.value<DemandDetailProvide>(context)
-                          .selectAll(flag);
-                    },
-                  ),
-                  Text(
-                      '全选${Provide.value<DemandDetailProvide>(context).selectAllFlag}')
-                ],
-              ),
-            ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(right: 20),
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '已选1种12件',
-                  style: TextStyle(
-                    color: Colors.black26,
-                  ),
+                child: Row(
+                  children: <Widget>[
+                    RoundCheckBox(
+                      value: Provide.value<DemandDetailProvide>(context)
+                          .selectAllFlag,
+                      onChanged: (value) {
+                        this.flag = !this.flag;
+                        Provide.value<DemandDetailProvide>(context)
+                            .selectAll(flag);
+                      },
+                    ),
+                    Text('全选')
+                  ],
                 ),
               ),
             ),
+            // Expanded(
+            //   child: Container(
+            //     padding: EdgeInsets.only(right: 20),
+            //     alignment: Alignment.centerRight,
+            //     child: Text(
+            //       '已选1种12件',
+            //       style: TextStyle(
+            //         color: Colors.black26,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             FlatButton(
               //自定义按钮颜色
               color: Color(0xFF2A83FF),
