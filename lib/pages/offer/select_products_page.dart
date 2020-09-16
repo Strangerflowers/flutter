@@ -25,54 +25,69 @@ class SelectProductsPage extends StatelessWidget {
       body: FutureBuilder(
         future: _getBackDetailInfo(context),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Stack(
-              children: <Widget>[
-                SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 80),
-                    constraints: BoxConstraints(
-                      // minWidth: 180,
-                      minHeight: MediaQuery.of(context).size.height - 126,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.only(
-                                  left: 20, top: 20, bottom: 20),
-                              alignment: Alignment.centerLeft,
-                              child: InkWell(
-                                child: Text('请选择报价产品:'),
-                                onTap: () {
-                                  Application.router.navigateTo(
-                                      context, "/addproduct?id='1'");
-                                },
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            if (snapshot.hasData) {
+              return Stack(
+                children: <Widget>[
+                  SingleChildScrollView(
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 80),
+                      constraints: BoxConstraints(
+                        // minWidth: 180,
+                        minHeight: MediaQuery.of(context).size.height - 126,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                color: Colors.white,
+                                padding: EdgeInsets.only(
+                                    left: 20, top: 20, bottom: 20),
+                                alignment: Alignment.centerLeft,
+                                child: InkWell(
+                                  child: Text('请选择报价产品:'),
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                        context, "/addproduct?id='1'");
+                                  },
+                                ),
                               ),
-                            ),
-                            SelectProductsBody(),
-                          ],
-                        ),
-                      ],
+                              SelectProductsBody(),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: -5,
-                  left: 0,
-                  right: 0,
-                  child: SelectProductsBottom(id),
-                )
-              ],
-            );
-          } else {
-            return Text('加载中......');
+                  Positioned(
+                    bottom: -5,
+                    left: 0,
+                    right: 0,
+                    child: SelectProductsBottom(id),
+                  )
+                ],
+              );
+            } else {
+              return Text('加载中......');
+            }
           }
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+                value: .7,
+              ),
+            ),
+          );
         },
       ),
     );
