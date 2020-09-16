@@ -47,9 +47,11 @@ Future<void> mainCommon(String env) async {
   await ConfigReader.initialize(env);
   // 初始化api接口地址定义
   ServiceUrlHolder.initialize();
-  Global.init();
   bool success = await SpUtil.getInstance();
-  print('初始化持久哈$success');
+  bool axio = await Git.checkAuditStatus();
+  Global.init();
+
+  print('初始化持久化$success========$axio');
   // 初始化代理配置监听
   Packetcapture.initUniLinks(callBack: (host, port) {
     Network.setHttpProxy(host, port);
