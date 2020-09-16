@@ -10,6 +10,7 @@ import '../../model/quotation_model.dart';
 import './quotataion_detail_page.dart';
 import 'package:fluro/fluro.dart';
 import '../../routers/application.dart';
+import 'package:bid/common/inconfont.dart';
 
 class QuotationIndexPage extends StatefulWidget {
   @override
@@ -292,7 +293,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(right: 10.0),
-                  child: Icon(IconData(0xe64e, fontFamily: 'iconfont'),
+                  child: Icon(Iconfont.companyLabel,
                       color: Color(0xFF5A99FF), size: 20.0),
                 ),
                 Expanded(

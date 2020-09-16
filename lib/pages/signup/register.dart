@@ -18,7 +18,6 @@ class Register extends StatelessWidget {
       body: SingleChildScrollView(
         child: HomeContent(),
       ),
-      // ),
     );
   }
 }
@@ -119,24 +118,6 @@ class FormDemoState extends State<FormDemo> {
         }
       });
     }
-
-    // print('object$formData');
-    // if ((registerFormKey.currentState as FormState).validate()) {
-    //   // await request('verifyRegCheckCode', formData: formData).then((val) {
-    //   //   print('// 校验验证码$val====${val['code'] == 0}');
-    //   //   if (val['code'] == 0) {
-    //   //     print('判断是否跑进校验');
-    //   //     Application.router.navigateTo(context,
-    //   //         "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
-    //   //     // Application.router.navigateTo(context, "/setPassword?item=$item");
-    //   //   } else {
-    //   //     Toast.toast(
-    //   //       context,
-    //   //       msg: val['message'],
-    //   //     );
-    //   //   }
-    //   // });
-    // }
   }
 
   @override
@@ -164,7 +145,7 @@ class FormDemoState extends State<FormDemo> {
                   // 保持光标在最后
                   decoration: InputDecoration(
                     prefixIcon: Container(
-                      width: ScreenUtil().setWidth(120),
+                      width: ScreenUtil().setWidth(150),
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('公司名称'),
                     ),
@@ -197,7 +178,7 @@ class FormDemoState extends State<FormDemo> {
                   // 保持光标在最后
                   decoration: InputDecoration(
                     prefixIcon: Container(
-                      width: ScreenUtil().setWidth(120),
+                      width: ScreenUtil().setWidth(150),
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('公司简称'),
                     ),
@@ -219,7 +200,7 @@ class FormDemoState extends State<FormDemo> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     prefixIcon: Container(
-                      width: ScreenUtil().setWidth(120),
+                      width: ScreenUtil().setWidth(150),
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('账号'),
                     ),
@@ -251,7 +232,7 @@ class FormDemoState extends State<FormDemo> {
                   autovalidate: autovalidateOther,
                   decoration: InputDecoration(
                     prefixIcon: Container(
-                      width: ScreenUtil().setWidth(120),
+                      width: ScreenUtil().setWidth(150),
                       margin: EdgeInsets.only(top: 15.0, right: 5.0),
                       child: Text('验证码'),
                     ),

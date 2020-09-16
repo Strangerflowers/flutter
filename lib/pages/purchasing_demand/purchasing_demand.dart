@@ -18,6 +18,7 @@ import '../quotation/quotation_index_page.dart';
 import '../../service/service_method.dart';
 import '../../model/purchasing_list_model.dart';
 import '../../pages/offer/choice_index_page.dart';
+import 'package:bid/common/inconfont.dart';
 
 class PurchasingDemand extends StatefulWidget {
   @override
@@ -85,8 +86,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(IconData(0xe650, fontFamily: 'iconfont'),
-                          color: Colors.white, size: 30.0),
+                      Icon(Iconfont.warehouse, color: Colors.white, size: 30.0),
                       Text(
                         '商品库',
                         style: TextStyle(
@@ -112,8 +112,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(IconData(0xe64b, fontFamily: 'iconfont'),
-                          color: Colors.white, size: 30.0),
+                      Icon(Iconfont.quotation, color: Colors.white, size: 30.0),
                       Text(
                         '报价单',
                         style: TextStyle(
@@ -139,7 +138,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(IconData(0xe651, fontFamily: 'iconfont'),
+                      Icon(Iconfont.salesorder,
                           color: Colors.white, size: 30.0),
                       Text(
                         '销售订单',
@@ -468,7 +467,7 @@ class _DemandContentState extends State<DemandContent> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: Icon(IconData(0xe64e, fontFamily: 'iconfont'),
+            child: Icon(Iconfont.companyLabel,
                 color: Color.fromARGB(
                   255,
                   82,

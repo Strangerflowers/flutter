@@ -69,17 +69,17 @@ class _CertificationInfoState extends State<CertificationInfo> {
       ),
       backgroundColor: Colors.white,
       actions: <Widget>[
-        FlatButton(
-          child: Text(
-            "更新资料认证",
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-          onPressed: () {
-            Application.router.navigateTo(context, "/authentication");
-          },
-        )
+        // FlatButton(
+        //   child: Text(
+        //     "更新资料认证",
+        //     style: TextStyle(
+        //       color: Colors.grey,
+        //     ),
+        //   ),
+        //   onPressed: () {
+        //     Application.router.navigateTo(context, "/authentication");
+        //   },
+        // )
       ],
     );
   }

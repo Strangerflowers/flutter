@@ -17,10 +17,12 @@ import '../../common/constants.dart';
 import '../../routers/routers.dart';
 import '../../common/log_utils.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:bid/common/inconfont.dart';
 import '../signup/signin.dart';
 
 // 快速生成  stlss
 class PersonalCenter extends StatelessWidget {
+  var result;
   @override
   Widget build(BuildContext context) {
     List<Map<String, Object>> listTitles = _initPageRouteMap();
@@ -40,7 +42,7 @@ class PersonalCenter extends StatelessWidget {
               if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               }
-
+              result = snapshot.data['result'];
               var data = snapshot.data['result'];
 
               if (null != data) {
@@ -139,8 +141,7 @@ class PersonalCenter extends StatelessWidget {
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: Image.network(
-                    'http://blogimages.jspang.com/blogtouxiang1.jpg'),
+                child: Image.asset('images/user.png'),
               ),
             ),
           ),
@@ -265,29 +266,66 @@ class PersonalCenter extends StatelessWidget {
   }
 
   // 通用ListTile
-  Widget _myListTile(BuildContext context, String title, String url) {
+  Widget _myListTile(BuildContext context, String title, String url, item) {
     return InkWell(
       onTap: () {
         LogUtils.d('用户中心列表项', sprintf('%s被点击! 路由地址为url:%s', [title, url]));
         Application.router.navigateTo(context, url);
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(
-              width: 1,
-              color: Colors.black12,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: Colors.black12,
+                ),
+              ),
+            ),
+            child: ListTile(
+              leading: Image.asset('images/${item['code']}.png',
+                  width: 30, height: 30),
+              // leading: Icon(Iconfont.certificationInfo),
+              title: Text(title),
+              trailing: Icon(Icons.keyboard_arrow_right),
             ),
           ),
-        ),
-        child: ListTile(
-          leading: Icon(Icons.blur_circular),
-          title: Text(title),
-          trailing: Icon(Icons.keyboard_arrow_right),
-        ),
+          Positioned(
+            top: 15,
+            right: 50,
+            child: _certificationInfo(item),
+          )
+        ],
       ),
     );
+  }
+
+  // 资料认证显示隐藏
+  Widget _certificationInfo(item) {
+    var asditText = {0: '已认证', 1: '待审核', 2: '未提交', 3: '审核不通过'};
+    if (item['code'] == "certificationInfo") {
+      return Container(
+        padding: EdgeInsets.all(5),
+        decoration: new BoxDecoration(
+          border: new Border.all(width: 1.0, color: Color(0xFFE2B35B)),
+          color: Colors.white,
+          borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+        ),
+        child: Text(
+          '${asditText[result['auditStatus']]}',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+            color: Color(0xFFE2B35B),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text(''),
+      );
+    }
   }
 
   Widget _actionList(
@@ -310,7 +348,7 @@ class PersonalCenter extends StatelessWidget {
           _logOut(context);
         },
         child: Text(
-          '登录',
+          '退出登录',
           style: TextStyle(
             color: Color(0xFFD47776),
             fontSize: ScreenUtil().setSp(40),
@@ -361,7 +399,8 @@ class PersonalCenter extends StatelessWidget {
       list.add(_myListTile(
           context,
           item['name' + Constants.UNDERLINE + Constants.DEFUAL_LANG],
-          item['url']));
+          item['url'],
+          item));
     }
     return list;
   }

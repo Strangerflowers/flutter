@@ -8,6 +8,7 @@ import '../../service/service_method.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../routers/application.dart';
+import 'package:bid/common/inconfont.dart';
 
 class SalesIndexPage extends StatefulWidget {
   @override
@@ -357,7 +358,7 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: Icon(IconData(0xe64e, fontFamily: 'iconfont'),
+            child: Icon(Iconfont.companyLabel,
                 color: Color.fromARGB(
                   255,
                   82,
