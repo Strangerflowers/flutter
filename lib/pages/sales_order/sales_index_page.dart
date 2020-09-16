@@ -132,7 +132,7 @@ class _SalesTabsState extends State<SalesTabs> {
   void _getSaleasOrderList() async {
     var data = {
       "isAll": true,
-      "limit": 3,
+      "limit": 10,
       "order": "string",
       "page": 1,
       "pageMap": {},
@@ -224,7 +224,7 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
     Provide.value<SalesOrderListProvide>(context).addPage();
     var data = {
       "isAll": true,
-      "limit": 3,
+      "limit": 10,
       "order": "string",
       "page": Provide.value<SalesOrderListProvide>(context).page,
       "pageMap": {},
