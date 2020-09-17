@@ -294,8 +294,7 @@ class AddQuoteBody extends StatelessWidget {
                 if (goodsInfo.length <= 1) {
                   return Toast.toast(context, msg: '不可删除');
                 }
-                Provide.value<DemandDetailProvide>(context).removeProduct(item);
-
+                _removeConfirm(context, item);
                 print('点击提交报价');
               },
             ),
@@ -310,6 +309,34 @@ class AddQuoteBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // 删除产品二次确认弹框
+  void _removeConfirm(context, item) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('提示'),
+            content: Text('确定删除该产品？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () {
+                  Provide.value<DemandDetailProvide>(context)
+                      .removeProduct(item);
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+            ],
+          );
+        });
   }
 
   // 备注

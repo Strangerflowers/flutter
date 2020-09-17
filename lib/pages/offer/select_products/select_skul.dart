@@ -168,6 +168,8 @@ class _SelectSkulState extends State<SelectSkul> {
                   SingleChildScrollView(
                     child: Container(
                       height: ScreenUtil().setHeight(400),
+                      width: ScreenUtil().setWidth(750),
+                      padding: EdgeInsets.only(left: 20, right: 20),
                       child: MultiSelectChip(
                         skuldataList,
                         // list,
