@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+GlobalKey<AddressPickerState> addressPickerState = GlobalKey();
+
 /// 省市区选择器(使用示例见address_manage)
 class AddressPicker extends StatefulWidget {
+  final String provinceId;
+  final String cityId;
+
   /// 省
   final String province;
 
@@ -19,18 +24,22 @@ class AddressPicker extends StatefulWidget {
 
   /// 区列表
   final List districtList;
+  final String supplierType;
 
   /// 选择事件
   final Function(int, String, String) onChanged; // 参数分别为下标、id、name
   AddressPicker({
     Key key,
     @required this.onChanged,
+    @required this.provinceId,
+    @required this.cityId,
     @required this.province,
     @required this.city,
     @required this.district,
     @required this.provinceList,
     @required this.cityList,
     @required this.districtList,
+    @required this.supplierType,
   }) : super(key: key);
 
   @override
@@ -48,6 +57,11 @@ class AddressPickerState extends State<AddressPicker>
     Tab(text: ''),
     Tab(text: '')
   ]; // TabBar初始化3个，其中两个文字置空
+  List<Map> _myTabExtras = <Map>[
+    {"id": "", "name": ""},
+    {"id": "", "name": ""},
+    {"id": "", "name": ""}
+  ];
   List _provinceList = []; // 省列表
   List _cityList = []; // 市列表
   List _districtList = []; // 区列表
@@ -64,8 +78,23 @@ class AddressPickerState extends State<AddressPicker>
           text: widget.province == '' || widget.province == null
               ? '请选择'
               : widget.province);
+      _myTabExtras[0] = {
+        "id": widget.provinceId == '' || widget.provinceId == null
+            ? '请选择'
+            : widget.provinceId,
+        "name": widget.province == '' || widget.province == null
+            ? '请选择'
+            : widget.province
+      };
+
       _myTabs[1] = Tab(text: widget.city ?? '');
+      _myTabExtras[1] = {"id": widget.cityId ?? '', "name": widget.city ?? ''};
+
       _myTabs[2] = Tab(text: widget.district ?? '');
+      _myTabExtras[2] = {
+        "id": widget.supplierType ?? '',
+        "name": widget.district ?? ''
+      };
       _provinceList = widget.provinceList ?? [];
       _cityList = widget.cityList ?? [];
       _districtList = widget.districtList ?? [];
@@ -96,11 +125,13 @@ class AddressPickerState extends State<AddressPicker>
       case 1:
         this.setState(() {
           _mList = _cityList;
+          // _mList = list;
         });
 
         break;
       case 2:
         this.setState(() {
+          // _mList = list;
           _mList = _districtList;
         });
         break;
@@ -112,14 +143,19 @@ class AddressPickerState extends State<AddressPicker>
       case 1:
         this.setState(() {
           _mList = _cityList;
-          _myTabs[1] = Tab(text: '请选择');
+          _myTabs[1] = Tab(
+            text: '请选择',
+          );
           _myTabs[2] = Tab(text: '');
+          _myTabExtras[1] = {"id": "请选择", "name": '请选择'};
+          _myTabExtras[2] = {"id": "", "name": ''};
         });
         break;
       case 2:
         this.setState(() {
           _mList = _districtList;
           _myTabs[2] = Tab(text: '请选择');
+          _myTabExtras[2] = {"id": "请选择", "name": '请选择'};
         });
         break;
       case 3:
@@ -132,17 +168,42 @@ class AddressPickerState extends State<AddressPicker>
 
   // 选中某个tab
   void checkedTab(int index) {
+    if (_index == 0) {
+      var arr = [];
+      _provinceList.forEach((ele) {
+        if (ele['id'] == _provinceList[index]['id']) {
+          arr = ele['subCategorys'];
+        }
+      });
+      _cityList = arr;
+    }
+    if (_index == 1) {
+      var brr = [];
+      _cityList.forEach((ele) {
+        if (ele['id'] == _cityList[index]['id']) {
+          brr = ele['subCategorys'];
+        }
+      });
+      _districtList = brr;
+    }
+
+    print('选中某个tab');
+    // print('_选中某个tab==$_cityList');
     // 将选中的返回到父组件
     widget.onChanged(_index, _mList[index]['id'], _mList[index]['name']);
     this.setState(() {
       _myTabs[_index] = Tab(text: _mList[index]['name']);
+      _myTabExtras[_index] = {
+        "id": _mList[index]['id'],
+        "name": _mList[index]['name']
+      };
       _positions[_index] = index;
       _index = _index + 1;
     });
     setListAndChangeTab();
     if (_index > 2) {
       setIndex(2);
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
     _controller.animateTo(0.0,
         duration: Duration(milliseconds: 100), curve: Curves.ease);
@@ -184,7 +245,18 @@ class AddressPickerState extends State<AddressPicker>
                   right: 16.0,
                   top: 16.0,
                   bottom: 16.0,
-                )
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: FlatButton(
+                    child: Text("确定"),
+                    textColor: Colors.blue,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
               ],
             ),
             Expanded(
@@ -223,8 +295,10 @@ class AddressPickerState extends State<AddressPicker>
                       controller: _controller,
                       itemExtent: 48.0,
                       itemBuilder: (_, index) {
+                        // bool flag =
+                        //     _mList[index]['name'] == _myTabs[_index].text;
                         bool flag =
-                            _mList[index]['name'] == _myTabs[_index].text;
+                            _mList[index]['id'] == _myTabExtras[_index]["id"];
                         return InkWell(
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),

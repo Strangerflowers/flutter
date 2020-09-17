@@ -1,4 +1,7 @@
 // 资料认证页面
+import 'dart:collection';
+
+import 'package:bid/common/log_utils.dart';
 import 'package:bid/routers/application.dart';
 import 'package:flutter/material.dart';
 import 'package:bid/common/toast.dart';
@@ -7,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:bid/common/xyz_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sprintf/sprintf.dart';
 import '../../images.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -138,9 +142,12 @@ class AuthenticationForm extends StatefulWidget {
   _AuthenticationFormState createState() => _AuthenticationFormState();
 }
 
+GlobalKey<AddressPickerState> addressPickerState = GlobalKey();
 typedef MyOnChange = Function(int index, String id, String name);
 
 class _AuthenticationFormState extends State<AuthenticationForm> {
+  String TAG = "_AuthenticationFormState";
+  Map<String, Object> categoryTree = new LinkedHashMap();
   var companyAddressName; //显示公司地区名称
   var auditStatus = 1;
   var supplierType; //供应商类型
@@ -173,6 +180,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   List provinceList = [];
   List cityList = [];
   List streetList = [];
+  String categoryoneId;
+  String categorytwoId;
+  // 存放供应商类型字段
+  var typeList;
+
   void _getCategory() async {
     //
     await requestGet('getCategory').then((val) {
@@ -181,8 +193,36 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         if (val['result'] != null && val['result'].length > 0) {
           res = _func(val['result']);
           categoryoneList = res;
-          categorytwoList = categoryoneList[0]['subCategorys'];
-          categorythreeList = categorytwoList[0]['subCategorys'];
+          _toMap(val['result']);
+
+          // print(categoryTree.keys.join(','));
+          Map categoryLevelThree = categoryTree[supplierType.toString()];
+          Map categoryLevelTwo =
+              categoryTree[categoryLevelThree['pid'].toString()];
+          categorytwoId = categoryLevelTwo['id'];
+          Map categoryLevelOne =
+              categoryTree[categoryLevelTwo['pid'].toString()];
+          categoryoneId = categoryLevelOne['id'];
+          print(
+              'Map======${categorytwoId}=====$categoryoneId====================$supplierType');
+
+          var arr = [];
+          categoryoneList.forEach((ele) {
+            if (ele['name'] == categoryone) {
+              arr = ele['subCategorys'];
+            }
+          });
+          categorytwoList = arr;
+
+          var brr = [];
+          categorytwoList.forEach((ele) {
+            if (ele['name'] == categorytwo) {
+              brr = ele['subCategorys'];
+            }
+          });
+          categorythreeList = brr;
+          // categorytwoList = categoryoneList[0]['subCategorys'];
+          // categorythreeList = categorytwoList[0]['subCategorys'];
         } else {
           Toast.toast(context, msg: '供应商类型列表暂无数据');
         }
@@ -193,8 +233,24 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     });
   }
 
+  void _toMap(list) {
+    // TODO:
+    // list.forEach((ele) {
+    //   categoryTree[ele['id']] = ele;
+    //   if (ele['subCategorys'] != null && ele['subCategorys'].length > 0) {
+    //     _toMap(ele['subCategorys']);
+    //   }
+    // });
+    for (int i = 0, length = list.length; i < length; i++) {
+      Map ele = list[i];
+      categoryTree[ele['id']] = ele;
+      if (ele['subCategorys'] != null && ele['subCategorys'].length > 0) {
+        _toMap(ele['subCategorys']);
+      }
+    }
+  }
+
   void _getAddress() async {
-    // getAddress
     await requestGet('getAddress').then((val) {
       if (val['code'] == 0) {
         // res = _func(val['result']);
@@ -228,24 +284,19 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   }
 
   var data;
-  // 存放供应商类型字段
-  var typeList;
+
   void initState() {
     // setState(() {
     data = widget.data;
     typeList = data['supplierTypeName'];
+    var categoryType;
     if (typeList != null) {
-      typeList = typeList.split('/');
-      // setState(() {
-      categoryone = typeList[0];
-      categorytwo = typeList[1];
-      categorythree = typeList[2];
-      // });
+      categoryType = typeList.split('/');
+      categoryone = categoryType[0];
+      categorytwo = categoryType[1];
+      categorythree = categoryType[2];
     }
-    // categoryone = typeList[0];
-    // categorytwo = typeList[1];
-    // categorythree = typeList[2];
-    // categorythree = data['supplierTypeName'];
+
     supplierType = data['supplierType'];
     companyAddressName = data['companyDistrictName'];
     auditStatus = data['auditStatus'];
@@ -315,12 +366,15 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
 
   //供应商类型
   void _showBottomSheetCate({
+    String categoryoneId,
+    String categorytwoId,
     String categoryone,
     String categorytwo,
     String categorythree,
     List categoryoneList,
     List categorytwoList,
     List categorythreeList,
+    String supplierType,
     BuildContext context,
     MyOnChange onChnage,
   }) {
@@ -331,12 +385,15 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         child: StatefulBuilder(builder: (context, StateSetter setState) {
           // TODO: 待改进
           return AddressPicker(
+            provinceId: categoryoneId,
+            cityId: categorytwoId,
             province: categoryone,
             city: categorytwo,
             district: categorythree,
             provinceList: categoryoneList,
             cityList: categorytwoList,
             districtList: categorythreeList,
+            supplierType: supplierType,
             onChanged: onChnage,
           );
         }),
@@ -394,22 +451,30 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           // XYZAddressPickerTestPage(),
           InkWell(
               onTap: () => _showBottomSheetCate(
+                    categoryoneId: categoryoneId,
+                    categorytwoId: categorytwoId,
                     categoryone: categoryone,
                     categorytwo: categorytwo,
                     categorythree: categorythree,
                     categoryoneList: categoryoneList,
                     categorytwoList: categorytwoList,
                     categorythreeList: categorythreeList,
+                    supplierType: supplierType,
                     context: context,
                     onChnage: (int index, String id, String name) {
                       if (index == 0) {
-                        setState(() {
-                          res.forEach((ele) {
-                            if (ele['id'] == id) {
-                              return categorytwoList = ele['subCategorys'];
-                            }
-                          });
+                        var arr = [];
+                        // setState(() {
+                        res.forEach((ele) {
+                          if (ele['id'] == id) {
+                            return arr = ele['subCategorys'];
+                          }
+                          // });
                         });
+                        setState(() {
+                          categorytwoList = arr;
+                        });
+                        // addressPickerState.currentState.checkedTab(index);
                       }
                       if (index == 1) {
                         categorytwoList.forEach((element) {
@@ -421,18 +486,30 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                       switch (index) {
                         case 0:
                           setState(() {
+                            typeList = name;
                             categoryone = name;
+                            categoryoneId = id;
+                            categorytwo = '';
+                            categorytwoId = '';
+                            categorythree = '';
+                            supplierType = '';
                           });
                           break;
                         case 1:
                           setState(() {
                             categorytwo = name;
+                            categorytwoId = id;
+                            typeList = categoryone + '/' + name;
+                            categorythree = '';
+                            supplierType = '';
                           });
                           break;
                         case 2:
                           setState(() {
                             categorythree = name;
                             supplierType = id;
+                            typeList =
+                                categoryone + '/' + categorytwo + '/' + name;
                           });
                           break;
                       }
@@ -451,9 +528,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   ),
                   child: ListTile(
                     title: Text(
-                      categorythree == null ? '请选择' : categorythree,
+                      typeList == null ? '请选择' : typeList.toString(),
                       style: TextStyle(
-                          color: categorythree != null
+                          color: typeList != null
                               ? Colors.black
                               : Color(0xFFD7D7D7)),
                     ),
