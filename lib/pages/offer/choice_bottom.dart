@@ -99,6 +99,7 @@ class ChoiceBottom extends StatelessWidget {
                   return;
                 }
                 Application.router.navigateTo(context, "/addproduct?id=1");
+                Provide.value<DemandDetailProvide>(context).cleanCheck();
                 // addproduct
                 // applyBoxFit(fit, inputSize, outputSize)
               },

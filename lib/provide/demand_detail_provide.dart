@@ -187,4 +187,22 @@ class DemandDetailProvide with ChangeNotifier {
     offerPageData.remove(item);
     notifyListeners();
   }
+
+  // 清空勾选
+  cleanCheck() {
+    quotationData = goodsList.result.demandSkuDtoList;
+    // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态
+    quotationData.forEach((ele) {
+      ele.checkBoxFlag = false;
+      selectAllFlag = false;
+      if (ele.demandDetailDtoList != null) {
+        ele.demandDetailDtoList.forEach((ele) {
+          ele.checkBoxFlag = false;
+        });
+      }
+      return arr.add(ele);
+    });
+    quotationData = arr;
+    notifyListeners();
+  }
 }
