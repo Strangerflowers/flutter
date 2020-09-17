@@ -16,7 +16,7 @@ class DemandQuotationProvide with ChangeNotifier {
       "limit": 10,
       "order": "string",
       "page": 1,
-      "params": {"productCategroyId": productCategroyId}
+      "params": {"productCategroy": productCategroyId}
     };
     // FormData formData = FormData.fromMap({'demandId': id});
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
