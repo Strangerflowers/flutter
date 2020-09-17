@@ -16,15 +16,21 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
   Widget build(BuildContext context) {
     return Provide<DemandQuotationProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandQuotationProvide>(context).goodsList;
-      return SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _checkboxTitleListView(goodsInfo.result.list),
-            ],
+      if (goodsInfo != null) {
+        return SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _checkboxTitleListView(goodsInfo.result.list),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        return Center(
+          child: Text('暂无数据'),
+        );
+      }
     });
   }
 

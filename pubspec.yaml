@@ -87,6 +87,11 @@ flutter:
     - images/r.jpg
     - images/clear.png
     - images/edit.png
+    - images/user.png
+    - images/certificationInfo.png
+    - images/contactInfo.png
+    - images/modifyPassword.png
+    - images/withdrawAddress.png
 
   fonts:
     - family: iconfont

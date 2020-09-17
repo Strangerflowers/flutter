@@ -34,6 +34,7 @@ class ServiceUrlMapper {
   static Map<String, String> urlMapper = {
     'login': '/os_kernel_authcctr/app/authcctr/authc/tgt/login', // 通过账号登录
     'getToken': '/os_kernel_authcctr/app/authc/token/getAndSetTime', //获取token
+    "getQiniuToken": "/os_kernel_bid/goods/getQiniuToken",
     'sendResetPwdCaptcha':
         '/os_kernel_userorgctr/app/user/sendLoginCaptcha', //登录获取验证码
     'sendRegCaptcha':

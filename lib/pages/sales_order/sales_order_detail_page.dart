@@ -1,7 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
+import 'package:bid/common/toast.dart';
 import 'dart:convert';
 import 'package:provide/provide.dart';
 import '../../service/service_method.dart';
@@ -16,7 +18,7 @@ class SalesOrderDetails extends StatelessWidget {
     // _getBackDetailInfo(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('销售订单详情$goodsId'),
+        title: Text('销售订单详情'),
       ),
       body: FutureBuilder(
         future: _getBackDetailInfo(context),
@@ -324,7 +326,7 @@ class ProductInformation extends StatelessWidget {
               // height: ScreenUtil().setHeight(120),
               padding: EdgeInsets.only(top: 0, right: 10),
               child: Image.network(
-                '${item.skuKey}',
+                '${item.mainKey}',
                 fit: BoxFit.cover,
                 width: ScreenUtil().setWidth(150),
                 height: ScreenUtil().setHeight(150),
@@ -468,9 +470,9 @@ class DeliveryArrangement extends StatelessWidget {
               ),
               backgroundColor: Colors.white,
               children: <Widget>[
-                _deliverList(goodsInfo.result.dispatchVos),
+                _deliverList(goodsInfo.result.dispatchVos, goodsInfo.result),
                 _addShipment(goodsInfo.result, context, len),
-                _shipmentButtom(context),
+                _shipmentButtom(context, goodsInfo.result),
               ],
               initiallyExpanded: true, //是否默认打开？
             ),
@@ -484,7 +486,7 @@ class DeliveryArrangement extends StatelessWidget {
 
   // 循环渲染
   // 一级
-  Widget _deliverList(list) {
+  Widget _deliverList(list, result) {
     if (list != null) {
       return Container(
         // height: ScreenUtil().setHeight(1000),
@@ -495,7 +497,7 @@ class DeliveryArrangement extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               // return Text('测试测试');
-              return _productItem(list[index], index, contex);
+              return _productItem(list[index], index, contex, result);
             },
           ),
         ),
@@ -508,7 +510,7 @@ class DeliveryArrangement extends StatelessWidget {
   }
 
   // 合并头部跟产品信息
-  Widget _productItem(item, index, context) {
+  Widget _productItem(item, index, context, result) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -521,15 +523,15 @@ class DeliveryArrangement extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          _productTitle(item, index, context),
+          _productTitle(item, index, context, result),
           _salesOrderProductChild(item.dispatchItemVos),
         ],
       ),
     );
   }
 
-  Widget _productTitle(item, index, context) {
-    var statusType = {0: '待发货', 1: '已发货', 2: '已收货'};
+  Widget _productTitle(item, index, context, result) {
+    var statusType = {0: '发货', 1: '已发货', 2: '已收货'};
     var statusColor = {0: 0xFF378AFF, 1: 0xFFA1A4A7, 2: 0xFF00C290};
     return Container(
       child: Row(
@@ -557,91 +559,61 @@ class DeliveryArrangement extends StatelessWidget {
                             ),
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            // 跳转到详情页面
-                            // Application.router
-                            //     .navigateTo(context, "/add?id=${item.id}");
-                            // print('跳转到更新发货信息');
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                              //设置四周边框
-                              border: new Border.all(
-                                width: 1,
-                                color: Color(0xFFDAEDFE),
-                              ),
-                              color: Color(0xFFDAEDFE),
-                            ),
-                            margin: EdgeInsets.only(right: 10, top: 10),
-                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            // width: ScreenUtil().setWidth(120),
-                            child: Text(
-                              '${statusType[item.status]}',
-                              style: TextStyle(
-                                  color: Color(0xFF5696D2),
-                                  fontSize: ScreenUtil().setSp(24)),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
+                        _deliverButtom(item, context, statusType, result),
+                        // InkWell(
+                        //   onTap: () {
+                        //     // 跳转到详情页面
+                        //     if (item.status == 0) {
+                        //       Application.router
+                        //           .navigateTo(context, "/add?id=${item.id}");
+                        //       print('跳转到更新发货信息');
+                        //     }
+                        //   },
+                        //   child: Container(
+                        //     alignment: Alignment.centerRight,
+                        //     decoration: BoxDecoration(
+                        //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        //       borderRadius:
+                        //           BorderRadius.all(Radius.circular(5.0)),
+                        //       //设置四周边框
+                        //       border: new Border.all(
+                        //         width: 1,
+                        //         color: Color(0xFFDAEDFE),
+                        //       ),
+                        //       color: Color(0xFFDAEDFE),
+                        //     ),
+                        //     margin: EdgeInsets.only(right: 10, top: 10),
+                        //     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        //     // width: ScreenUtil().setWidth(120),
+                        //     child: Text(
+                        //       '${statusType[item.status]}',
+                        //       style: TextStyle(
+                        //           color: Color(0xFF5696D2),
+                        //           fontSize: ScreenUtil().setSp(24)),
+                        //       maxLines: 1,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
                   Container(
+                    height: item.status == 0 ? 0 : null,
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Container(
-                            child: Text(item.logisticsNumber == 'null'
-                                ? '暂无物流信息'
-                                : '${item.logisticsCompanyName}${item.logisticsNumber}'),
-                          ),
-                        ),
-                        // Expanded(
-                        //   child:
-                        InkWell(
-                          onTap: () {
-                            if (item.status == 0) {
-                              Application.router
-                                  .navigateTo(context, "/add?id=${item.id}");
-                            } else {
-                              // 跳转到详情页面
-                              Application.router
-                                  .navigateTo(context, "/look?id=${item.id}");
-                              print('查看发货信息详情');
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                              //设置四周边框
-                              border: new Border.all(
-                                width: 1,
-                                color: Color(0xFFDAEDFE),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                child: Text(item.logisticsNumber == 'null'
+                                    ? ''
+                                    : '${item.logisticsCompanyName}${item.logisticsNumber}'),
                               ),
-                              color: Color(0xFFDAEDFE),
-                            ),
-                            margin: EdgeInsets.only(right: 10, top: 10),
-                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            // width: ScreenUtil().setWidth(120),
-                            child: Text(
-                              '${item.status == 0 ? '填写发货信息并发货' : '查询发货信息'}',
-                              style: TextStyle(
-                                  color: Color(0xFF5696D2),
-                                  fontSize: ScreenUtil().setSp(24)),
-                              maxLines: 1,
-                            ),
+                              _copy(item, context),
+                            ],
                           ),
                         ),
-                        // )
+                        _seeInfo(item, context),
                       ],
                     ),
                   ),
@@ -652,6 +624,153 @@ class DeliveryArrangement extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // 发货按钮控制
+  Widget _deliverButtom(item, context, statusType, result) {
+    if (result.status == 1 || result.status == 0) {
+      return Container(
+        child: Text(''),
+      );
+    } else {
+      return InkWell(
+        onTap: () {
+          // 跳转到详情页面
+          if (item.status == 0) {
+            Application.router.navigateTo(context, "/add?id=${item.id}");
+            print('跳转到更新发货信息');
+          }
+        },
+        child: Container(
+          alignment: Alignment.centerRight,
+          decoration: BoxDecoration(
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            //设置四周边框
+            border: new Border.all(
+              width: 1,
+              color: Color(0xFFDAEDFE),
+            ),
+            color: Color(0xFFDAEDFE),
+          ),
+          margin: EdgeInsets.only(right: 10, top: 10),
+          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+          // width: ScreenUtil().setWidth(120),
+          child: Text(
+            '${statusType[item.status]}',
+            style: TextStyle(
+                color: Color(0xFF5696D2), fontSize: ScreenUtil().setSp(24)),
+            maxLines: 1,
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _copy(item, context) {
+    if (item.logisticsNumber.trim() == 'null') {
+      return Container(child: Text(''));
+    } else {
+      return Container(
+        child: FlatButton(
+          child: Text(
+            "复制",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: Color(0xFF5696D2),
+            ),
+          ),
+          onPressed: () {
+            ClipboardData data =
+                new ClipboardData(text: "${item.logisticsNumber}");
+            Clipboard.setData(data);
+            Toast.toast(
+              context,
+              msg: "已复制",
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Widget _seeInfo(item, context) {
+    if (item.status != 0) {
+      return Container(
+        padding: EdgeInsets.only(right: 10),
+        child: Container(
+          // padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+          child: FlatButton(
+            //自定义按钮颜色
+            color: Color(0xFFDAEDFE),
+            highlightColor: Color(0xFFDAEDFE),
+            colorBrightness: Brightness.dark,
+            splashColor: Colors.blue,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              child: Text(
+                "查看发货信息",
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: Color(0xFF5696D2),
+                ),
+              ),
+            ),
+
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            onPressed: () {
+              if (item.status == 0) {
+                Application.router.navigateTo(context, "/add?id=${item.id}");
+              } else {
+                // 跳转到详情页面
+                Application.router.navigateTo(context, "/look?id=${item.id}");
+                print('查看发货信息详情');
+              }
+            },
+          ),
+        ),
+      );
+
+      // ),
+      // child: InkWell(
+      //   // onTap: () {
+      //   //   if (item.status == 0) {
+      //   //     Application.router.navigateTo(context, "/add?id=${item.id}");
+      //   //   } else {
+      //   //     // 跳转到详情页面
+      //   //     Application.router.navigateTo(context, "/look?id=${item.id}");
+      //   //     print('查看发货信息详情');
+      //   //   }
+      //   // },
+      //   child: Container(
+      //     alignment: Alignment.centerRight,
+      //     decoration: BoxDecoration(
+      //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+      //       borderRadius: BorderRadius.all(Radius.circular(5.0)),
+      //       //设置四周边框
+      //       border: new Border.all(
+      //         width: 1,
+      //         color: Color(0xFFDAEDFE),
+      //       ),
+      //       color: Color(0xFFDAEDFE),
+      //     ),
+      //     margin: EdgeInsets.only(right: 10, top: 10),
+      //     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      //     // width: ScreenUtil().setWidth(120),
+      //     child: Text(
+      //       '${item.status == 0 ? '' : '查看发货信息'}',
+      //       style: TextStyle(
+      //           color: Color(0xFF5696D2), fontSize: ScreenUtil().setSp(24)),
+      //       maxLines: 1,
+      //     ),
+      //   ),
+      // ),
+      // );
+    } else {
+      return Container(child: Text(''));
+    }
   }
 
   //二级需求信息变量渲染
@@ -693,12 +812,14 @@ class DeliveryArrangement extends StatelessWidget {
               // width: ScreenUtil().setWidth(120),
               // height: ScreenUtil().setHeight(120),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuKey}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
+              child: item.mainKey == 'null'
+                  ? Image.asset('images/icon.png')
+                  : Image.network(
+                      '${item.mainKey}',
+                      fit: BoxFit.cover,
+                      width: ScreenUtil().setWidth(150),
+                      height: ScreenUtil().setHeight(150),
+                    )
               // Image.asset('images/icon.png'),
               ),
           Expanded(
@@ -761,66 +882,76 @@ class DeliveryArrangement extends StatelessWidget {
 
   // 添加发货安排
   Widget _addShipment(item, context, len) {
-    return InkWell(
-      onTap: () {
-        // 跳转到详情页面
-        Application.router.navigateTo(context,
-            "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId");
-        print('点击跳转采购页面');
-      },
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          //设置四周边框
-          border: new Border.all(
-            width: 1,
+    if (item.status == 1 || item.status == 2) {
+      return InkWell(
+        onTap: () {
+          // 跳转到详情页面
+          Application.router.navigateTo(context,
+              "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId");
+          print('点击跳转采购页面');
+        },
+        child: Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            //设置四周边框
+            border: new Border.all(
+              width: 1,
+              color: Color(0xFFF6F5F8),
+            ),
             color: Color(0xFFF6F5F8),
           ),
-          color: Color(0xFFF6F5F8),
+          height: ScreenUtil().setHeight(160),
+          margin: EdgeInsets.all(20),
+          // color: Color(0xFFF6F5F8),
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.add),
+              Text('添加发货安排'),
+            ],
+          ),
         ),
-        height: ScreenUtil().setHeight(160),
-        margin: EdgeInsets.all(20),
-        // color: Color(0xFFF6F5F8),
-        child: Row(
-          children: <Widget>[
-            Icon(Icons.add),
-            Text('添加发货安排'),
-          ],
-        ),
-      ),
-    );
+      );
+    } else {
+      return Container(
+        child: Text(''),
+      );
+    }
   }
 
   // 发货按钮
-  Widget _shipmentButtom(context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        // width:200.0,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: FlatButton(
-                //自定义按钮颜色
-                color: Color(0xFF2A83FF),
-                highlightColor: Colors.blue[700],
-                colorBrightness: Brightness.dark,
-                splashColor: Colors.blue,
-                child: Text("确认并发送"),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                onPressed: () {
-                  _confirm(context);
-                },
+  Widget _shipmentButtom(context, result) {
+    if (result.status == 1 || result.status == 2) {
+      return Container(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          // width:200.0,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: FlatButton(
+                  //自定义按钮颜色
+                  color: Color(0xFF2A83FF),
+                  highlightColor: Colors.blue[700],
+                  colorBrightness: Brightness.dark,
+                  splashColor: Colors.blue,
+                  child: Text("确认并发送"),
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  onPressed: () {
+                    _confirm(context);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container(child: Text(''));
+    }
   }
 
   void _confirm(context) {
@@ -830,23 +961,25 @@ class DeliveryArrangement extends StatelessWidget {
     requestGet('confirm', formData: formData).then((val) {
       print('响应数据---$val');
       if (val['code'] == 0) {
-        Fluttertoast.showToast(
-          msg: '发送成功!',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        Toast.toast(context, msg: '发送成功!');
+        // Fluttertoast.showToast(
+        //   msg: '发送成功!',
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       } else {
-        Fluttertoast.showToast(
-          msg: val['message'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        Toast.toast(context, msg: val['message']);
+        // Fluttertoast.showToast(
+        //   msg: val['message'],
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
       // goodsList = AddDeliverArrange.fromJson(val);
       // print('详情数据$goodsList');

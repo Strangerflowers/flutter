@@ -3,19 +3,26 @@ import 'package:bid/pages/personal_center/contact_info.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/provide/app_global/user_info.dart';
 import 'package:bid/routers/application.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:bid/model/base/DataModel.dart';
+import 'package:bid/model/user_center/CertificationInfoModel.dart';
 import '../../common/constants.dart';
 import '../../routers/routers.dart';
 import '../../common/log_utils.dart';
+import 'package:bid/service/service_method.dart';
+import 'package:bid/common/inconfont.dart';
 import '../signup/signin.dart';
 
 // 快速生成  stlss
 class PersonalCenter extends StatelessWidget {
+  var result;
   @override
   Widget build(BuildContext context) {
     List<Map<String, Object>> listTitles = _initPageRouteMap();
@@ -24,15 +31,45 @@ class PersonalCenter extends StatelessWidget {
       //   title: Text('会员中心'),
       //   centerTitle: true, //文字居中
       // ),
-      body: ListView(
-        children: <Widget>[
-          _topHeader(),
-          _orderTitle(),
-          // _orderType(),
-          _actionList(context, listTitles),
-          _logout(context),
-        ],
-      ),
+      body: FutureBuilder(
+          future: requestGet('getCertificationInfo'),
+          builder: (context, snapshot) {
+            //请求完成
+            if (snapshot.connectionState == ConnectionState.done) {
+              LogUtils.d('snapshot', snapshot);
+              LogUtils.d('snapshot.data', snapshot.data.toString());
+              //发生错误
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              result = snapshot.data['result'];
+              var data = snapshot.data['result'];
+
+              if (null != data) {
+                return ListView(
+                  children: <Widget>[
+                    _topHeader(data),
+                    _actionList(context, listTitles),
+                    _logout(context),
+                  ],
+                );
+              } else {
+                return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "查无数据!",
+                      style: TextStyle(color: Colors.grey),
+                    ));
+              }
+            }
+            // }
+            //请求未完成时弹出loading
+            return SizedBox(
+                width: 24.0,
+                height: 24.0,
+                child: CircularProgressIndicator(strokeWidth: 2.0));
+          }),
     );
   }
 
@@ -76,7 +113,7 @@ class PersonalCenter extends StatelessWidget {
   }
 
   // 头部区域
-  Widget _topHeader() {
+  Widget _topHeader(data) {
     return Container(
       width: ScreenUtil().setWidth(750),
       // height: ScreenUtil().setHeight(330),
@@ -104,18 +141,17 @@ class PersonalCenter extends StatelessWidget {
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: Image.network(
-                    'http://blogimages.jspang.com/blogtouxiang1.jpg'),
+                child: Image.asset('images/user.png'),
               ),
             ),
           ),
-          _headerRight(),
+          _headerRight(data),
         ],
       ),
     );
   }
 
-  Widget _headerRight() {
+  Widget _headerRight(data) {
     return Container(
       width: ScreenUtil().setWidth(500),
       padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -125,7 +161,7 @@ class PersonalCenter extends StatelessWidget {
             alignment: Alignment.centerLeft,
             // margin: EdgeInsets.only(top: 10),
             child: Text(
-              '俊翔音乐设备有限公司',
+              '${data['companyName']}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(36),
                 color: Colors.white,
@@ -137,7 +173,7 @@ class PersonalCenter extends StatelessWidget {
             margin: EdgeInsets.only(top: 10),
             alignment: Alignment.centerLeft,
             child: Text(
-              '编号 sdffsdf1234734',
+              '编号   ${data['companyNum']}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: Colors.white,
@@ -230,29 +266,66 @@ class PersonalCenter extends StatelessWidget {
   }
 
   // 通用ListTile
-  Widget _myListTile(BuildContext context, String title, String url) {
+  Widget _myListTile(BuildContext context, String title, String url, item) {
     return InkWell(
       onTap: () {
         LogUtils.d('用户中心列表项', sprintf('%s被点击! 路由地址为url:%s', [title, url]));
         Application.router.navigateTo(context, url);
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(
-              width: 1,
-              color: Colors.black12,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: Colors.black12,
+                ),
+              ),
+            ),
+            child: ListTile(
+              leading: Image.asset('images/${item['code']}.png',
+                  width: 30, height: 30),
+              // leading: Icon(Iconfont.certificationInfo),
+              title: Text(title),
+              trailing: Icon(Icons.keyboard_arrow_right),
             ),
           ),
-        ),
-        child: ListTile(
-          leading: Icon(Icons.blur_circular),
-          title: Text(title),
-          trailing: Icon(Icons.keyboard_arrow_right),
-        ),
+          Positioned(
+            top: 15,
+            right: 50,
+            child: _certificationInfo(item),
+          )
+        ],
       ),
     );
+  }
+
+  // 资料认证显示隐藏
+  Widget _certificationInfo(item) {
+    var asditText = {0: '已认证', 1: '待审核', 2: '未提交', 3: '审核不通过'};
+    if (item['code'] == "certificationInfo") {
+      return Container(
+        padding: EdgeInsets.all(5),
+        decoration: new BoxDecoration(
+          border: new Border.all(width: 1.0, color: Color(0xFFE2B35B)),
+          color: Colors.white,
+          borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+        ),
+        child: Text(
+          '${asditText[result['auditStatus']]}',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+            color: Color(0xFFE2B35B),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text(''),
+      );
+    }
   }
 
   Widget _actionList(
@@ -275,7 +348,7 @@ class PersonalCenter extends StatelessWidget {
           _logOut(context);
         },
         child: Text(
-          '登录',
+          '退出登录',
           style: TextStyle(
             color: Color(0xFFD47776),
             fontSize: ScreenUtil().setSp(40),
@@ -305,7 +378,10 @@ class PersonalCenter extends StatelessWidget {
                   final prefs = await SharedPreferences.getInstance();
                   final result = await prefs.clear();
                   if (result) {
+                    // 退出登录时，清除之前的登录缓存
+                    Provide.value<UserModel>(context).user = null;
                     Navigator.of(context).pop('cancel');
+                    Navigator.pop(context);
                     Application.router.navigateTo(context, '/sigin');
                   }
                 },
@@ -313,28 +389,6 @@ class PersonalCenter extends StatelessWidget {
             ],
           );
         });
-
-    // 苹果风格
-    // showCupertinoDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return CupertinoAlertDialog(
-    //         title: Text('提示'),
-    //         content: Text('确定要退出登录吗？'),
-    //         actions: <Widget>[
-    //           CupertinoDialogAction(
-    //             child: Text('取消'),
-    //             onPressed: () {},
-    //           ),
-    //           CupertinoDialogAction(
-    //             child: Text('确认'),
-    //             onPressed: () {
-    //               Application.router.navigateTo(context, '/sigin');
-    //             },
-    //           ),
-    //         ],
-    //       );
-    //     });
   }
 
   /////////////////////////INTERNAL PROCESS FUNCTION //////////////////////
@@ -345,7 +399,8 @@ class PersonalCenter extends StatelessWidget {
       list.add(_myListTile(
           context,
           item['name' + Constants.UNDERLINE + Constants.DEFUAL_LANG],
-          item['url']));
+          item['url'],
+          item));
     }
     return list;
   }

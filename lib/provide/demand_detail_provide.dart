@@ -42,25 +42,26 @@ class DemandDetailProvide with ChangeNotifier {
           });
           quotationData = arr;
         } else {
-          Fluttertoast.showToast(
-            msg: '暂无数据',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
+          // Toast.toast()
+          // Fluttertoast.showToast(
+          //   msg: '暂无数据',
+          //   toastLength: Toast.LENGTH_SHORT,
+          //   gravity: ToastGravity.CENTER,
+          //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          //   textColor: Colors.white,
+          //   fontSize: 16.0,
+          // );
         }
       } else {
         goodsList = null;
-        Fluttertoast.showToast(
-          msg: val['message'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: val['message'],
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
       notifyListeners();
     });

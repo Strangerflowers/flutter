@@ -41,10 +41,10 @@ class _MyImageState extends State<MyImage> {
 
   void _getUpdateToken() async {
     print('获取七牛云同肯');
-    await request('getpictrueToken').then(
+    await request('getQiniuToken').then(
       (value) {
-        updateToken = value['upToken'];
-        print('获取图片上传的token${value['upToken']}');
+        updateToken = value['result']['upToken'];
+        print('获取图片上传的token${updateToken}');
         // var keys = {'token': value['upToken']};
         // requestNoHeader('getKey', formData: data).then(
         //   (value) {

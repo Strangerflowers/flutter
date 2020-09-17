@@ -8,6 +8,7 @@ import '../../service/service_method.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../routers/application.dart';
+import 'package:bid/common/inconfont.dart';
 
 class SalesIndexPage extends StatefulWidget {
   @override
@@ -131,7 +132,7 @@ class _SalesTabsState extends State<SalesTabs> {
   void _getSaleasOrderList() async {
     var data = {
       "isAll": true,
-      "limit": 3,
+      "limit": 10,
       "order": "string",
       "page": 1,
       "pageMap": {},
@@ -223,7 +224,7 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
     Provide.value<SalesOrderListProvide>(context).addPage();
     var data = {
       "isAll": true,
-      "limit": 3,
+      "limit": 10,
       "order": "string",
       "page": Provide.value<SalesOrderListProvide>(context).page,
       "pageMap": {},
@@ -332,7 +333,14 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10),
-            child: Image.asset('images/icon.png'),
+            child: subItem.mainKey == null
+                ? Image.asset('images/icon.png')
+                : Image.network(
+                    subItem.mainKey,
+                    fit: BoxFit.cover,
+                    width: ScreenUtil().setWidth(150),
+                    height: ScreenUtil().setHeight(150),
+                  ),
           ),
           Expanded(
             child: _right(subItem),
@@ -350,7 +358,7 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: Icon(IconData(0xe64e, fontFamily: 'iconfont'),
+            child: Icon(Iconfont.companyLabel,
                 color: Color.fromARGB(
                   255,
                   82,

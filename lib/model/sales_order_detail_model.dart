@@ -280,6 +280,7 @@ class DispatchItemVos {
   int number;
   String totalActualDeliveryNumber;
   String skuKey;
+  String mainKey;
 
   DispatchItemVos(
       {this.id,
@@ -292,6 +293,7 @@ class DispatchItemVos {
       this.specification,
       this.number,
       this.totalActualDeliveryNumber,
+      this.mainKey,
       this.skuKey});
 
   DispatchItemVos.fromJson(Map<String, dynamic> json) {
@@ -305,6 +307,7 @@ class DispatchItemVos {
     specification = json['specification'];
     number = json['number'];
     totalActualDeliveryNumber = json['totalActualDeliveryNumber'].toString();
+    mainKey = json['mainKey'];
     skuKey = json['skuKey'].toString();
   }
 
@@ -320,6 +323,7 @@ class DispatchItemVos {
     data['specification'] = this.specification;
     data['number'] = this.number;
     data['totalActualDeliveryNumber'] = this.totalActualDeliveryNumber;
+    data['mainKey'] = this.mainKey;
     data['skuKey'] = this.skuKey;
     return data;
   }

@@ -14,30 +14,37 @@ class DemandDetailBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
-      var goodsInfo =
-          Provide.value<DemandDetailProvide>(context).goodsList.result;
-      return Container(
-        margin: EdgeInsets.all(5.0),
-        padding: EdgeInsets.only(top: 10, bottom: 10, right: 10),
-        color: Colors.white,
-        width: ScreenUtil().setWidth(750),
-        child: FlatButton(
-          //自定义按钮颜色
-          color: Color(0xFF2A83FF),
-          highlightColor: Colors.blue[700],
-          colorBrightness: Brightness.dark,
-          splashColor: Colors.blue,
-          child:
-              Text("${goodsInfo.isQuotationMerchant == 1 ? '立即报价' : '查看报价'}"),
-          textColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          onPressed: () {
-            _dispatchAdd(context);
-            // Application.router.navigateTo(context, "/demanddetail?id=1");
-          },
-        ),
-      );
+      var res = Provide.value<DemandDetailProvide>(context).goodsList;
+
+      if (res != null) {
+        var goodsInfo = res.result;
+        return Container(
+          margin: EdgeInsets.all(5.0),
+          padding: EdgeInsets.only(top: 10, bottom: 10, right: 10),
+          color: Colors.white,
+          width: ScreenUtil().setWidth(750),
+          child: FlatButton(
+            //自定义按钮颜色
+            color: Color(0xFF2A83FF),
+            highlightColor: Colors.blue[700],
+            colorBrightness: Brightness.dark,
+            splashColor: Colors.blue,
+            child:
+                Text("${goodsInfo.isQuotationMerchant == 1 ? '立即报价' : '查看报价'}"),
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            onPressed: () {
+              _dispatchAdd(context);
+              // Application.router.navigateTo(context, "/demanddetail?id=1");
+            },
+          ),
+        );
+      } else {
+        return Container(
+          child: Text(''),
+        );
+      }
     });
   }
 

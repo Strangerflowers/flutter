@@ -9,21 +9,18 @@ import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 
-// class CertificationInfo extends StatefulWidget {
-//   @override
-//   _CertificationInfoState createState() => _CertificationInfoState();
-// }
+class CertificationInfo extends StatefulWidget {
+  @override
+  _CertificationInfoState createState() => _CertificationInfoState();
+}
 
-// class _CertificationInfoState extends State<CertificationInfo> {
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Container();
-// //   }
-// // }
-
-class CertificationInfo extends StatelessWidget {
-//   //包裹你定义的需要更新的weight
-//   // GlobalKey<CertificationInfo> textKey = GlobalKey();
+class _CertificationInfoState extends State<CertificationInfo> {
+  var _futureBuilderFuture;
+  void initState() {
+    // print('页面初始化');
+    _futureBuilderFuture = _gerData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +28,29 @@ class CertificationInfo extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(context),
       // body: _buildBody(),
-      body: FutureBuilder(
-        future: requestGet('getCertificationInfo'),
-        builder: _asyncBuilder,
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: FutureBuilder(
+          // future: requestGet('getCertificationInfo'),
+          future: _futureBuilderFuture,
+          builder: _asyncBuilder,
+        ),
       ),
     );
+  }
+
+  Future _handleRefresh() async {
+    _futureBuilderFuture = await _gerData();
+    if (_futureBuilderFuture['result']['auditStatus'] == 0) {
+      Navigator.pop(context);
+      Application.router.navigateTo(context, "/indexPage");
+    }
+  }
+
+  // 获取数据
+  Future _gerData() async {
+    var response = await requestGet('getCertificationInfo');
+    return response;
   }
 
   /**
@@ -54,17 +69,17 @@ class CertificationInfo extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       actions: <Widget>[
-        FlatButton(
-          child: Text(
-            "更新资料认证",
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-          onPressed: () {
-            Application.router.navigateTo(context, "/authentication");
-          },
-        )
+        // FlatButton(
+        //   child: Text(
+        //     "更新资料认证",
+        //     style: TextStyle(
+        //       color: Colors.grey,
+        //     ),
+        //   ),
+        //   onPressed: () {
+        //     Application.router.navigateTo(context, "/authentication");
+        //   },
+        // )
       ],
     );
   }
@@ -87,7 +102,8 @@ class CertificationInfo extends StatelessWidget {
         BaseResponseModel<CertificationInfoModel> baseResponseModel =
             BaseResponseModel.fromJson(
                 data, (json) => CertificationInfoModel.fromJson(json));
-        LogUtils.d('============>[baseResponseModel]', baseResponseModel);
+        LogUtils.d('============>[baseResponseModel]',
+            baseResponseModel.result.auditStatus);
         CertificationInfoModel certificationInfoModel =
             baseResponseModel.result;
         if (null != certificationInfoModel) {
@@ -159,11 +175,13 @@ class CertificationInfo extends StatelessWidget {
             width: 150,
             height: 150,
             padding: const EdgeInsets.all(16.0),
-            child: Image.network(
-              dataModel.value,
-              width: 150,
-              height: 150,
-            ),
+            child: dataModel.value == null
+                ? Text('')
+                : Image.network(
+                    dataModel.value,
+                    width: 150,
+                    height: 150,
+                  ),
           ),
         ]),
       );
