@@ -3,6 +3,9 @@ import 'package:provide/provide.dart';
 import './round_checkbox.dart';
 import '../../provide/demand_detail_provide.dart';
 
+/**
+ ************************************************ 报价body************************************************
+ */
 class SwitchAndCheckBoxTestRoute extends StatefulWidget {
   @override
   _SwitchAndCheckBoxTestRouteState createState() =>
@@ -88,6 +91,7 @@ class _SwitchAndCheckBoxTestRouteState
     );
   }
 
+  // 一级单选框
   Widget _checkboxTitle(item, index) {
     var parent = false;
     return Container(
@@ -125,6 +129,7 @@ class _SwitchAndCheckBoxTestRouteState
     );
   }
 
+  // 子单选框
   Widget _checkboxContent(item) {
     return Container(
       color: Colors.white,

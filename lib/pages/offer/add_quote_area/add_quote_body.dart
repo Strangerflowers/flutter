@@ -1,3 +1,4 @@
+import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
@@ -64,7 +65,7 @@ class AddQuoteBody extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _firstStage(item),
-          _datasecondsListView(item['demandDetailDtoList'], context),
+          _datasecondsListView(item['demandDetailDtoList'], item, context),
           // _secondLevel(),
         ],
       ),
@@ -90,7 +91,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   //遍历二级数据
-  Widget _datasecondsListView(subList, context) {
+  Widget _datasecondsListView(subList, item, context) {
     if (subList != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
@@ -100,7 +101,7 @@ class AddQuoteBody extends StatelessWidget {
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (context, index) {
-              return _secondLevel(subList[index], context);
+              return _secondLevel(subList[index], item, context);
             },
           ),
         ),
@@ -113,7 +114,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 二级数据
-  Widget _secondLevel(subItem, context) {
+  Widget _secondLevel(subItem, item, context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -133,7 +134,7 @@ class AddQuoteBody extends StatelessWidget {
             child: Text('需求数量：${subItem.num}${subItem.type}'),
           ),
           _showAddProduct(subItem, context),
-          _buttom(subItem),
+          _buttom(subItem, item, context),
         ],
       ),
     );
@@ -270,7 +271,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 删除按钮
-  Widget _buttom(subItem) {
+  Widget _buttom(subItem, item, context) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -288,6 +289,13 @@ class AddQuoteBody extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
+                var goodsInfo =
+                    Provide.value<DemandDetailProvide>(context).offerPageData;
+                if (goodsInfo.length <= 1) {
+                  return Toast.toast(context, msg: '不可删除');
+                }
+                Provide.value<DemandDetailProvide>(context).removeProduct(item);
+
                 print('点击提交报价');
               },
             ),

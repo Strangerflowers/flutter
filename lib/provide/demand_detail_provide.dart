@@ -11,10 +11,10 @@ class DemandDetailProvide with ChangeNotifier {
   var remark; //备注输入信息；
   var speciesNumber; //几种
   var totalNumber; //共几件
-  var offerPageData; //报价整合数据的数据
+  var offerPageData; //报价整合数据的数据，用于渲染报价提交页面
   var selectData = [];
   var totalAmount; //总价格
-  var quotationData;
+  var quotationData; //报价页面数据
   var parentFlagList = []; //存放父级勾选的值，用于对全选是否勾上
   var childFlagList = [];
   bool selectAllFlag = false;
@@ -30,6 +30,7 @@ class DemandDetailProvide with ChangeNotifier {
         if (val['result'] != null) {
           goodsList = DemandDetailHome.fromJson(val);
           quotationData = goodsList.result.demandSkuDtoList;
+          // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态
           quotationData.forEach((ele) {
             ele.checkBoxFlag = false;
             selectAllFlag = false;
@@ -177,6 +178,13 @@ class DemandDetailProvide with ChangeNotifier {
 
   remarkFunc(text) {
     remark = text;
+    notifyListeners();
+  }
+
+  // 删除产品
+  removeProduct(item) {
+    // print('删除方法');
+    offerPageData.remove(item);
     notifyListeners();
   }
 }

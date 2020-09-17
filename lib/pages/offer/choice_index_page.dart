@@ -49,8 +49,8 @@ class ChoiceIndex extends StatelessWidget {
                               child: InkWell(
                                 child: Text('请选择你要报价的商品:'),
                                 onTap: () {
-                                  Application.router.navigateTo(
-                                      context, "/addproduct?id='1'");
+                                  // Application.router.navigateTo(
+                                  //     context, "/addproduct?id='1'");
                                 },
                               ),
                             ),
