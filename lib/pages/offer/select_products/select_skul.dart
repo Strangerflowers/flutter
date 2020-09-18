@@ -100,41 +100,48 @@ class _SelectSkulState extends State<SelectSkul> {
 
   // 左侧商品
   Widget _right(selectGoodsItem, goodsItem) {
+    print('秀嘎动态字段==${selectGoodsResult}');
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
       child: Column(
         children: <Widget>[
           Container(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      goodsItem.name,
-                      maxLines: 2,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    goodsItem.name,
+                    maxLines: 2,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(right: 20),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context, 1);
+                    },
+                    child: Icon(
+                      Iconfont.circulClose,
+                      color: Color(0xFF999DA0),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pop(context, 1);
-                      },
-                      child: Icon(
-                        Iconfont.circulClose,
-                        color: Color(0xFF999DA0),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(
-              '库存  ${selectGoodsResult}',
-              maxLines: 2,
-            ),
+            child: selectGoodsItem == null
+                ? Text(
+                    '库存  999999',
+                    maxLines: 2,
+                  )
+                : Text(
+                    '库存：${selectGoodsItem.stock}',
+                    maxLines: 2,
+                  ),
           ),
           Row(
             children: <Widget>[
@@ -142,10 +149,6 @@ class _SelectSkulState extends State<SelectSkul> {
                 '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
-              // Text(
-              //   '${goodsItem.priceRange}',
-              //   style: TextStyle(color: Color(0xFFF0B347)),
-              // ),
             ],
           ),
         ],
@@ -159,91 +162,98 @@ class _SelectSkulState extends State<SelectSkul> {
       context: context,
       // isScrollControlled: false,
       builder: (context) => GestureDetector(
-        child: Container(
-          height: ScreenUtil().setHeight(700),
-          child: Column(
-            children: <Widget>[
-              // _mergeItem(skugoodsItem == null ? goodsItem : skugoodsItem),
-              _mergeItem(selectGoodsResult, goodsItem),
-              Container(
-                padding: EdgeInsets.only(left: 20),
-                alignment: Alignment.bottomLeft,
-                height: ScreenUtil().setHeight(40),
-                child: Text(
-                  '规格',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+        // 表单动态更改数据
+        child: StatefulBuilder(builder: (context, StateSetter setState) {
+          return Container(
+            height: ScreenUtil().setHeight(700),
+            child: Column(
+              children: <Widget>[
+                // _mergeItem(skugoodsItem == null ? goodsItem : skugoodsItem),
+                _mergeItem(selectGoodsResult, goodsItem),
+                Container(
+                  padding: EdgeInsets.only(left: 20),
+                  alignment: Alignment.bottomLeft,
+                  height: ScreenUtil().setHeight(40),
+                  child: Text(
+                    '规格',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Container(
-                      height: ScreenUtil().setHeight(400),
-                      width: ScreenUtil().setWidth(750),
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: MultiSelectChip(
-                        skuldataList,
-                        showSelectItem,
-                        onSelectionChanged: (selectedList) {
-                          // selectedList选中的规格
-                          print('单选的回调$selectedList');
+                Stack(
+                  children: <Widget>[
+                    SingleChildScrollView(
+                      child: Container(
+                        height: ScreenUtil().setHeight(400),
+                        width: ScreenUtil().setWidth(750),
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: MultiSelectChip(
+                          skuldataList,
+                          showSelectItem,
+                          onSelectionChanged: (selectedList) {
+                            // selectedList选中的规格
+                            print('单选的回调$selectedList');
+                            setState(() {
+                              selectedItemsList = selectedList;
+                            });
+                            var obj;
+                            skulObjectData.forEach((element) {
+                              if (element['skul'] ==
+                                  selectedItemsList.join(' ')) {
+                                // print('进入条件判断$selectGoodsResult');
+                                obj = element['skulgood'];
+                                setState(() {
+                                  selectGoodsResult = obj;
+                                  print(
+                                      '2222=========${selectGoodsResult.price}');
+                                });
+                                return;
+
+                                // return result.specificaId = element['id'];
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0.0,
+                      right: 20,
+                      left: 20,
+                      child: FlatButton(
+                        //自定义按钮颜色
+                        color: Color(0xFF2A83FF),
+                        highlightColor: Colors.blue[700],
+                        colorBrightness: Brightness.dark,
+                        splashColor: Colors.blue,
+                        child: Text("确定"),
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        onPressed: () {
                           setState(() {
-                            selectedItemsList = selectedList;
+                            showSelectItem = selectedItemsList.join('');
                           });
                           skulObjectData.forEach((element) {
-                            if (element['skul'] ==
-                                selectedItemsList.join(' ')) {
-                              // print('进入条件判断$selectGoodsResult');
-                              return selectGoodsResult = element['skulgood'];
-
-                              // return result.specificaId = element['id'];
+                            if (element['skul'] == showSelectItem) {
+                              result.goodsPrice =
+                                  double.parse(element['price'].toString());
+                              return result.specificaId = element['id'];
                             }
                           });
-                          // setState(() {});
-                          print(
-                              '当前规格信息-----------------------$selectGoodsResult');
+                          // 选择规格时给一个默认的价格
+                          double price = result.goodsPrice / 100;
+                          Provide.value<DemandDetailProvide>(context)
+                              .changeGoodsPrice(price, result.specificaId);
+                          Navigator.pop(context, 1);
                         },
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    right: 20,
-                    left: 20,
-                    child: FlatButton(
-                      //自定义按钮颜色
-                      color: Color(0xFF2A83FF),
-                      highlightColor: Colors.blue[700],
-                      colorBrightness: Brightness.dark,
-                      splashColor: Colors.blue,
-                      child: Text("确定"),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      onPressed: () {
-                        setState(() {
-                          showSelectItem = selectedItemsList.join('');
-                        });
-                        skulObjectData.forEach((element) {
-                          if (element['skul'] == showSelectItem) {
-                            result.goodsPrice =
-                                double.parse(element['price'].toString());
-                            return result.specificaId = element['id'];
-                          }
-                        });
-                        // 选择规格时给一个默认的价格
-                        double price = result.goodsPrice / 100;
-                        Provide.value<DemandDetailProvide>(context)
-                            .changeGoodsPrice(price, result.specificaId);
-                        Navigator.pop(context, 1);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
         onVerticalDragStart: (_) {},
       ),
       isDismissible: false,
