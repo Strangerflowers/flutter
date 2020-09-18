@@ -38,10 +38,12 @@ class DemandDetailResult {
   int isQuotationMerchant;
   String quotationId;
   String name;
-  Null announceTime;
+  String announceTime;
+  String announceTimeStr;
   String linkPhone;
   String linkPerson;
   String deliveryDate;
+  String deliveryDateStr;
   Null status;
   String remark;
   String createTime;
@@ -57,9 +59,11 @@ class DemandDetailResult {
       this.quotationId,
       this.name,
       this.announceTime,
+      this.announceTimeStr,
       this.linkPhone,
       this.linkPerson,
       this.deliveryDate,
+      this.deliveryDateStr,
       this.status,
       this.remark,
       this.createTime,
@@ -75,9 +79,11 @@ class DemandDetailResult {
     quotationId = json['quotationId'].toString();
     name = json['name'];
     announceTime = json['announceTime'];
+    announceTimeStr = json['announceTimeStr'];
     linkPhone = json['linkPhone'];
     linkPerson = json['linkPerson'];
     deliveryDate = json['deliveryDate'];
+    deliveryDateStr = json['deliveryDateStr'];
     status = json['status'];
     remark = json['remark'];
     createTime = json['createTime'];
@@ -100,9 +106,11 @@ class DemandDetailResult {
     data['quotationId'] = this.quotationId;
     data['name'] = this.name;
     data['announceTime'] = this.announceTime;
+    data['announceTimeStr'] = this.announceTimeStr;
     data['linkPhone'] = this.linkPhone;
     data['linkPerson'] = this.linkPerson;
     data['deliveryDate'] = this.deliveryDate;
+    data['deliveryDateStr'] = this.deliveryDateStr;
     data['status'] = this.status;
     data['remark'] = this.remark;
     data['createTime'] = this.createTime;

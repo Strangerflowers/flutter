@@ -489,7 +489,7 @@ class _DemandContentState extends State<DemandContent> {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              '${item.announceTime}',
+              '${item.announceTimeStr}',
               style: TextStyle(
                 color: Color(0xFFA1A0A3),
               ),

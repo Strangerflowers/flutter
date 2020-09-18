@@ -76,10 +76,12 @@ class PurchasingList {
   String orgId;
   String orgName;
   String name;
-  Null announceTime;
+  String announceTime;
+  String announceTimeStr;
   String linkPhone;
   String linkPerson;
   String deliveryDate;
+  String deliveryDateStr;
   Null status;
   String createTime;
   List<DemandDetailDtoList> demandDetailDtoList;
@@ -92,9 +94,11 @@ class PurchasingList {
       this.orgName,
       this.name,
       this.announceTime,
+      this.announceTimeStr,
       this.linkPhone,
       this.linkPerson,
       this.deliveryDate,
+      this.deliveryDateStr,
       this.status,
       this.createTime,
       this.demandDetailDtoList,
@@ -107,9 +111,11 @@ class PurchasingList {
     orgName = json['orgName'];
     name = json['name'];
     announceTime = json['announceTime'];
+    announceTimeStr = json['announceTimeStr'];
     linkPhone = json['linkPhone'];
     linkPerson = json['linkPerson'];
     deliveryDate = json['deliveryDate'];
+    deliveryDateStr = json['deliveryDateStr'];
     status = json['status'];
     createTime = json['createTime'];
     if (json['demandDetailDtoList'] != null) {
@@ -131,9 +137,11 @@ class PurchasingList {
     data['orgName'] = this.orgName;
     data['name'] = this.name;
     data['announceTime'] = this.announceTime;
+    data['announceTimeStr'] = this.announceTimeStr;
     data['linkPhone'] = this.linkPhone;
     data['linkPerson'] = this.linkPerson;
     data['deliveryDate'] = this.deliveryDate;
+    data['deliveryDateStr'] = this.deliveryDateStr;
     data['status'] = this.status;
     data['createTime'] = this.createTime;
     if (this.demandDetailDtoList != null) {

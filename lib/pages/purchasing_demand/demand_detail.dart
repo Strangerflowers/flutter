@@ -119,9 +119,9 @@ class ExpansionTileDome extends StatelessWidget {
           _purchaseInformation('需求方名称', detailData.orgName),
           _purchaseInformation('联系人', detailData.linkPerson),
           _purchaseInformation('联系电话', detailData.linkPhone),
-          _purchaseInformation('发布日期', detailData.announceTime),
+          _purchaseInformation('发布日期', detailData.announceTimeStr),
           _purchaseInformation('采购计划', detailData.name),
-          _purchaseInformation('期望交货时间', detailData.deliveryDate),
+          _purchaseInformation('期望交货时间', detailData.deliveryDateStr),
         ],
       ),
     );
