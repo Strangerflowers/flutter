@@ -20,7 +20,7 @@ class SelectProductsPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('选择产品55'),
+        title: Text('选择产品'),
       ),
       body: FutureBuilder(
         future: _getBackDetailInfo(context),

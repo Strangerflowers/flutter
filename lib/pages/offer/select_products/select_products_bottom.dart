@@ -48,12 +48,18 @@ class SelectProductsBottom extends StatelessWidget {
                 offer['demandDetailDtoList'].forEach((suboffer) {
                   if (suboffer.productCategroyId.toString() == id) {
                     if (null != suboffer.subjectItemList) {
+                      // 替换产品的时候需要将之前的清空，再放进去
+                      suboffer.subjectItemList = [];
                       suboffer.subjectItemList.add(productData[0]);
                     } else {
                       suboffer.subjectItemList = new List<QuotataionDataList>();
                       suboffer.subjectItemList.add(productData[0]);
                     }
-                    LogUtils.d("======================>", suboffer.toJson());
+                    LogUtils.d("======================>",
+                        suboffer.subjectItemList[0].skuList[0].id);
+                    // print('打开新弹框${widget.skulList.subjectItemList[0].skuList[0].id}');
+                    // LogUtils.d("======================>", offerPageData);
+                    // LogUtils.d("======================>", offerPageData);
                   }
                 });
               }
@@ -62,7 +68,9 @@ class SelectProductsBottom extends StatelessWidget {
               return;
             }
             Application.router.navigateTo(context, "/addproduct?id=1");
-            // addproduct
+            // 选定之后，清空当前页面的勾选状态
+            // Provide.value<DemandQuotationProvide>(context).cleanProduct();
+
             // applyBoxFit(fit, inputSize, outputSize)
           },
         ),

@@ -191,18 +191,25 @@ class DemandDetailProvide with ChangeNotifier {
   // 清空勾选
   cleanCheck() {
     quotationData = goodsList.result.demandSkuDtoList;
-    // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态
+    // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态,//清空选择的产品
     quotationData.forEach((ele) {
       ele.checkBoxFlag = false;
       selectAllFlag = false;
       if (ele.demandDetailDtoList != null) {
         ele.demandDetailDtoList.forEach((ele) {
+          ele.subjectItemList = null; //清空选择的产品
           ele.checkBoxFlag = false;
         });
       }
       return arr.add(ele);
     });
     quotationData = arr;
+    notifyListeners();
+  }
+
+  //清空报价页面
+  cleanProduct() {
+    offerPageData = [];
     notifyListeners();
   }
 }

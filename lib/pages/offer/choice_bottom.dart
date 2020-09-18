@@ -82,9 +82,6 @@ class ChoiceBottom extends StatelessWidget {
                     if (brr.length > 0) {
                       obj['demandDetailDtoList'] = brr;
                     }
-                    // var show = obj['demandDetailDtoList'] == null;
-                    // print(
-                    // '判断传入的数据${obj['demandDetailDtoList'] != null}===show$show');
                     if (obj['demandDetailDtoList'] != null) {
                       arr.add(obj);
                     }
@@ -99,6 +96,7 @@ class ChoiceBottom extends StatelessWidget {
                   return;
                 }
                 Application.router.navigateTo(context, "/addproduct?id=1");
+                // 点击下一步的时候清空当前页面的勾选
                 Provide.value<DemandDetailProvide>(context).cleanCheck();
                 // addproduct
                 // applyBoxFit(fit, inputSize, outputSize)
