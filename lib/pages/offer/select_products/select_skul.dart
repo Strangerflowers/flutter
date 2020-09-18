@@ -14,10 +14,11 @@ class SelectSkul extends StatefulWidget {
 }
 
 class _SelectSkulState extends State<SelectSkul> {
+  var selectGoodsResult; //存放动态商品数据
   var result;
   var goodsItem;
   var skugoodsItem;
-  List<String> skuldataList;
+  List<Map> skuldataList;
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   void initState() {
     skuldataList = [];
@@ -35,15 +36,19 @@ class _SelectSkulState extends State<SelectSkul> {
         "skulgood": ele,
         "price": ele.price,
       };
+      var itemObj = {
+        "skul": valueArr.join(',').replaceAll(",", "-"),
+        "status": ele.status
+      };
       skulObjectData.add(obj);
-      return skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
+      return skuldataList.add(itemObj);
+      // return skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
     });
-    print('skulObjectData$skulObjectData');
   }
 
   int currentIndex = 0;
   bool isSelect = false;
-  // var list = skuldataList;
+
   var list = [
     'Hamilton1',
     'Lafayette1',
@@ -57,7 +62,7 @@ class _SelectSkulState extends State<SelectSkul> {
   String showSelectItem; //展示最后确定的规格
   @override
   Widget build(BuildContext context) {
-    // print('规格选择页面${goodsItem.skuList}');
+    // print('规格选择页面===================${selectGoodsResult}');
     return Provide<DemandQuotationProvide>(builder: (context, child, val) {
       return Container(
         color: Colors.white,
@@ -75,18 +80,18 @@ class _SelectSkulState extends State<SelectSkul> {
   }
 
   // 合并商品
-  Widget _mergeItem(goodsItem) {
+  Widget _mergeItem(selectGoodsItem, goodsItem) {
     return Container(
       child: Row(
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10),
-            // child: Image.network(goodsItem.image),
-            child: Image.asset('images/icon.png'),
+            child: Image.network(goodsItem.image),
+            // child: Image.asset('images/icon.png'),
           ),
           Expanded(
-            child: _right(goodsItem),
+            child: _right(selectGoodsItem, goodsItem),
           ),
         ],
       ),
@@ -94,7 +99,7 @@ class _SelectSkulState extends State<SelectSkul> {
   }
 
   // 左侧商品
-  Widget _right(goodsItem) {
+  Widget _right(selectGoodsItem, goodsItem) {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
@@ -124,19 +129,23 @@ class _SelectSkulState extends State<SelectSkul> {
                   ),
                 ],
               )),
-          // Container(
-          //   alignment: Alignment.centerLeft,
-          //   child: Text(
-          //     '库存  999999',
-          //     maxLines: 2,
-          //   ),
-          // ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '库存  ${selectGoodsResult}',
+              maxLines: 2,
+            ),
+          ),
           Row(
             children: <Widget>[
               Text(
-                '${goodsItem.priceRange}',
+                '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
+              // Text(
+              //   '${goodsItem.priceRange}',
+              //   style: TextStyle(color: Color(0xFFF0B347)),
+              // ),
             ],
           ),
         ],
@@ -154,7 +163,8 @@ class _SelectSkulState extends State<SelectSkul> {
           height: ScreenUtil().setHeight(700),
           child: Column(
             children: <Widget>[
-              _mergeItem(skugoodsItem == null ? goodsItem : skugoodsItem),
+              // _mergeItem(skugoodsItem == null ? goodsItem : skugoodsItem),
+              _mergeItem(selectGoodsResult, goodsItem),
               Container(
                 padding: EdgeInsets.only(left: 20),
                 alignment: Alignment.bottomLeft,
@@ -173,7 +183,6 @@ class _SelectSkulState extends State<SelectSkul> {
                       padding: EdgeInsets.only(left: 20, right: 20),
                       child: MultiSelectChip(
                         skuldataList,
-                        // list,
                         showSelectItem,
                         onSelectionChanged: (selectedList) {
                           // selectedList选中的规格
@@ -181,6 +190,18 @@ class _SelectSkulState extends State<SelectSkul> {
                           setState(() {
                             selectedItemsList = selectedList;
                           });
+                          skulObjectData.forEach((element) {
+                            if (element['skul'] ==
+                                selectedItemsList.join(' ')) {
+                              // print('进入条件判断$selectGoodsResult');
+                              return selectGoodsResult = element['skulgood'];
+
+                              // return result.specificaId = element['id'];
+                            }
+                          });
+                          // setState(() {});
+                          print(
+                              '当前规格信息-----------------------$selectGoodsResult');
                         },
                       ),
                     ),
@@ -269,7 +290,7 @@ class _SelectSkulState extends State<SelectSkul> {
 
 // 单独写一个管理状态的组件
 class MultiSelectChip extends StatefulWidget {
-  final List<String> reportList;
+  final List<Map> reportList;
   String selectItem;
   final Function(List<String>) onSelectionChanged;
 
@@ -286,9 +307,9 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
 
   _buildChoiceList() {
     List<Widget> choices = List();
-    print('${widget.selectItem == null}===${widget.selectItem}}');
     if (widget.selectItem != null) {
       setState(() {
+        selectedChoices = [];
         selectedChoices.add(widget.selectItem);
         widget.selectItem = null;
       });
@@ -300,16 +321,24 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
         // alignment: Alignment.bottomLeft,
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
-          label: Text(item),
-          selected: selectedChoices.contains(item),
+          label: item['status'] == 0
+              ? Text(item['skul'], style: TextStyle(color: Color(0XFFCCCCCC)))
+              : Text(item['skul']),
+          backgroundColor:
+              item['status'] == 0 ? Color(0XFFEEEEEE) : Color(0XFFCCCCCC),
+          selected: selectedChoices.contains(item['skul']),
           onSelected: (selected) {
+            // item['status'] ---0:禁用，1：可用
             selectedChoices = [];
             setState(() {
-              if (selectedChoices.contains(item)) {
-                selectedChoices.remove(item);
+              if (item['status'] == 0) {
+                return;
+              }
+              if (selectedChoices.contains(item['skul'])) {
+                selectedChoices.remove(item['skul']);
               } else {
                 selectedChoices = [];
-                selectedChoices.add(item);
+                selectedChoices.add(item['skul']);
               }
               print('object$selectedChoices');
               widget.onSelectionChanged(selectedChoices);

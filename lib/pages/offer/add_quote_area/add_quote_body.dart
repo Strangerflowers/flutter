@@ -153,6 +153,7 @@ class AddQuoteBody extends StatelessWidget {
     return InkWell(
       onTap: () {
         // 跳转到商品列表页面
+        // Navigator.pop(context);
         Application.router.navigateTo(
             context, "/selectproduct?id=${subItem.productCategroyId}");
       },
@@ -191,8 +192,8 @@ class AddQuoteBody extends StatelessWidget {
               Container(
                 width: ScreenUtil().setWidth(120),
                 padding: EdgeInsets.only(top: 0, right: 10),
-                child: Image.asset('images/icon.png'),
-                // child: Image.network(subItem.subjectItemList[0].image),
+                // child: Image.asset('images/icon.png'),
+                child: Image.network(subItem.subjectItemList[0].image),
               ),
               Expanded(
                 child: _right(subItem.subjectItemList[0]),

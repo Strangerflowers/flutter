@@ -67,6 +67,7 @@ class SelectProductsBottom extends StatelessWidget {
             if (productData.length <= 0) {
               return;
             }
+            Navigator.pop(context);
             Application.router.navigateTo(context, "/addproduct?id=1");
             // 选定之后，清空当前页面的勾选状态
             // Provide.value<DemandQuotationProvide>(context).cleanProduct();

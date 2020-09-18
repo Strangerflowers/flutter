@@ -98,7 +98,8 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10),
-            child: Image.asset('images/icon.png'),
+            child: Image.network(item.image),
+            // child: Image.asset('images/icon.png'),
           ),
           Expanded(
             child: _right(item),
