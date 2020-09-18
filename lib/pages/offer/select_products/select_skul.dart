@@ -100,7 +100,6 @@ class _SelectSkulState extends State<SelectSkul> {
 
   // 左侧商品
   Widget _right(selectGoodsItem, goodsItem) {
-    print('秀嘎动态字段==${selectGoodsResult}');
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       // width: ScreenUtil().setWidth(750),
@@ -195,20 +194,10 @@ class _SelectSkulState extends State<SelectSkul> {
                             setState(() {
                               selectedItemsList = selectedList;
                             });
-                            var obj;
-                            skulObjectData.forEach((element) {
-                              if (element['skul'] ==
-                                  selectedItemsList.join(' ')) {
-                                // print('进入条件判断$selectGoodsResult');
-                                obj = element['skulgood'];
-                                setState(() {
-                                  selectGoodsResult = obj;
-                                  print(
-                                      '2222=========${selectGoodsResult.price}');
-                                });
-                                return;
 
-                                // return result.specificaId = element['id'];
+                            skulObjectData.forEach((element) {
+                              if (element['skul'] == selectedList.join(' ')) {
+                                return selectGoodsResult = element['skulgood'];
                               }
                             });
                           },
@@ -317,12 +306,12 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
 
   _buildChoiceList() {
     List<Widget> choices = List();
+    print('widget.selectItem====${widget.selectItem}');
     if (widget.selectItem != null) {
-      setState(() {
-        selectedChoices = [];
+      if (selectedChoices.length == 0) {
         selectedChoices.add(widget.selectItem);
         widget.selectItem = null;
-      });
+      }
     }
 
     // if (selectedChoices1 != []) {}
@@ -338,14 +327,18 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
               item['status'] == 0 ? Color(0XFFEEEEEE) : Color(0XFFCCCCCC),
           selected: selectedChoices.contains(item['skul']),
           onSelected: (selected) {
+            widget.onSelectionChanged([]);
             // item['status'] ---0:禁用，1：可用
             selectedChoices = [];
+            if (item['status'] == 0) {
+              return;
+            }
             setState(() {
-              if (item['status'] == 0) {
-                return;
-              }
+              print(
+                  '再次选择规格出错$selectedChoices====${item['skul']}====${selectedChoices.contains(item['skul'])}');
               if (selectedChoices.contains(item['skul'])) {
-                selectedChoices.remove(item['skul']);
+                selectedChoices.clear();
+                // selectedChoices.remove(item['skul']);
               } else {
                 selectedChoices = [];
                 selectedChoices.add(item['skul']);
