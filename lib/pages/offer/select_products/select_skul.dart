@@ -306,7 +306,6 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
 
   _buildChoiceList() {
     List<Widget> choices = List();
-    print('widget.selectItem====${widget.selectItem}');
     if (widget.selectItem != null) {
       if (selectedChoices.length == 0) {
         selectedChoices.add(widget.selectItem);
@@ -334,8 +333,6 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
               return;
             }
             setState(() {
-              print(
-                  '再次选择规格出错$selectedChoices====${item['skul']}====${selectedChoices.contains(item['skul'])}');
               if (selectedChoices.contains(item['skul'])) {
                 selectedChoices.clear();
                 // selectedChoices.remove(item['skul']);
@@ -343,7 +340,6 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
                 selectedChoices = [];
                 selectedChoices.add(item['skul']);
               }
-              print('object$selectedChoices');
               widget.onSelectionChanged(selectedChoices);
             });
           },
