@@ -1,3 +1,4 @@
+import 'package:bid/common/inconfont.dart';
 import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,8 +78,7 @@ class AddQuoteBody extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          Icon(IconData(0xe656, fontFamily: 'iconfont'),
-              color: Color(0xFF52A0FF), size: 20.0),
+          Icon(Iconfont.productIcon, color: Color(0xFF52A0FF), size: 20.0),
           Expanded(
             child: Container(
               padding: EdgeInsets.only(left: 10),

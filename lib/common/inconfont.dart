@@ -20,4 +20,8 @@ class Iconfont {
   static IconData salesorder = IconData(0xe651, fontFamily: 'iconfont');
   // Company label 公司前的标签
   static IconData companyLabel = IconData(0xe64e, fontFamily: 'iconfont');
+  //xe656
+  static IconData productIcon = IconData(0xe656, fontFamily: 'iconfont');
+  //关闭图标
+  static IconData circulClose = IconData(0xebd2, fontFamily: 'iconfont');
 }

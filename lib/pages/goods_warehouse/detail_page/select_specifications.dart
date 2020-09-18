@@ -1,3 +1,4 @@
+import 'package:bid/common/inconfont.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../../../provide/goods_detail_provide.dart';
@@ -113,7 +114,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                         Navigator.pop(context, 1);
                       },
                       child: Icon(
-                        IconData(0xebd2, fontFamily: 'iconfont'),
+                        Iconfont.circulClose,
                         color: Color(0xFF999DA0),
                       ),
                     ),

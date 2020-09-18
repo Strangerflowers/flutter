@@ -1,3 +1,4 @@
+import 'package:bid/common/inconfont.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../../../provide/demand_quotation/demand_quotation_provide.dart';
@@ -116,7 +117,7 @@ class _SelectSkulState extends State<SelectSkul> {
                         Navigator.pop(context, 1);
                       },
                       child: Icon(
-                        IconData(0xebd2, fontFamily: 'iconfont'),
+                        Iconfont.circulClose,
                         color: Color(0xFF999DA0),
                       ),
                     ),
