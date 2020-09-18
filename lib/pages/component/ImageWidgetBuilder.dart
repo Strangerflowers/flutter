@@ -28,7 +28,7 @@ class ImageWidgetBuilder {
     int cacheWidth,
     int cacheHeight,
   }) {
-    Image defaultImage = Image.asset('images/r.jpg');
+    Image defaultImage = Image.asset('images/icon.png');
     Image image = Image.network(url,
         key: key,
         scale: scale,
@@ -50,7 +50,7 @@ class ImageWidgetBuilder {
         matchTextDirection: matchTextDirection,
         gaplessPlayback: gaplessPlayback,
         filterQuality: filterQuality,
-        isAntiAlias: isAntiAlias,
+        // isAntiAlias: isAntiAlias,
         headers: headers,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight);

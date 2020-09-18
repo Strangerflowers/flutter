@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -143,11 +144,12 @@ class _MyImageState extends State<MyImage> {
                               width: 200,
                               height: 100,
                             )
-                      : Image.network(
-                          url,
-                          width: 200,
-                          height: 100,
-                        ),
+                      : ImageWidgetBuilder.loadImage(url),
+                  // Image.network(
+                  //     url,
+                  //     width: 200,
+                  //     height: 100,
+                  //   ),
                 ),
                 FloatingActionButton(
                   onPressed: () {
