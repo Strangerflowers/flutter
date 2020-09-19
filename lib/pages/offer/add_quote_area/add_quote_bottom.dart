@@ -12,10 +12,21 @@ import '../../index_page.dart';
 class AddQuoteBottom extends StatelessWidget {
   var speciesNumber; //几种
   var totalNumber; //共几件
+  var totalAmount;
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandDetailProvide>(context).offerPageData;
+      totalAmount = 0;
+      totalNumber = 0;
+      goodsInfo.forEach((ele) {
+        ele['demandDetailDtoList'].forEach((item) {
+          totalNumber += item.num;
+          if (item.goodsPrice != 'null' && item.goodsPrice != '') {
+            totalAmount += double.parse(item.goodsPrice) * item.num;
+          }
+        });
+      });
       return Container(
         // margin: EdgeInsets.all(5.0),
         padding: EdgeInsets.all(10),
@@ -37,8 +48,7 @@ class AddQuoteBottom extends StatelessWidget {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text:
-                                    '￥${Provide.value<DemandDetailProvide>(context).totalAmount == null ? 0 : Provide.value<DemandDetailProvide>(context).totalAmount}',
+                                text: '￥${totalAmount}',
                                 style: TextStyle(
                                   color: Color(0xFFF8980B),
                                 ),
@@ -49,7 +59,7 @@ class AddQuoteBottom extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${Provide.value<DemandDetailProvide>(context).speciesNumber}种${Provide.value<DemandDetailProvide>(context).totalNumber}件',
+                        '${Provide.value<DemandDetailProvide>(context).speciesNumber}种${totalNumber}件',
                         style: TextStyle(color: Color(0xFFA9A8AB)),
                       ),
                     ),
@@ -92,8 +102,7 @@ class AddQuoteBottom extends StatelessWidget {
                       .id,
                   "remark": Provide.value<DemandDetailProvide>(context).remark,
                   "subjectMgrInfoId": "0711547302f842e29f26f5658e72366b",
-                  "totalAmount":
-                      Provide.value<DemandDetailProvide>(context).totalAmount
+                  "totalAmount": totalAmount
                 };
                 print('提交报价参数$formData');
                 request('createDemandQuotation', formData: formData)

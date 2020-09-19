@@ -13,7 +13,6 @@ class DemandDetailProvide with ChangeNotifier {
   var totalNumber; //共几件
   var offerPageData; //报价整合数据的数据，用于渲染报价提交页面
   var selectData = [];
-  var totalAmount; //总价格
   var quotationData; //报价页面数据
   var parentFlagList = []; //存放父级勾选的值，用于对全选是否勾上
   var childFlagList = [];
@@ -160,19 +159,37 @@ class DemandDetailProvide with ChangeNotifier {
     notifyListeners();
   }
 
+  // 选择规格时，默认单价
   changeGoodsPrice(price, specificaId) {
-    print('-------------->${specificaId}---$price');
-    totalAmount = 0;
+    // print('-------------->${specificaId}---$price');
+
     offerPageData.forEach((ele) {
       ele['demandDetailDtoList'].forEach((item) {
         if (item.specificaId == specificaId) {
           item.goodsPrice = price;
-          totalAmount += item.goodsPrice * item.num;
-          // print('1')
-          // return;
         }
       });
     });
+    notifyListeners();
+  }
+
+  // 修改单个价格
+  modifyPrice(producet, price) {
+    offerPageData.forEach((ele) {
+      ele['demandDetailDtoList'].forEach((item) {
+        if (item.id == producet.id) {
+          item.goodsPrice = price;
+        }
+      });
+    });
+    notifyListeners();
+  }
+
+  // 输入价格时跟随价格浮动
+  // 法一，每次输入改变都进行一次遍历，然后计算总价格
+  // 法二，找到对应位置，只改对应的价格，
+  // 法三：先计算小计，由小计来相加，计算总价格数
+  changeTotalAmount(price, specificaId) {
     notifyListeners();
   }
 

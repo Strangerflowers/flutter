@@ -21,6 +21,7 @@ class AddQuoteBody extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _dataListView(goodsInfo, context),
+            // 描述
             _planMark(context),
           ],
         ),
@@ -30,7 +31,6 @@ class AddQuoteBody extends StatelessWidget {
 
   //循环一级数据
   Widget _dataListView(list, context) {
-    // List item = ['123', '4353'];
     if (list != null) {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
@@ -40,7 +40,7 @@ class AddQuoteBody extends StatelessWidget {
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (context, index) {
-              return _merge(list[index], context);
+              return _merge(list[index], index, context);
             },
           ),
         ),
@@ -53,7 +53,7 @@ class AddQuoteBody extends StatelessWidget {
   }
 
   // 合并一二级数据
-  Widget _merge(item, context) {
+  Widget _merge(item, index, context) {
     return Container(
       // decoration: BoxDecoration(
       //   color: Colors.white,
@@ -212,8 +212,8 @@ class AddQuoteBody extends StatelessWidget {
           ),
           SelectSkul(subItem),
           // specificationList
-          // _inputPrice(subItem),
-          GoodsPrice(subItem),
+          _goodsPrice(subItem, context),
+          // GoodsPrice(subItem),
         ],
       ),
     );
@@ -246,20 +246,41 @@ class AddQuoteBody extends StatelessWidget {
     );
   }
 
-  //输入报价金额item
-  Widget _inputPrice(item) {
+  Widget _goodsPrice(subItem, context) {
     return Container(
       child: TextFormField(
-        autofocus: false,
-        // controller: _unameController,
+        keyboardType: TextInputType.number,
+        controller: TextEditingController.fromValue(
+          TextEditingValue(
+            text: '${subItem.goodsPrice == null ? "" : subItem.goodsPrice}',
+            // 保持光标在最后
+            selection: TextSelection.fromPosition(
+              TextPosition(
+                  affinity: TextAffinity.downstream,
+                  offset:
+                      '${subItem.goodsPrice == null ? "" : subItem.goodsPrice}'
+                          .length),
+            ),
+          ),
+        ),
+        // autofocus: false,
+        autofocus: true,
+        onChanged: (value) {
+          if (value == '') {
+            Provide.value<DemandDetailProvide>(context)
+                .modifyPrice(subItem, '');
+          } else {
+            Provide.value<DemandDetailProvide>(context)
+                .modifyPrice(subItem, value);
+          }
+        },
+        onSaved: (value) {},
         decoration: InputDecoration(
-          // TextInputType.number,
-          hintText:
-              "${item.specificaId == null ? item.subjectItemList[0].priceRange : item.specificaId}",
+          hintText: "请输入报价单价",
           prefixIcon: Container(
             width: ScreenUtil().setWidth(150),
             margin: EdgeInsets.only(top: 15.0, right: 5.0),
-            child: Text('报价'),
+            child: Text('报价${subItem.goodsPrice}'),
           ),
           suffixIcon: Container(
             width: ScreenUtil().setWidth(80),
@@ -304,7 +325,7 @@ class AddQuoteBody extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                  '小计：${subItem.goodsPrice == null ? 0 : subItem.goodsPrice * subItem.num}'),
+                  '小计：${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : double.parse(subItem.goodsPrice) * subItem.num}'),
             ),
           ),
         ],
@@ -414,19 +435,29 @@ class _GoodsPriceState extends State<GoodsPrice> {
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
-      return Container(
+      return Form(
+        key: priceFormKey,
         child: TextFormField(
+          controller: TextEditingController.fromValue(
+            TextEditingValue(
+              text: '${result.goodsPrice == 'null' ? "" : result.goodsPrice}',
+              // 保持光标在最后
+              selection: TextSelection.fromPosition(
+                TextPosition(
+                    affinity: TextAffinity.downstream,
+                    offset:
+                        '${result.goodsPrice == 'null' ? "" : result.goodsPrice}'
+                            .length),
+              ),
+            ),
+          ),
           // autofocus: false,
           autofocus: true,
           onChanged: (value) {
-            setState(() {
-              print('是否进入修改页面${value}1');
-              result.goodsPrice = double.parse(value);
-              print('是否进入修改页面${result.goodsPrice}');
-            });
-
+            // setState(() {
+            print('是否进入修改页面${value}1');
             Provide.value<DemandDetailProvide>(context)
-                .changeGoodsPrice(value, result.specificaId);
+                .modifyPrice(result, value);
           },
           onSaved: (value) {
             this.result = value;
@@ -440,12 +471,11 @@ class _GoodsPriceState extends State<GoodsPrice> {
               });
           },
           decoration: InputDecoration(
-            hintText:
-                "${result.goodsPrice == null ? '请输入报价单价' : result.goodsPrice}",
+            hintText: "请输入报价单价",
             prefixIcon: Container(
               width: ScreenUtil().setWidth(150),
               margin: EdgeInsets.only(top: 15.0, right: 5.0),
-              child: Text('报价'),
+              child: Text('报价${result.goodsPrice}'),
             ),
             suffixIcon: Container(
               width: ScreenUtil().setWidth(80),

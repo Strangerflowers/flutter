@@ -171,7 +171,7 @@ class DemandDetailDtoList {
   List<Object> subjectItemList;
   List<Object> specificationList;
   int specificaId;
-  double goodsPrice;
+  String goodsPrice;
   int num;
   int typeId;
   String type;
@@ -211,7 +211,7 @@ class DemandDetailDtoList {
     subjectItemList = json['subjectItemList'];
     specificationList = json['specificationList'];
     specificaId = json['specificaId'];
-    goodsPrice = json['goodsPrice'];
+    goodsPrice = json['goodsPrice'].toString();
     // subjectItemList
     num = json['num'];
     typeId = json['typeId'];

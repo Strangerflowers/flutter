@@ -224,15 +224,16 @@ class _SelectSkulState extends State<SelectSkul> {
                           });
                           skulObjectData.forEach((element) {
                             if (element['skul'] == showSelectItem) {
-                              result.goodsPrice =
-                                  double.parse(element['price'].toString());
+                              result.goodsPrice = element['price'].toString();
+                              // 选择规格传参
                               return result.specificaId = element['id'];
                             }
                           });
                           // 选择规格时给一个默认的价格
-                          double price = result.goodsPrice / 100;
+                          double price = double.parse(result.goodsPrice) / 100;
                           Provide.value<DemandDetailProvide>(context)
-                              .changeGoodsPrice(price, result.specificaId);
+                              .changeGoodsPrice(
+                                  price.toString(), result.specificaId);
                           Navigator.pop(context, 1);
                         },
                       ),
