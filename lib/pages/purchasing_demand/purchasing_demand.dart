@@ -299,7 +299,7 @@ class _DemandContentState extends State<DemandContent> {
     return Provide<PurchasingListProvide>(builder: (context, child, data) {
       if (data.goodsList != null) {
         return Container(
-          height: ScreenUtil().setHeight(1000),
+          // height: ScreenUtil().setHeight(1000),
           child: SizedBox(
             child: ListView.builder(
               itemCount: data.goodsList.length,

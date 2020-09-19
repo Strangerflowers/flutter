@@ -19,12 +19,12 @@ class _SwitchAndCheckBoxTestRouteState
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
-      var goodsInfo = Provide.value<DemandDetailProvide>(context).goodsList;
+      var goodsInfo = Provide.value<DemandDetailProvide>(context).quotationData;
       return SingleChildScrollView(
         child: Container(
           child: Column(
             children: <Widget>[
-              _checkboxTitleListView(goodsInfo.result.demandSkuDtoList),
+              _checkboxTitleListView(goodsInfo),
             ],
           ),
         ),

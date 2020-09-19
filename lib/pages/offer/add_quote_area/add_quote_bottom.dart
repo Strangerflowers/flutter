@@ -9,7 +9,19 @@ import '../../index_page.dart';
 // import './round_checkbox.dart';
 // import '../../routers/application.dart';
 
-class AddQuoteBottom extends StatelessWidget {
+class AddQuoteBottom extends StatefulWidget {
+  @override
+  _AddQuoteBottomState createState() => _AddQuoteBottomState();
+}
+
+class _AddQuoteBottomState extends State<AddQuoteBottom> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class AddQuoteBottom extends StatelessWidget {
   var speciesNumber; //几种
   var totalNumber; //共几件
   var totalAmount;
@@ -85,7 +97,7 @@ class AddQuoteBottom extends StatelessWidget {
                   ele['demandDetailDtoList'].forEach((subele) {
                     print('循环遍历查看skuiid是否获取${subele.specificaId}');
                     var Obj = {
-                      "amount": subele.goodsPrice,
+                      "amount": double.parse(subele.goodsPrice) * 100,
                       "demandDetailId": subele.id,
                       "num": subele.num,
                       "skuId": subele.specificaId
@@ -102,7 +114,7 @@ class AddQuoteBottom extends StatelessWidget {
                       .id,
                   "remark": Provide.value<DemandDetailProvide>(context).remark,
                   "subjectMgrInfoId": "0711547302f842e29f26f5658e72366b",
-                  "totalAmount": totalAmount
+                  "totalAmount": totalAmount * 100
                 };
                 print('提交报价参数$formData');
                 request('createDemandQuotation', formData: formData)

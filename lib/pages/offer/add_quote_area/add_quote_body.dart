@@ -234,7 +234,8 @@ class AddQuoteBody extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              '${childItem.priceRange}',
+              "",
+              // '${childItem.priceRange}',
               style: TextStyle(
                 color: Color(0xFFCCCCCC),
                 fontSize: ScreenUtil().setSp(30),
@@ -252,13 +253,13 @@ class AddQuoteBody extends StatelessWidget {
         keyboardType: TextInputType.number,
         controller: TextEditingController.fromValue(
           TextEditingValue(
-            text: '${subItem.goodsPrice == null ? "" : subItem.goodsPrice}',
+            text: '${subItem.goodsPrice == 'null' ? "" : subItem.goodsPrice}',
             // 保持光标在最后
             selection: TextSelection.fromPosition(
               TextPosition(
                   affinity: TextAffinity.downstream,
                   offset:
-                      '${subItem.goodsPrice == null ? "" : subItem.goodsPrice}'
+                      '${subItem.goodsPrice == 'null' ? "" : subItem.goodsPrice}'
                           .length),
             ),
           ),
@@ -280,12 +281,12 @@ class AddQuoteBody extends StatelessWidget {
           prefixIcon: Container(
             width: ScreenUtil().setWidth(150),
             margin: EdgeInsets.only(top: 15.0, right: 5.0),
-            child: Text('报价${subItem.goodsPrice}'),
+            child: Text('报价'),
           ),
           suffixIcon: Container(
             width: ScreenUtil().setWidth(80),
             margin: EdgeInsets.only(top: 15.0, right: 5.0),
-            child: Text('元'),
+            child: Text('元/${subItem.type}'),
           ),
         ),
       ),
@@ -325,7 +326,7 @@ class AddQuoteBody extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                  '小计：${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : double.parse(subItem.goodsPrice) * subItem.num}'),
+                  '小计：￥${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : double.parse(subItem.goodsPrice) * subItem.num}'),
             ),
           ),
         ],
@@ -475,7 +476,7 @@ class _GoodsPriceState extends State<GoodsPrice> {
             prefixIcon: Container(
               width: ScreenUtil().setWidth(150),
               margin: EdgeInsets.only(top: 15.0, right: 5.0),
-              child: Text('报价${result.goodsPrice}'),
+              child: Text('报价'),
             ),
             suffixIcon: Container(
               width: ScreenUtil().setWidth(80),

@@ -16,7 +16,7 @@ class AddQuoteProductPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('报价添加产品'),
+        title: Text('报价'),
       ),
       body: Stack(
         children: <Widget>[

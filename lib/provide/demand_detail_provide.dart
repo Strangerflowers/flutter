@@ -16,6 +16,7 @@ class DemandDetailProvide with ChangeNotifier {
   var quotationData; //报价页面数据
   var parentFlagList = []; //存放父级勾选的值，用于对全选是否勾上
   var childFlagList = [];
+  var tranData; //中转
   bool selectAllFlag = false;
   var arr = [];
   // 从后台获取数据
@@ -28,19 +29,30 @@ class DemandDetailProvide with ChangeNotifier {
         // goodsList = DemandDetailHome.fromJson(val);
         if (val['result'] != null) {
           goodsList = DemandDetailHome.fromJson(val);
-          quotationData = goodsList.result.demandSkuDtoList;
+          tranData = goodsList.result.demandSkuDtoList;
+          quotationData = [];
           // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态
-          quotationData.forEach((ele) {
+          tranData.forEach((ele) {
             ele.checkBoxFlag = false;
             selectAllFlag = false;
             if (ele.demandDetailDtoList != null) {
-              ele.demandDetailDtoList.forEach((ele) {
-                ele.checkBoxFlag = false;
+              List<DemandDetailDtoList> wherearr = new List();
+              ele.demandDetailDtoList.forEach((subele) {
+                subele.checkBoxFlag = false;
+                if (subele.isQuotation == 0) {
+                  return wherearr.add(subele);
+                  // return quotationData.add(ele);
+                }
               });
+              // 只展示可报价的
+              if (wherearr.length > 0) {
+                ele.demandDetailDtoList = wherearr;
+                quotationData.add(ele);
+              }
             }
-            return arr.add(ele);
+            // return arr.add(ele);
           });
-          quotationData = arr;
+          // quotationData = arr;
         } else {
           // Toast.toast()
           // Fluttertoast.showToast(
@@ -71,7 +83,7 @@ class DemandDetailProvide with ChangeNotifier {
   selectAll(flag) {
     // selectAllFlag = flag;
     selectAllFlag = !selectAllFlag;
-    quotationData = goodsList.result.demandSkuDtoList;
+
     quotationData.forEach((ele) {
       ele.checkBoxFlag = selectAllFlag;
       if (ele.demandDetailDtoList != null) {
@@ -79,9 +91,7 @@ class DemandDetailProvide with ChangeNotifier {
           ele.checkBoxFlag = selectAllFlag;
         });
       }
-      return arr.add(ele);
     });
-    quotationData = arr;
 
     print('全选状态$selectAllFlag');
     notifyListeners();
@@ -90,7 +100,7 @@ class DemandDetailProvide with ChangeNotifier {
   // 勾选父级下面的子级全部勾上
   selectParentAll(flag, index) {
     // 父级全选，子级全部勾选，父级取消，子级全部取消
-    quotationData = goodsList.result.demandSkuDtoList;
+    // quotationData = goodsList.result.demandSkuDtoList;
     quotationData[index].demandDetailDtoList.forEach((ele) {
       ele.checkBoxFlag = flag;
       return arr.add(ele);
@@ -115,7 +125,7 @@ class DemandDetailProvide with ChangeNotifier {
 
   // 子级勾选
   selectChild() {
-    quotationData = goodsList.result.demandSkuDtoList;
+    // quotationData = goodsList.result.demandSkuDtoList;
     // 判断全选是否勾上
     quotationData.forEach((ele) {
       if (ele.demandDetailDtoList != null) {

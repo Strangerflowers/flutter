@@ -528,7 +528,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   ),
                   child: ListTile(
                     title: Text(
-                      typeList == null ? '请选择' : typeList.toString(),
+                      typeList == null ? '请选择类别' : typeList.toString(),
                       style: TextStyle(
                           color: typeList != null
                               ? Colors.black
@@ -639,7 +639,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             maxLines: null, //不限制行数
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入详细地址",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -694,7 +694,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
             decoration: InputDecoration(
-              hintText: "请输入",
+              hintText: "请输入公司联系电话",
             ),
             onSaved: (value) {
               companyMobile = value;
@@ -754,7 +754,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入营业执照编号",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -765,7 +765,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             },
             validator: (value) {
               if (value.isEmpty) {
-                return "请输入";
+                return "请输入营业执照编号";
               }
               return null;
             },
@@ -808,7 +808,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入经营范围",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -819,7 +819,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             },
             validator: (value) {
               if (value.isEmpty) {
-                return "请输入";
+                return "不能为空";
               } else if (value.length > 200) {
                 return "长度不能超过200个字符";
               }
@@ -864,7 +864,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入开户银行名称",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -918,7 +918,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入开户账号",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -928,9 +928,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               account = value;
             },
             validator: (value) {
-              if (value.isEmpty) {
-                return "请输入";
-              }
+              // if (value.isEmpty) {
+              //   return "请输入";
+              // }
               return null;
             },
           ),
@@ -972,7 +972,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入固定电话",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -1027,7 +1027,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入社会信用代码",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -1040,7 +1040,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               RegExp exp =
                   RegExp(r'^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$');
               if (value.isEmpty) {
-                return "请输入";
+                return "请输入社会信用代码";
               } else if (!exp.hasMatch(value)) {
                 return "格式错误";
               }
@@ -1085,7 +1085,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入联系人姓名",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {
@@ -1141,7 +1141,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             decoration: InputDecoration(
               // labelText: "用户名",
-              hintText: "请输入",
+              hintText: "请输入联系人手机号码",
               // prefixIcon: Icon(Icons.person),
             ),
             onSaved: (value) {

@@ -249,6 +249,7 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
+            width: ScreenUtil().setWidth(550.0),
             child: Text(
               '${item.productDescript}',
               style: TextStyle(
