@@ -97,8 +97,12 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(120),
+            height: ScreenUtil().setHeight(100),
             padding: EdgeInsets.only(top: 0, right: 10),
-            child: Image.network(item.image),
+            child: Image.network(
+              item.image,
+              fit: BoxFit.fill,
+            ),
             // child: Image.asset('images/icon.png'),
           ),
           Expanded(
@@ -125,9 +129,9 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              '${item.priceRange}',
+              '￥${item.priceRange}',
               style: TextStyle(
-                color: Color(0xFFCCCCCC),
+                color: Color(0xFFF4AB36),
                 fontSize: ScreenUtil().setSp(30),
               ),
             ),

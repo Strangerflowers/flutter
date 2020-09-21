@@ -121,7 +121,10 @@ class _SwitchAndCheckBoxTestRouteState
           ),
           Expanded(
             child: Container(
-              child: Text('${item.productCategroyPath}'),
+              child: Text(
+                '${item.productCategroyPath}',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ),
         ],

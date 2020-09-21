@@ -62,13 +62,13 @@ class SalesAddPage with ChangeNotifier {
 
   // 修改物流公司
   changeCompanyNumber(value) {
-    logisticsCompanyName = value;
+    logisticsNumber = value;
     notifyListeners();
   }
 
   // 修改快递单号
   changeCompanyName(value) {
-    logisticsNumber = value;
+    logisticsCompanyName = value;
     notifyListeners();
   }
 }
