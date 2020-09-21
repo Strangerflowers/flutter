@@ -7,7 +7,8 @@ import '../../routers/application.dart';
 
 class SelectProductsPage extends StatelessWidget {
   final String id;
-  SelectProductsPage(this.id);
+  final String subId;
+  SelectProductsPage(this.id, this.subId);
   @override
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).size.height);
@@ -70,7 +71,7 @@ class SelectProductsPage extends StatelessWidget {
                     bottom: -5,
                     left: 0,
                     right: 0,
-                    child: SelectProductsBottom(id),
+                    child: SelectProductsBottom(id, subId),
                   )
                 ],
               );

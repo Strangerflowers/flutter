@@ -154,8 +154,8 @@ class AddQuoteBody extends StatelessWidget {
       onTap: () {
         // 跳转到商品列表页面
         // Navigator.pop(context);
-        Application.router.navigateTo(
-            context, "/selectproduct?id=${subItem.productCategroyId}");
+        Application.router.navigateTo(context,
+            "/selectproduct?id=${subItem.productCategroyId}&subId=${subItem.id}");
       },
       child: Container(
         padding: EdgeInsets.all(20),
@@ -202,7 +202,7 @@ class AddQuoteBody extends StatelessWidget {
                 onTap: () {
                   // 跳转到商品列表页面
                   Application.router.navigateTo(context,
-                      "/selectproduct?id=${subItem.productCategroyId}");
+                      "/selectproduct?id=${subItem.productCategroyId}&subId=${subItem.id}");
                 },
                 child: Container(
                   child: Text('替换产品'),

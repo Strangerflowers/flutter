@@ -111,8 +111,9 @@ Handler selectProductsPageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   print('添加产品$params');
   String id = params['id'].first;
+  String subId = params['subId'].first;
   // print('index>details goodsId is ${goodsId}');
-  return SelectProductsPage(id);
+  return SelectProductsPage(id, subId);
 });
 
 // ChoiceIndex  需求详情跳转到报价页面

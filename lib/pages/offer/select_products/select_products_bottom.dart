@@ -10,7 +10,8 @@ import '../../../routers/application.dart';
 
 class SelectProductsBottom extends StatelessWidget {
   final String id;
-  SelectProductsBottom(this.id);
+  final String subId;
+  SelectProductsBottom(this.id, this.subId);
   var flag = false;
   @override
   Widget build(BuildContext context) {
@@ -46,12 +47,20 @@ class SelectProductsBottom extends StatelessWidget {
             offerPageData.forEach((offer) {
               if (offer['demandDetailDtoList'].length > 0) {
                 offer['demandDetailDtoList'].forEach((suboffer) {
-                  if (suboffer.productCategroyId.toString() == id) {
+                  if (suboffer.id.toString() == subId) {
                     if (null != suboffer.subjectItemList) {
+                      if (suboffer.specificaId != null ||
+                          suboffer.goodsPrice != '') {
+                        suboffer.specificaId = null;
+                        suboffer.goodsPrice = '';
+                      }
+                      print(
+                          '替换报价时进入${suboffer.specificaId}====${suboffer.goodsPrice}');
                       // 替换产品的时候需要将之前的清空，再放进去
                       suboffer.subjectItemList = [];
                       suboffer.subjectItemList.add(productData[0]);
                     } else {
+                      print('报价时首次进入');
                       suboffer.subjectItemList = new List<QuotataionDataList>();
                       suboffer.subjectItemList.add(productData[0]);
                     }

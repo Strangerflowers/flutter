@@ -145,7 +145,7 @@ class _SelectSkulState extends State<SelectSkul> {
           Row(
             children: <Widget>[
               Text(
-                '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price}',
+                '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price / 100}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
             ],
