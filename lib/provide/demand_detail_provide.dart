@@ -217,7 +217,7 @@ class DemandDetailProvide with ChangeNotifier {
 
   // 清空勾选
   cleanCheck() {
-    quotationData = goodsList.result.demandSkuDtoList;
+    // quotationData = goodsList.result.demandSkuDtoList;
     // 获取报价页面数据，遍历多加一个checkBoxFlag字段，用于判断是否处于勾选状态,//清空选择的产品
     quotationData.forEach((ele) {
       ele.checkBoxFlag = false;
@@ -228,9 +228,9 @@ class DemandDetailProvide with ChangeNotifier {
           ele.checkBoxFlag = false;
         });
       }
-      return arr.add(ele);
+      // return arr.add(ele);
     });
-    quotationData = arr;
+    // quotationData = arr;
     notifyListeners();
   }
 

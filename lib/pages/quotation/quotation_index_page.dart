@@ -299,7 +299,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '${item.merchantName}',
+                      '${item.orgName}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(30),
                         color: Color(0xFF333333),
@@ -441,6 +441,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
             child: Column(
               children: <Widget>[
                 Container(
+                  alignment: Alignment.bottomLeft,
                   child: Text(
                     '${item.productDescript}',
                     maxLines: 2,

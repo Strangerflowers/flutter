@@ -222,7 +222,7 @@ class ProductInformation extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Text(
-        '${item.productCategoryName}（${item.num}${item.typeName}）',
+        '${item.productDescript}（${item.num}${item.typeName}）',
         style: TextStyle(
           fontSize: ScreenUtil().setSp(30),
           color: Color(0xFF969497),

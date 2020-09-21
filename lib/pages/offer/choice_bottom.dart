@@ -59,10 +59,8 @@ class ChoiceBottom extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
-                var quotationData = Provide.value<DemandDetailProvide>(context)
-                    .goodsList
-                    .result
-                    .demandSkuDtoList;
+                var quotationData =
+                    Provide.value<DemandDetailProvide>(context).quotationData;
                 var arr = [];
                 quotationData.forEach((ele) {
                   var obj = {
