@@ -129,13 +129,14 @@ class DemandDetailProvide with ChangeNotifier {
     // 判断全选是否勾上
     quotationData.forEach((ele) {
       if (ele.demandDetailDtoList != null) {
+        // 用于存放true的个数
         childFlagList = [];
         ele.demandDetailDtoList.forEach((sub) {
           if (sub.checkBoxFlag == true) {
             childFlagList.add(sub.checkBoxFlag);
           }
         });
-        if (childFlagList.length > 0) {
+        if (childFlagList.length == ele.demandDetailDtoList.length) {
           ele.checkBoxFlag = true;
         } else {
           ele.checkBoxFlag = false;
