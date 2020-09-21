@@ -31,7 +31,9 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
       var goodsInfo = Provide.value<DemandDetailProvide>(context).offerPageData;
       totalAmount = 0;
       totalNumber = 0;
+      speciesNumber = 0;
       goodsInfo.forEach((ele) {
+        speciesNumber += ele['demandDetailDtoList'].length;
         ele['demandDetailDtoList'].forEach((item) {
           totalNumber += item.num;
           if (item.goodsPrice != 'null' && item.goodsPrice != '') {
@@ -71,7 +73,7 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${Provide.value<DemandDetailProvide>(context).speciesNumber}种${totalNumber}件',
+                        '${speciesNumber}种${totalNumber}件',
                         style: TextStyle(color: Color(0xFFA9A8AB)),
                       ),
                     ),

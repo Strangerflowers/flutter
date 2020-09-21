@@ -312,12 +312,14 @@ class AddQuoteBody extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
+                print('点击删除拿到的id${subItem.id}');
                 var goodsInfo =
                     Provide.value<DemandDetailProvide>(context).offerPageData;
-                if (goodsInfo.length <= 1) {
+                if (goodsInfo.length <= 1 &&
+                    goodsInfo[0]['demandDetailDtoList'].length <= 1) {
                   return Toast.toast(context, msg: '不可删除');
                 }
-                _removeConfirm(context, item);
+                _removeConfirm(context, subItem);
                 print('点击提交报价');
               },
             ),
@@ -353,7 +355,7 @@ class AddQuoteBody extends StatelessWidget {
                 child: Text('确认'),
                 onPressed: () {
                   Provide.value<DemandDetailProvide>(context)
-                      .removeProduct(item);
+                      .removeProduct(item, context);
                   Navigator.of(context).pop('cancel');
                 },
               ),

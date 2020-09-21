@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:bid/common/toast.dart';
 
 import 'dart:convert';
 import '../model/demand_detail_model.dart';
@@ -210,9 +211,30 @@ class DemandDetailProvide with ChangeNotifier {
   }
 
   // 删除产品
-  removeProduct(item) {
-    // print('删除方法');
-    offerPageData.remove(item);
+  removeProduct(item, context) {
+    var arr = [];
+    offerPageData.forEach((ele) {
+      if (ele['demandDetailDtoList'] != null) {
+        var brr = [];
+        ele['demandDetailDtoList'].forEach((subele) {
+          if (subele.id == item.id) {
+            if (offerPageData.length <= 1 &&
+                ele['demandDetailDtoList'].length <= 1) {
+              brr.add(subele);
+              return Toast.toast(context, msg: '不可删除');
+            }
+          } else {
+            brr.add(subele);
+          }
+        });
+        ele['demandDetailDtoList'] = brr;
+        if (ele['demandDetailDtoList'].length > 0) {
+          arr.add(ele);
+        }
+      }
+    });
+    offerPageData = arr;
+    // offerPageData.remove(item);
     notifyListeners();
   }
 
