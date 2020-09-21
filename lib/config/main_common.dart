@@ -3,11 +3,11 @@ import 'package:bid/common/network.dart';
 import 'package:bid/common/pocket_capture.dart';
 import 'package:bid/config/config_reader.dart';
 import 'package:bid/config/service_url_holder.dart';
-import 'package:bid/models/user.dart';
 import 'package:bid/pages/index_page.dart';
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/signup/authentication.dart';
 import 'package:bid/pages/signup/signin.dart';
+import 'package:bid/provide/app_global/save_profile.dart';
 import 'package:bid/provide/app_global/user_info.dart';
 import 'package:bid/provide/demand_detail_provide.dart';
 import 'package:bid/provide/demand_quotation/demand_quotation_provide.dart';
@@ -30,9 +30,7 @@ import 'package:bid/service/service_method.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_screenutil/screenutil.dart';
 import 'package:provide/provide.dart';
-import 'package:bid/provide/app_global/save_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /** 

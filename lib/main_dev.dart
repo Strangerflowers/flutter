@@ -1,4 +1,3 @@
-import 'package:bid/common/log_utils.dart';
 import 'package:bid/config/environment.dart';
 import 'package:bid/config/main_common.dart';
 

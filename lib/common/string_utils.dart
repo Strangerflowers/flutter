@@ -67,4 +67,12 @@ class StringUtils extends TextUtil {
     }
     return finalText;
   }
+
+  static String valueOf(dynamic value) {
+    if (null != value) {
+      return value.toString();
+    } else {
+      return '';
+    }
+  }
 }
