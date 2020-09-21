@@ -130,10 +130,12 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                       textColor: Colors.white,
                       fontSize: 16.0,
                     );
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return IndexPage();
-                    }));
+                    Application.router.navigateTo(context,
+                        "/demanddetail?id=${Provide.value<DemandDetailProvide>(context).goodsList.result.id}");
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return IndexPage();
+                    // }));
                     // Application.router
                     //     .navigateTo(context, "/choice?id=$demandId");
                   } else {
