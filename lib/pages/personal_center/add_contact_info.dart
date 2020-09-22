@@ -1,8 +1,8 @@
 import 'package:bid/common/bean_utils.dart';
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/string_utils.dart';
-import 'package:bid/model/user_center/ContactInfoModel.dart';
-import 'package:bid/model/vo/ContactInfoVo.dart';
+import 'package:bid/models/user_center/ContactInfoModel.dart';
+import 'package:bid/models/vo/ContactInfoVo.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';

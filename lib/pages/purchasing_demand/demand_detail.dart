@@ -6,7 +6,7 @@ import 'package:provide/provide.dart';
 import '../../service/service_method.dart';
 import '../../provide/demand_detail_provide.dart';
 import './details/detail_bottom.dart';
-import '../../model/demand_detail_model.dart';
+import '../../models/demand_detail_model.dart';
 import '../../routers/application.dart';
 
 class DemandDetails extends StatelessWidget {

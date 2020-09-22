@@ -1,7 +1,7 @@
+import 'package:bid/models/shipping_information_add_model.dart';
 import 'package:flutter/material.dart';
+
 import '../service/service_method.dart';
-import 'dart:convert';
-import '../model/shipping_information_add_model.dart';
 
 class SalesOrderAddProvide with ChangeNotifier {
   GoodsNewsObj goodsList;

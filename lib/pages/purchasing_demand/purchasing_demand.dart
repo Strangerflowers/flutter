@@ -16,7 +16,7 @@ import '../goods_warehouse/goods_page.dart';
 import '../sales_order/sales_index_page.dart';
 import '../quotation/quotation_index_page.dart';
 import '../../service/service_method.dart';
-import '../../model/purchasing_list_model.dart';
+import '../../models/purchasing_list_model.dart';
 import '../../pages/offer/choice_index_page.dart';
 import 'package:bid/common/inconfont.dart';
 

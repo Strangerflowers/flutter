@@ -1,7 +1,7 @@
+import 'package:bid/models/sales_order/look.dart';
 import 'package:flutter/material.dart';
+
 import '../../service/service_method.dart';
-import 'dart:convert';
-import '../../model/sales_order/look.dart';
 
 class SalesOrderLook with ChangeNotifier {
   Look goodsList;

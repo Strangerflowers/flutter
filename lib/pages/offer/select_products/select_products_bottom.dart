@@ -1,11 +1,11 @@
 import 'package:bid/common/log_utils.dart';
-import 'package:bid/model/demand_quotation/demand_quotation_model.dart';
+import 'package:bid/models/demand_quotation/demand_quotation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
-import '../../../provide/demand_quotation/demand_quotation_provide.dart';
+
 import '../../../provide/demand_detail_provide.dart';
-// import '../round_checkbox.dart';
+import '../../../provide/demand_quotation/demand_quotation_provide.dart';
 import '../../../routers/application.dart';
 
 class SelectProductsBottom extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
-import '../model/quotation_detail_plan_model.dart';
+import '../models/quotation_detail_plan_model.dart';
 
 class QuotationPlanProvide with ChangeNotifier {
   QuotationPlan goodsList;

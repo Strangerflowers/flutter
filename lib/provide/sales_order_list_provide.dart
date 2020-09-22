@@ -1,7 +1,5 @@
+import 'package:bid/models/sales_order_list_model.dart';
 import 'package:flutter/material.dart';
-import '../service/service_method.dart';
-import 'dart:convert';
-import '../model/sales_order_list_model.dart';
 
 class SalesOrderListProvide with ChangeNotifier {
   // // GoodsSearchList goodsAllList; //在provide获取接口数据时，将返回数据保存在该变量

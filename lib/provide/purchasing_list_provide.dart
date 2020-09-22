@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
-import '../model/purchasing_list_model.dart';
+import '../models/purchasing_list_model.dart';
 
 class PurchasingListProvide with ChangeNotifier {
   // // GoodsSearchList goodsAllList; //在provide获取接口数据时，将返回数据保存在该变量

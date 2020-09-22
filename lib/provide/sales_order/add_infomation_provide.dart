@@ -1,8 +1,10 @@
 // 添加发货信息
-import 'package:flutter/material.dart';
-import '../../service/service_method.dart';
 import 'dart:convert';
-import '../../model/sales_order/add_infomation_model.dart';
+
+import 'package:bid/models/sales_order/add_infomation_model.dart';
+import 'package:flutter/material.dart';
+
+import '../../service/service_method.dart';
 
 class SalesAddPage with ChangeNotifier {
   SalesAdd goodsList;
