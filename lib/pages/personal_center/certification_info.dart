@@ -1,11 +1,13 @@
 import 'dart:collection';
 
+import 'package:bid/common/constants.dart';
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/string_utils.dart';
 import 'package:bid/model/base/BaseResponseModel.dart';
 import 'package:bid/model/base/DataModel.dart';
 import 'package:bid/model/user_center/CertificationInfoModel.dart';
 import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 
@@ -15,23 +17,21 @@ class CertificationInfo extends StatefulWidget {
 }
 
 class _CertificationInfoState extends State<CertificationInfo> {
+  static String TAG = '_CertificationInfoState';
+
   var _futureBuilderFuture;
   void initState() {
-    // print('页面初始化');
     _futureBuilderFuture = _gerData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: _buildAppBar(context),
-      // body: _buildBody(),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: FutureBuilder(
-          // future: requestGet('getCertificationInfo'),
           future: _futureBuilderFuture,
           builder: _asyncBuilder,
         ),
@@ -41,9 +41,13 @@ class _CertificationInfoState extends State<CertificationInfo> {
 
   Future _handleRefresh() async {
     _futureBuilderFuture = await _gerData();
-    if (_futureBuilderFuture['result']['auditStatus'] == 0) {
+    var auditStatus = _futureBuilderFuture['result']['auditStatus'];
+    if (auditStatus == 0) {
       Navigator.pop(context);
-      Application.router.navigateTo(context, "/indexPage");
+      Application.router.navigateTo(context, Routes.INDEX_PAGE);
+    } else if (auditStatus == 3) {
+      Navigator.pop(context);
+      Application.router.navigateTo(context, Routes.AUTHENTICATION);
     }
   }
 
@@ -114,8 +118,21 @@ class _CertificationInfoState extends State<CertificationInfo> {
                   certificationInfoModel.companyDistrictName, '') +
               StringUtils.defaultIfEmpty(
                   certificationInfoModel.companyDetailAddr, '');
-          dataModelList.forEach((e) => e.value =
-              null != certInfoModelMap[e.code] ? certInfoModelMap[e.code] : '');
+          LogUtils.debug(
+              TAG,
+              Constants
+                  .CERTIFICATION_ADUIT_STATUS[certInfoModelMap['auditStatus']],
+              StackTrace.current);
+          dataModelList.forEach((e) {
+            if (e.code == 'auditStatus') {
+              e.value = Constants
+                  .CERTIFICATION_ADUIT_STATUS[certInfoModelMap[e.code]];
+            } else {
+              e.value = null != certInfoModelMap[e.code]
+                  ? StringUtils.valueOf(certInfoModelMap[e.code])
+                  : '';
+            }
+          });
           LogUtils.d('[dataModelList]', dataModelList);
           //请求成功，通过项目信息构建用于显示项目名称的ListView
           return _buildBody(dataModelList);
@@ -232,6 +249,7 @@ class _CertificationInfoState extends State<CertificationInfo> {
       DataModel(code: 'companyShort', label: '公司简称', value: ''),
       DataModel(code: 'companyNum', label: '供应商编号', value: ''),
       DataModel(code: 'supplierTypeName', label: '供应商类型', value: ''),
+      DataModel(code: 'auditStatus', label: '资料认证状态', value: ''),
       DataModel(code: 'companyDetailAddr', label: '公司地址', value: ''),
       DataModel(code: 'companyMobile', label: '公司电话', value: ''),
       DataModel(

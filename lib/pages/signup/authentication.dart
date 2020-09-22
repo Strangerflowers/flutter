@@ -1,19 +1,17 @@
 // 资料认证页面
+import 'dart:async';
 import 'dart:collection';
 
-import 'package:bid/common/log_utils.dart';
-import 'package:bid/routers/application.dart';
-import 'package:flutter/material.dart';
 import 'package:bid/common/toast.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:image_picker/image_picker.dart';
-import 'package:city_pickers/city_pickers.dart';
 import 'package:bid/common/xyz_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sprintf/sprintf.dart';
-import '../../images.dart';
-import 'dart:async';
+import 'package:bid/routers/application.dart';
+import 'package:city_pickers/city_pickers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../images.dart';
 import '../../service/service_method.dart';
 
 class Authentication extends StatefulWidget {
