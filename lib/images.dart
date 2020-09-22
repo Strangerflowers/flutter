@@ -50,7 +50,6 @@ class _MyImageState extends State<MyImage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334);
     return Center(
       child: Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -73,8 +72,8 @@ class _MyImageState extends State<MyImage> {
                 FloatingActionButton(
                   onPressed: () {
                     _getUploadToken();
-                    //_onUpload();
-                    _onUploadBySyFlutterQiniuStorage();
+                    _onUpload();
+                    //_onUploadBySyFlutterQiniuStorage();
                   },
                   tooltip: 'Pick Image',
                   child: Icon(Icons.add_a_photo),
