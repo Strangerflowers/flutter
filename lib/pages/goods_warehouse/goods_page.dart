@@ -77,7 +77,7 @@ class _GoodsPageState extends State<GoodsPage> {
     super.initState();
   }
 
-  List list = ['售卖中', '草稿', '已下架'];
+  List list = ['售卖中', '未发布', '已下架'];
   //  {0: '草稿', 1: '售卖中', -1: '已下架'};
   var strtusType = {0: 1, 1: 0, 2: -1};
   // int listIndex = 0;
@@ -204,7 +204,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       if (data.goodsList != null) {
         return Expanded(
           child: Container(
-            width: ScreenUtil().setWidth(570),
+            // width: ScreenUtil().setWidth(570),
+            padding: EdgeInsets.only(left: 10, right: 20),
             child: EasyRefresh(
               refreshFooter: ClassicsFooter(
                 key: _footerkey,
@@ -268,6 +269,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   // 合并商品
   Widget _mergeItem(item) {
     return Container(
+      padding: EdgeInsets.only(bottom: 20),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -283,8 +285,17 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           children: <Widget>[
             Container(
                 width: ScreenUtil().setWidth(120),
+                height: ScreenUtil().setHeight(100),
                 padding: EdgeInsets.only(right: 10),
-                child: Image.network('${item.image}')
+                child: item.image == 'null'
+                    ? Image.asset(
+                        'images/default.png',
+                        fit: BoxFit.fill,
+                      )
+                    : Image.network(
+                        '${item.image}',
+                        fit: BoxFit.fill,
+                      )
                 // Image.asset('images/icon.png'),
                 ),
             Expanded(child: _right(item)),
@@ -296,6 +307,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   // 左侧商品
   Widget _right(item) {
+    var actionType = {'online': '上架', 'offline': '下架', 'change': '商品变更'};
     return Container(
       // width: ScreenUtil().setWidth(600),
       child: Column(
@@ -321,7 +333,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    '请求：${item.status}-${item.auditStatus}-${item.action}',
+                    '请求：${actionType[item.action]}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                     ),
@@ -331,7 +343,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '审核状态：${auditStatusType[item.auditStatus]}',
+                      '状态：${auditStatusType[item.auditStatus]}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                       ),
@@ -374,29 +386,34 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     return Expanded(
       child: Container(
         alignment: Alignment.topRight,
-        child: FlatButton(
-          // color: Colors.blue,
-          highlightColor: Colors.blue[700],
-          // colorBrightness: Brightness.dark,
-          splashColor: Colors.grey,
-          child: Text(
-            '$text',
-            style: TextStyle(
-              // color: Color(0xFF4389ED),
-              color: Color(0xFF4389ED),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(50),
+          width: ScreenUtil().setWidth(130),
+          child: FlatButton(
+            // color: Colors.blue,
+            highlightColor: Colors.blue[700],
+            // colorBrightness: Brightness.dark,
+            splashColor: Colors.grey,
+            child: Text(
+              '$text',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                // color: Color(0xFF4389ED),
+                color: Color(0xFF4389ED),
+              ),
             ),
-          ),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              // color: Color(0xFF4389ED),
-              color: Color(0xFF4389ED),
-              width: 1,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                // color: Color(0xFF4389ED),
+                color: Color(0xFF4389ED),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(20.0),
             ),
-            borderRadius: BorderRadius.circular(20.0),
+            onPressed: () {
+              _showStatusAlert(item, url, text);
+            },
           ),
-          onPressed: () {
-            _showStatusAlert(item, url, text);
-          },
         ),
       ),
     );

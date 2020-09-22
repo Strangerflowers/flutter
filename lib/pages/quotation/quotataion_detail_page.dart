@@ -185,7 +185,9 @@ class ProductInformation extends StatelessWidget {
 
               backgroundColor: Colors.white,
               children: <Widget>[
-                _recommedList(goodsInfo.result.detailList)
+                _recommedList(goodsInfo.result.detailList),
+                _totalPrice(goodsInfo.result),
+                _planMark(goodsInfo.result),
                 // _productItem(),
               ],
               initiallyExpanded: true, //是否默认打开？
@@ -201,9 +203,7 @@ class ProductInformation extends StatelessWidget {
   // 循环渲染
   // 一级
   Widget _recommedList(list) {
-    // if (list.length > 0) {
     return Container(
-      height: ScreenUtil().setHeight(1000),
       child: SizedBox(
         child: ListView.builder(
           itemCount: list.length,
@@ -358,7 +358,7 @@ class ProductInformation extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(top: 3, bottom: 3),
                   child: Text(
-                    '￥${item.amount}',
+                    '￥${item.amount / 100}',
                     // '${item.productDescript}',
                     maxLines: 2,
                     style: TextStyle(
@@ -397,27 +397,91 @@ class ProductInformation extends StatelessWidget {
     );
   }
 
-  // 合计
+  // 小计
   Widget _sumPrice(item) {
     double sum = 0.0;
-    sum = item.num * item.amount;
+    sum = item.num * item.amount / 100;
     return Container(
       padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
       alignment: Alignment.centerRight,
       width: ScreenUtil().setWidth(700),
-      // child: Expanded(
-      child: Row(
-        children: <Widget>[
-          Text('小计：'),
-          Text(
-            '￥$sum',
-            style: TextStyle(
-              color: Color(0xFFF2A631),
-            ),
-          ),
-        ],
+      child: RichText(
+        text: TextSpan(
+            text: '小计：',
+            style: TextStyle(color: Color(0xFF333333)),
+            children: <TextSpan>[
+              TextSpan(
+                text: '￥$sum',
+                style: TextStyle(
+                  color: Color(0xFFF2A631),
+                ),
+              ),
+            ]),
       ),
-      // ),
     );
+  }
+
+  // 合计
+  Widget _totalPrice(item) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 20, 30, 20),
+      alignment: Alignment.bottomRight,
+      // width: ScreenUtil().setWidth(700),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5, //宽度
+            color: Colors.grey, //边框颜色
+          ),
+        ),
+      ),
+      child: RichText(
+        text: TextSpan(
+            text: '共计：',
+            style: TextStyle(color: Color(0xFF333333)),
+            children: <TextSpan>[
+              TextSpan(
+                text: '￥${item.totalAmount / 100}',
+                style: TextStyle(
+                  color: Color(0xFFF2A631),
+                ),
+              ),
+            ]),
+      ),
+    );
+  }
+
+  // 备注
+  Widget _planMark(item) {
+    return Container(
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        margin: EdgeInsets.only(bottom: 40),
+        // padding: EdgeInsets.only(left: 20, right: 20),
+        alignment: Alignment.centerLeft,
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                '备注',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                  color: Color(0xFF423F42),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${item.remark}',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30),
+                    color: Color(0xFF575558),
+                    height: 1.5),
+              ),
+            )
+          ],
+        ));
   }
 }

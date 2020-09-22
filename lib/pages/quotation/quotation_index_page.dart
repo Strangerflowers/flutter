@@ -350,7 +350,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '￥${item.totalAmount}（共${item.categoryNum}种${item.total}件）',
+                      '￥${double.parse(item.totalAmount) / 100}（共${item.categoryNum}种${item.total}件）',
                       style: TextStyle(
                         color: Color(0xFF333333),
                         height: 1.5,

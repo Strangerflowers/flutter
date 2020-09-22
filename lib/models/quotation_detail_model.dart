@@ -42,7 +42,7 @@ class DetailResult {
   String merchantName;
   String linkPerson;
   String linkPhone;
-  String totalAmount;
+  double totalAmount;
   String remark;
   String categoryNum;
   int total;
@@ -78,7 +78,7 @@ class DetailResult {
     merchantName = json['merchantName'].toString();
     linkPerson = json['linkPerson'];
     linkPhone = json['linkPhone'];
-    totalAmount = json['totalAmount'].toString();
+    totalAmount = json['totalAmount'];
     remark = json['remark'];
     categoryNum = json['categoryNum'].toString();
     total = json['total'];
