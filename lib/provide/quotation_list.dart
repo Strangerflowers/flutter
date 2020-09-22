@@ -1,5 +1,5 @@
+import 'package:bid/models/quotation_model.dart';
 import 'package:flutter/material.dart';
-import '../model/quotation_model.dart';
 
 class QuotationGoodsListProvide with ChangeNotifier {
   // QuotationHomeList goodsList;

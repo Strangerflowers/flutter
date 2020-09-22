@@ -1,16 +1,17 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:bid/models/goods_list.dart';
 import 'package:bid/pages/goods_warehouse/goods_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:provide/provide.dart';
-import '../../provide/goods_list.dart';
+
 import '../../provide/goods_list_provide.dart';
 import '../../service/service_method.dart';
-import '../../model/goods_list.dart';
 
 class GoodsIndexPage extends StatefulWidget {
   @override

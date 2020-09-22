@@ -1,9 +1,9 @@
 import 'package:bid/common/log_utils.dart';
-import 'package:bid/model/base/BaseRequestModel.dart';
-import 'package:bid/model/base/BaseResponseModel.dart';
-import 'package:bid/model/base/BaseResponseResultList.dart';
-import 'package:bid/model/base/ListModel.dart';
-import 'package:bid/model/user_center/WithdrawAddressModel.dart';
+import 'package:bid/models/base/BaseRequestModel.dart';
+import 'package:bid/models/base/BaseResponseModel.dart';
+import 'package:bid/models/base/BaseResponseResultList.dart';
+import 'package:bid/models/base/ListModel.dart';
+import 'package:bid/models/user_center/WithdrawAddressModel.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';

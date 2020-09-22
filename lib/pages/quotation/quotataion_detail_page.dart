@@ -1,13 +1,11 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
-import '../../service/service_method.dart';
-import '../../model/quotation_detail_model.dart';
+
 import '../../provide/quotation_detail.dart';
 import '../../routers/application.dart';
-import './procurement_plan.dart';
 
 class QuotationDetailPage extends StatelessWidget {
   final String goodsId;

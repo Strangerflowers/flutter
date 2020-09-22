@@ -5,7 +5,7 @@ import '../service/service_method.dart';
 import 'package:bid/common/toast.dart';
 
 import 'dart:convert';
-import '../model/demand_detail_model.dart';
+import '../models/demand_detail_model.dart';
 
 class DemandDetailProvide with ChangeNotifier {
   DemandDetailHome goodsList;

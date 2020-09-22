@@ -1,7 +1,7 @@
+import 'package:bid/models/sales_order_detail_model.dart';
 import 'package:flutter/material.dart';
+
 import '../service/service_method.dart';
-import 'dart:convert';
-import '../model/sales_order_detail_model.dart';
 
 class SalesOrderDetailProvide with ChangeNotifier {
   SalesOrderDetail goodsList;

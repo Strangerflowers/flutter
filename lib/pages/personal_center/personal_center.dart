@@ -1,24 +1,20 @@
 import 'package:bid/pages/personal_center/certification_info.dart';
 import 'package:bid/pages/personal_center/contact_info.dart';
-import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
 import 'package:bid/provide/app_global/user_info.dart';
 import 'package:bid/routers/application.dart';
+import 'package:bid/service/service_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
-import 'package:bid/model/base/DataModel.dart';
-import 'package:bid/model/user_center/CertificationInfoModel.dart';
+
 import '../../common/constants.dart';
-import '../../routers/routers.dart';
 import '../../common/log_utils.dart';
-import 'package:bid/service/service_method.dart';
-import 'package:bid/common/inconfont.dart';
-import '../signup/signin.dart';
+import '../../routers/routers.dart';
 
 // 快速生成  stlss
 class PersonalCenter extends StatelessWidget {

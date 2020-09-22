@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
+import 'package:bid/models/demand_quotation/demand_quotation_model.dart';
 import 'package:flutter/material.dart';
+
 import '../../service/service_method.dart';
-import 'dart:convert';
-import '../../model/demand_quotation/demand_quotation_model.dart';
 
 class DemandQuotationProvide with ChangeNotifier {
   QuotataionData goodsList;

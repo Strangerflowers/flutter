@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'dart:async';
-import 'package:provide/provide.dart';
-import '../../provide/sales_order_list_provide.dart';
-import '../../model/sales_order_list_model.dart';
-import '../../service/service_method.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../../routers/application.dart';
 import 'package:bid/common/inconfont.dart';
+import 'package:bid/models/sales_order_list_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provide/provide.dart';
+
+import '../../provide/sales_order_list_provide.dart';
+import '../../routers/application.dart';
+import '../../service/service_method.dart';
 
 class SalesIndexPage extends StatefulWidget {
   @override

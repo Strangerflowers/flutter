@@ -1,7 +1,7 @@
+import 'package:bid/models/quotation_detail_model.dart';
 import 'package:flutter/material.dart';
+
 import '../service/service_method.dart';
-import 'dart:convert';
-import '../model/quotation_detail_model.dart';
 
 class QuotationDetailProvide with ChangeNotifier {
   QuotationDetail goodsList;

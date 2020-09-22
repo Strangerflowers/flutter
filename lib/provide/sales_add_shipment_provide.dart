@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
-import '../model/sales_add_shipment_model.dart';
+import '../models/sales_add_shipment_model.dart';
 
 class SalesOrderAddProvide with ChangeNotifier {
   AddDeliverArrange goodsList;

@@ -7,7 +7,7 @@ import '../../service/service_method.dart';
 import '../../provide/quotation_detail_plan_provide.dart';
 import '../../routers/application.dart';
 import './procurement_plan.dart';
-import '../../model/quotation_detail_plan_model.dart';
+import '../../models/quotation_detail_plan_model.dart';
 
 class ProcurementPlan extends StatelessWidget {
   final String goodsId;

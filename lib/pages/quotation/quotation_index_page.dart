@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:provide/provide.dart';
-import '../../provide/quotation_list.dart';
-import '../../service/service_method.dart';
-import '../../model/quotation_model.dart';
-import './quotataion_detail_page.dart';
-import 'package:fluro/fluro.dart';
-import '../../routers/application.dart';
 import 'package:bid/common/inconfont.dart';
+import 'package:bid/models/quotation_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+
+import '../../provide/quotation_list.dart';
+import '../../routers/application.dart';
+import '../../service/service_method.dart';
 
 class QuotationIndexPage extends StatefulWidget {
   @override

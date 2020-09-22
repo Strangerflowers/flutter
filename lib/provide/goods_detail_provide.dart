@@ -1,7 +1,7 @@
+import 'package:bid/models/goods/goods_detail_model.dart';
 import 'package:flutter/material.dart';
-import '../model/goods/goods_detail_model.dart';
+
 import '../service/service_method.dart';
-import 'dart:convert';
 
 class DetailsInfoProvide with ChangeNotifier {
   int currentSelect = 0;
