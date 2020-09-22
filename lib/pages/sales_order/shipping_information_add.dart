@@ -331,18 +331,18 @@ class OkBotton extends StatelessWidget {
     DateTime now = new DateTime.now();
     var dayTime = now.toString().substring(0, 10);
 
-    if (Provide.value<SalesAddPage>(context).logisticsCompanyName == null ||
-        Provide.value<SalesAddPage>(context).logisticsNumber == null) {
-      Fluttertoast.showToast(
-        msg: '物流公司名称以及快递单号不能为空',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      return '请填写完整信息';
-    }
+    // if (Provide.value<SalesAddPage>(context).logisticsCompanyName == null ||
+    //     Provide.value<SalesAddPage>(context).logisticsNumber == null) {
+    //   Fluttertoast.showToast(
+    //     msg: '物流公司名称以及快递单号不能为空',
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+    //     textColor: Colors.white,
+    //     fontSize: 16.0,
+    //   );
+    //   return '请填写完整信息';
+    // }
     var formData = {
       "id": Provide.value<SalesAddPage>(context).goodsList.result.id,
       "actualDeliveryTime":
