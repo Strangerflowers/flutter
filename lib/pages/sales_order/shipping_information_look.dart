@@ -96,7 +96,7 @@ class LookHeader extends StatelessWidget {
             child: Text('$title'),
           ),
           Container(
-            child: Text('$content'),
+            child: Text('${content == 'null' ? '' : content}'),
           )
         ],
       ),
@@ -115,7 +115,8 @@ class ProductInformation extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 20),
             color: Colors.white,
-            child: _recommedList(goodsInfo.result.dispatchItemVos),
+            child: _recommedList(
+                goodsInfo.result.dispatchItemVos, goodsInfo.result),
           ),
         );
       } else {
@@ -126,7 +127,7 @@ class ProductInformation extends StatelessWidget {
 
   // 循环渲染
   // 一级
-  Widget _recommedList(list) {
+  Widget _recommedList(list, result) {
     // if (list.length > 0) {
     return Container(
       margin: EdgeInsets.only(top: 10),
@@ -138,7 +139,7 @@ class ProductInformation extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           itemBuilder: (contex, index) {
             // return _goodsItem(list[index]);
-            return _productItem(list[index], index);
+            return _productItem(list[index], index, result);
           },
         ),
       ),
@@ -160,7 +161,7 @@ class ProductInformation extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.bottomRight,
                   // padding: EdgeInsets.only(right: 20),
-                  child: Text('$text'),
+                  child: Text('${text == 'null' ? '' : text}'),
                   // child: CartCount(item, index),
                 ),
               )
@@ -176,7 +177,7 @@ class ProductInformation extends StatelessWidget {
   }
 
   // 合并
-  Widget _productItem(item, index) {
+  Widget _productItem(item, index, result) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -192,10 +193,44 @@ class ProductInformation extends StatelessWidget {
           _goodsItem(item),
           _shipmentquantity('计划发货数量', item.planDeliveryNumber),
           _shipmentquantity('实际发货数量', item.actualDeliveryNumber),
-          _shipmentquantity('实际收货数量', item.actualConsigneeNumber),
+          _isReceived(item, result),
+          // _shipmentquantity('实际收货数量', item.actualConsigneeNumber),
         ],
       ),
     );
+  }
+
+  Widget _isReceived(item, result) {
+    if (result.status == 2) {
+      return Container(
+        padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  child: Text('实际收获数量'),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.bottomRight,
+                    // padding: EdgeInsets.only(right: 20),
+                    child: Text(
+                        '${item.actualConsigneeNumber == 'null' ? '' : item.actualConsigneeNumber}'),
+                    // child: CartCount(item, index),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+      // return _shipmentquantity('实际收货数量', item.actualConsigneeNumber);
+    } else {
+      return Container(
+        child: Text(''),
+      );
+    }
   }
 
   // 商品信息
@@ -269,16 +304,22 @@ class Quotation extends StatelessWidget {
       var goodsInfo = Provide.value<SalesOrderLook>(context).goodsList;
       if (goodsInfo != null) {
         var result = goodsInfo.result;
-        return Container(
-          color: Colors.white,
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            children: <Widget>[
-              _information('质检情况', result.qualityCondition),
-              _imageInfomation('收货单', result.consigneeUrls),
-            ],
-          ),
-        );
+        if (result.status == 2) {
+          return Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: <Widget>[
+                _information('质检情况', result.qualityCondition),
+                _imageInfomation('收货单', result.consigneeUrls),
+              ],
+            ),
+          );
+        } else {
+          return Container(
+            child: Text(''),
+          );
+        }
       } else {
         return Text('暂无数据');
       }
@@ -305,7 +346,7 @@ class Quotation extends StatelessWidget {
             child: Text('$title'),
           ),
           Container(
-            child: Text('$content'),
+            child: Text('${content == 'null' ? '' : content}'),
           )
         ],
       ),
