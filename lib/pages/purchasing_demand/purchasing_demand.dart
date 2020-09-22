@@ -535,7 +535,7 @@ class _SearchState extends State<Search> with WidgetsBindingObserver {
         child: TextFormField(
           focusNode: _focusNode,
           decoration: InputDecoration(
-            hintText: 'Search',
+            hintText: '搜一搜',
             icon: Icon(Icons.search),
             border: InputBorder.none,
           ),

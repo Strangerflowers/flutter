@@ -8,6 +8,34 @@ import '../../service/service_method.dart';
 import '../../provide/sales_add_shipment_provide.dart';
 import '../../routers/application.dart';
 
+// class AddShipmentSchedule extends StatefulWidget {
+//   final String mainOrderId;
+//   final String goodsId;
+//   final String len;
+//   final String returnId;
+//   AddShipmentSchedule(this.goodsId, this.mainOrderId, this.len, this.returnId);
+//   @override
+//   _AddShipmentScheduleState createState() => _AddShipmentScheduleState();
+// }
+
+// class _AddShipmentScheduleState extends State<AddShipmentSchedule> {
+//   String mainOrderId;
+//   String goodsId;
+//   String len;
+//   String returnId;
+//   void initState() {
+//     mainOrderId = widget.mainOrderId;
+//     goodsId = widget.goodsId;
+//     len = widget.len;
+//     returnId = widget.returnId;
+//     super.initState();
+//   }
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Container();
+// //   }
+// // }
+
 class AddShipmentSchedule extends StatelessWidget {
   final String mainOrderId;
   final String goodsId;
@@ -139,13 +167,15 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             locale: Locale('zh'),
             lastDate: DateTime(2030),
           );
-          setState(() {
-            dayTime = result.toString().substring(0, 10);
-            Provide.value<SalesOrderAddProvide>(context)
-                .changeDayTime(result.toString().substring(0, 10));
-          });
+          if (result != null) {
+            setState(() {
+              dayTime = result.toString().substring(0, 10);
+              Provide.value<SalesOrderAddProvide>(context)
+                  .changeDayTime(result.toString().substring(0, 10));
+            });
+          }
 
-          print('选择时间12345678--${result.toString().substring(0, 10)}');
+          // print('选择时间12345678--${result.toString().substring(0, 10)}');
           // 跳转到详情页面
           // Application.router.navigateTo(context, "/plan?id=$id");
         },
@@ -432,13 +462,19 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
+              width: ScreenUtil().setWidth(120),
+              height: ScreenUtil().setHeight(100),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuKey}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
+              child: item.skuKey == null ||
+                      item.skuKey == '' ||
+                      item.skuKey == 'null'
+                  ? Image.asset('images/default.png')
+                  : Image.network(
+                      '${item.skuKey}',
+                      fit: BoxFit.cover,
+                      width: ScreenUtil().setWidth(150),
+                      height: ScreenUtil().setHeight(150),
+                    )
               // Image.asset('images/icon.png'),
               ),
           Expanded(

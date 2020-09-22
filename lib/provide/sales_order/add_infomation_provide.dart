@@ -21,20 +21,6 @@ class SalesAddPage with ChangeNotifier {
   getQuotationDetail(String id) {
     var formData = {'dispatchId': id};
     requestGet('showDispatchProduct', formData: formData).then((val) {
-      // print('发货信息详情响应数据${val['result']}');
-      // orderItems = val['result'];
-      // orderItems.forEach((element) {
-      //   // print('遍历方法${element['id']}');
-      //   dispatchItems
-      //       .add({'orderItemId': element['id'], 'planDeliveryNumber': 0});
-      // });
-      // var res = val['result']['dispatchItemVos'].map((ele) {
-      //   ele['actualDeliveryNumber'] = 0;
-      //   return ele;
-      // });
-      // val['result'] = res;
-      // print('获-返回数据是否改变${val['result']}');
-      // print('查看总的数据$val');
       goodsList = SalesAdd.fromJson(val);
       salesList = goodsList.result.dispatchItemVos;
       print('详情数据$goodsList');

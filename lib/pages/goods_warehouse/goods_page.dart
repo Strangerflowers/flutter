@@ -314,9 +314,12 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(bottom: 5),
             child: Text(
               '${item.name}',
+              style: TextStyle(fontSize: ScreenUtil().setSp(28)),
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Row(
@@ -329,6 +332,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
             ],
           ),
           Container(
+            padding: EdgeInsets.only(top: 5),
             child: Row(
               children: <Widget>[
                 Container(
