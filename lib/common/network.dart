@@ -74,35 +74,43 @@ class Network {
         },
         onResponse: (Response res) {
           try {
-            print('接口: ${res.request.baseUrl}${res.request.path}');
+            LogUtils.debug(TAG, '接口: ${res.request.baseUrl}${res.request.path}',
+                StackTrace.current);
             if (res.request.method == "POST") {
-              print('参数: ${res.request.data}');
+              LogUtils.debug(
+                  TAG, '参数: ${res.request.data}', StackTrace.current);
             } else {
-              print('参数: ${res.request.queryParameters}');
+              LogUtils.debug(TAG, '参数: ${res.request.queryParameters}',
+                  StackTrace.current);
             }
-            print('返回数据: ${res.data}');
+            LogUtils.debug(TAG, '返回数据: ${res.data}', StackTrace.current);
             print('\n');
             return res.data;
           } catch (e) {
+            LogUtils.error(TAG, '接口响应发生错误, 堆栈信息: ', StackTrace.current, e: e);
             return res;
           }
         },
         onError: (DioError e) {
           print('\n');
-          print(e);
+          LogUtils.error(TAG, '接口请求发生错误, 捕获DioError的堆栈信息: ', StackTrace.current,
+              e: e);
           print('\n');
-          print('报错接口: ${e.request.baseUrl}${e.request.path}');
+          LogUtils.error(TAG, '报错接口: ${e.request.baseUrl}${e.request.path}',
+              StackTrace.current);
           if (e.request.method == "POST") {
-            print('参数: ${e.request.data}');
+            LogUtils.error(TAG, '参数: ${e.request.data}', StackTrace.current);
           } else {
-            print('参数: ${e.request.queryParameters}');
+            LogUtils.error(
+                TAG, '参数: ${e.request.queryParameters}', StackTrace.current);
           }
           switch (e.type) {
             case DioErrorType.CONNECT_TIMEOUT:
               // Fluttertoast.showToast(msg: '请求超时，请检查网络连接后重试');
               break;
             case DioErrorType.RESPONSE:
-              print('response: ${e.response.data}');
+              LogUtils.error(
+                  TAG, 'response: ${e.response.data}', StackTrace.current);
               final data = e.response.data;
               if (data != null) {
                 Fluttertoast.showToast(
