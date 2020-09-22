@@ -92,6 +92,7 @@ flutter:
     - images/contactInfo.png
     - images/modifyPassword.png
     - images/withdrawAddress.png
+    - images/default.png
 
   fonts:
     - family: iconfont

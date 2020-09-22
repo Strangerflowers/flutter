@@ -88,16 +88,18 @@ class SalesOrderBasic extends StatelessWidget {
   }
 
   Widget _mergeInformation(detailData, context) {
+    var type = {0: '待发送', 1: '待确认', 2: '待发货', 3: '已发货', 4: '已完成'};
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Column(
         children: <Widget>[
           _information('订单编号', detailData.subOrderCode),
-          _information('订单状态', detailData.status),
+          _information('订单状态', type[detailData.status]),
           _information('需求方名称', detailData.demanderDeptName),
           _planClick('报价单', detailData.quotationCode, detailData.quotationCode,
               context),
-          _information('收货地址', detailData.consigneeAdress),
+          // _information('收货地址', detailData.consigneeAdress),
+          _address('收货地址', detailData),
           _information('期望交货时间', detailData.expectedDeliveryTime),
           _information('备注', detailData.notes),
           _information('支付状态', '支付成功'),
@@ -122,7 +124,7 @@ class SalesOrderBasic extends StatelessWidget {
               child: Text('$title'),
             ),
             Expanded(
-              child: Text('$content'),
+              child: Text('${content == 'null' ? '' : content}'),
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -133,6 +135,43 @@ class SalesOrderBasic extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _address(title, item) {
+    return Container(
+      padding: EdgeInsets.only(top: 5, bottom: 5),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: ScreenUtil().setWidth(200),
+            child: Text('$title'),
+          ),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        padding: EdgeInsets.only(right: 20),
+                        child: Text(item.consigneeName),
+                      ),
+                      Container(
+                        child: Text(item.consigneeMobile),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Text(item.consigneeAdress),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -148,7 +187,8 @@ class SalesOrderBasic extends StatelessWidget {
             child: Text('$title'),
           ),
           Container(
-            child: Text('$content'),
+            child:
+                Text('${content == 'null' || content == null ? '' : content}'),
           )
         ],
       ),
@@ -322,15 +362,20 @@ class ProductInformation extends StatelessWidget {
         children: <Widget>[
           Container(
               // alignment: Alignment.topCenter,
-              // width: ScreenUtil().setWidth(120),
-              // height: ScreenUtil().setHeight(120),
+              width: ScreenUtil().setWidth(150),
+              height: ScreenUtil().setHeight(150),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.mainKey}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
+              child: item.mainKey == 'null'
+                  ? Image.asset(
+                      'images/default.png',
+                      fit: BoxFit.fill,
+                    )
+                  : Image.network(
+                      '${item.mainKey}',
+                      fit: BoxFit.fill,
+                      // width: ScreenUtil().setWidth(150),
+                      // height: ScreenUtil().setHeight(150),
+                    )
               // Image.asset('images/icon.png'),
               ),
           Expanded(
@@ -605,9 +650,14 @@ class DeliveryArrangement extends StatelessWidget {
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(item.logisticsNumber == 'null'
-                                    ? ''
-                                    : '${item.logisticsCompanyName}${item.logisticsNumber}'),
+                                padding: EdgeInsets.only(right: 5),
+                                child: Text(
+                                  item.logisticsNumber == 'null'
+                                      ? ''
+                                      : '${item.logisticsCompanyName}${item.logisticsNumber}',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(24)),
+                                ),
                               ),
                               _copy(item, context),
                             ],
@@ -671,26 +721,44 @@ class DeliveryArrangement extends StatelessWidget {
     if (item.logisticsNumber.trim() == 'null') {
       return Container(child: Text(''));
     } else {
-      return Container(
-        child: FlatButton(
-          child: Text(
-            "复制",
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: Color(0xFF5696D2),
-            ),
+      return InkWell(
+        onTap: () {
+          ClipboardData data =
+              new ClipboardData(text: "${item.logisticsNumber}");
+          Clipboard.setData(data);
+          Toast.toast(
+            context,
+            msg: "已复制",
+          );
+        },
+        child: Text(
+          "复制",
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            color: Color(0xFF5696D2),
           ),
-          onPressed: () {
-            ClipboardData data =
-                new ClipboardData(text: "${item.logisticsNumber}");
-            Clipboard.setData(data);
-            Toast.toast(
-              context,
-              msg: "已复制",
-            );
-          },
         ),
       );
+      // return Container(
+      //   child: FlatButton(
+      //     child: Text(
+      //       "复制",
+      //       style: TextStyle(
+      //         fontSize: ScreenUtil().setSp(24),
+      //         color: Color(0xFF5696D2),
+      //       ),
+      //     ),
+      //     onPressed: () {
+      //       ClipboardData data =
+      //           new ClipboardData(text: "${item.logisticsNumber}");
+      //       Clipboard.setData(data);
+      //       Toast.toast(
+      //         context,
+      //         msg: "已复制",
+      //       );
+      //     },
+      //   ),
+      // );
     }
   }
 
@@ -698,38 +766,54 @@ class DeliveryArrangement extends StatelessWidget {
     if (item.status != 0) {
       return Container(
         padding: EdgeInsets.only(right: 10),
-        child: Container(
-          // padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-          child: FlatButton(
-            //自定义按钮颜色
-            color: Color(0xFFDAEDFE),
-            highlightColor: Color(0xFFDAEDFE),
-            colorBrightness: Brightness.dark,
-            splashColor: Colors.blue,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-              child: Text(
-                "查看发货信息",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: Color(0xFF5696D2),
-                ),
-              ),
+        child: InkWell(
+          child: Text(
+            "查看发货信息",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: Color(0xFF5696D2),
             ),
-
-            textColor: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            onPressed: () {
-              if (item.status == 0) {
-                Application.router.navigateTo(context, "/add?id=${item.id}");
-              } else {
-                // 跳转到详情页面
-                Application.router.navigateTo(context, "/look?id=${item.id}");
-                print('查看发货信息详情');
-              }
-            },
           ),
+          onTap: () {
+            if (item.status == 0) {
+              Application.router.navigateTo(context, "/add?id=${item.id}");
+            } else {
+              // 跳转到详情页面
+              Application.router.navigateTo(context, "/look?id=${item.id}");
+              print('查看发货信息详情');
+            }
+          },
+          // padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+          // child: FlatButton(
+          //   //自定义按钮颜色
+          //   color: Color(0xFFDAEDFE),
+          //   highlightColor: Color(0xFFDAEDFE),
+          //   colorBrightness: Brightness.dark,
+          //   splashColor: Colors.blue,
+          //   child: Padding(
+          //     padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+          //     child: Text(
+          //       "查看发货信息",
+          //       style: TextStyle(
+          //         fontSize: ScreenUtil().setSp(24),
+          //         color: Color(0xFF5696D2),
+          //       ),
+          //     ),
+          //   ),
+
+          //   textColor: Colors.white,
+          //   shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(5.0)),
+          //   onPressed: () {
+          //     if (item.status == 0) {
+          //       Application.router.navigateTo(context, "/add?id=${item.id}");
+          //     } else {
+          //       // 跳转到详情页面
+          //       Application.router.navigateTo(context, "/look?id=${item.id}");
+          //       print('查看发货信息详情');
+          //     }
+          //   },
+          // ),
         ),
       );
 
@@ -813,7 +897,7 @@ class DeliveryArrangement extends StatelessWidget {
               // height: ScreenUtil().setHeight(120),
               padding: EdgeInsets.only(top: 0, right: 10),
               child: item.mainKey == 'null'
-                  ? Image.asset('images/icon.png')
+                  ? Image.asset('images/default.png')
                   : Image.network(
                       '${item.mainKey}',
                       fit: BoxFit.cover,

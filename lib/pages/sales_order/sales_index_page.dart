@@ -331,15 +331,15 @@ class _SalesGoodsListState extends State<SalesGoodsList> {
       child: Row(
         children: <Widget>[
           Container(
-            width: ScreenUtil().setWidth(120),
-            padding: EdgeInsets.only(top: 0, right: 10),
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            // width: ScreenUtil().setWidth(120),
+            padding: EdgeInsets.only(top: 0, right: 10, bottom: 10),
             child: subItem.mainKey == null
-                ? Image.asset('images/icon.png')
+                ? Image.asset('images/default.png')
                 : Image.network(
                     subItem.mainKey,
-                    fit: BoxFit.cover,
-                    width: ScreenUtil().setWidth(150),
-                    height: ScreenUtil().setHeight(150),
+                    fit: BoxFit.fill,
                   ),
           ),
           Expanded(

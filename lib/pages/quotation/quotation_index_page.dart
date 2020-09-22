@@ -406,7 +406,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
     //  replace
     String str = '';
     if (item.skuValueList.length > 0) {
-      str = (item.skuValueList.join(",")).replaceAll(",", "-");
+      str = (item.skuValueList.join(",")).replaceAll(",", ";");
       print('字符串拼接$str');
     }
     return Container(

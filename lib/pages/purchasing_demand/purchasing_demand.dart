@@ -197,22 +197,6 @@ class _DemandContentState extends State<DemandContent> {
               return Container(
                 child: _demandListView(),
               );
-              // print(
-              //     '99999111111${snapshot.toString()}===${hasToken != null}==${widget.inputText}');
-              // var data = snapshot.data;
-              // if (snapshot != null) {
-              //   return Container(
-              //     child: _demandListView(),
-              //   );
-              // } else {
-              //   if (hasToken != '') {
-              //     return Container(
-              //       child: Text('暂无数据'),
-              //     );
-              //   } else {
-              //     return _logOut(context);
-              //   }
-              // }
             }
             return Container(
               height: MediaQuery.of(context).size.height / 2,
@@ -237,35 +221,6 @@ class _DemandContentState extends State<DemandContent> {
     hasToken = token;
     return token;
   }
-
-  Widget _logOut(context) {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    return AlertDialog(
-      title: Text('提示'),
-      content: Text('您还未登录，请先登录'),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('确认'),
-          onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            final result = await prefs.clear();
-            if (result) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  "/loginPage", ModalRoute.withName("/loginPage"));
-              // Navigator.of(context).pop('cancel');
-              // Application.router.navigateTo(context, '/sigin');
-            }
-          },
-        ),
-      ],
-    );
-    //   },
-    // );
-  }
-
-  // 循环渲染
 
   // 获取响应数据
   Future _getBackDetailInfo(BuildContext context) async {
@@ -339,7 +294,6 @@ class _DemandContentState extends State<DemandContent> {
           children: <Widget>[
             _title(item.name),
             _attributes(item),
-            // _attributes(),
             _company(item),
           ],
         ),
@@ -386,9 +340,12 @@ class _DemandContentState extends State<DemandContent> {
 
   // 产品属性合并
   Widget _attributes(item) {
+    print('---------------${item.name}===${item.categoryMap.values.toList()}');
+    var arr = item.categoryMap.values.toList();
+    // print('修改bug====${item.categoryMap.toJson().values.toList()}');
     return Container(
       alignment: Alignment.bottomLeft,
-      child: _attributesItem(item),
+      child: _attributesItem(arr),
     );
   }
 
@@ -403,7 +360,7 @@ class _DemandContentState extends State<DemandContent> {
     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
     Widget content; //单独一个widget组件，用于返回需要生成的内容widget
     var arr = [];
-    item.demandDetailDtoList.forEach((val) {
+    item.forEach((val) {
       tiles.add(Container(
         decoration: BoxDecoration(
           border: Border.all(color: Color(0xFFE9E2EE)),
@@ -415,7 +372,7 @@ class _DemandContentState extends State<DemandContent> {
         child: Container(
           // alignment: Alignment.centerLeft,
           child: Text(
-            '${val.productCategroyPath.substring(1)}',
+            '${val}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               color: Color(0xFF78777A),

@@ -261,7 +261,7 @@ class ProductInformation extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           // padding: EdgeInsets.only(top: 5, bottom: 5),
-                          width: ScreenUtil().setWidth(150),
+                          width: ScreenUtil().setWidth(160),
                           child: Text('对应产品：'),
                         ),
                         Container(
@@ -280,7 +280,7 @@ class ProductInformation extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.only(top: 5, bottom: 5),
-                          width: ScreenUtil().setWidth(150),
+                          width: ScreenUtil().setWidth(160),
                           child: Text('需求数量：'),
                         ),
                         Container(
@@ -319,7 +319,7 @@ class ProductInformation extends StatelessWidget {
   Widget _goodsItem(item) {
     String str = '';
     if (item.skuValueList.length > 0) {
-      str = (item.skuValueList.join(",")).replaceAll(",", "-");
+      str = (item.skuValueList.join(",")).replaceAll(",", ";");
       print('字符串拼接$str');
     }
     return Container(
@@ -347,7 +347,7 @@ class ProductInformation extends StatelessWidget {
                   padding: EdgeInsets.only(top: 3, bottom: 3),
                   child: Text(
                     // '12323',
-                    '${item.productDescript}',
+                    '${item.skuName}',
                     maxLines: 2,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),

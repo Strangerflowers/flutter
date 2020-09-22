@@ -85,7 +85,7 @@ class PurchasingList {
   Null status;
   String createTime;
   List<DemandDetailDtoList> demandDetailDtoList;
-  CategoryMap categoryMap;
+  Map categoryMap;
   Null demandSkuDtoList;
 
   PurchasingList(
@@ -124,9 +124,9 @@ class PurchasingList {
         demandDetailDtoList.add(new DemandDetailDtoList.fromJson(v));
       });
     }
-    categoryMap = json['categoryMap'] != null
-        ? new CategoryMap.fromJson(json['categoryMap'])
-        : null;
+    categoryMap = json['categoryMap'];
+    // ? new Map.fromJson(json['categoryMap'])
+    // : null;
     demandSkuDtoList = json['demandSkuDtoList'];
   }
 
@@ -149,7 +149,7 @@ class PurchasingList {
           this.demandDetailDtoList.map((v) => v.toJson()).toList();
     }
     if (this.categoryMap != null) {
-      data['categoryMap'] = this.categoryMap.toJson();
+      data['categoryMap'] = this.categoryMap;
     }
     data['demandSkuDtoList'] = this.demandSkuDtoList;
     return data;
@@ -217,21 +217,21 @@ class DemandDetailDtoList {
   }
 }
 
-class CategoryMap {
-  String s2464;
-  String s2472;
+// class CategoryMap {
+//   // String s2464;
+//   // String s2472;
 
-  CategoryMap({this.s2464, this.s2472});
+//   // CategoryMap({this.s2464, this.s2472});
 
-  CategoryMap.fromJson(Map<String, dynamic> json) {
-    s2464 = json['2464'];
-    s2472 = json['2472'];
-  }
+//   // CategoryMap.fromJson(Map<String, dynamic> json) {
+//   //   s2464 = json['2464'];
+//   //   s2472 = json['2472'];
+//   // }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['2464'] = this.s2464;
-    data['2472'] = this.s2472;
-    return data;
-  }
-}
+//   // Map<String, dynamic> toJson() {
+//   //   final Map<String, dynamic> data = new Map<String, dynamic>();
+//   //   data['2464'] = this.s2464;
+//   //   data['2472'] = this.s2472;
+//   //   return data;
+//   // }
+// }
