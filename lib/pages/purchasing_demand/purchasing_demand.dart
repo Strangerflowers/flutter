@@ -490,7 +490,7 @@ class _SearchState extends State<Search> with WidgetsBindingObserver {
         if (isKeyboardActived) {
           isKeyboardActived = false;
           _searchKey.currentState.save();
-          _getSearch();
+          // _getSearch();
           // 使输入框失去焦点
           _focusNode.unfocus();
           return;
