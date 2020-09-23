@@ -316,7 +316,7 @@ class ProductInformation extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${item.remark}',
+                '${item.remark == 'null' || item.remark == null ? '' : item.remark}',
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
                     color: Color(0xFF575558),

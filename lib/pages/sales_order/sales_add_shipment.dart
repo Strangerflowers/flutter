@@ -189,23 +189,41 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     return Container(
       child: InkWell(
         onTap: () async {
-          var result = await showDatePicker(
-            // selectableDayPredicate: (DateTime day) {
-            //   return day.difference(DateTime.now()).inDays < 2;
-            // },
+          showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(2020),
             locale: Locale('zh'),
             lastDate: DateTime(2030),
-          );
-          if (result != null) {
-            setState(() {
-              dayTime = result.toString().substring(0, 10);
-              Provide.value<SalesOrderAddProvide>(context)
-                  .changeDayTime(result.toString().substring(0, 10));
-            });
-          }
+          ).then((DateTime val) {
+            if (val != null) {
+              setState(() {
+                dayTime = val.toString().substring(0, 10);
+                Provide.value<SalesOrderAddProvide>(context)
+                    .changeDayTime(val.toString().substring(0, 10));
+              });
+            }
+            print(val); // 2018-07-12 00:00:00.000
+          }).catchError((err) {
+            print(err);
+          });
+          // var result = await showDatePicker(
+          //   // selectableDayPredicate: (DateTime day) {
+          //   //   return day.difference(DateTime.now()).inDays < 2;
+          //   // },
+          //   context: context,
+          //   initialDate: DateTime.now(),
+          //   firstDate: DateTime(2020),
+          //   locale: Locale('zh'),
+          //   lastDate: DateTime(2030),
+          // );
+          // if (result != null) {
+          //   setState(() {
+          //     dayTime = result.toString().substring(0, 10);
+          //     Provide.value<SalesOrderAddProvide>(context)
+          //         .changeDayTime(result.toString().substring(0, 10));
+          //   });
+          // }
 
           // print('选择时间12345678--${result.toString().substring(0, 10)}');
           // 跳转到详情页面

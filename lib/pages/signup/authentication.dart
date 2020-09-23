@@ -981,12 +981,17 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyTelephone = value;
             },
             validator: (value) {
-              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
-              // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
-              if (!exp.hasMatch(value)) {
-                return "格式错误";
+              if (value.isEmpty) {
+                return null;
+              } else {
+                RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
+                // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
+                if (!exp.hasMatch(value)) {
+                  return "格式错误";
+                }
               }
-              return null;
+
+              // return null;
             },
           ),
         ],
