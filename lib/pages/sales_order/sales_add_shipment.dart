@@ -398,6 +398,7 @@ class OkBotton extends StatelessWidget {
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        // Navigator.pop(context);
         Application.router.navigateTo(context, "/salesdetail?id=$returnId");
       } else {
         Fluttertoast.showToast(

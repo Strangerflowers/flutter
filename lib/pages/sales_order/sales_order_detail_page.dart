@@ -96,8 +96,8 @@ class SalesOrderBasic extends StatelessWidget {
           _information('订单编号', detailData.subOrderCode),
           _information('订单状态', type[detailData.status]),
           _information('需求方名称', detailData.demanderDeptName),
-          _planClick('报价单', detailData.quotationCode, detailData.quotationCode,
-              context),
+          _planClick(
+              '报价单', detailData.quotationCode, detailData.quotationId, context),
           // _information('收货地址', detailData.consigneeAdress),
           _address('收货地址', detailData),
           _information('期望交货时间', detailData.expectedDeliveryTime),
@@ -110,33 +110,41 @@ class SalesOrderBasic extends StatelessWidget {
 
   // 报价单
   Widget _planClick(title, content, id, context) {
-    return Container(
-      child: InkWell(
-        onTap: () {
-          // 跳转到详情页面
-          // Application.router.navigateTo(context, "/plan?id=$id");
-          print('点击跳转采购页面');
-        },
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: ScreenUtil().setWidth(200),
-              child: Text('$title'),
-            ),
-            Expanded(
-              child: Text('${content == 'null' ? '' : content}'),
-            ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.black12,
+    if (id == 'null') {
+      return Container(
+        height: 0,
+        child: Text(''),
+      );
+    } else {
+      return Container(
+        child: InkWell(
+          onTap: () {
+            // 跳转到报价单详情页面
+            Application.router.navigateTo(context, "/detail?id=$id");
+            // Application.router.navigateTo(context, "/plan?id=$id");
+            print('点击跳转采购页面');
+          },
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: ScreenUtil().setWidth(200),
+                child: Text('$title'),
               ),
-            )
-          ],
+              Expanded(
+                child: Text('${content == 'null' ? '' : content}'),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Colors.black12,
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _address(title, item) {
@@ -996,6 +1004,7 @@ class DeliveryArrangement extends StatelessWidget {
       return InkWell(
         onTap: () {
           // 跳转到详情页面
+
           Application.router.navigateTo(context,
               "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId");
           print('点击跳转采购页面');

@@ -37,6 +37,7 @@ class SalesOrderDetailResult {
   String subOrderCode;
   String demanderDeptName;
   String quotationCode;
+  String quotationId;
   double totalMoney;
   int status;
   String consigneeName;
@@ -55,6 +56,7 @@ class SalesOrderDetailResult {
       this.subOrderCode,
       this.demanderDeptName,
       this.quotationCode,
+      this.quotationId,
       this.totalMoney,
       this.status,
       this.consigneeName,
@@ -73,6 +75,7 @@ class SalesOrderDetailResult {
     subOrderCode = json['subOrderCode'];
     demanderDeptName = json['demanderDeptName'];
     quotationCode = json['quotationCode'].toString();
+    quotationId = json['quotationId'].toString();
     totalMoney = json['totalMoney'];
     status = json['status'];
     consigneeName = json['consigneeName'];
@@ -103,6 +106,7 @@ class SalesOrderDetailResult {
     data['subOrderCode'] = this.subOrderCode;
     data['demanderDeptName'] = this.demanderDeptName;
     data['quotationCode'] = this.quotationCode;
+    data['quotationId'] = this.quotationId;
     data['totalMoney'] = this.totalMoney;
     data['status'] = this.status;
     data['consigneeName'] = this.consigneeName;
