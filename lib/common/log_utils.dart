@@ -29,6 +29,21 @@ abstract class LogUtils {
         message);
   }
 
+  static void error(String tag, Object message, StackTrace current,
+      {Exception e}) {
+    programInfo = XFCustomTrace(current);
+    if (!isRelease)
+      _printLog(
+          tag,
+          '[ERROR] ' +
+              programInfo.fileName +
+              ' - 第' +
+              programInfo.lineNumber.toString() +
+              '行 -> ',
+          message,
+          e: e);
+  }
+
   static void d(String tag, Object message) {
     if (!isRelease) _printLog(tag, '[DEBUG] -> ', message);
   }
@@ -45,7 +60,8 @@ abstract class LogUtils {
     _printLog(tag, '[WARN] -> ', message);
   }
 
-  static void _printLog(String tag, String level, Object message) {
+  static void _printLog(String tag, String level, Object message,
+      {Exception e}) {
     StringBuffer sb = new StringBuffer();
     sb
       ..write(new DateTime.now())
@@ -53,7 +69,8 @@ abstract class LogUtils {
       ..write(level)
       ..write(tag ?? '')
       ..write(': ')
-      ..write(message);
+      ..write(message)
+      ..write(e != null ? '$e' : '');
     print(sb.toString());
   }
 }

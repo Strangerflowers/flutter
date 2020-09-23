@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bid/common/constants.dart';
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/network.dart';
 import 'package:bid/config/service_url_holder.dart';
@@ -21,7 +22,7 @@ Future request(
 
     Options options = new Options();
     options.headers = {
-      "X-OS-KERNEL-TOKEN": token,
+      Constants.X_OS_KERNEL_TOKEN: token,
     };
     String requestUrl = ServiceUrlHolder.getUrl(url);
     LogUtils.info(
@@ -43,7 +44,7 @@ Future request(
     }
     return responseData;
   } catch (e) {
-    print(e);
+    LogUtils.error(TAG, 'request请求发生异常: ', StackTrace.current, e: e);
   }
 }
 
@@ -58,7 +59,7 @@ Future requestPostSpl(
 
     Options options = new Options();
     options.headers = {
-      "X-OS-KERNEL-TOKEN": token,
+      Constants.X_OS_KERNEL_TOKEN: token,
     };
 
     String requestUrl = ServiceUrlHolder.getUrl(url);
@@ -81,7 +82,7 @@ Future requestPostSpl(
     }
     return responseData;
   } catch (e) {
-    print(e);
+    LogUtils.error(TAG, 'requestPostSpl请求发生异常: ', StackTrace.current, e: e);
   }
 }
 
@@ -111,7 +112,7 @@ Future requestNoHeader(url, {formData}) async {
     }
     return responseData;
   } catch (e) {
-    print(e);
+    LogUtils.error(TAG, 'requestNoHeader请求发生异常: ', StackTrace.current, e: e);
   }
 }
 
@@ -123,7 +124,7 @@ Future requestGet(url, {formData}) async {
 
     Options options = new Options();
     options.headers = {
-      "X-OS-KERNEL-TOKEN": token,
+      Constants.X_OS_KERNEL_TOKEN: token,
     };
 
     String requestUrl = ServiceUrlHolder.getUrl(url);
@@ -146,6 +147,6 @@ Future requestGet(url, {formData}) async {
     }
     return responseData;
   } catch (e) {
-    print(e);
+    LogUtils.error(TAG, 'requestGet请求发生异常: ', StackTrace.current, e: e);
   }
 }

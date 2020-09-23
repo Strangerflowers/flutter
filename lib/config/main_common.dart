@@ -1,4 +1,6 @@
 import 'package:bid/common/app_global.dart';
+import 'package:bid/common/constants.dart';
+import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/network.dart';
 import 'package:bid/common/pocket_capture.dart';
 import 'package:bid/config/config_reader.dart';
@@ -33,23 +35,19 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/** 
- * 公共的启动Main方法.
- * @author: DANTE FUNG
- * @date: 2020-9-9 15:53:14
- */
+/// 公共的启动Main方法.
+/// @author: DANTE FUNG
+/// @date: 2020-9-9 15:53:14
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+const TAG = "mainCommon";
 Future<void> mainCommon(String env) async {
   WidgetsFlutterBinding.ensureInitialized();
   // 加载app_xxx_config.json配置文件
   await ConfigReader.initialize(env);
   // 初始化api接口地址定义
   ServiceUrlHolder.initialize();
-  bool success = await SpUtil.getInstance();
-  bool axio = await Git.checkAuditStatus();
-  Global.init();
-
-  print('初始化持久化$success========$axio');
+  // 初始化获取本地存储的用户TOKEN信息
+  await Global.init();
   // 初始化代理配置监听
   Packetcapture.initUniLinks(callBack: (host, port) {
     Network.setHttpProxy(host, port);
@@ -122,8 +120,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child, counter) {
         // 在这里进行判断，如果有token，就去判断资料认证状态，如果已通过审核则跳转到首页，如果没有通过审核则跳转到资料认证页面，如果没有token 就去到登录页面
         var firstPage;
-        // prefs.getInt('auditStatusStatus');
-        print('入口文件${Global.profile.auditStatus}======${Global.profile.token}');
+        LogUtils.debug(TAG, '供应商状态: ${Constants.CERTIFICATION_ADUIT_STATUS[Global.profile.auditStatus]}', StackTrace.current);
+        LogUtils.debug(TAG, '已认证TOKEN: ${Global.profile.token}', StackTrace.current);
         if (Global.profile.token == null) {
           firstPage = FormTestRoute();
         } else if (Global.profile.token != null &&
@@ -136,6 +134,8 @@ class MyApp extends StatelessWidget {
         } else {
           firstPage = IndexPage();
         }
+        firstPage = IndexPage();
+
         return Container(
           child: MaterialApp(
               navigatorKey: navigatorKey,

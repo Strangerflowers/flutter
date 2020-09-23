@@ -22,7 +22,7 @@ abstract class ServiceUrlHolder {
 class ServiceUrlMapper {
   /// 第三方固定url地址
   static Map<String, String> thirdUrlMapper = {
-    "getKey": 'https://up-z2.qbox.me/',
+    "qiniuyunUrl": 'https://up-z2.qbox.me/',
   };
 
   /// 公司其他接口定义，例如 http://api-xxx.gtland.cn 需要进行环境切换
@@ -34,7 +34,8 @@ class ServiceUrlMapper {
   static Map<String, String> urlMapper = {
     'login': '/os_kernel_authcctr/app/authcctr/authc/tgt/login', // 通过账号登录
     'getToken': '/os_kernel_authcctr/app/authc/token/getAndSetTime', //获取token
-    "getQiniuToken": "/os_kernel_bid/goods/getQiniuToken",
+    "getQiniuToken": "/os_kernel_bid/goods/getQiniuToken", // 获取七牛云token
+    "getUrlByKey": "/kernel-comm/api/qiniu/getUrlByKey", // 通过七牛云的key换取url
     'sendResetPwdCaptcha':
         '/os_kernel_userorgctr/app/user/sendLoginCaptcha', //登录获取验证码
     'sendRegCaptcha':

@@ -38,8 +38,6 @@ class Global {
     if (_profile != null) {
       try {
         profile.token = _profile;
-        // print('jinr======');
-        // profile = Profile.fromJson(jsonDecode(_profile));
       } catch (e) {
         print(e);
       }
@@ -53,11 +51,7 @@ class Global {
         print(e);
       }
     }
-
-    //初始化网络请求相关配置
-    // Global.init();
-    // init();
-    Git.checkAuditStatus();
+    await Git.checkAuditStatus();
   }
 
   // 持久化Profile信息

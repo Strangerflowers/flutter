@@ -4,11 +4,9 @@ import 'package:bid/common/log_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:sprintf/sprintf.dart';
 
-/** 
- * 配置文件加载器，用于加载config/app_xxx_config.json文件
- * @author DANTE FUNG
- * @date 2020-9-9 15:53:56
- */
+/// 配置文件加载器，用于加载config/app_xxx_config.json文件
+/// @author DANTE FUNG
+/// @date 2020-9-9 15:53:56
 abstract class ConfigReader {
   static String TAG = "ConfigReader";
   static Map<String, dynamic> _config;
