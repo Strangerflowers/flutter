@@ -7,6 +7,7 @@ class SalesOrderAddProvide with ChangeNotifier {
   AddDeliverArrange goodsList;
   List<AddDeliverArrangeResult> salesList; //存储需求列表数据
   String planDeliveryTime; //计划发货时间
+  var surplus; //剩余存量
   String mainOrderId = '0';
   String subOrderId = '0';
   String batch = '0';

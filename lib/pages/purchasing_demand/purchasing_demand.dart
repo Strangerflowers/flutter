@@ -340,7 +340,6 @@ class _DemandContentState extends State<DemandContent> {
 
   // 产品属性合并
   Widget _attributes(item) {
-    print('---------------${item.name}===${item.categoryMap.values.toList()}');
     var arr = item.categoryMap.values.toList();
     // print('修改bug====${item.categoryMap.toJson().values.toList()}');
     return Container(

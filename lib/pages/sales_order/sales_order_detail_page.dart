@@ -445,18 +445,31 @@ class ProductInformation extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
       alignment: Alignment.bottomRight,
       width: ScreenUtil().setWidth(750),
-      // child: Expanded(
-      child: Row(
-        children: <Widget>[
-          Text('小计：'),
-          Text(
-            '￥${sum.toStringAsFixed(2)}',
-            style: TextStyle(
-              color: Color(0xFFF2A631),
-            ),
-          ),
-        ],
+      child: RichText(
+        text: TextSpan(
+            text: '小计：',
+            style: TextStyle(color: Color(0xFF333333)),
+            children: <TextSpan>[
+              TextSpan(
+                text: '￥${(sum / 100).toStringAsFixed(2)}',
+                style: TextStyle(
+                  color: Color(0xFFF2A631),
+                ),
+              ),
+            ]),
       ),
+      // child: Expanded(
+      // child: Row(
+      //   children: <Widget>[
+      //     Text('小计：'),
+      //     Text(
+      //       '￥${sum.toStringAsFixed(2)}',
+      //       style: TextStyle(
+      //         color: Color(0xFFF2A631),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       // ),
     );
   }
@@ -467,18 +480,31 @@ class ProductInformation extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
       alignment: Alignment.bottomRight,
       width: ScreenUtil().setWidth(750),
-      // child: Expanded(
-      child: Row(
-        children: <Widget>[
-          Text('共计：'),
-          Text(
-            '￥${item.totalMoney}',
-            style: TextStyle(
-              color: Color(0xFFF2A631),
-            ),
-          ),
-        ],
+      child: RichText(
+        text: TextSpan(
+            text: '共计：',
+            style: TextStyle(color: Color(0xFF333333)),
+            children: <TextSpan>[
+              TextSpan(
+                text: '￥${(item.totalMoney / 100).toStringAsFixed(2)}',
+                style: TextStyle(
+                  color: Color(0xFFF2A631),
+                ),
+              ),
+            ]),
       ),
+      // child: Expanded(
+      // child: Row(
+      //   children: <Widget>[
+      //     Text('共计：'),
+      //     Text(
+      //       '￥${item.totalMoney}',
+      //       style: TextStyle(
+      //         color: Color(0xFFF2A631),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       // ),
     );
   }

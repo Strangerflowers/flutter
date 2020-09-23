@@ -240,13 +240,15 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
+              width: ScreenUtil().setWidth(150),
+              height: ScreenUtil().setHeight(150),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuKey}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
+              child: item.skuKey == null || item.skuKey == 'null'
+                  ? Image.asset('images/default.png')
+                  : Image.network(
+                      '${item.skuKey}',
+                      fit: BoxFit.fill,
+                    )
               // Image.asset('images/icon.png'),
               ),
           Expanded(
@@ -374,8 +376,10 @@ class Quotation extends StatelessWidget {
           Container(
             width: ScreenUtil().setWidth(300),
             height: ScreenUtil().setHeight(300),
-            // child: Image.asset('images/icon.png'),
-            child: Image.network('${urls != null ? urls[0] : ''}'),
+            child: urls != null
+                ? Image.network(urls[0])
+                : Image.asset('images/icon.png'),
+            // child: Image.network('${urls != null ? urls[0] : ''}'),
             // 轮播图
             // child: Swiper(
             //   itemBuilder: (BuildContext context, int index) {

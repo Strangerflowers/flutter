@@ -145,6 +145,7 @@ typedef MyOnChange = Function(int index, String id, String name);
 
 class _AuthenticationFormState extends State<AuthenticationForm> {
   String TAG = "_AuthenticationFormState";
+  bool isValider = false;
   Map<String, Object> categoryTree = new LinkedHashMap();
   var companyAddressName; //显示公司地区名称
   var auditStatus = 1;
@@ -326,7 +327,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     ScreenUtil.init(context, width: 750, height: 1334);
     return Form(
       key: authFormKey,
-      autovalidate: true,
+      autovalidate: isValider,
       child: Container(
         color: Colors.white,
         padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
@@ -1182,6 +1183,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
+          isValider = true;
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
             if (supplierType.isEmpty) {
