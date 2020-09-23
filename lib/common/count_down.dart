@@ -25,8 +25,8 @@ class LoginFormCode extends StatefulWidget {
   final bool available;
 
   /// 用户点击时的回调函数。
-  // final Function onTapCallback;
-  final ValueChanged onTapCallback;
+  final Function onTapCallback;
+  // final ValueChanged onTapCallback;
 
   LoginFormCode({
     Key key,
@@ -61,13 +61,10 @@ class _LoginFormCodeState extends State<LoginFormCode> {
 
   /// 取消倒计时的计时器。
   restTimer() {
-    print('父组件调用子组件的方法');
-    // 计时器（`Timer`）组件的取消（`cancel`）方法，取消计时器。
-    _timer?.cancel();
-    _seconds = widget.countdown;
+    cancelTimer();
+    _verifyStr = '重新发送';
     inkWellStyle = _availableStyle;
     setState(() {});
-    return;
   }
 
   /// 启动倒计时的计时器。
@@ -107,16 +104,15 @@ class _LoginFormCodeState extends State<LoginFormCode> {
             ),
             onTap: (_seconds == widget.countdown && widget.isChange == true)
                 ? () {
-                    print('子组件方法');
                     _startTimer();
                     inkWellStyle = _unavailableStyle;
                     _verifyStr = '已发送$_seconds' + 's';
                     setState(() {});
-                    widget.onTapCallback(_verifyStr);
+                    widget.onTapCallback(_verifyStr, this);
                   }
                 : (_seconds == widget.countdown && widget.isChange == false)
                     ? () {
-                        widget.onTapCallback(_verifyStr);
+                        widget.onTapCallback(_verifyStr, this);
                       }
                     : null,
           )

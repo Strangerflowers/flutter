@@ -1,11 +1,13 @@
 import 'package:bid/common/count_down.dart';
+import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import '../../service/service_method.dart';
-import 'package:bid/common/toast.dart';
-import './setregister_password.dart';
+
 import '../../routers/application.dart';
+import '../../service/service_method.dart';
+
+const String TAG = 'Register';
 
 class Register extends StatelessWidget {
   @override
@@ -92,14 +94,16 @@ class FormDemoState extends State<FormDemo> {
       };
 
       // checkNameAndMobile
-      print('校验公司名称$item');
+      LogUtils.debug(TAG, '校验公司名称$item', StackTrace.current);
       await request('checkNameAndMobile', formData: item).then((ele) {
-        print('校验公司名称$ele====${ele['code'] == 0}');
+        LogUtils.debug(
+            TAG, '校验公司名称$ele====${ele['code'] == 0}', StackTrace.current);
         if (ele['code'] == 0) {
           request('verifyRegCheckCode', formData: formData).then((val) {
-            print('$val====${val['code'] == 0}');
+            LogUtils.debug(
+                TAG, '$val====${val['code'] == 0}', StackTrace.current);
             if (val['code'] == 0) {
-              print('判断是否跑进校验');
+              LogUtils.debug(TAG, '判断是否跑进校验', StackTrace.current);
               Application.router.navigateTo(context,
                   "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
               // Application.router.navigateTo(context, "/setPassword?item=$item");
@@ -153,7 +157,7 @@ class FormDemoState extends State<FormDemo> {
                   ),
                   onChanged: (value) {
                     this.companyName = value;
-                    print('当前输入的公司名称----$mobile');
+                    // print('当前输入的公司名称----$value');
                   },
                   onSaved: (value) {
                     this.companyName = value;
@@ -225,7 +229,8 @@ class FormDemoState extends State<FormDemo> {
                           ? true
                           : false;
                     });
-                    print('获取验证码倒计时$changeCount');
+                    LogUtils.debug(
+                        TAG, '获取验证码倒计时$changeCount', StackTrace.current);
                   },
                 ),
                 TextFormField(
@@ -243,9 +248,10 @@ class FormDemoState extends State<FormDemo> {
                         isChange: changeCount,
                         countdown: 60,
                         available: true,
-                        onTapCallback: (val) {
-                          print('父组件拿到子组件的方法$val');
-                          _getPhoneCode();
+                        onTapCallback: (val, pWidget) {
+                          LogUtils.debug(TAG, '回调: $val', StackTrace.current);
+                          LogUtils.debug(TAG, pWidget, StackTrace.current);
+                          _getPhoneCode(pWidget);
                         },
                       ),
                     ),
@@ -300,17 +306,17 @@ class FormDemoState extends State<FormDemo> {
   // 验证手机号码
   String validateMibile(String value) {
     errorMobileText = null;
-    print('手机校验$value==$mobile');
+    LogUtils.debug(TAG, '手机校验$value==$mobile', StackTrace.current);
     // 正则匹配手机号
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
     if (mobile.isEmpty) {
-      print('手机校验为空====$mobile');
+      LogUtils.debug(TAG, '手机校验为空：$mobile', StackTrace.current);
       return '手机号码不能为空';
     } else {
       if (!exp.hasMatch(mobile)) {
-        print('手机校验规则不对');
+        LogUtils.debug(TAG, '手机校验规则不对', StackTrace.current);
         return '请输入正确的账号';
       } else {
         return null;
@@ -320,11 +326,10 @@ class FormDemoState extends State<FormDemo> {
 
   //
   // 获取验证码
-  void _getPhoneCode() async {
+  void _getPhoneCode(pWidget) async {
     autovalidateMobile = true;
     registerFormKey.currentState.save();
     if (mobile.isEmpty) {
-      print('查看进度$mobile');
       setState(() {
         errorMobileText = "手机号码不能为空";
       });
@@ -337,14 +342,15 @@ class FormDemoState extends State<FormDemo> {
     // registerFormKey.currentState.validate();
     if (flag) {
       var data = {'mobile': this.mobile};
-      print('获取验证码注册$data');
-
       await requestGet('sendRegCaptcha', formData: data).then((val) {
+        LogUtils.debug(TAG, val, StackTrace.current);
+        if (val['success'] == false) {
+          pWidget.restTimer();
+        }
         Toast.toast(
           context,
           msg: val['message'],
         );
-        print('----------------------$val');
       });
     }
   }
