@@ -120,8 +120,12 @@ class MyApp extends StatelessWidget {
       builder: (context, child, counter) {
         // 在这里进行判断，如果有token，就去判断资料认证状态，如果已通过审核则跳转到首页，如果没有通过审核则跳转到资料认证页面，如果没有token 就去到登录页面
         var firstPage;
-        LogUtils.debug(TAG, '供应商状态: ${Constants.CERTIFICATION_ADUIT_STATUS[Global.profile.auditStatus]}', StackTrace.current);
-        LogUtils.debug(TAG, '已认证TOKEN: ${Global.profile.token}', StackTrace.current);
+        LogUtils.debug(
+            TAG,
+            '供应商状态: ${Constants.CERTIFICATION_ADUIT_STATUS[Global.profile.auditStatus]}',
+            StackTrace.current);
+        LogUtils.debug(
+            TAG, '已认证TOKEN: ${Global.profile.token}', StackTrace.current);
         if (Global.profile.token == null) {
           firstPage = FormTestRoute();
         } else if (Global.profile.token != null &&
@@ -134,7 +138,6 @@ class MyApp extends StatelessWidget {
         } else {
           firstPage = IndexPage();
         }
-        firstPage = IndexPage();
 
         return Container(
           child: MaterialApp(
