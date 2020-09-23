@@ -108,7 +108,7 @@ class SalesOrderBasic extends StatelessWidget {
     );
   }
 
-  // 采购计划
+  // 报价单
   Widget _planClick(title, content, id, context) {
     return Container(
       child: InkWell(

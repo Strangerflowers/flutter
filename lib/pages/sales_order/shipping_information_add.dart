@@ -528,12 +528,17 @@ class ProductInformation extends StatelessWidget {
               width: ScreenUtil().setWidth(150),
               height: ScreenUtil().setHeight(150),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuKey}',
-                fit: BoxFit.fill,
-              )
-              // Image.asset('images/icon.png'),
-              ),
+              child: item.skuKey == 'null' ||
+                      item.skuKey == null ||
+                      item.skuKey == ''
+                  ? Image.asset(
+                      'images/default.png',
+                      fit: BoxFit.fill,
+                    )
+                  : Image.network(
+                      '${item.skuKey}',
+                      fit: BoxFit.fill,
+                    )),
           Expanded(
             child: Column(
               children: <Widget>[

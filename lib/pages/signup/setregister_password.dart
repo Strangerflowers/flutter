@@ -118,7 +118,12 @@ class _PasswordFormState extends State<PasswordForm> {
                 prefixIcon: Container(
                   width: ScreenUtil().setWidth(130),
                   margin: EdgeInsets.only(top: 13.0, right: 5.0),
-                  child: Text('确认密码'),
+                  child: Text(
+                    '确认密码',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                    ),
+                  ),
                 ),
                 hintText: "再次输入登录密码",
               ),

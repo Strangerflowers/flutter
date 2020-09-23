@@ -623,7 +623,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             controller: TextEditingController.fromValue(
               TextEditingValue(
                 text: '${companyDetailAddr == null ? "" : companyDetailAddr}',
@@ -688,7 +688,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -735,7 +735,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -791,7 +791,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -847,7 +847,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -892,16 +892,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
+              // Text(
+              //   '*',
+              //   style: TextStyle(color: Colors.red),
+              // ),
               Text(title)
             ],
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -946,16 +946,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
+              // Text(
+              //   '*',
+              //   style: TextStyle(color: Colors.red),
+              // ),
               Text(title)
             ],
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -981,7 +981,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyTelephone = value;
             },
             validator: (value) {
-              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
+              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
+              // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
               if (!exp.hasMatch(value)) {
                 return "格式错误";
               }
@@ -1010,7 +1011,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -1068,7 +1069,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -1124,7 +1125,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           ),
           TextFormField(
             autofocus: false,
-            autovalidate: true,
+            autovalidate: isValider,
             // keyboardType: TextInputType.phone,
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
@@ -1183,7 +1184,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
-          isValider = true;
+          setState(() {
+            isValider = true;
+          });
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
             if (supplierType.isEmpty) {
