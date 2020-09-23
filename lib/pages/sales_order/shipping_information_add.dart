@@ -1,4 +1,6 @@
+import 'package:bid/models/sales_order/add_infomation_model.dart';
 import 'package:city_pickers/city_pickers.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,13 +12,32 @@ import '../../provide/sales_order/add_infomation_provide.dart';
 import '../../routers/application.dart';
 import '../../pages/sales_order/sales_index_page.dart';
 
-class SaleaUpdate extends StatelessWidget {
+class SaleaUpdate extends StatefulWidget {
   final String id;
-  // final String mainOrderId;
-  // final String goodsId;
-  // final String len;
-  // final String returnId;
+
   SaleaUpdate(this.id);
+  @override
+  _SaleaUpdateState createState() => _SaleaUpdateState();
+}
+
+class _SaleaUpdateState extends State<SaleaUpdate> {
+  String id;
+  var _getBackDetailInfo;
+  void initState() {
+    id = widget.id;
+    _getBackDetailInfo = _getDate();
+    super.initState();
+  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class SaleaUpdate extends StatelessWidget {
+//   final String id;
+
+//   SaleaUpdate(this.id);
   @override
   Widget build(BuildContext context) {
     // _getBackDetailInfo(context);
@@ -25,59 +46,82 @@ class SaleaUpdate extends StatelessWidget {
         title: Text('填写发货信息'),
       ),
       body: FutureBuilder(
-        future: _getBackDetailInfo(context),
+        future: _getBackDetailInfo,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    AddHeader(),
-                    // DatePickerWidget(),
-                    ProductInformation(),
-                    OkBotton(),
-                  ],
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            var data = SalesAdd.fromJson(snapshot.data);
+            if (data.result != null) {
+              return SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      AddHeader(data.result),
+                      // DatePickerWidget(),
+                      ProductInformation(data.result.dispatchItemVos),
+                      OkBotton(data.result),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return Text('加载中......');
+              );
+            } else {
+              return Text('暂无数据');
+            }
           }
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+                value: .7,
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  Future _getBackDetailInfo(BuildContext context) async {
-    await Provide.value<SalesAddPage>(context).getQuotationDetail(id);
-    return '加载完成';
+  Future _getDate() async {
+    var formData = {'dispatchId': id};
+    var response = await requestGet('showDispatchProduct', formData: formData);
+    response['result']['dispatchItemVos'].forEach((ele) {
+      ele['actualDeliveryNumber'] = 0;
+      return ele;
+    });
+    return response;
   }
 }
 
 class AddHeader extends StatelessWidget {
+  final result;
+  AddHeader(this.result);
   @override
   Widget build(BuildContext context) {
     return Provide<SalesAddPage>(builder: (context, child, val) {
       var statusType = {0: '待发货', 1: '已发货', 2: '已收货'};
-      var goodsInfo = Provide.value<SalesAddPage>(context).goodsList;
-      if (goodsInfo != null) {
-        var result = goodsInfo.result;
-        return Container(
-          color: Colors.white,
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            children: <Widget>[
-              _information('发货批次', result.batch),
-              // _information('发货状态', statusType[result.status]),
-              _information('计划发货时间', '${result.planDeliveryTime}'),
-              DatePickerWidget(),
-              UpdateForm(),
-            ],
-          ),
-        );
-      } else {
-        return Text('暂无数据');
-      }
+      // var goodsInfo = Provide.value<SalesAddPage>(context).goodsList;
+      // if (goodsInfo != null) {
+      //   var result = goodsInfo.result;
+      return Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          children: <Widget>[
+            _information('发货批次', result.batch),
+            // _information('发货状态', statusType[result.status]),
+            _information('计划发货时间', '${result.planDeliveryTime}'),
+            DatePickerWidget(),
+            UpdateForm(),
+          ],
+        ),
+      );
+      // } else {
+      //   return Text('暂无数据');
+      // }
     });
   }
 
@@ -229,8 +273,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget _onClick(context) {
     return Container(
       child: InkWell(
-        onTap: () async {
-          var result = await showDatePicker(
+        onTap: () {
+          showDatePicker(
             // 设置禁用时间
             // selectableDayPredicate: (DateTime day) {
             //   return day.difference(DateTime.now()).inDays < 2;
@@ -238,15 +282,27 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(2020),
-            locale: Locale('zh'),
+            locale: Locale('zh', 'CH'),
+            // locale: Locale('zh'),
             lastDate: DateTime(2030),
-          );
-          setState(() {
-            dayTime = result.toString().substring(0, 10);
-            Provide.value<SalesAddPage>(context)
-                .changeDayTime(result.toString().substring(0, 10));
+          ).then((DateTime val) {
+            if (val != null) {
+              setState(() {
+                dayTime = val.toString().substring(0, 10);
+                Provide.value<SalesAddPage>(context)
+                    .changeDayTime(val.toString().substring(0, 10));
+              });
+            }
+            print(val); // 2018-07-12 00:00:00.000
+          }).catchError((err) {
+            print(err);
           });
-          print('选择时间12345678--${result.toString().substring(0, 10)}');
+          // setState(() {
+          //   dayTime = result.toString().substring(0, 10);
+          //   Provide.value<SalesAddPage>(context)
+          //       .changeDayTime(result.toString().substring(0, 10));
+          // });
+          // print('选择时间12345678--${result.toString().substring(0, 10)}');
           // 跳转到详情页面
           // Application.router.navigateTo(context, "/plan?id=$id");
         },
@@ -281,17 +337,18 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
 // 确定按钮
 class OkBotton extends StatelessWidget {
+  final data;
   // final String mainOrderId;
   // final String goodsId;
   // final String len;
   // final String returnId;
-  OkBotton();
+  OkBotton(this.data);
 
   @override
   Widget build(BuildContext context) {
     return Provide<SalesAddPage>(builder: (context, child, val) {
-      var result = Provide.value<SalesAddPage>(context).goodsList.result;
-      var goodsInfo = Provide.value<SalesAddPage>(context).salesList;
+      // var result = Provide.value<SalesAddPage>(context).goodsList.result;
+      // var goodsInfo = Provide.value<SalesAddPage>(context).salesList;
       return Container(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -310,13 +367,13 @@ class OkBotton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0)),
                   onPressed: () {
                     var dispatchItems = [];
-                    goodsInfo.forEach((element) {
+                    data.dispatchItemVos.forEach((element) {
                       dispatchItems.add({
                         'id': element.id,
                         'actualDeliveryNumber': element.actualDeliveryNumber
                       });
                     });
-                    _dispatchAdd(dispatchItems, result, context);
+                    _dispatchAdd(dispatchItems, data, context);
                   },
                 ),
               ),
@@ -344,7 +401,7 @@ class OkBotton extends StatelessWidget {
     //   return '请填写完整信息';
     // }
     var formData = {
-      "id": Provide.value<SalesAddPage>(context).goodsList.result.id,
+      "id": result.id,
       "actualDeliveryTime":
           Provide.value<SalesAddPage>(context).actualDeliveryTime == null
               ? dayTime
@@ -401,22 +458,41 @@ class OkBotton extends StatelessWidget {
 }
 
 // 产品信息
-class ProductInformation extends StatelessWidget {
+class ProductInformation extends StatefulWidget {
+  final data;
+  ProductInformation(this.data);
+  @override
+  _ProductInformationState createState() => _ProductInformationState();
+}
+
+class _ProductInformationState extends State<ProductInformation> {
+  var data;
+  void initState() {
+    data = widget.data;
+    super.initState();
+  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class ProductInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provide<SalesAddPage>(builder: (context, child, val) {
       var goodsInfo = Provide.value<SalesAddPage>(context).salesList;
-      if (goodsInfo != null) {
-        return SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            color: Colors.white,
-            child: _recommedList(goodsInfo),
-          ),
-        );
-      } else {
-        return Container(child: Text(''));
-      }
+      // if (goodsInfo != null) {
+      return SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(bottom: 20),
+          color: Colors.white,
+          child: _recommedList(data),
+        ),
+      );
+      // } else {
+      //   return Container(child: Text(''));
+      // }
     });
   }
 
@@ -481,7 +557,11 @@ class ProductInformation extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.bottomRight,
                   // padding: EdgeInsets.only(right: 20),
-                  child: CartCount(item, index),
+                  child: CartCount(item, index, (num) {
+                    print('NUM----￥$num');
+                    setState(() {});
+                  }),
+                  // child: CartCount(item, index),
                 ),
               )
             ],
@@ -489,7 +569,9 @@ class ProductInformation extends StatelessWidget {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-                '已发${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber}'),
+                '已安排${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber <= 0 ? 0 : item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber}'),
+            // child: Text(
+            //     '已发${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber}'),
           )
         ],
       ),
@@ -528,12 +610,17 @@ class ProductInformation extends StatelessWidget {
               width: ScreenUtil().setWidth(150),
               height: ScreenUtil().setHeight(150),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuKey}',
-                fit: BoxFit.fill,
-              )
-              // Image.asset('images/icon.png'),
-              ),
+              child: item.skuKey == 'null' ||
+                      item.skuKey == null ||
+                      item.skuKey == ''
+                  ? Image.asset(
+                      'images/default.png',
+                      fit: BoxFit.fill,
+                    )
+                  : Image.network(
+                      '${item.skuKey}',
+                      fit: BoxFit.fill,
+                    )),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -582,29 +669,70 @@ class ProductInformation extends StatelessWidget {
 }
 
 // 数量增加减少按钮
-class CartCount extends StatelessWidget {
+class CartCount extends StatefulWidget {
   var item;
   int index;
 
-  CartCount(this.item, this.index);
+  final Function(int) changed;
+  CartCount(this.item, this.index, this.changed);
+  @override
+  _CartCountState createState() => _CartCountState();
+}
+
+class _CartCountState extends State<CartCount> {
+  var item;
+  int index;
+  void initState() {
+    item = widget.item;
+    index = widget.index;
+    super.initState();
+  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+
+//     );
+//   }
+// }
+// class CartCount extends StatelessWidget {
+  // var item;
+  // int index;
+  // CartCount(this.item, this.index);
 
   @override
   Widget build(BuildContext context) {
     return Provide<SalesAddPage>(builder: (context, child, val) {
       var goodsInfo = Provide.value<SalesAddPage>(context).goodsList;
-      if (item.actualDeliveryNumber == null) {
-        item.actualDeliveryNumber = 0;
-      }
       return Container(
-        width: ScreenUtil().setWidth(230),
-        margin: EdgeInsets.only(top: 5.0),
+        width: ScreenUtil().setWidth(260),
+        height: ScreenUtil().setHeight(45),
+        // margin: EdgeInsets.only(top: 5.0),
         decoration:
             BoxDecoration(border: Border.all(width: 1, color: Colors.black12)),
-        child: Row(
+        child: Stack(
           children: <Widget>[
-            _reduceBtn(context),
-            _countArea(),
-            _addBtn(context, item),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              // right: 0,
+              top: 0,
+              child: _reduceBtn(context),
+            ),
+            Positioned(
+              bottom: -10,
+              left: 40,
+              top: -15,
+              right: 30,
+              child: _countArea(),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: _addBtn(context, item),
+            ),
+            // _reduceBtn(context),
+            // _countArea(),
+            // _addBtn(context, item),
           ],
         ),
       );
@@ -618,8 +746,10 @@ class CartCount extends StatelessWidget {
         if (item.actualDeliveryNumber <= 0) {
           return;
         } else {
-          var num = item.actualDeliveryNumber -= 1;
-          Provide.value<SalesAddPage>(context).getSalessList(index, num);
+          setState(() {
+            item.actualDeliveryNumber -= 1;
+          });
+          widget.changed(1);
         }
       },
       child: Container(
@@ -638,42 +768,209 @@ class CartCount extends StatelessWidget {
   //添加按钮
   Widget _addBtn(context, item) {
     // 剩余存量
-    int surplus = item.number - item.totalActualDeliveryNumber;
-    var num;
+    int num;
     return InkWell(
       onTap: () {
-        num = item.actualDeliveryNumber += 1;
-        if (num <= surplus) {
-          Provide.value<SalesAddPage>(context).getSalessList(index, num);
-        } else {
-          num = surplus;
-          Provide.value<SalesAddPage>(context).getSalessList(index, num);
+        if (item.actualDeliveryNumber >= 999999) {
+          return;
         }
-        print(
-            '比较${item.actualDeliveryNumber <= (item.number - item.totalActualDeliveryNumber)}');
+        setState(() {
+          item.actualDeliveryNumber += 1;
+        });
+        num = item.number -
+                    item.totalActualDeliveryNumber -
+                    item.actualDeliveryNumber <=
+                0
+            ? 0
+            : item.number -
+                item.totalActualDeliveryNumber -
+                item.actualDeliveryNumber;
+        widget.changed(num);
       },
       child: Container(
         width: ScreenUtil().setWidth(65),
         height: ScreenUtil().setHeight(45),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: item.actualDeliveryNumber < surplus
-                ? Colors.white
-                : Colors.black12,
+            color: item.actualDeliveryNumber >= 999999
+                ? Colors.black12
+                : Colors.white,
             border: Border(left: BorderSide(width: 1, color: Colors.black12))),
-        child: item.actualDeliveryNumber <= surplus ? Text('+') : Text('+'),
+        child: Text('+'),
       ),
     );
   }
 
   //中间数量显示区域
   Widget _countArea() {
+    var showNum;
     return Container(
-      width: ScreenUtil().setWidth(95),
-      height: ScreenUtil().setHeight(45),
+      width: ScreenUtil().setWidth(750),
       alignment: Alignment.center,
       color: Colors.white,
-      child: Text('${item.actualDeliveryNumber}'),
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+        ),
+        // controller:
+        // new TextEditingController(text: item.actualDeliveryNumber.toString()),
+        controller: TextEditingController.fromValue(
+          TextEditingValue(
+            text:
+                '${item.actualDeliveryNumber == null ? "" : item.actualDeliveryNumber}',
+            // 保持光标在最后
+            selection: TextSelection.fromPosition(
+              TextPosition(
+                  affinity: TextAffinity.downstream,
+                  offset: '${item.actualDeliveryNumber}'.length),
+            ),
+          ),
+        ),
+        inputFormatters: [
+          WhitelistingTextInputFormatter.digitsOnly,
+          // LengthLimitingTextInputFormatter(5)
+        ], //只允许输入数字
+        maxLines: null, //最大行数
+        // maxLength: 6,
+        autocorrect: true, //是否自动更正
+        autofocus: false, //是否自动对焦
+        // autovalidate: item['value'] == 'mobile' ? mobileValidate : autoValidate,
+        obscureText: false, //是否是密码
+        textAlign: TextAlign.left, //文本对齐方式
+        style: TextStyle(
+          fontSize: 14.0,
+        ), //输入文本的样式
+        //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
+        onChanged: (v) {
+          if (v == '') {
+            item.actualDeliveryNumber = 0;
+            widget.changed(1);
+          } else {
+            if (v.length >= 6) {
+              showNum = int.parse(v.substring(0, 6));
+              print('输入${showNum}');
+            } else {
+              showNum = int.parse(v);
+            }
+
+            // if (showNum > 999999) {
+            //   showNum = 999999;
+            // }
+            setState(() {
+              item.actualDeliveryNumber = showNum;
+            });
+          }
+
+          widget.changed(1);
+          print('v====${item.actualDeliveryNumber}');
+        },
+        validator: (value) {
+          if (int.parse(value) >= 999999) {
+            return '不能超过999999';
+          }
+          return null;
+        },
+        // onSaved: (val) {},
+      ),
+      // child: Text('${item.actualDeliveryNumber}'),
     );
   }
 }
+
+// // 数量增加减少按钮
+// class CartCount extends StatelessWidget {
+//   var item;
+//   int index;
+
+//   CartCount(this.item, this.index);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Provide<SalesAddPage>(builder: (context, child, val) {
+//       var goodsInfo = Provide.value<SalesAddPage>(context).goodsList;
+//       if (item.actualDeliveryNumber == null) {
+//         item.actualDeliveryNumber = 0;
+//       }
+//       return Container(
+//         width: ScreenUtil().setWidth(230),
+//         margin: EdgeInsets.only(top: 5.0),
+//         decoration:
+//             BoxDecoration(border: Border.all(width: 1, color: Colors.black12)),
+//         child: Row(
+//           children: <Widget>[
+//             _reduceBtn(context),
+//             _countArea(),
+//             _addBtn(context, item),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+
+//   // 减少按钮
+//   Widget _reduceBtn(context) {
+//     return InkWell(
+//       onTap: () {
+//         if (item.actualDeliveryNumber <= 0) {
+//           return;
+//         } else {
+//           var num = item.actualDeliveryNumber -= 1;
+//           Provide.value<SalesAddPage>(context).getSalessList(index, num);
+//         }
+//       },
+//       child: Container(
+//         width: ScreenUtil().setWidth(65),
+//         height: ScreenUtil().setHeight(45),
+//         alignment: Alignment.center,
+//         decoration: BoxDecoration(
+//             color:
+//                 item.actualDeliveryNumber > 0 ? Colors.white : Colors.black12,
+//             border: Border(right: BorderSide(width: 1, color: Colors.black12))),
+//         child: item.actualDeliveryNumber > 0 ? Text('-') : Text('-'),
+//       ),
+//     );
+//   }
+
+//   //添加按钮
+//   Widget _addBtn(context, item) {
+//     // 剩余存量
+//     int surplus = item.number - item.totalActualDeliveryNumber;
+//     var num;
+//     return InkWell(
+//       onTap: () {
+//         num = item.actualDeliveryNumber += 1;
+//         if (num <= surplus) {
+//           Provide.value<SalesAddPage>(context).getSalessList(index, num);
+//         } else {
+//           num = surplus;
+//           Provide.value<SalesAddPage>(context).getSalessList(index, num);
+//         }
+//         print(
+//             '比较${item.actualDeliveryNumber <= (item.number - item.totalActualDeliveryNumber)}');
+//       },
+//       child: Container(
+//         width: ScreenUtil().setWidth(65),
+//         height: ScreenUtil().setHeight(45),
+//         alignment: Alignment.center,
+//         decoration: BoxDecoration(
+//             color: item.actualDeliveryNumber < surplus
+//                 ? Colors.white
+//                 : Colors.black12,
+//             border: Border(left: BorderSide(width: 1, color: Colors.black12))),
+//         child: item.actualDeliveryNumber <= surplus ? Text('+') : Text('+'),
+//       ),
+//     );
+//   }
+
+//   //中间数量显示区域
+//   Widget _countArea() {
+//     return Container(
+//       width: ScreenUtil().setWidth(95),
+//       height: ScreenUtil().setHeight(45),
+//       alignment: Alignment.center,
+//       color: Colors.white,
+//       child: Text('${item.actualDeliveryNumber}'),
+//     );
+//   }
+// }

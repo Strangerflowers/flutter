@@ -490,7 +490,7 @@ class _SearchState extends State<Search> with WidgetsBindingObserver {
         if (isKeyboardActived) {
           isKeyboardActived = false;
           _searchKey.currentState.save();
-          _getSearch();
+          // _getSearch();
           // 使输入框失去焦点
           _focusNode.unfocus();
           return;
@@ -531,23 +531,36 @@ class _SearchState extends State<Search> with WidgetsBindingObserver {
       ),
       child: Form(
         key: _searchKey,
-        child: TextFormField(
+        child: TextField(
+          textInputAction: TextInputAction.search,
           focusNode: _focusNode,
           decoration: InputDecoration(
             hintText: '搜一搜',
             icon: Icon(Icons.search),
             border: InputBorder.none,
           ),
+          onEditingComplete: () {
+            print('test');
+          },
+          onSubmitted: (value) {
+            setState(() {
+              currentText = value;
+            });
+            _focusNode.unfocus();
+            _getSearch();
+
+            print('点击搜索键触发搜索条件value$value');
+          },
           onChanged: (value) {
             setState(() {
               currentText = value;
             });
           },
-          onSaved: (value) {
-            setState(() {
-              currentText = value;
-            });
-          },
+          // onSaved: (value) {
+          //   setState(() {
+          //     currentText = value;
+          //   });
+          // },
         ),
       ),
     );

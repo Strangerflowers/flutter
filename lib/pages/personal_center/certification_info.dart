@@ -10,6 +10,7 @@ import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CertificationInfo extends StatefulWidget {
   @override
@@ -171,9 +172,14 @@ class _CertificationInfoState extends State<CertificationInfo> {
               Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
       child: new Row(children: [
         Container(
-            padding: const EdgeInsets.all(16.0), child: Text(dataModel.label)),
+            width: ScreenUtil().setWidth(260),
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.all(16.0),
+            child: Text(dataModel.label)),
         Container(
-            padding: const EdgeInsets.all(16.0), child: Text(dataModel.value)),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.all(16.0),
+            child: Text(dataModel.value)),
       ]),
     );
 
@@ -185,12 +191,15 @@ class _CertificationInfoState extends State<CertificationInfo> {
                 Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
         child: new Row(children: [
           Container(
+              width: ScreenUtil().setWidth(260),
+              alignment: Alignment.centerRight,
               padding: const EdgeInsets.all(16.0),
               child: Text(dataModel.label)),
           Container(
             //color: Colors.yellowAccent,
             width: 150,
             height: 150,
+            alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(16.0),
             child: dataModel.value == null
                 ? Text('')
@@ -212,11 +221,14 @@ class _CertificationInfoState extends State<CertificationInfo> {
                 Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
         child: new Row(children: [
           Container(
+              width: ScreenUtil().setWidth(260),
+              alignment: Alignment.centerRight,
               padding: const EdgeInsets.all(16.0),
               child: Text(dataModel.label)),
           Container(
               height: 100,
               //color: Colors.grey,
+              alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(16.0),
               child: Expanded(
                   child: new Text(
