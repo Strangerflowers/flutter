@@ -751,6 +751,7 @@ class _CartCountState extends State<CartCount> {
       alignment: Alignment.center,
       color: Colors.white,
       child: TextFormField(
+        keyboardType: TextInputType.number,
         decoration: InputDecoration(
           border: InputBorder.none,
         ),
