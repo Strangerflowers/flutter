@@ -83,15 +83,20 @@ class Git {
 
   static Future checkAuditStatus() async {
     _prefs = await SharedPreferences.getInstance();
-    var val = await requestGet('checkAuditStatus');
-    if (val['code'] == 0) {
-      _prefs.remove("auditStatusStatus");
-      _prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
-    } else if (val['code'] == 13001010) {
-      // print('token 失效');
-      _prefs.clear();
+    try {
+      var val = await requestGet('checkAuditStatus');
+      if (val['code'] == 0) {
+        _prefs.remove("auditStatusStatus");
+        _prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
+      } else if (val['code'] == 13001010) {
+        // print('token 失效');
+        _prefs.clear();
+      }
+      return true;
+    } catch (e) {
+      print(e);
     }
-    return true;
+
     //  .then((val) {
     //     print('全局调用方法');
     //     if (val['code'] == 0) {
