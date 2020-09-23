@@ -193,7 +193,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(2020),
-            locale: Locale('zh'),
+            locale: Locale('zh', 'CH'),
             lastDate: DateTime(2030),
           ).then((DateTime val) {
             if (val != null) {

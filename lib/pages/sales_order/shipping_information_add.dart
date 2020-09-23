@@ -229,8 +229,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget _onClick(context) {
     return Container(
       child: InkWell(
-        onTap: () async {
-          var result = await showDatePicker(
+        onTap: () {
+          showDatePicker(
             // 设置禁用时间
             // selectableDayPredicate: (DateTime day) {
             //   return day.difference(DateTime.now()).inDays < 2;
@@ -238,15 +238,27 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(2020),
-            locale: Locale('zh'),
+            locale: Locale('zh', 'CH'),
+            // locale: Locale('zh'),
             lastDate: DateTime(2030),
-          );
-          setState(() {
-            dayTime = result.toString().substring(0, 10);
-            Provide.value<SalesAddPage>(context)
-                .changeDayTime(result.toString().substring(0, 10));
+          ).then((DateTime val) {
+            if (val != null) {
+              setState(() {
+                dayTime = val.toString().substring(0, 10);
+                Provide.value<SalesAddPage>(context)
+                    .changeDayTime(val.toString().substring(0, 10));
+              });
+            }
+            print(val); // 2018-07-12 00:00:00.000
+          }).catchError((err) {
+            print(err);
           });
-          print('选择时间12345678--${result.toString().substring(0, 10)}');
+          // setState(() {
+          //   dayTime = result.toString().substring(0, 10);
+          //   Provide.value<SalesAddPage>(context)
+          //       .changeDayTime(result.toString().substring(0, 10));
+          // });
+          // print('选择时间12345678--${result.toString().substring(0, 10)}');
           // 跳转到详情页面
           // Application.router.navigateTo(context, "/plan?id=$id");
         },
