@@ -15,10 +15,54 @@ class QuotationIndexPage extends StatefulWidget {
 }
 
 class _QuotationIndexPageState extends State<QuotationIndexPage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  // List<GoodsSearchList> _itemList;
+  var _itemList;
+  static const loadingTag = "##loading##"; //表尾标记
+  var _words = <String>[loadingTag];
+  var scorllController = new ScrollController();
+  int ststes;
+  var getData;
+  int currentTabs = 0;
+  int preTabs = 0;
+  int pageNum = 1;
+  int totalPage;
+  List list = ['已报价', '全部通过', '部分通过', '全部不通过'];
+  // 0：已报价，1：报价未通过,2：报价通过，3：部分通过
+  var statusType = {0: 0, 1: 2, 2: 3, 3: 1};
+  // status = statusType[index];
+  @override
+  void initState() {
+    _getQuotationList();
+    super.initState();
+  }
+
+  // 获取列表数据
+  void _getQuotationList() async {
+    _itemList = [];
+    var data = {
+      "limit": 10,
+      "page": pageNum,
+      "params": {
+        "status": statusType[currentTabs],
+      }
+    };
+
+    print('获取商品列表页数据参数${data}');
+    await request('quotationQueryPage', formData: data).then((val) {
+      if (val['code'] == 0) {
+        QuotationHome goodsList = QuotationHome.fromJson(val);
+        totalPage = goodsList.result.totalPage;
+
+        if (pageNum == 1) {
+          setState(() {
+            _itemList = goodsList.result.list;
+          });
+        } else {
+          _itemList.addAll(goodsList.result.list);
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +73,379 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       body: Container(
         child: Column(
           children: <Widget>[
-            QuotationTabs(),
-            QuotationGoodsList(),
+            _tabs(list),
+            _recommedList(_itemList),
+            // QuotationTabs(),
+            // QuotationGoodsList(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _tabs(list) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      height: ScreenUtil().setHeight(93),
+      // width: ScreenUtil().setWidth(750),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(width: 1, color: Colors.black12),
+        ),
+      ),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return _typeWell(list[index], index);
+        },
+        itemCount: list.length,
+        scrollDirection: Axis.horizontal,
+      ),
+      // ),
+    );
+  }
+
+  Widget _typeWell(item, int index) {
+    bool isClick = false;
+    isClick = (index == currentTabs ? true : false);
+    // bool isClick = false;
+    // isClick =
+    //     (index == Provide.value<QuotationGoodsListProvide>(context).childIndex
+    //         ? true
+    //         : false);
+    return InkWell(
+      onTap: () {
+        setState(() {
+          currentTabs = index;
+          preTabs = currentTabs;
+          pageNum = 1;
+        });
+        // Provide.value<QuotationGoodsListProvide>(context)
+        //     .changeChildIndex(index);
+        _getQuotationList();
+        // _getGoodsList(item.mallSubId);
+        // setState(() {
+        //   listIndex = index;
+        // });
+        // print('$isClick');
+      },
+      child: Container(
+        child: Container(
+          alignment: Alignment.center,
+          width: ScreenUtil().setWidth(187),
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
+                // padding: EdgeInsets.only(bottom: 20),
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    color: isClick ? Color(0xFF4389ED) : Colors.black,
+                    // decoration: TextDecoration.underline, //给文字添加下划线
+                    fontSize: ScreenUtil().setSp(30),
+                    // height: 1.5,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 20,
+                height: 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: isClick ? Color(0xFF4389ED) : Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 商品列表
+  Widget _goodsList(list) {
+    return Expanded(
+      child: Container(
+        child: _recommedList(list),
+      ),
+    );
+  }
+
+  // 一级
+  Widget _recommedList(list) {
+    if (list != null) {
+      return Container(
+        // height: ScreenUtil().setHeight(1000),
+        child: Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(height: .0),
+            itemCount: list.length + 1,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            itemBuilder: (contex, index) {
+              //如果到了表尾
+              if (index > (list.length - 1)) {
+                //不足100条，继续获取数据
+                if (pageNum < totalPage) {
+                  print('获取更多$pageNum====$totalPage');
+                  //获取数据
+                  pageNum++;
+                  _getQuotationList();
+                  //加载时显示loading
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: 24.0,
+                        height: 24.0,
+                        child: CircularProgressIndicator(strokeWidth: 2.0)),
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "没有更多了",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+              }
+
+              return _merge(list[index], index);
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text('暂无数据'),
+      );
+    }
+  }
+
+  Widget _merge(item, index) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(20),
+      child: InkWell(
+        onTap: () {
+          // 跳转到详情页面
+          Application.router.navigateTo(context, "/detail?id=${item.id}");
+        },
+        child: Column(
+          children: <Widget>[
+            _information(item, index),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //公司资料
+  Widget _information(item, index) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Color(0xFFEEEEEE),
+          ),
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(bottom: 10.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: Icon(Iconfont.companyLabel,
+                      color: Color(0xFF5A99FF), size: 20.0),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '${item.orgName}',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(30),
+                        color: Color(0xFF333333),
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(bottom: 5.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: ScreenUtil().setWidth(120),
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    '联系人',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF3333333),
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '${item.linkPerson}-${item.linkPhone}',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(30),
+                        color: Color(0xFF3333333),
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: ScreenUtil().setWidth(120),
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: Text('合计'),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '￥${double.parse(item.totalAmount) / 100}（共${item.categoryNum}种${item.total}件）',
+                      style: TextStyle(
+                        color: Color(0xFF333333),
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _goodlsList(item.detailList),
+        ],
+      ),
+    );
+  }
+
+  // 二级
+  Widget _goodlsList(arr) {
+    if (arr.length > 0) {
+      return Container(
+        // height: ScreenUtil().setHeight(1000),
+        child: SizedBox(
+          child: ListView.builder(
+            itemCount: arr.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            physics: new NeverScrollableScrollPhysics(), //禁用滑动事件
+            itemBuilder: (contex, index) {
+              return _mergeGoods(arr[index]);
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text('暂无数据'),
+      );
+    }
+  }
+
+  Widget _mergeGoods(item) {
+    return Container(
+      color: Colors.white,
+      // padding: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          _goodsItem(item),
+        ],
+      ),
+    );
+  }
+
+  // 商品信息
+  Widget _goodsItem(item) {
+    //  replace
+    String str = '';
+    if (item.skuValueList.length > 0) {
+      str = (item.skuValueList.join(",")).replaceAll(",", ";");
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.black12,
+          ),
+        ),
+      ),
+      padding: EdgeInsets.only(top: 20, bottom: 20),
+      child: Row(
+        children: <Widget>[
+          Container(
+              width: ScreenUtil().setWidth(150),
+              height: ScreenUtil().setHeight(150),
+              padding: EdgeInsets.only(top: 0, right: 10),
+              child: item.skuUrl == null ||
+                      item.skuUrl == 'null' ||
+                      item.skuUrl == ''
+                  ? Image.asset('images/default.png')
+                  : Image.network(
+                      '${item.skuUrl}',
+                      fit: BoxFit.fill,
+                    )
+              //  Image.asset('images/icon.png'),
+              ),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    '${item.productDescript}',
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(30),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    // '规格：${item.skuValueList}',
+                    '规格：$str',
+                    style: TextStyle(
+                      color: Color(0xFFCCCCCC),
+                      fontSize: ScreenUtil().setSp(30),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '数量：${item.num}',
+                    style: TextStyle(
+                      color: Color(0xFFCCCCCC),
+                      fontSize: ScreenUtil().setSp(30),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -423,15 +836,17 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
       child: Row(
         children: <Widget>[
           Container(
-              // width: ScreenUtil().setWidth(120),
-              // height: ScreenUtil().setHeight(120),
+              width: ScreenUtil().setWidth(150),
+              height: ScreenUtil().setHeight(150),
               padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuUrl}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
+              child: item.skuUrl == null ||
+                      item.skuUrl == 'null' ||
+                      item.skuUrl == ''
+                  ? Image.asset('images/default.png')
+                  : Image.network(
+                      '${item.skuUrl}',
+                      fit: BoxFit.fill,
+                    )
               //  Image.asset('images/icon.png'),
               ),
           Expanded(

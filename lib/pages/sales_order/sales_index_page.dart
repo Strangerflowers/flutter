@@ -52,6 +52,10 @@ class _SalesTabsState extends State<SalesTabs> {
   @override
   Widget build(BuildContext context) {
     return Provide<SalesOrderListProvide>(builder: (context, child, data) {
+      if (listIndex == 0) {
+        Provide.value<SalesOrderListProvide>(context)
+            .changeChildIndex(listIndex);
+      }
       if (data.goodsList != []) {
         return Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -90,6 +94,7 @@ class _SalesTabsState extends State<SalesTabs> {
         Provide.value<SalesOrderListProvide>(context).changeChildIndex(index);
         setState(() {
           statuss = Provide.value<SalesOrderListProvide>(context).status;
+          listIndex = index;
         });
         _getSaleasOrderList();
         print('$isClick');
