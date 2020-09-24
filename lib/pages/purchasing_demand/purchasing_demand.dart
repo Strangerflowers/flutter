@@ -37,8 +37,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ListView(
+      body: Container(
+        child: Column(
           children: <Widget>[
             _orderType(inputText),
             DemandContent(inputText),
@@ -185,7 +185,7 @@ class _DemandContentState extends State<DemandContent> {
   Widget build(BuildContext context) {
     // return Provide<PurchasingListProvide>(builder: (context, child, data) {
     //   if (data.goodsList != null) {
-    return InkWell(
+    return Expanded(
       child: Container(
         child: FutureBuilder(
           future: _getBackDetailInfo(context),
@@ -253,17 +253,17 @@ class _DemandContentState extends State<DemandContent> {
   Widget _demandListView() {
     return Provide<PurchasingListProvide>(builder: (context, child, data) {
       if (data.goodsList != null) {
-        return Container(
+        return Expanded(
           // height: ScreenUtil().setHeight(1000),
-          child: SizedBox(
-            child: ListView.builder(
-              itemCount: data.goodsList.length,
-              shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-              physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-              itemBuilder: (contex, index) {
-                return _demandItem(data.goodsList[index], context);
-              },
-            ),
+          // child: SizedBox(
+          child: ListView.builder(
+            itemCount: data.goodsList.length,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+            itemBuilder: (contex, index) {
+              return _demandItem(data.goodsList[index], context);
+            },
+            // ),
           ),
         );
       } else {
