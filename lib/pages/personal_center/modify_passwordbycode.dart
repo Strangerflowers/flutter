@@ -173,16 +173,17 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                         textAlign: TextAlign.left,
                         text: TextSpan(
                           text: '*',
-                          style:
-                              TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                          style: TextStyle(
+                              // color: Color.fromRGBO(255, 113, 66, 1),
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: '${item['label']}',
                               style: TextStyle(
                                 decoration: TextDecoration.none,
-                                color: Color(0xFF888888),
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                                // fontSize: 14,
+                                // fontWeight: FontWeight.bold,
                                 //fontFamily: defaultFontFamily,
                               ),
                             ),

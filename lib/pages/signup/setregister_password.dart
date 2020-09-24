@@ -1,6 +1,7 @@
+import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import './signin.dart';
 import './authentication.dart';
 import '../../service/service_method.dart';
@@ -214,28 +215,34 @@ class _PasswordFormState extends State<PasswordForm> {
       await request('register', formData: formData).then((val) {
         print('----------------------$val');
         if (val['code'] == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return FormTestRoute();
-                // return Register();
-              },
-            ),
-          );
+          Toast.toast(context, msg: "注册成功");
+          // 延时1s执行返回
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return FormTestRoute();
+                  // return Register();
+                },
+              ),
+            );
+          });
+
           // Application.router.navigateTo(context, "/setPassword?item=$item");
         } else {
+          Toast.toast(context, msg: val['message']);
           // setState(() {
           //   btnFlag = false;
           // });
-          Fluttertoast.showToast(
-            msg: val['message'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
+          // Fluttertoast.showToast(
+          //   msg: val['message'],
+          //   toastLength: Toast.LENGTH_SHORT,
+          //   gravity: ToastGravity.CENTER,
+          //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          //   textColor: Colors.white,
+          //   fontSize: 16.0,
+          // );
         }
       });
     }

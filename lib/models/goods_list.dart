@@ -6,7 +6,12 @@ class GoodsSearchList {
   int timestamp;
 
   GoodsSearchList(
-      {this.code, this.success, this.message, this.result, this.timestamp});
+      {this.code,
+      this.success,
+      this.message,
+      this.result,
+      this.timestamp,
+      String receiverName});
 
   GoodsSearchList.fromJson(Map<String, dynamic> json) {
     code = json['code'];

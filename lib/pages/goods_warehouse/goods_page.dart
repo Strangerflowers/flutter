@@ -19,36 +19,59 @@ class GoodsIndexPage extends StatefulWidget {
 }
 
 class _GoodsIndexPageState extends State<GoodsIndexPage> {
+  // List<GoodsSearchList> _itemList;
+  var _itemList;
+  static const loadingTag = "##loading##"; //表尾标记
+  var _words = <String>[loadingTag];
+  var scorllController = new ScrollController();
   int ststes;
+  var getData;
+  int currentTabs = 0;
+  int preTabs = 0;
+  int pageNum = 1;
+  int totalPage;
   void initState() {
     _getGoodsList();
     super.initState();
   }
 
-  // 获取商品库列表数据
+  List list = ['售卖中', '未发布', '已下架'];
+  var strtusType = {0: 1, 1: 0, 2: -1};
+  var auditStatusType = {1: '审核通过', 0: '待审核', -1: '不通过'};
+
   void _getGoodsList() async {
+    if (pageNum == 1) {
+      setState(() {
+        _itemList = [];
+      });
+      print('获取长度￥${_itemList.length}');
+    }
     var formData = {
-      'pageNum': 1,
-      "status": 1,
+      'pageNum': pageNum,
+      "status": strtusType[currentTabs],
       'pageSize': 10,
     };
-    print('商品库列表数据传参$formData');
-    await requestGet('goodsList', formData: formData).then((val) {
-      // var data = json.decode(val.toString());
-      GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
-      if (goodsList.result.list == null) {
-        Provide.value<GoodsWarehose>(context).getGoodsList([]);
+    print('======$formData');
+
+    await requestGet('goodsList', formData: formData).then((value) {
+      totalPage = value['result']['totalPage'];
+      GoodsSearchList goodsList = GoodsSearchList.fromJson(value);
+
+      if (pageNum == 1) {
+        setState(() {
+          _itemList = goodsList.result.list;
+        });
+        print('获取长度￥${_itemList.length}');
       } else {
-        Provide.value<GoodsWarehose>(context)
-            .getGoodsList(goodsList.result.list);
+        setState(() {
+          _itemList.addAll(goodsList.result.list);
+        });
       }
-      // Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // _getCategory();
     return Scaffold(
       appBar: AppBar(
         title: Text('商品库'),
@@ -56,89 +79,49 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
       body: Container(
         child: Column(
           children: <Widget>[
-            GoodsPage(),
-            CategoryGoodsList(),
+            _goodsPage(list),
+            _goodsList(_itemList),
           ],
         ),
       ),
     );
   }
-}
 
-class GoodsPage extends StatefulWidget {
-  @override
-  _GoodsPageState createState() => _GoodsPageState();
-}
-
-class _GoodsPageState extends State<GoodsPage> {
-  int currentStatus = 1;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List list = ['售卖中', '未发布', '已下架'];
-  //  {0: '草稿', 1: '售卖中', -1: '已下架'};
-  var strtusType = {0: 1, 1: 0, 2: -1};
-  // int listIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Provide<GoodsWarehose>(builder: (context, child, counter) {
-      if (Provide.value<GoodsWarehose>(context).provideIndex != null &&
-          currentStatus == 1) {
-        Provide.value<GoodsWarehose>(context).activeIndex(0);
-      }
-      return Container(
-        margin: EdgeInsets.only(bottom: 20),
-        height: ScreenUtil().setHeight(90),
-        // width: ScreenUtil().setWidth(750),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(width: 1, color: Colors.black12),
-          ),
+  Widget _goodsPage(list) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      height: ScreenUtil().setHeight(90),
+      // width: ScreenUtil().setWidth(750),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(width: 1, color: Colors.black12),
         ),
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return _typeWell(list[index], index);
-          },
-          itemCount: list.length,
-          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-          scrollDirection: Axis.horizontal,
-        ),
-        // ),
-      );
-    });
-  }
-
-  // 获取商品库列表数据
-  void _getGoodsList() async {
-    var formData = {
-      'pageNum': 1,
-      "status": currentStatus,
-      'pageSize': 10,
-    };
-    print('商品库列表数据传参$formData');
-    await requestGet('goodsList', formData: formData).then((val) {
-      // var data = json.decode(val.toString());
-      GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
-      Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
-    });
+      ),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return _typeWell(list[index], index);
+        },
+        itemCount: list.length,
+        shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+        scrollDirection: Axis.horizontal,
+      ),
+      // ),
+    );
   }
 
   Widget _typeWell(item, int index) {
     bool isClick = false;
-    isClick = (index == Provide.value<GoodsWarehose>(context).provideIndex
-        ? true
-        : false);
+    isClick = (index == currentTabs ? true : false);
     return Container(
       child: InkWell(
         onTap: () {
-          Provide.value<GoodsWarehose>(context).activeIndex(index);
           setState(() {
-            currentStatus =
-                strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
+            currentTabs = index;
+            preTabs = currentTabs;
+            pageNum = 1;
           });
+          // scorllController.jumpTo(0.0);
           _getGoodsList();
         },
         child: Container(
@@ -177,70 +160,71 @@ class _GoodsPageState extends State<GoodsPage> {
       ),
     );
   }
-}
 
-// 商品列表
-class CategoryGoodsList extends StatefulWidget {
-  @override
-  _CategoryGoodsListState createState() => _CategoryGoodsListState();
-}
-
-class _CategoryGoodsListState extends State<CategoryGoodsList> {
-  GlobalKey<RefreshFooterState> _footerkey =
-      new GlobalKey<RefreshFooterState>();
-  var scorllController = new ScrollController();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  var auditStatusType = {1: '审核通过', 0: '待审核', -1: '不通过'};
-
-  @override
-  Widget build(BuildContext context) {
-    return Provide<GoodsWarehose>(builder: (context, child, data) {
-      print('provide======${data.goodsList}');
-      if (data.goodsList != null) {
-        return Expanded(
-          child: Container(
-            // width: ScreenUtil().setWidth(570),
-            padding: EdgeInsets.only(left: 10, right: 20),
-            child: EasyRefresh(
-              refreshFooter: ClassicsFooter(
-                key: _footerkey,
-                bgColor: Colors.white,
-                textColor: Colors.pink,
-                moreInfoColor: Colors.pink,
-                showMore: true,
-                noMoreText: Provide.value<GoodsWarehose>(context).noMoreText,
-                moreInfo: '加载中',
-                loadReadyText: '上拉加载',
-              ),
-              child: ListView.builder(
-                controller: scorllController,
-                itemCount: data.goodsList.length,
-                shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-                itemBuilder: (context, index) {
-                  return _recommedList(data.goodsList);
-                },
-              ),
-              loadMore: () async {
-                // 上拉加载更多的回调方法
-                _getMoreList();
-                print('上拉加载更多......');
-              },
-            ),
-          ),
-        );
-      } else {
-        return Container(
-          child: Text('暂无数据'),
-        );
+  Widget _goodsList(result) {
+    if (result != null) {
+      try {
+        if (pageNum == 1) {
+          // 如果列表page==1，列表位置放到最顶部
+          scorllController.jumpTo(0.0);
+        }
+      } catch (e) {
+        print('进入页面第一次初始化：${e}');
       }
-    });
-
-// )
+      return Container(
+        child: Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(height: .0),
+            controller: scorllController,
+            itemCount: result.length + 1,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            itemBuilder: (context, index) {
+              //如果到了表尾
+              if (index > (result.length - 1)) {
+                //不足100条，继续获取数据
+                if (pageNum < totalPage) {
+                  print('获取更多$pageNum====$totalPage');
+                  //获取数据
+                  pageNum++;
+                  _getGoodsList();
+                  //加载时显示loading
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: 24.0,
+                        height: 24.0,
+                        child: CircularProgressIndicator(strokeWidth: 2.0)),
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "没有更多了",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+              }
+              return _mergeItem(result[index]);
+              // return _recommedList(list);
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        height: MediaQuery.of(context).size.height / 2,
+        child: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation(Colors.blue),
+            value: .7,
+          ),
+        ),
+      );
+    }
   }
 
   //ListViewzujian
@@ -464,7 +448,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        _reflesGoodsList();
+        pageNum = 1;
+        _getGoodsList();
       } else {
         // goodsList = null;
         Fluttertoast.showToast(
@@ -478,13 +463,59 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       }
     });
   }
+}
+
+class GoodsPage extends StatefulWidget {
+  @override
+  _GoodsPageState createState() => _GoodsPageState();
+}
+
+class _GoodsPageState extends State<GoodsPage> {
+  int currentStatus = 1;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  List list = ['售卖中', '未发布', '已下架'];
+  //  {0: '草稿', 1: '售卖中', -1: '已下架'};
+  var strtusType = {0: 1, 1: 0, 2: -1};
+  // int listIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Provide<GoodsWarehose>(builder: (context, child, counter) {
+      if (Provide.value<GoodsWarehose>(context).provideIndex != null &&
+          currentStatus == 1) {
+        Provide.value<GoodsWarehose>(context).activeIndex(0);
+      }
+      return Container(
+        margin: EdgeInsets.only(bottom: 20),
+        height: ScreenUtil().setHeight(90),
+        // width: ScreenUtil().setWidth(750),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 1, color: Colors.black12),
+          ),
+        ),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return _typeWell(list[index], index);
+          },
+          itemCount: list.length,
+          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+          scrollDirection: Axis.horizontal,
+        ),
+        // ),
+      );
+    });
+  }
 
   // 获取商品库列表数据
-  void _reflesGoodsList() async {
-    var strtusType = {0: 1, 1: 0, 2: -1};
+  void _getGoodsList() async {
     var formData = {
       'pageNum': 1,
-      "status": strtusType[Provide.value<GoodsWarehose>(context).provideIndex],
+      "status": currentStatus,
       'pageSize': 10,
     };
     print('商品库列表数据传参$formData');
@@ -495,39 +526,55 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     });
   }
 
-  // 上拉加载更多
-  void _getMoreList() async {
-    var strtusType = {0: 1, 1: 0, 2: -1};
-    var numb = Provide.value<GoodsWarehose>(context).provideIndex == null
-        ? 1
-        : Provide.value<GoodsWarehose>(context).provideIndex;
-
-    Provide.value<GoodsWarehose>(context).addPage();
-    var data = {
-      'pageNum': Provide.value<GoodsWarehose>(context).page,
-      "status": strtusType[numb],
-      'pageSize': 10,
-    };
-    print('查看参数====>$data');
-    await requestGet('goodsList', formData: data).then((val) {
-      print('上拉加载更多$val');
-      // 使用状态管理的方式
-      GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
-      if (goodsList.result.list.length <= 0 || goodsList.result.list == null) {
-        Fluttertoast.showToast(
-          msg: '已经到底了',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Colors.pink,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        Provide.value<GoodsWarehose>(context).changeNoMore('没有更多了');
-      } else {
-        print('测试判断条件2');
-        Provide.value<GoodsWarehose>(context)
-            .addGoodsList(goodsList.result.list);
-      }
-    });
+  Widget _typeWell(item, int index) {
+    bool isClick = false;
+    isClick = (index == Provide.value<GoodsWarehose>(context).provideIndex
+        ? true
+        : false);
+    return Container(
+      child: InkWell(
+        onTap: () {
+          Provide.value<GoodsWarehose>(context).activeIndex(index);
+          setState(() {
+            currentStatus =
+                strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
+          });
+          _getGoodsList();
+        },
+        child: Container(
+          // flex: 1,
+          child: Container(
+            alignment: Alignment.center,
+            width: ScreenUtil().setWidth(250),
+            // padding: EdgeInsets.fromLTRB(5.0, 10.0, 0, 10.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
+                  // padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    item,
+                    style: TextStyle(
+                      color: isClick ? Color(0xFF4389ED) : Colors.black,
+                      // decoration: TextDecoration.underline, //给文字添加下划线
+                      fontSize: ScreenUtil().setSp(30),
+                      // height: 1.5,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                  height: 2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: isClick ? Color(0xFF4389ED) : Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

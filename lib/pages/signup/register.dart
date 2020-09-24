@@ -164,11 +164,12 @@ class FormDemoState extends State<FormDemo> {
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return "用户名不能为空";
+                      return "公司名称不能为空";
+                    } else if (value.length > 50) {
+                      return "长度不能超过50个字符";
                     } else {
                       return null;
                     }
-                    // return null;
                   },
                 ),
                 TextFormField(
@@ -193,9 +194,12 @@ class FormDemoState extends State<FormDemo> {
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return "用户名不能为空";
+                      return "公司简称不能为空";
+                    } else if (value.length > 10) {
+                      return "长度不能超过10个字符";
+                    } else {
+                      return null;
                     }
-                    return null;
                   },
                 ),
                 TextFormField(

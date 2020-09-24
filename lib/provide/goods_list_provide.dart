@@ -42,15 +42,4 @@ class GoodsWarehose with ChangeNotifier {
     goodsList.addAll(list);
     notifyListeners();
   }
-
-  // // 从后台获取数据
-  // getGoodsAllList() {
-  //   var formData = {'pageNum': 1, 'pageSize': 10};
-  //   requestGet('goodsList', formData: formData).then((val) {
-  //     print('商品库响应数据$val');
-  //     goodsAllList = GoodsSearchList.fromJson(val);
-  //     // print('详情数据$goodsList');
-  //     notifyListeners();
-  //   });
-  // }
 }
