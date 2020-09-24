@@ -292,7 +292,7 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
         // autofocus: false,
         autofocus: false,
         onChanged: (value) {
-          RegExp exp = RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,})?\$");
+          RegExp exp = RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,2})?\$");
           if (value == '') {
             Provide.value<DemandDetailProvide>(context)
                 .modifyPrice(subItem, '');
