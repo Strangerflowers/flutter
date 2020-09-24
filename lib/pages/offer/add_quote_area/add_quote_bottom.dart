@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
@@ -37,7 +38,9 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
         ele['demandDetailDtoList'].forEach((item) {
           totalNumber += item.num;
           if (item.goodsPrice != 'null' && item.goodsPrice != '') {
-            totalAmount += double.parse(item.goodsPrice) * item.num;
+            totalAmount +=
+                NumUtil.multiplyDecStr(item.goodsPrice, item.num.toString())
+                    .toDouble();
           }
         });
       });

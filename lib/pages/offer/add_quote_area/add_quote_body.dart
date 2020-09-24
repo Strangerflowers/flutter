@@ -1,6 +1,8 @@
 import 'package:bid/common/inconfont.dart';
 import 'package:bid/common/toast.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import '../../../routers/application.dart';
@@ -193,7 +195,11 @@ class AddQuoteBody extends StatelessWidget {
                 width: ScreenUtil().setWidth(120),
                 padding: EdgeInsets.only(top: 0, right: 10),
                 // child: Image.asset('images/icon.png'),
-                child: Image.network(subItem.subjectItemList[0].image),
+                child: subItem.subjectItemList[0].image == '' ||
+                        subItem.subjectItemList[0].image == 'null' ||
+                        subItem.subjectItemList[0].image == null
+                    ? Image.asset('images/default.png')
+                    : Image.network(subItem.subjectItemList[0].image),
               ),
               Expanded(
                 child: _right(subItem.subjectItemList[0]),
@@ -250,6 +256,10 @@ class AddQuoteBody extends StatelessWidget {
   Widget _goodsPrice(subItem, context) {
     return Container(
       child: TextFormField(
+        inputFormatters: [
+          WhitelistingTextInputFormatter(
+              RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,})?\$")), //只允许输入小数
+        ],
         keyboardType: TextInputType.number,
         controller: TextEditingController.fromValue(
           TextEditingValue(
@@ -328,7 +338,7 @@ class AddQuoteBody extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                  '小计：￥${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : double.parse(subItem.goodsPrice) * subItem.num}'),
+                  '小计：￥${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : NumUtil.multiplyDecStr(subItem.goodsPrice, subItem.num.toString())}'),
             ),
           ),
         ],
@@ -394,6 +404,12 @@ class AddQuoteBody extends StatelessWidget {
                 autofocus: false,
                 onChanged: (value) {
                   Provide.value<DemandDetailProvide>(context).remarkFunc(value);
+                },
+                validator: (value) {
+                  if (value.length > 200) {
+                    return "长度不能超过200";
+                  }
+                  return null;
                 },
                 // controller: _unameController,
               ),
