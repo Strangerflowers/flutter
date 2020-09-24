@@ -93,7 +93,7 @@ class _AuthenticationState extends State<Authentication> {
       child: Column(
         children: <Widget>[
           _headerItemRow('资料认证状态', asditText[result['auditStatus'].toString()]),
-          _headerItemRow('供养商编号', result['companyNum']),
+          _headerItemRow('供应商编号', result['companyNum']),
           _headerItemRow('公司名称', result['companyName']),
           _headerItemRow('公司简称', result['companyShort']),
         ],
@@ -702,8 +702,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyMobile = value;
             },
             validator: (value) {
-              RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
-              // RegExp exp = RegExp(r'^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$');
+              RegExp exp = RegExp(r'^0\d{2,3}-?[(\d)\(/d)]{7,20}$');
+              // RegExp exp = RegExp(
+              //     r'^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$');
 
               if (value.isEmpty) {
                 return "请输入";
@@ -1194,14 +1195,23 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           });
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
-            if (supplierType.isEmpty) {
-              // || companyCode.isEmpty
+            if (supplierType.isEmpty &&
+                categoryoneId.isEmpty &&
+                categorytwoId.isEmpty) {
               Toast.toast(context, msg: '供应商类型不能为空');
               return;
             }
+            var supplierTypeId;
+            if (categoryoneId != null) {
+              supplierTypeId = categoryoneId;
+            } else if (categorytwoId != null) {
+              supplierTypeId = categorytwoId;
+            } else if (supplierType != null) {
+              supplierTypeId = supplierType;
+            }
             var formData = {
               "auditStatus": 1,
-              "supplierType": supplierType,
+              "supplierType": supplierTypeId,
               "companyCode": companyCode,
               "companyDetailAddr": companyDetailAddr,
               "companyMobile": companyMobile,
