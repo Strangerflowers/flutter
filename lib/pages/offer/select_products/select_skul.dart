@@ -67,7 +67,7 @@ class _SelectSkulState extends State<SelectSkul> {
       return Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10, bottom: 10),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 10),
         // height: ScreenUtil().setHeight(70),
         width: ScreenUtil().setWidth(750),
         child: InkWell(
@@ -134,7 +134,7 @@ class _SelectSkulState extends State<SelectSkul> {
             alignment: Alignment.centerLeft,
             child: selectGoodsItem == null
                 ? Text(
-                    '库存  999999',
+                    '库存： ${goodsItem.spuStock}',
                     maxLines: 2,
                   )
                 : Text(
@@ -193,6 +193,8 @@ class _SelectSkulState extends State<SelectSkul> {
                             print('单选的回调$selectedList');
                             setState(() {
                               selectedItemsList = selectedList;
+                              result.specificaText =
+                                  selectedItemsList.join(' ');
                             });
 
                             skulObjectData.forEach((element) {
@@ -266,8 +268,10 @@ class _SelectSkulState extends State<SelectSkul> {
             ),
             Expanded(
               child: Container(
-                child:
-                    Text('${showSelectItem == null ? '请选择' : showSelectItem}'),
+                child: Text(
+                    '${result.specificaText == null || result.specificaText == '' || result.specificaText == 'null' ? '请选择' : result.specificaText}'),
+                // child:
+                //     Text('${showSelectItem == null ? '请选择' : showSelectItem}'),
               ),
             ),
             Container(

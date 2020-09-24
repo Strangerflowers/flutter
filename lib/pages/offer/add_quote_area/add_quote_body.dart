@@ -9,7 +9,20 @@ import '../../../routers/application.dart';
 import '../../../provide/demand_detail_provide.dart';
 import '../select_products/select_skul.dart';
 
-class AddQuoteBody extends StatelessWidget {
+class AddQuoteBody extends StatefulWidget {
+  @override
+  _AddQuoteBodyState createState() => _AddQuoteBodyState();
+}
+
+class _AddQuoteBodyState extends State<AddQuoteBody> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class AddQuoteBody extends StatelessWidget {
+  var error;
   @override
   Widget build(BuildContext context) {
     return Provide<DemandDetailProvide>(builder: (context, child, val) {
@@ -257,8 +270,10 @@ class AddQuoteBody extends StatelessWidget {
     return Container(
       child: TextFormField(
         inputFormatters: [
-          WhitelistingTextInputFormatter(
-              RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,})?\$")), //只允许输入小数
+          // ignore: deprecated_member_use
+          WhitelistingTextInputFormatter(RegExp("[0-9.]")), //只允许输入小数
+          // WhitelistingTextInputFormatter(
+          //     RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,})?\$")), //只允许输入小数
         ],
         keyboardType: TextInputType.number,
         controller: TextEditingController.fromValue(
@@ -275,14 +290,20 @@ class AddQuoteBody extends StatelessWidget {
           ),
         ),
         // autofocus: false,
-        autofocus: true,
+        autofocus: false,
         onChanged: (value) {
+          RegExp exp = RegExp("((^[0])|(^[1-9]\\d{0,11}))(\.\\d{0,})?\$");
           if (value == '') {
             Provide.value<DemandDetailProvide>(context)
                 .modifyPrice(subItem, '');
           } else {
-            Provide.value<DemandDetailProvide>(context)
-                .modifyPrice(subItem, value);
+            if (exp.hasMatch(value) && double.parse(value) <= 99999999.99) {
+              Provide.value<DemandDetailProvide>(context)
+                  .modifyPrice(subItem, value);
+            } else {
+              Provide.value<DemandDetailProvide>(context)
+                  .modifyPrice(subItem, subItem.goodsPrice);
+            }
           }
         },
         onSaved: (value) {},
@@ -397,13 +418,27 @@ class AddQuoteBody extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               child: TextFormField(
+                decoration: InputDecoration(
+                  errorText: error,
+                ),
                 keyboardType: TextInputType.multiline,
+                autovalidate: true,
                 // maxLines: whatever,
                 maxLines: 10,
                 minLines: 1,
                 autofocus: false,
                 onChanged: (value) {
-                  Provide.value<DemandDetailProvide>(context).remarkFunc(value);
+                  if (value.length > 200) {
+                    setState(() {
+                      error = "长度不能超过200个字符";
+                    });
+                  } else {
+                    Provide.value<DemandDetailProvide>(context)
+                        .remarkFunc(value);
+                    setState(() {
+                      error = null;
+                    });
+                  }
                 },
                 validator: (value) {
                   if (value.length > 200) {
@@ -471,7 +506,7 @@ class _GoodsPriceState extends State<GoodsPrice> {
             ),
           ),
           // autofocus: false,
-          autofocus: true,
+          autofocus: false,
           onChanged: (value) {
             // setState(() {
             print('是否进入修改页面${value}1');
