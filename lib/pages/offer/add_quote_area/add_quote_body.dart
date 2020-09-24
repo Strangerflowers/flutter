@@ -33,12 +33,14 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
         padding: EdgeInsets.all(20),
         color: Colors.white,
         width: ScreenUtil().setWidth(750),
-        child: Column(
-          children: <Widget>[
-            _dataListView(goodsInfo, context),
-            // 描述
-            _planMark(context),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              _dataListView(goodsInfo, context),
+              // 描述
+              _planMark(context),
+            ],
+          ),
         ),
       );
     });
@@ -399,7 +401,7 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
   Widget _planMark(context) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-        margin: EdgeInsets.only(bottom: 40),
+        margin: EdgeInsets.only(bottom: 200),
         // padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
         child: Column(
