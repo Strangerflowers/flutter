@@ -50,7 +50,7 @@ class ImageWidgetBuilder {
         matchTextDirection: matchTextDirection,
         gaplessPlayback: gaplessPlayback,
         filterQuality: filterQuality,
-        // isAntiAlias: isAntiAlias,
+        isAntiAlias: isAntiAlias,
         headers: headers,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight);
