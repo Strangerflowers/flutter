@@ -646,9 +646,9 @@ class _MobileFormPageState extends State<MobileFormPage> {
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
     if (value.isEmpty) {
-      return '用户名不能为空';
+      return '手机号码不能为空';
     } else if (!exp.hasMatch(value)) {
-      return '请输入正确的账号';
+      return '请输入正确的手机号码';
     }
   }
 
