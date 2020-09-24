@@ -1,16 +1,18 @@
 import 'package:bid/common/count_down.dart';
+import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/toast.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
+
 import './register.dart';
-import 'package:bid/common/toast.dart';
 import '../../routers/application.dart';
-import 'dart:convert';
-import 'package:dio/dio.dart';
-import '../index_page.dart';
 
 Dio dio = Dio();
+
+const String TAG = "signin";
 
 class FormTestRoute extends StatefulWidget {
   @override
@@ -129,7 +131,8 @@ class _FormTestRouteState extends State<FormTestRoute> {
                               setState(() {
                                 currentIndex = 1;
                               });
-                              print("点击了 title 手机验证码登录");
+                              LogUtils.debug(
+                                  TAG, "点击了 title 手机验证码登录", StackTrace.current);
                             },
                             child: Container(
                               padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
@@ -453,6 +456,7 @@ class MobileFormPage extends StatefulWidget {
 class _MobileFormPageState extends State<MobileFormPage> {
   // bool _mobileAutoFocus = true;
   bool isMobilesignin = false; //是否已获取验证码
+
   bool changeCount = false;
   var errorMobileText;
   bool autovalidateMobile = false;
@@ -561,8 +565,8 @@ class _MobileFormPageState extends State<MobileFormPage> {
                         isChange: changeCount,
                         countdown: 60,
                         available: true,
-                        onTapCallback: (val) {
-                          _getPhoneCode();
+                        onTapCallback: (val, pWidget) {
+                          _getPhoneCode(pWidget);
                         },
                       ),
                     ),
@@ -640,7 +644,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
   // 验证手机号码
   String validateMibile(value) {
     errorMobileText = null;
-    print('$value,手机号码验证');
+    LogUtils.debug(TAG, '$value,手机号码验证', StackTrace.current);
     // 正则匹配手机号
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
@@ -653,7 +657,7 @@ class _MobileFormPageState extends State<MobileFormPage> {
   }
 
   // 获取验证码
-  void _getPhoneCode() async {
+  void _getPhoneCode(pWidget) async {
     _mobileformKey.currentState.save();
     autovalidateMobile = true;
 
@@ -677,11 +681,9 @@ class _MobileFormPageState extends State<MobileFormPage> {
           setState(() {
             isMobilesignin = true;
           });
-          print('获取登录验证码$value');
+          LogUtils.debug(TAG, '获取登录验证码$value', StackTrace.current);
           if (value['code'] != 0) {
-            // 失败的时候调用清除倒计时操作
-            // childKey.currentState.restTimer();
-
+            pWidget.restTimer();
           }
         },
       );

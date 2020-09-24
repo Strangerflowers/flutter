@@ -1,14 +1,13 @@
+import 'package:bid/common/count_down.dart';
+import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/toast.dart';
+import 'package:bid/pages/signup/signin.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bid/common/toast.dart';
-import 'package:bid/common/count_down.dart';
-import 'package:flutter/physics.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../common/log_utils.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ModifyPasswordByCode extends StatefulWidget {
   @override
@@ -16,6 +15,7 @@ class ModifyPasswordByCode extends StatefulWidget {
 }
 
 class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
+  static String TAG = "_ModifyPasswordByCodeState";
   bool changeCount = false;
   bool autoValidate = false;
   bool mobileValidate = false;
@@ -79,7 +79,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
   }
 
   // 获取验证码
-  void _getPhoneCode() async {
+  void _getPhoneCode(pWidget) async {
     mobileValidate = true;
     setPawwordFormKey.currentState.save();
     if (params['mobile'].isEmpty) {
@@ -97,6 +97,10 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
       var data = {'mobile': params['mobile']};
       print('获取验证码注册$data');
       await requestGet('getModifyPasswordCode', formData: data).then((val) {
+        LogUtils.debug(TAG, val, StackTrace.current);
+        if (val['success'] == false) {
+          pWidget.restTimer();
+        }
         Toast.toast(
           context,
           msg: val['message'],
@@ -369,9 +373,8 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
           isChange: changeCount,
           countdown: 60,
           available: true,
-          onTapCallback: (val) {
-            print('父组件拿到子组件的方法$val');
-            _getPhoneCode();
+          onTapCallback: (val, pWidget) {
+            _getPhoneCode(pWidget);
           },
         ),
         // child: FlatButton(
