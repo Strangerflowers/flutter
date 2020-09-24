@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:bid/common/log_utils.dart';
 import 'package:uni_links/uni_links.dart';
 
 //设置抓包
 class Packetcapture {
+  static String TAG = "Packetcapture";
   static StreamController _packetcaptureListener =
       new StreamController.broadcast(); //抓包监听
   static Map<Function, StreamSubscription> _listeners = {};
@@ -19,7 +21,7 @@ class Packetcapture {
 
   //通过topsports://设置抓包代理
   static Future<Null> initUniLinks({Function callBack}) async {
-    print('------获取参数--------');
+    LogUtils.debug(TAG, '------获取参数--------', StackTrace.current);
     try {
       //app没有打开时获取link
       String link = await getInitialLink();
@@ -41,7 +43,7 @@ class Packetcapture {
   }
 
   static setNetworkAgent(String link, {Function callBack}) {
-    print('=======link:$link============');
+    LogUtils.debug(TAG, '=======link:$link============', StackTrace.current);
     String type = getTypeStr(link);
 
     if (type == mode) {
