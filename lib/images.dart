@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/toast.dart';
+import 'package:bid/config/config_reader.dart';
+import 'package:bid/config/environment.dart';
+import 'package:bid/config/service_url_holder.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:dio/dio.dart';
@@ -10,6 +13,36 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sy_flutter_qiniu_storage/sy_flutter_qiniu_storage.dart';
+
+var businessLicenseIssuedKey = '';
+var url = '';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ConfigReader.initialize(Environment.DEV);
+  // 初始化api接口地址定义
+  ServiceUrlHolder.initialize();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: '测试图片组件',
+      theme: new ThemeData(
+        primaryColor: Colors.white,
+      ),
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('测试图片组件'),
+        ),
+        body: MyImage(businessLicenseIssuedKey, url, (val) {
+          print(val);
+        }),
+      ),
+    );
+  }
+}
 
 class MyImage extends StatefulWidget {
   // 七牛云的key
@@ -50,6 +83,7 @@ class _MyImageState extends State<MyImage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return Center(
       child: Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -90,18 +124,32 @@ class _MyImageState extends State<MyImage> {
   /// 加载图片
   /// ----------------------
   Widget _loadingImage() {
-    if (url != '') {
-      return Container(
-          width: ScreenUtil().setWidth(200),
-          height: ScreenUtil().setHeight(200),
-          child: ImageWidgetBuilder.loadImage(url,
-              width: double.parse('200'), height: double.parse('200')));
-    } else if (_image != null) {
-      return Image.file(
-        _image,
-        width: 200,
-        height: 100,
-      );
+    // if (url != '') {
+    //   return Container(
+    //       width: ScreenUtil().setWidth(200),
+    //       height: ScreenUtil().setHeight(200),
+    //       child: ImageWidgetBuilder.loadImage(url,
+    //           context: context,
+    //           width: double.parse('200'),
+    //           height: double.parse('200')));
+    // } else
+    if (_image != null) {
+      return Column(children: [
+        Visibility(
+            visible: false,
+            child: ImageWidgetBuilder.loadImage(url,
+                context: context, noDefaultErrBuilder: false)),
+        Image.file(
+          _image,
+          width: 200,
+          height: 100,
+        )
+      ]);
+      // return Image.file(
+      //   _image,
+      //   width: 200,
+      //   height: 100,
+      // );
     } else if ('0.0' != _uploadProcessPrecent) {
       return Container(
         width: ScreenUtil().setWidth(100),
@@ -134,18 +182,20 @@ class _MyImageState extends State<MyImage> {
   /// 通过原生网络请求文件上传
   /// =========================
   _onUpload() async {
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (file == null) {
+    ImagePicker imagePicker = new ImagePicker();
+    PickedFile pickedFile =
+        await imagePicker.getImage(source: ImageSource.gallery);
+    LogUtils.debug(TAG, pickedFile, StackTrace.current);
+    _image = new File(pickedFile.path);
+    if (_image == null) {
       return;
     }
 
-    setState(() {
-      _image = File(file.path);
-      url = '';
-    });
+    setState(() {});
 
     FormData formData = FormData.fromMap({
-      "file": MultipartFile.fromFileSync(file.path, filename: _filename(file)),
+      "file":
+          MultipartFile.fromFileSync(_image.path, filename: _filename(_image)),
       "token": uploadToken,
     });
 
@@ -157,7 +207,7 @@ class _MyImageState extends State<MyImage> {
         widget.onChangePic(key);
       });
     });
-    // 通过key换取url
+    //通过key换取url
     await request('getUrlByKey', formData: {"key": key, "fileType": "Media"})
         .then((value) {
       LogUtils.debug(TAG, 'key换取的url为:${value}', StackTrace.current);
@@ -171,16 +221,16 @@ class _MyImageState extends State<MyImage> {
   /// 通过七牛云插件进行文件上传
   /// ============================
   _onUploadBySyFlutterQiniuStorage() async {
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (file == null) {
+    ImagePicker imagePicker = new ImagePicker();
+    PickedFile pickedFile =
+        await imagePicker.getImage(source: ImageSource.gallery);
+    LogUtils.debug(TAG, pickedFile, StackTrace.current);
+    _image = new File(pickedFile.path);
+    if (_image == null) {
       return;
     }
 
-    setState(() {
-      _image = File(file.path);
-      url = '';
-    });
-
+    setState(() {});
     final syStorage = new SyFlutterQiniuStorage();
     //监听上传进度
     syStorage.onChanged().listen((dynamic percent) {
@@ -193,7 +243,7 @@ class _MyImageState extends State<MyImage> {
 
     // 通过七牛云插件上传文件
     await syStorage
-        .upload(file.path, uploadToken, _filename(file))
+        .upload(_image.path, uploadToken, _filename(_image))
         .then((value) {
       LogUtils.debug(TAG, value, StackTrace.current);
       if (value.success == true) {
