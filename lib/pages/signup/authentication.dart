@@ -444,7 +444,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           // XYZAddressPickerTestPage(),
@@ -529,9 +534,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                     title: Text(
                       typeList == null ? '请选择类别' : typeList.toString(),
                       style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
                           color: typeList != null
                               ? Colors.black
-                              : Color(0xFFD7D7D7)),
+                              : Color(0xFF888888)),
                     ),
                     trailing: Icon(
                       Icons.keyboard_arrow_right,
@@ -573,7 +579,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           InkWell(
@@ -591,8 +602,13 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   ),
                   child: ListTile(
                     title: Text(
-                      companyAddressName == null ? '' : companyAddressName,
-                      style: TextStyle(color: Colors.black),
+                      companyAddressName == null ? '请选择地址' : companyAddressName,
+                      style: TextStyle(
+                        color: companyAddressName == null
+                            ? Color(0xFF888888)
+                            : Colors.black,
+                        fontSize: ScreenUtil().setSp(32),
+                      ),
                     ),
                     trailing: Icon(
                       Icons.keyboard_arrow_right,
@@ -618,10 +634,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             controller: TextEditingController.fromValue(
@@ -637,6 +661,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             maxLines: null, //不限制行数
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入详细地址",
               // prefixIcon: Icon(Icons.person),
@@ -673,10 +698,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             controller: TextEditingController.fromValue(
               TextEditingValue(
                 text: '${companyMobile == null ? "" : companyMobile}',
@@ -693,6 +726,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               hintText: "请输入公司联系电话",
             ),
             onSaved: (value) {
@@ -731,10 +765,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -753,6 +795,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入营业执照编号",
               // prefixIcon: Icon(Icons.person),
@@ -787,10 +830,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -807,6 +858,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入经营范围",
               // prefixIcon: Icon(Icons.person),
@@ -843,10 +895,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -863,6 +923,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入开户银行名称",
               // prefixIcon: Icon(Icons.person),
@@ -897,10 +958,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -917,6 +986,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入开户账号",
               // prefixIcon: Icon(Icons.person),
@@ -951,10 +1021,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -971,6 +1049,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入固定电话",
               // prefixIcon: Icon(Icons.person),
@@ -1012,10 +1091,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1032,6 +1119,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入社会信用代码",
               // prefixIcon: Icon(Icons.person),
@@ -1070,10 +1158,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1090,6 +1186,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入联系人姓名",
               // prefixIcon: Icon(Icons.person),
@@ -1126,10 +1223,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1146,6 +1251,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入联系人手机号码",
               // prefixIcon: Icon(Icons.person),
