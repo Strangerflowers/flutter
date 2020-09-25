@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/goods_list.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/pages/goods_warehouse/goods_detail_page.dart';
@@ -278,7 +279,8 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
               width: ScreenUtil().setWidth(120),
               height: ScreenUtil().setHeight(100),
               padding: EdgeInsets.only(right: 10),
-              child: ImageWidgetBuilder.loadImage(item.imageUrl),
+              child: ImageWidgetBuilder.loadImage(
+                  StringUtils.defaultIfEmpty(item.imageUrl, '')),
             ),
             Expanded(child: _right(item)),
           ],

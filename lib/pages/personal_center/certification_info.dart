@@ -203,7 +203,8 @@ class _CertificationInfoState extends State<CertificationInfo> {
             height: 150,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(16.0),
-            child: ImageWidgetBuilder.loadImage(dataModel.value),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(dataModel.value, '')),
             // : Image.network(
             //     dataModel.value,
             //     width: 150,

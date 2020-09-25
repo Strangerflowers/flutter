@@ -52,7 +52,7 @@ class ImageWidgetBuilder {
         height: height,
         color: color,
         colorBlendMode: colorBlendMode,
-        fit: fit,
+        fit: BoxFit.fill,
         alignment: alignment,
         repeat: repeat,
         centerSlice: centerSlice,
