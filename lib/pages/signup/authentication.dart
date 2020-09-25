@@ -195,31 +195,33 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           _toMap(val['result']);
 
           // print(categoryTree.keys.join(','));
-          Map categoryLevelThree = categoryTree[supplierType.toString()];
-          Map categoryLevelTwo =
-              categoryTree[categoryLevelThree['pid'].toString()];
-          categorytwoId = categoryLevelTwo['id'];
-          Map categoryLevelOne =
-              categoryTree[categoryLevelTwo['pid'].toString()];
-          categoryoneId = categoryLevelOne['id'];
-          print(
-              'Map======${categorytwoId}=====$categoryoneId====================$supplierType');
+          if (supplierType != null) {
+            Map categoryLevelThree = categoryTree[supplierType.toString()];
+            Map categoryLevelTwo =
+                categoryTree[categoryLevelThree['pid'].toString()];
+            categorytwoId = categoryLevelTwo['id'];
+            Map categoryLevelOne =
+                categoryTree[categoryLevelTwo['pid'].toString()];
+            categoryoneId = categoryLevelOne['id'];
+            print(
+                'Map======${categorytwoId}=====$categoryoneId====================$supplierType');
 
-          var arr = [];
-          categoryoneList.forEach((ele) {
-            if (ele['name'] == categoryone) {
-              arr = ele['subCategorys'];
-            }
-          });
-          categorytwoList = arr;
+            var arr = [];
+            categoryoneList.forEach((ele) {
+              if (ele['name'] == categoryone) {
+                arr = ele['subCategorys'];
+              }
+            });
+            categorytwoList = arr;
 
-          var brr = [];
-          categorytwoList.forEach((ele) {
-            if (ele['name'] == categorytwo) {
-              brr = ele['subCategorys'];
-            }
-          });
-          categorythreeList = brr;
+            var brr = [];
+            categorytwoList.forEach((ele) {
+              if (ele['name'] == categorytwo) {
+                brr = ele['subCategorys'];
+              }
+            });
+            categorythreeList = brr;
+          }
           // categorytwoList = categoryoneList[0]['subCategorys'];
           // categorythreeList = categorytwoList[0]['subCategorys'];
         } else {
@@ -294,6 +296,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       categoryone = categoryType[0];
       categorytwo = categoryType[1];
       categorythree = categoryType[2];
+    } else {
+      categoryone = '';
+      categorytwo = '';
+      categorythree = '';
     }
 
     supplierType = data['supplierType'];
@@ -1301,9 +1307,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           });
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
-            if (supplierType.isEmpty &&
-                categoryoneId.isEmpty &&
-                categorytwoId.isEmpty) {
+            if (supplierType == '' &&
+                categoryoneId == '' &&
+                categorytwoId == '') {
               Toast.toast(context, msg: '供应商类型不能为空');
               return;
             }
