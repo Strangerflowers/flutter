@@ -88,6 +88,7 @@ class GoodsSearchResultList {
   String unit;
   String packUnit;
   String image;
+  String imageUrl;
   String description;
   String remark;
   int status;
@@ -113,6 +114,7 @@ class GoodsSearchResultList {
       this.unit,
       this.packUnit,
       this.image,
+      this.imageUrl,
       this.description,
       this.remark,
       this.status,
@@ -138,6 +140,7 @@ class GoodsSearchResultList {
     unit = json['unit'];
     packUnit = json['packUnit'];
     image = json['image'].toString();
+    imageUrl = json['imageUrl'].toString();
     description = json['description'];
     remark = json['remark'];
     status = json['status'];
@@ -165,6 +168,7 @@ class GoodsSearchResultList {
     data['unit'] = this.unit;
     data['packUnit'] = this.packUnit;
     data['image'] = this.image;
+    data['imageUrl'] = this.imageUrl;
     data['description'] = this.description;
     data['remark'] = this.remark;
     data['status'] = this.status;
