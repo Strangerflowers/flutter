@@ -124,7 +124,12 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(Iconfont.warehouse, color: Colors.white, size: 30.0),
+                      Image.asset(
+                        'images/warehouse.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      // Icon(Iconfont.warehouse, color: Colors.white, size: 30.0),
                       Text(
                         '商品库',
                         style: TextStyle(
@@ -150,7 +155,12 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(Iconfont.quotation, color: Colors.white, size: 30.0),
+                      Image.asset(
+                        'images/quotation.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      // Icon(Iconfont.quotation, color: Colors.white, size: 30.0),
                       Text(
                         '报价单',
                         style: TextStyle(
@@ -176,8 +186,13 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                   width: ScreenUtil().setWidth(200),
                   child: Column(
                     children: <Widget>[
-                      Icon(Iconfont.salesorder,
-                          color: Colors.white, size: 30.0),
+                      Image.asset(
+                        'images/salesorder.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      // Icon(Iconfont.salesorder,
+                      //     color: Colors.white, size: 30.0),
                       Text(
                         '销售订单',
                         style: TextStyle(
@@ -395,16 +410,21 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       child: Row(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(right: 10.0),
-            child: Icon(Iconfont.companyLabel,
-                color: Color.fromARGB(
-                  255,
-                  82,
-                  160,
-                  255,
-                ),
-                size: 20.0),
-          ),
+              padding: EdgeInsets.only(right: 10.0),
+              child: Image.asset(
+                'images/companyLabel.png',
+                width: 20,
+                height: 20,
+              )
+              // Icon(Iconfont.companyLabel,
+              //     color: Color.fromARGB(
+              //       255,
+              //       82,
+              //       160,
+              //       255,
+              //     ),
+              //     size: 20.0),
+              ),
           Expanded(
             child: Container(
               child: Text(
@@ -710,14 +730,19 @@ class _DemandContentState extends State<DemandContent> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: Icon(Iconfont.companyLabel,
-                color: Color.fromARGB(
-                  255,
-                  82,
-                  160,
-                  255,
-                ),
-                size: 20.0),
+            child: Image.asset(
+              'images/companyLabel.png',
+              width: 20,
+              height: 20,
+            ),
+            // child: Icon(Iconfont.companyLabel,
+            //     color: Color.fromARGB(
+            //       255,
+            //       82,
+            //       160,
+            //       255,
+            //     ),
+            //     size: 20.0),
           ),
           Expanded(
             child: Container(

@@ -262,8 +262,13 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(right: 10.0),
-                  child: Icon(Iconfont.companyLabel,
-                      color: Color(0xFF5A99FF), size: 20.0),
+                  child: Image.asset(
+                    'images/companyLabel.png',
+                    width: 20,
+                    height: 20,
+                  ),
+                  // child: Icon(Iconfont.companyLabel,
+                  //     color: Color(0xFF5A99FF), size: 20.0),
                 ),
                 Expanded(
                   child: Container(
@@ -703,8 +708,13 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(right: 10.0),
-                  child: Icon(Iconfont.companyLabel,
-                      color: Color(0xFF5A99FF), size: 20.0),
+                  child: Image.asset(
+                    'images/companyLabel.png',
+                    width: 20,
+                    height: 20,
+                  ),
+                  // child: Icon(Iconfont.companyLabel,
+                  //     color: Color(0xFF5A99FF), size: 20.0),
                 ),
                 Expanded(
                   child: Container(

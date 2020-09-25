@@ -113,10 +113,15 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                       onTap: () {
                         Navigator.pop(context, 1);
                       },
-                      child: Icon(
-                        Iconfont.circulClose,
-                        color: Color(0xFF999DA0),
+                      child: Image.asset(
+                        'images/clear.png',
+                        width: 20,
+                        height: 20,
                       ),
+                      // child: Icon(
+                      //   Iconfont.circulClose,
+                      //   color: Color(0xFF999DA0),
+                      // ),
                     ),
                   ),
                 ],

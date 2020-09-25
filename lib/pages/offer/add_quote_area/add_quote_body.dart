@@ -95,7 +95,12 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
     return Container(
       child: Row(
         children: <Widget>[
-          Icon(Iconfont.productIcon, color: Color(0xFF52A0FF), size: 20.0),
+          Image.asset(
+            'images/productIcon.png',
+            width: 20,
+            height: 20,
+          ),
+          // Icon(Iconfont.productIcon, color: Color(0xFF52A0FF), size: 20.0),
           Expanded(
             child: Container(
               padding: EdgeInsets.only(left: 10),

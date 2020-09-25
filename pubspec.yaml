@@ -96,6 +96,14 @@ flutter:
     - images/modifyPassword.png
     - images/withdrawAddress.png
     - images/default.png
+    - images/warehouse.png
+    - images/salesorder.png
+    - images/quotation.png
+    - images/companyLabel.png
+    - images/productIcon.png
+    - images/r643.png
+    - images/r641.png
+    - images/r63f.png
 
   fonts:
     - family: iconfont

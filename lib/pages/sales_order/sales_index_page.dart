@@ -307,14 +307,19 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: Icon(Iconfont.companyLabel,
-                color: Color.fromARGB(
-                  255,
-                  82,
-                  160,
-                  255,
-                ),
-                size: 20.0),
+            child: Image.asset(
+              'images/companyLabel.png',
+              width: 20,
+              height: 20,
+            ),
+            // child: Icon(Iconfont.companyLabel,
+            //     color: Color.fromARGB(
+            //       255,
+            //       82,
+            //       160,
+            //       255,
+            //     ),
+            //     size: 20.0),
           ),
           Expanded(
             child: Container(
