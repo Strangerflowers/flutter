@@ -97,7 +97,9 @@ class _MyImageState extends State<MyImage> {
         Visibility(
             visible: false,
             child: ImageWidgetBuilder.loadImage(url,
-                context: context, openToast: true, noDefaultErrBuilder: false)),
+                context: context,
+                openToast: false,
+                noDefaultErrBuilder: false)),
         // UI展示通过访问文件系统的图片资源加快展示.
         Image.file(
           _image,
