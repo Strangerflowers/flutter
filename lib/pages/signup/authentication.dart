@@ -742,12 +742,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyMobile = value;
             },
             validator: (value) {
-              RegExp exp = RegExp(r'^0\d{2,3}-?[(\d)\(/d)]{7,20}$');
-              // RegExp exp = RegExp(
-              //     r'^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$');
-
+              // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,16}$');
+              RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
               if (value.isEmpty) {
-                return "请输入";
+                return "请输入公司联系电话";
               } else if (!exp.hasMatch(value)) {
                 return "号码格式不对";
               }
@@ -1070,8 +1068,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               if (value.isEmpty) {
                 return null;
               } else {
-                RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
-                // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
+                RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
+                // RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
+                // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,16}$');
                 if (!exp.hasMatch(value)) {
                   return "格式错误";
                 }
