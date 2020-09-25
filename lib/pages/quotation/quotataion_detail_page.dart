@@ -246,7 +246,12 @@ class ProductInformation extends StatelessWidget {
   }
 
   Widget _productTitle(item) {
-    var statusType = {0: 0xe643, 1: 0xe641, 2: 0xe63f};
+    var statusType = {
+      0: 'images/r643.png',
+      1: 'images/r641.png',
+      2: 'images/r63f.png'
+    };
+    // var statusType = {0: 0xe643, 1: 0xe641, 2: 0xe63f};  images/r643.png
     var statusColor = {0: 0xFF378AFF, 1: 0xFFA1A4A7, 2: 0xFF00C290};
     return Container(
       child: Row(
@@ -304,11 +309,15 @@ class ProductInformation extends StatelessWidget {
             margin: EdgeInsets.only(right: 30),
             alignment: Alignment.centerRight,
             // 0:审核中  1:审核不通过  2:审核通过
-            child: Icon(
-                IconData(statusType[item.status], fontFamily: 'iconfont'),
-                color: Color(statusColor[item.status]),
-                size: 42.0),
-            // child: Image.asset('images/icon.png'),
+            // child: Icon(
+            //     IconData(statusType[item.status], fontFamily: 'iconfont'),
+            //     color: Color(statusColor[item.status]),
+            //     size: 42.0),
+            child: Image.asset(
+              statusType[item.status],
+              width: 40,
+              height: 40,
+            ),
           )
         ],
       ),

@@ -53,6 +53,7 @@ class SelectProductsBottom extends StatelessWidget {
                           suboffer.goodsPrice != '') {
                         suboffer.specificaId = null;
                         suboffer.goodsPrice = '';
+                        suboffer.specificaText = '';
                       }
                       print(
                           '替换报价时进入${suboffer.specificaId}====${suboffer.goodsPrice}');

@@ -1000,7 +1000,7 @@ class DeliveryArrangement extends StatelessWidget {
 
   // 添加发货安排
   Widget _addShipment(item, context, len) {
-    if (item.status == 1 || item.status == 2) {
+    if (item.status == 1) {
       return InkWell(
         onTap: () {
           // 跳转到详情页面
@@ -1041,7 +1041,7 @@ class DeliveryArrangement extends StatelessWidget {
 
   // 发货按钮
   Widget _shipmentButtom(context, result) {
-    if (result.status == 1 || result.status == 2) {
+    if (result.status == 1) {
       return Container(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -1060,7 +1060,7 @@ class DeliveryArrangement extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                   onPressed: () {
-                    _confirm(context);
+                    _confirm(context, result);
                   },
                 ),
               ),
@@ -1073,7 +1073,10 @@ class DeliveryArrangement extends StatelessWidget {
     }
   }
 
-  void _confirm(context) {
+  void _confirm(context, result) {
+    if (result.dispatchVos.length <= 0) {
+      return Toast.toast(context, msg: '请先添加发货安排');
+    }
     var formData = {
       'subOrderId': goodsId,
     };

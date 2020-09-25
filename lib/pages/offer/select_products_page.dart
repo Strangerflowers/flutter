@@ -12,86 +12,131 @@ class SelectProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).size.height);
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return Provide<DemandQuotationProvide>(builder: (context, child, val) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text('选择产品'),
         ),
-        title: Text('选择产品'),
-      ),
-      body: FutureBuilder(
-        future: _getBackDetailInfo(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            if (snapshot.hasData) {
-              return Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 80),
-                      constraints: BoxConstraints(
-                        // minWidth: 180,
-                        minHeight: MediaQuery.of(context).size.height - 126,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                color: Colors.white,
-                                padding: EdgeInsets.only(
-                                    left: 20, top: 20, bottom: 20),
-                                alignment: Alignment.centerLeft,
-                                child: InkWell(
-                                  child: Text('请选择报价产品:'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, "/addproduct?id='1'");
-                                  },
-                                ),
-                              ),
-                              SelectProductsBody(),
-                            ],
+        body: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 80),
+                constraints: BoxConstraints(
+                  // minWidth: 180,
+                  minHeight: MediaQuery.of(context).size.height - 126,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          color: Colors.white,
+                          padding:
+                              EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                            child: Text('请选择报价产品:'),
+                            onTap: () {
+                              Application.router
+                                  .navigateTo(context, "/addproduct?id='1'");
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                        SelectProductsBody(id),
+                      ],
                     ),
-                  ),
-                  Positioned(
-                    bottom: -5,
-                    left: 0,
-                    right: 0,
-                    child: SelectProductsBottom(id, subId),
-                  )
-                ],
-              );
-            } else {
-              return Text('加载中......');
-            }
-          }
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-                value: .7,
+                  ],
+                ),
               ),
             ),
-          );
-        },
-      ),
-    );
+            Positioned(
+              bottom: -5,
+              left: 0,
+              right: 0,
+              child: SelectProductsBottom(id, subId),
+            )
+          ],
+        ),
+        // FutureBuilder(
+        //   future: _getBackDetailInfo(context),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.done) {
+        //       if (snapshot.hasError) {
+        //         return Text(snapshot.error.toString());
+        //       }
+        //       if (snapshot.hasData) {
+        //         return Stack(
+        //           children: <Widget>[
+        //             SingleChildScrollView(
+        //               child: Container(
+        //                 margin: EdgeInsets.only(bottom: 80),
+        //                 constraints: BoxConstraints(
+        //                   // minWidth: 180,
+        //                   minHeight: MediaQuery.of(context).size.height - 126,
+        //                 ),
+        //                 child: Column(
+        //                   crossAxisAlignment: CrossAxisAlignment.start,
+        //                   children: <Widget>[
+        //                     Column(
+        //                       mainAxisAlignment: MainAxisAlignment.start,
+        //                       crossAxisAlignment: CrossAxisAlignment.start,
+        //                       children: <Widget>[
+        //                         Container(
+        //                           color: Colors.white,
+        //                           padding: EdgeInsets.only(
+        //                               left: 20, top: 20, bottom: 20),
+        //                           alignment: Alignment.centerLeft,
+        //                           child: InkWell(
+        //                             child: Text('请选择报价产品:'),
+        //                             onTap: () {
+        //                               Application.router.navigateTo(
+        //                                   context, "/addproduct?id='1'");
+        //                             },
+        //                           ),
+        //                         ),
+        //                         SelectProductsBody(id),
+        //                       ],
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ),
+        //             Positioned(
+        //               bottom: -5,
+        //               left: 0,
+        //               right: 0,
+        //               child: SelectProductsBottom(id, subId),
+        //             )
+        //           ],
+        //         );
+        //       } else {
+        //         return Text('加载中......');
+        //       }
+        //     }
+        //     return Container(
+        //       height: MediaQuery.of(context).size.height / 2,
+        //       child: Center(
+        //         child: CircularProgressIndicator(
+        //           backgroundColor: Colors.grey[200],
+        //           valueColor: AlwaysStoppedAnimation(Colors.blue),
+        //           value: .7,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
+      );
+    });
   }
 
   Future _getBackDetailInfo(BuildContext context) async {

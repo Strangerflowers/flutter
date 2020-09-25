@@ -181,7 +181,6 @@ class ProductInformation extends StatelessWidget {
 
   // 一级循环渲染
   Widget _recommedList(result) {
-    print('r34ererefrd$result');
     // if (list.length > 0) {
     return Container(
       alignment: Alignment.bottomLeft,

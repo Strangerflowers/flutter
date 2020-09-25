@@ -84,7 +84,7 @@ class SalesRoderList {
   String expectedDeliveryTime;
   Null notes;
   String demanderDeptName;
-  Null quotationCode;
+  String quotationCode;
   Null applyKey;
   Null createBy;
   Null updateBy;
@@ -136,7 +136,8 @@ class SalesRoderList {
     expectedDeliveryTime = json['expectedDeliveryTime'];
     notes = json['notes'];
     demanderDeptName = json['demanderDeptName'];
-    quotationCode = json['quotationCode'];
+    quotationCode =
+        json['quotationCode'] != null ? json['quotationCode'] : null;
     applyKey = json['applyKey'];
     createBy = json['createBy'];
     updateBy = json['updateBy'];

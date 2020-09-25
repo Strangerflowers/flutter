@@ -1,7 +1,9 @@
+import 'package:bid/common/toast.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import '../../../routers/application.dart';
 import '../../../provide/demand_detail_provide.dart';
 import '../../../service/service_method.dart';
@@ -37,7 +39,9 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
         ele['demandDetailDtoList'].forEach((item) {
           totalNumber += item.num;
           if (item.goodsPrice != 'null' && item.goodsPrice != '') {
-            totalAmount += double.parse(item.goodsPrice) * item.num;
+            totalAmount +=
+                NumUtil.multiplyDecStr(item.goodsPrice, item.num.toString())
+                    .toDouble();
           }
         });
       });
@@ -62,7 +66,8 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: '￥${totalAmount}',
+                                text:
+                                    '￥${MoneyUtil.changeYWithUnit(totalAmount, MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)}',
                                 style: TextStyle(
                                   color: Color(0xFFF8980B),
                                 ),
@@ -94,10 +99,24 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
               onPressed: () {
                 print('点击提交报价$goodsInfo');
                 List createQuotationDetailDtos = new List<Object>();
+                if (Provide.value<DemandDetailProvide>(context).remark !=
+                        null &&
+                    Provide.value<DemandDetailProvide>(context).remark.length >
+                        200) {
+                  return;
+                }
+                // 声明一个数据，用于存放specificaId为空的字段
+                var skuIdNullList = [];
 
                 goodsInfo.forEach((ele) {
                   ele['demandDetailDtoList'].forEach((subele) {
                     print('循环遍历查看skuiid是否获取${subele.specificaId}');
+                    if (subele.specificaId == null ||
+                        subele.goodsPrice == null ||
+                        subele.goodsPrice == '') {
+                      skuIdNullList.add(true);
+                      return Toast.toast(context, msg: '请将报价产品信息填写完整');
+                    }
                     var Obj = {
                       "amount": double.parse(subele.goodsPrice) * 100,
                       "demandDetailId": subele.id,
@@ -107,6 +126,10 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                     return createQuotationDetailDtos.add(Obj);
                   });
                 });
+                if (skuIdNullList.length > 0) {
+                  // Toast.toast(context, msg: '请将报价产品信息填写完整');
+                  return;
+                }
 
                 var formData = {
                   "createQuotationDetailDtos": createQuotationDetailDtos,
@@ -119,17 +142,19 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                   "totalAmount": totalAmount * 100
                 };
                 print('提交报价参数$formData');
+
                 request('createDemandQuotation', formData: formData)
                     .then((val) {
                   if (val['code'] == 0) {
-                    Fluttertoast.showToast(
-                      msg: '提交成功',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                    Toast.toast(context, msg: '提交成功');
+                    // Fluttertoast.showToast(
+                    //   msg: '提交成功',
+                    //   toastLength: Toast.LENGTH_SHORT,
+                    //   gravity: ToastGravity.CENTER,
+                    //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    //   textColor: Colors.white,
+                    //   fontSize: 16.0,
+                    // );
                     Application.router.navigateTo(context,
                         "/demanddetail?id=${Provide.value<DemandDetailProvide>(context).goodsList.result.id}");
                     // Navigator.push(context,
@@ -139,14 +164,15 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                     // Application.router
                     //     .navigateTo(context, "/choice?id=$demandId");
                   } else {
-                    Fluttertoast.showToast(
-                      msg: val['message'],
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                    Toast.toast(context, msg: val['message']);
+                    // Fluttertoast.showToast(
+                    //   msg: val['message'],
+                    //   toastLength: Toast.LENGTH_SHORT,
+                    //   gravity: ToastGravity.CENTER,
+                    //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+                    //   textColor: Colors.white,
+                    //   fontSize: 16.0,
+                    // );
                   }
                 });
               },

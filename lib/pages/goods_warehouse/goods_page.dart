@@ -72,19 +72,25 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('商品库'),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _goodsPage(list),
-            _goodsList(_itemList),
-          ],
+    if (_itemList != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('商品库'),
         ),
-      ),
-    );
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              _goodsPage(list),
+              _goodsList(_itemList),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text('暂无数据'),
+      );
+    }
   }
 
   Widget _goodsPage(list) {
@@ -162,7 +168,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   }
 
   Widget _goodsList(result) {
-    if (result != null) {
+    if (result != null && _itemList.length > 0) {
       try {
         if (pageNum == 1) {
           // 如果列表page==1，列表位置放到最顶部
@@ -253,7 +259,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   // 合并商品
   Widget _mergeItem(item) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 20),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -271,13 +277,13 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                 width: ScreenUtil().setWidth(120),
                 height: ScreenUtil().setHeight(100),
                 padding: EdgeInsets.only(right: 10),
-                child: item.image == 'null'
+                child: item.imageUrl == 'null'
                     ? Image.asset(
                         'images/default.png',
                         fit: BoxFit.fill,
                       )
                     : Image.network(
-                        '${item.image}',
+                        '${item.imageUrl}',
                         fit: BoxFit.fill,
                       )
                 // Image.asset('images/icon.png'),
@@ -321,7 +327,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    '请求：${actionType[item.action]}',
+                    '请求：${item.action == 'null' ? '' : actionType[item.action]}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                     ),
@@ -331,7 +337,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '状态：${auditStatusType[item.auditStatus]}',
+                      '状态：${item.auditStatus == 'null' || item.auditStatus == null ? '' : auditStatusType[item.auditStatus]}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                       ),

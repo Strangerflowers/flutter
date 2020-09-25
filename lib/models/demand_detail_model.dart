@@ -171,6 +171,7 @@ class DemandDetailDtoList {
   List<Object> subjectItemList;
   List<Object> specificationList;
   int specificaId;
+  String specificaText;
   String goodsPrice;
   int num;
   int typeId;
@@ -191,6 +192,7 @@ class DemandDetailDtoList {
       this.subjectItemList,
       this.specificationList,
       this.specificaId,
+      this.specificaText,
       this.goodsPrice,
       this.num,
       this.typeId,
@@ -211,6 +213,7 @@ class DemandDetailDtoList {
     subjectItemList = json['subjectItemList'];
     specificationList = json['specificationList'];
     specificaId = json['specificaId'];
+    specificaText = json['specificaText'];
     goodsPrice = json['goodsPrice'].toString();
     // subjectItemList
     num = json['num'];
@@ -234,6 +237,7 @@ class DemandDetailDtoList {
     data['subjectItemList'] = this.subjectItemList;
     data['specificationList'] = this.specificationList;
     data['specificaId'] = this.specificaId;
+    data['specificaText'] = this.specificaText;
     data['goodsPrice'] = this.goodsPrice;
     // subjectItemList
     data['num'] = this.num;

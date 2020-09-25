@@ -192,7 +192,7 @@ bool _accountAutoFocus = false;
 String validateAccount(value) {
   // 对账号进行判空校验
   if (value.isEmpty) {
-    return '用户名不能为空';
+    return '账号不能为空';
   }
 }
 

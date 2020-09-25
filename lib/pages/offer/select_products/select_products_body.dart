@@ -1,3 +1,5 @@
+import 'package:bid/models/demand_quotation/demand_quotation_model.dart';
+import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
@@ -5,12 +7,60 @@ import '../../../provide/demand_quotation/demand_quotation_provide.dart';
 import '../round_checkbox.dart';
 
 class SelectProductsBody extends StatefulWidget {
+  final String id;
+  SelectProductsBody(this.id);
   @override
   _SelectProductsBodyState createState() => new _SelectProductsBodyState();
 }
 
 class _SelectProductsBodyState extends State<SelectProductsBody> {
+  String id;
+  int pageNum = 1;
+  int totalPage;
+  var quotationData;
+  void initState() {
+    super.initState();
+    pageNum = 1;
+    id = widget.id;
+    _getBackDetailInfo();
+  }
+
   var flag = false;
+  void _getBackDetailInfo() async {
+    print('商品列表选择============');
+    var formData = {
+      "isAll": true,
+      "limit": 10,
+      "order": "string",
+      "page": pageNum,
+      "params": {"productCategroy": id}
+    };
+    // FormData formData = FormData.fromMap({'demandId': id});
+    // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
+    // print('获选带选择产品$formData');
+    await request('selectGoodsByProductId', formData: formData).then((val) {
+      print('商品列表$val');
+      if (val['code'] == 0) {
+        QuotataionData goodsList = QuotataionData.fromJson(val);
+        totalPage = goodsList.result.totalPage;
+
+        quotationData = goodsList.result.list;
+
+        quotationData.forEach((ele) {
+          ele.checkBoxFlag = false;
+        });
+        if (pageNum == 1) {
+          Provide.value<DemandQuotationProvide>(context).getList(goodsList);
+        } else {
+          Provide.value<DemandQuotationProvide>(context).aAddList(goodsList);
+        }
+      }
+    });
+    print('查看是否执行');
+    // await Provide.value<DemandQuotationProvide>(context)
+    //     .getDemandDetailData(id);
+    // return '加载完成';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +91,38 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: list.length,
+            itemCount: list.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
+              //如果到了表尾
+              if (index > (list.length - 1)) {
+                //不足100条，继续获取数=据
+                if (pageNum < totalPage) {
+                  //获取数据
+                  pageNum++;
+                  _getBackDetailInfo();
+                  //加载时显示loading
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: 24.0,
+                        height: 24.0,
+                        child: CircularProgressIndicator(strokeWidth: 2.0)),
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "没有更多了",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+              }
+              // return _mergeWidget(result[index]);
               return _checkboxTitle(list[index], index);
             },
           ),

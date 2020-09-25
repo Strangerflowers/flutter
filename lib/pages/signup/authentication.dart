@@ -162,6 +162,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   var socialCreditCode; //社会信用代码
   var contactName; //联系人
   var contactMobile; //联系号码
+  var companyProvinceCode;
+  var companyCityCode;
   List res = [];
   String categoryone = '';
   String categorytwo = '';
@@ -195,31 +197,33 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           _toMap(val['result']);
 
           // print(categoryTree.keys.join(','));
-          Map categoryLevelThree = categoryTree[supplierType.toString()];
-          Map categoryLevelTwo =
-              categoryTree[categoryLevelThree['pid'].toString()];
-          categorytwoId = categoryLevelTwo['id'];
-          Map categoryLevelOne =
-              categoryTree[categoryLevelTwo['pid'].toString()];
-          categoryoneId = categoryLevelOne['id'];
-          print(
-              'Map======${categorytwoId}=====$categoryoneId====================$supplierType');
+          if (supplierType != null) {
+            Map categoryLevelThree = categoryTree[supplierType.toString()];
+            Map categoryLevelTwo =
+                categoryTree[categoryLevelThree['pid'].toString()];
+            categorytwoId = categoryLevelTwo['id'];
+            Map categoryLevelOne =
+                categoryTree[categoryLevelTwo['pid'].toString()];
+            categoryoneId = categoryLevelOne['id'];
+            print(
+                'Map======${categorytwoId}=====$categoryoneId====================$supplierType');
 
-          var arr = [];
-          categoryoneList.forEach((ele) {
-            if (ele['name'] == categoryone) {
-              arr = ele['subCategorys'];
-            }
-          });
-          categorytwoList = arr;
+            var arr = [];
+            categoryoneList.forEach((ele) {
+              if (ele['name'] == categoryone) {
+                arr = ele['subCategorys'];
+              }
+            });
+            categorytwoList = arr;
 
-          var brr = [];
-          categorytwoList.forEach((ele) {
-            if (ele['name'] == categorytwo) {
-              brr = ele['subCategorys'];
-            }
-          });
-          categorythreeList = brr;
+            var brr = [];
+            categorytwoList.forEach((ele) {
+              if (ele['name'] == categorytwo) {
+                brr = ele['subCategorys'];
+              }
+            });
+            categorythreeList = brr;
+          }
           // categorytwoList = categoryoneList[0]['subCategorys'];
           // categorythreeList = categorytwoList[0]['subCategorys'];
         } else {
@@ -294,6 +298,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       categoryone = categoryType[0];
       categorytwo = categoryType[1];
       categorythree = categoryType[2];
+    } else {
+      categoryone = '';
+      categorytwo = '';
+      categorythree = '';
     }
 
     supplierType = data['supplierType'];
@@ -313,6 +321,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     socialCreditCode = data['socialCreditCode']; //社会信用代码
     contactName = data['contactName']; //联系人
     contactMobile = data['contactMobile']; //联系号码
+    companyProvinceCode = data['companyProvinceCode'];
+    companyCityCode = data['companyCityCode'];
     // });
     _getCategory();
     // _getAddress();
@@ -444,7 +454,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           // XYZAddressPickerTestPage(),
@@ -529,9 +544,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                     title: Text(
                       typeList == null ? '请选择类别' : typeList.toString(),
                       style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
                           color: typeList != null
                               ? Colors.black
-                              : Color(0xFFD7D7D7)),
+                              : Color(0xFF888888)),
                     ),
                     trailing: Icon(
                       Icons.keyboard_arrow_right,
@@ -554,6 +570,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     print('result==$result');
     setState(() {
       companyCode = result.areaId;
+      companyProvinceCode = result.provinceId;
+      companyCityCode = result.cityId;
       companyAddressName =
           result.provinceName + result.cityName + result.areaName;
       // this.area =
@@ -573,7 +591,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           InkWell(
@@ -591,8 +614,13 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   ),
                   child: ListTile(
                     title: Text(
-                      companyAddressName == null ? '' : companyAddressName,
-                      style: TextStyle(color: Colors.black),
+                      companyAddressName == null ? '请选择地址' : companyAddressName,
+                      style: TextStyle(
+                        color: companyAddressName == null
+                            ? Color(0xFF888888)
+                            : Colors.black,
+                        fontSize: ScreenUtil().setSp(32),
+                      ),
                     ),
                     trailing: Icon(
                       Icons.keyboard_arrow_right,
@@ -618,10 +646,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             controller: TextEditingController.fromValue(
@@ -637,6 +673,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ),
             maxLines: null, //不限制行数
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入详细地址",
               // prefixIcon: Icon(Icons.person),
@@ -673,10 +710,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             controller: TextEditingController.fromValue(
               TextEditingValue(
                 text: '${companyMobile == null ? "" : companyMobile}',
@@ -693,6 +738,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             // keyboardType: TextInputType.phone,
             maxLines: 1, //不限制行数
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               hintText: "请输入公司联系电话",
             ),
             onSaved: (value) {
@@ -702,12 +748,10 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               companyMobile = value;
             },
             validator: (value) {
-              RegExp exp = RegExp(r'^0\d{2,3}-?[(\d)\(/d)]{7,20}$');
-              // RegExp exp = RegExp(
-              //     r'^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$');
-
+              // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,16}$');
+              RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
               if (value.isEmpty) {
-                return "请输入";
+                return "请输入公司联系电话";
               } else if (!exp.hasMatch(value)) {
                 return "号码格式不对";
               }
@@ -731,10 +775,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -753,6 +805,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入营业执照编号",
               // prefixIcon: Icon(Icons.person),
@@ -787,10 +840,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -807,6 +868,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入经营范围",
               // prefixIcon: Icon(Icons.person),
@@ -843,10 +905,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -863,6 +933,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入开户银行名称",
               // prefixIcon: Icon(Icons.person),
@@ -897,10 +968,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -917,6 +996,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入开户账号",
               // prefixIcon: Icon(Icons.person),
@@ -951,10 +1031,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               //   '*',
               //   style: TextStyle(color: Colors.red),
               // ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -971,6 +1059,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入固定电话",
               // prefixIcon: Icon(Icons.person),
@@ -985,8 +1074,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               if (value.isEmpty) {
                 return null;
               } else {
-                RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,20}$');
-                // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,8}$');
+                RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
+                // RegExp exp = RegExp(r'^0\d{2,3}-[1-9]\d{6,7}$');
+                // RegExp exp = RegExp(r'^0\d{2,3}-?\d{7,16}$');
                 if (!exp.hasMatch(value)) {
                   return "格式错误";
                 }
@@ -1012,10 +1102,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1032,6 +1130,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入社会信用代码",
               // prefixIcon: Icon(Icons.person),
@@ -1070,10 +1169,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1090,6 +1197,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入联系人姓名",
               // prefixIcon: Icon(Icons.person),
@@ -1126,10 +1234,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 '*',
                 style: TextStyle(color: Colors.red),
               ),
-              Text(title)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              )
             ],
           ),
           TextFormField(
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+            ),
             autofocus: false,
             autovalidate: isValider,
             // keyboardType: TextInputType.phone,
@@ -1146,6 +1262,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               ),
             ),
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 20, right: 10),
               // labelText: "用户名",
               hintText: "请输入联系人手机号码",
               // prefixIcon: Icon(Icons.person),
@@ -1195,9 +1312,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           });
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
-            if (supplierType.isEmpty &&
-                categoryoneId.isEmpty &&
-                categorytwoId.isEmpty) {
+            if (supplierType == '' &&
+                categoryoneId == '' &&
+                categorytwoId == '') {
               Toast.toast(context, msg: '供应商类型不能为空');
               return;
             }
@@ -1224,7 +1341,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               "companyTelephone": companyTelephone,
               "socialCreditCode": socialCreditCode,
               "contactName": contactName,
-              "contactMobile": contactMobile
+              "contactMobile": contactMobile,
+              "companyProvinceCode": companyProvinceCode,
+              "companyCityCode": companyCityCode
             };
 
             print(
