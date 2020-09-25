@@ -366,7 +366,7 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                  '小计：￥${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : NumUtil.multiplyDecStr(subItem.goodsPrice, subItem.num.toString())}'),
+                  '小计：￥${subItem.goodsPrice == 'null' || subItem.goodsPrice == '' ? 0 : MoneyUtil.changeYWithUnit(NumUtil.multiplyDecStr(subItem.goodsPrice, subItem.num.toString()), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)}'),
             ),
           ),
         ],

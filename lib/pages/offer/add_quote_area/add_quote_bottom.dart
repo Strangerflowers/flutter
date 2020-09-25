@@ -66,7 +66,8 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: '￥${totalAmount}',
+                                text:
+                                    '￥${MoneyUtil.changeYWithUnit(totalAmount, MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)}',
                                 style: TextStyle(
                                   color: Color(0xFFF8980B),
                                 ),
