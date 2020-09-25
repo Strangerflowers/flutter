@@ -271,13 +271,13 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                 width: ScreenUtil().setWidth(120),
                 height: ScreenUtil().setHeight(100),
                 padding: EdgeInsets.only(right: 10),
-                child: item.image == 'null'
+                child: item.imageUrl == 'null'
                     ? Image.asset(
                         'images/default.png',
                         fit: BoxFit.fill,
                       )
                     : Image.network(
-                        '${item.image}',
+                        '${item.imageUrl}',
                         fit: BoxFit.fill,
                       )
                 // Image.asset('images/icon.png'),
