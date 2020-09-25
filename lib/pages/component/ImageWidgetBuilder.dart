@@ -1,4 +1,5 @@
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,9 @@ class ImageWidgetBuilder {
     url, {
     BuildContext context,
     noDefaultErrBuilder = true,
+    openToast: false,
+    String successToastMsg,
+    String errToastMsg,
     Key key,
     double scale = 1.0,
     frameBuilder,
@@ -62,10 +66,12 @@ class ImageWidgetBuilder {
     final ImageStream stream = image.image.resolve(ImageConfiguration.empty);
     stream.addListener(ImageStreamListener((_, __) {
       LogUtils.debug(TAG, "=======> 图片加载成功!.", StackTrace.current);
-      Toast.toast(
-        context,
-        msg: '文件上传成功!',
-      );
+      if (openToast) {
+        Toast.toast(
+          context,
+          msg: StringUtils.defaultIfEmpty(successToastMsg, '文件上传成功!'),
+        );
+      }
     }, onError: (dynamic exception, StackTrace stackTrace) {
       LogUtils.debug(
           TAG, '=======> 图片加载失败! enter onError start', StackTrace.current);
@@ -73,10 +79,10 @@ class ImageWidgetBuilder {
       LogUtils.debug(TAG, stackTrace, StackTrace.current);
       LogUtils.debug(
           TAG, '=======> 图片加载失败! enter onError end', StackTrace.current);
-      if (url != '') {
+      if (url != '' && openToast) {
         Toast.toast(
           context,
-          msg: '文件上传失败!',
+          msg: StringUtils.defaultIfEmpty(errToastMsg, '文件上传失败!'),
         );
       }
     }));
