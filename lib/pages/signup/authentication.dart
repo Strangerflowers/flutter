@@ -162,6 +162,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   var socialCreditCode; //社会信用代码
   var contactName; //联系人
   var contactMobile; //联系号码
+  var companyProvinceCode;
+  var companyCityCode;
   List res = [];
   String categoryone = '';
   String categorytwo = '';
@@ -319,6 +321,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     socialCreditCode = data['socialCreditCode']; //社会信用代码
     contactName = data['contactName']; //联系人
     contactMobile = data['contactMobile']; //联系号码
+    companyProvinceCode = data['companyProvinceCode'];
+    companyCityCode = data['companyCityCode'];
     // });
     _getCategory();
     // _getAddress();
@@ -566,6 +570,8 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     print('result==$result');
     setState(() {
       companyCode = result.areaId;
+      companyProvinceCode = result.provinceId;
+      companyCityCode = result.cityId;
       companyAddressName =
           result.provinceName + result.cityName + result.areaName;
       // this.area =
@@ -1335,7 +1341,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               "companyTelephone": companyTelephone,
               "socialCreditCode": socialCreditCode,
               "contactName": contactName,
-              "contactMobile": contactMobile
+              "contactMobile": contactMobile,
+              "companyProvinceCode": companyProvinceCode,
+              "companyCityCode": companyCityCode
             };
 
             print(
