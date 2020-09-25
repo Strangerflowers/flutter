@@ -43,6 +43,7 @@ class GoodsDetailResult {
   String unit;
   String packUnit;
   String image;
+  String imageUrl;
   String description;
   String remark;
   int status;
@@ -70,6 +71,7 @@ class GoodsDetailResult {
       this.unit,
       this.packUnit,
       this.image,
+      this.imageUrl,
       this.description,
       this.remark,
       this.status,
@@ -97,6 +99,7 @@ class GoodsDetailResult {
     unit = json['unit'];
     packUnit = json['packUnit'];
     image = json['image'].toString();
+    imageUrl = json['imageUrl'].toString();
     description = json['description'];
     remark = json['remark'];
     status = json['status'];
@@ -131,6 +134,7 @@ class GoodsDetailResult {
     data['unit'] = this.unit;
     data['packUnit'] = this.packUnit;
     data['image'] = this.image;
+    data['imageUrl'] = this.imageUrl;
     data['description'] = this.description;
     data['remark'] = this.remark;
     data['status'] = this.status;
@@ -158,6 +162,7 @@ class GoodsDetailSkuList {
   int price;
   String expireTime;
   String image;
+  String imageUrl;
   int version;
   String createTime;
   String updateTime;
@@ -172,6 +177,7 @@ class GoodsDetailSkuList {
       this.price,
       this.expireTime,
       this.image,
+      this.imageUrl,
       this.version,
       this.createTime,
       this.updateTime,
@@ -186,6 +192,7 @@ class GoodsDetailSkuList {
     price = json['price'];
     expireTime = json['expireTime'];
     image = json['image'];
+    imageUrl = json['imageUrl'].toString();
     version = json['version'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];
@@ -207,6 +214,7 @@ class GoodsDetailSkuList {
     data['price'] = this.price;
     data['expireTime'] = this.expireTime;
     data['image'] = this.image;
+    data['imageUrl'] = this.imageUrl;
     data['version'] = this.version;
     data['createTime'] = this.createTime;
     data['updateTime'] = this.updateTime;

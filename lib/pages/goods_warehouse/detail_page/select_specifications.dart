@@ -178,6 +178,8 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                     SingleChildScrollView(
                       child: Container(
                         height: ScreenUtil().setHeight(400),
+                        width: ScreenUtil().setWidth(750),
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
                         child: MultiSelectChip(
                           skuldataList,
                           showSelectItem,

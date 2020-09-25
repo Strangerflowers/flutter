@@ -35,11 +35,16 @@ class DetailsTopArea extends StatelessWidget {
   Widget _goodsImage(goodsResult) {
     return Container(
       height: ScreenUtil().setHeight(300),
-      child: Image.network(
-        goodsResult.image,
-        width: ScreenUtil().setWidth(750),
-        fit: BoxFit.fill,
-      ),
+      width: ScreenUtil().setWidth(750),
+      child: goodsResult.imageUrl == "null"
+          ? Image.asset(
+              'images/default.png',
+              fit: BoxFit.fill,
+            )
+          : Image.network(
+              goodsResult.imageUrl,
+              fit: BoxFit.fill,
+            ),
     );
 
     // return Image.asset(
@@ -70,7 +75,7 @@ class DetailsTopArea extends StatelessWidget {
       padding: EdgeInsets.only(left: 15.0),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Text(
-        '${goodsResult.priceRange}',
+        '￥${goodsResult.priceRange}',
         style: TextStyle(color: Color(0xFFF2A631)),
       ),
     );

@@ -8,8 +8,8 @@ class DetailsInfoProvide with ChangeNotifier {
   var goodsInfo;
   // 从后台获取数据
   getGoodsInfo(String id) {
-    requestGet('goodsDetail').then((val) {
-      print('获取商品详情数据$val');
+    requestPostGetSpl('goodsDetail', spl: id.toString()).then((val) {
+      // print('获取商品详情数据$val');
       // var responseData = json.decode(val);
       // print('===========>$responseData');
       goodsInfo = GoodsDetail.fromJson(val);

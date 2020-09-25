@@ -53,7 +53,7 @@ class ServiceUrlMapper {
     'quotationDetailPlan':
         '/os_kernel_bid/mp/purchase/quotation/demand', //报价单查询所属的采购计划单详情App
     "goodsList": '/os_kernel_bid/goods/list', //商品库列表
-    'goodsDetail': '/os_kernel_bid/goods/info/1', //获取商品详情(包括spu、sku规格信息)
+    'goodsDetail': '/os_kernel_bid/goods/info', //获取商品详情(包括spu、sku规格信息)
     'listDemand': '/os_kernel_bid/app/suppliers/listDemand', //供应商app-采购-需求列表
     "demandDetail":
         '/os_kernel_bid/app/suppliers/demandDetail', //供应商app-采购-需求详情
