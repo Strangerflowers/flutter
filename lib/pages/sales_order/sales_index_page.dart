@@ -58,7 +58,9 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
         });
         print('拿到的字段￥${_itemList}');
       } else {
-        _itemList.addAll(goodsList.result.list);
+        setState(() {
+          _itemList.addAll(goodsList.result.list);
+        });
       }
     });
   }

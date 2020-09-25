@@ -60,7 +60,9 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
           _itemList = goodsList.result.list;
         });
       } else {
-        _itemList.addAll(goodsList.result.list);
+        setState(() {
+          _itemList.addAll(goodsList.result.list);
+        });
       }
     });
   }

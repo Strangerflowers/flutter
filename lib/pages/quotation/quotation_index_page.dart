@@ -38,7 +38,11 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
 
   // 获取列表数据
   void _getQuotationList() async {
-    _itemList = [];
+    if (pageNum == 1) {
+      setState(() {
+        _itemList = [];
+      });
+    }
     var data = {
       "limit": 10,
       "page": pageNum,
@@ -58,7 +62,9 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
             _itemList = goodsList.result.list;
           });
         } else {
-          _itemList.addAll(goodsList.result.list);
+          setState(() {
+            _itemList.addAll(goodsList.result.list);
+          });
         }
       }
     });

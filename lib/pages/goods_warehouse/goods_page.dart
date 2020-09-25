@@ -253,7 +253,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   // 合并商品
   Widget _mergeItem(item) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 20),
       child: InkWell(
         onTap: () {
           Navigator.push(

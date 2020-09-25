@@ -9,7 +9,8 @@ class DemandQuotationProvide with ChangeNotifier {
   int currentindex;
 
   // 从后台获取数据
-  getDemandDetailData(String productCategroyId) {
+  getDemandDetailData(String productCategroyId) async {
+    print('商品列表选择============');
     var formData = {
       "isAll": true,
       "limit": 10,
@@ -20,7 +21,7 @@ class DemandQuotationProvide with ChangeNotifier {
     // FormData formData = FormData.fromMap({'demandId': id});
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
     // print('获选带选择产品$formData');
-    request('selectGoodsByProductId', formData: formData).then((val) {
+    await request('selectGoodsByProductId', formData: formData).then((val) {
       print('商品列表$val');
       if (val['code'] == 0) {
         goodsList = QuotataionData.fromJson(val);
@@ -35,6 +36,18 @@ class DemandQuotationProvide with ChangeNotifier {
       // print('采购需求详情11111${quotationData[0].checkBoxFlag}');
       notifyListeners();
     });
+  }
+
+  getList(list) {
+    goodsList = list;
+    quotationData = goodsList.result.list;
+    notifyListeners();
+  }
+
+  aAddList(list) {
+    // goodsList = list;
+    quotationData.addAll(list.result.list);
+    notifyListeners();
   }
 
   // 单选控制
