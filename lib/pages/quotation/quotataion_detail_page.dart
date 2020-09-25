@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
@@ -336,18 +337,18 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-              // alignment: Alignment.topCenter,
-              // width: ScreenUtil().setWidth(120),
-              // height: ScreenUtil().setHeight(120),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: Image.network(
-                '${item.skuUrl}',
-                fit: BoxFit.cover,
-                width: ScreenUtil().setWidth(150),
-                height: ScreenUtil().setHeight(150),
-              )
-              // Image.asset('images/icon.png'),
-              ),
+            // alignment: Alignment.topCenter,
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(item.skuUrl),
+            // child: Image.network(
+            //   '${item.skuUrl}',
+            //   fit: BoxFit.cover,
+            //   width: ScreenUtil().setWidth(150),
+            //   height: ScreenUtil().setHeight(150),
+            // ),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[

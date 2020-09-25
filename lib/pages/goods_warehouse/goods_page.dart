@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bid/models/goods_list.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/pages/goods_warehouse/goods_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -274,20 +275,11 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
         child: Row(
           children: <Widget>[
             Container(
-                width: ScreenUtil().setWidth(120),
-                height: ScreenUtil().setHeight(100),
-                padding: EdgeInsets.only(right: 10),
-                child: item.imageUrl == 'null'
-                    ? Image.asset(
-                        'images/default.png',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.network(
-                        '${item.imageUrl}',
-                        fit: BoxFit.fill,
-                      )
-                // Image.asset('images/icon.png'),
-                ),
+              width: ScreenUtil().setWidth(120),
+              height: ScreenUtil().setHeight(100),
+              padding: EdgeInsets.only(right: 10),
+              child: ImageWidgetBuilder.loadImage(item.imageUrl),
+            ),
             Expanded(child: _right(item)),
           ],
         ),

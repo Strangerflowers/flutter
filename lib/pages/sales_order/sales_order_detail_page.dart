@@ -1,3 +1,5 @@
+import 'package:bid/common/string_utils.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -369,23 +371,25 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-              // alignment: Alignment.topCenter,
-              width: ScreenUtil().setWidth(150),
-              height: ScreenUtil().setHeight(150),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.mainKey == 'null'
-                  ? Image.asset(
-                      'images/default.png',
-                      fit: BoxFit.fill,
-                    )
-                  : Image.network(
-                      '${item.mainKey}',
-                      fit: BoxFit.fill,
-                      // width: ScreenUtil().setWidth(150),
-                      // height: ScreenUtil().setHeight(150),
-                    )
-              // Image.asset('images/icon.png'),
-              ),
+            // alignment: Alignment.topCenter,
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.mainKey, '')),
+            // child: item.mainKey == 'null'
+            //     ? Image.asset(
+            //         'images/default.png',
+            //         fit: BoxFit.fill,
+            //       )
+            //     : Image.network(
+            //         '${item.mainKey}',
+            //         fit: BoxFit.fill,
+            //         // width: ScreenUtil().setWidth(150),
+            //         // height: ScreenUtil().setHeight(150),
+            //       )
+            // Image.asset('images/icon.png'),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -926,20 +930,22 @@ class DeliveryArrangement extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-              // alignment: Alignment.topCenter,
-              // width: ScreenUtil().setWidth(120),
-              // height: ScreenUtil().setHeight(120),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.mainKey == 'null'
-                  ? Image.asset('images/default.png')
-                  : Image.network(
-                      '${item.mainKey}',
-                      fit: BoxFit.cover,
-                      width: ScreenUtil().setWidth(150),
-                      height: ScreenUtil().setHeight(150),
-                    )
-              // Image.asset('images/icon.png'),
-              ),
+            // alignment: Alignment.topCenter,
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.mainKey, '')),
+            // child: item.mainKey == 'null'
+            //     ? Image.asset('images/default.png')
+            //     : Image.network(
+            //         '${item.mainKey}',
+            //         fit: BoxFit.cover,
+            //         width: ScreenUtil().setWidth(150),
+            //         height: ScreenUtil().setHeight(150),
+            //       )
+            // Image.asset('images/icon.png'),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[

@@ -1,4 +1,6 @@
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/sales_order/add_infomation_model.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -607,20 +609,23 @@ class _ProductInformationState extends State<ProductInformation> {
       child: Row(
         children: <Widget>[
           Container(
-              width: ScreenUtil().setWidth(150),
-              height: ScreenUtil().setHeight(150),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.skuKey == 'null' ||
-                      item.skuKey == null ||
-                      item.skuKey == ''
-                  ? Image.asset(
-                      'images/default.png',
-                      fit: BoxFit.fill,
-                    )
-                  : Image.network(
-                      '${item.skuKey}',
-                      fit: BoxFit.fill,
-                    )),
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.skuKey, '')),
+            // child: item.skuKey == 'null' ||
+            //         item.skuKey == null ||
+            //         item.skuKey == ''
+            //     ? Image.asset(
+            //         'images/default.png',
+            //         fit: BoxFit.fill,
+            //       )
+            //     : Image.network(
+            //         '${item.skuKey}',
+            //         fit: BoxFit.fill,
+            //       ),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[

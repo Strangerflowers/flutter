@@ -35,7 +35,7 @@ class ImageWidgetBuilder {
     int cacheWidth,
     int cacheHeight,
   }) {
-    Image defaultImage = Image.asset('images/icon.png');
+    Image defaultImage = Image.asset('images/default.png');
     Image image = Image.network(url,
         key: key,
         scale: scale,

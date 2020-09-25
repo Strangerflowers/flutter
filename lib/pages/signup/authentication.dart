@@ -47,7 +47,7 @@ class _AuthenticationState extends State<Authentication> {
               var data = snapshot.data;
               print('响应数据====>${snapshot.data}');
               if (snapshot.hasData) {
-                return Stack(children: <Widget>[
+                return Column(children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(bottom: 50),
                     child: SingleChildScrollView(

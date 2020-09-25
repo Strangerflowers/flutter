@@ -1,3 +1,5 @@
+import 'package:bid/common/string_utils.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -240,17 +242,19 @@ class ProductInformation extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-              width: ScreenUtil().setWidth(150),
-              height: ScreenUtil().setHeight(150),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.skuKey == null || item.skuKey == 'null'
-                  ? Image.asset('images/default.png')
-                  : Image.network(
-                      '${item.skuKey}',
-                      fit: BoxFit.fill,
-                    )
-              // Image.asset('images/icon.png'),
-              ),
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.skuKey, '')),
+            // child: item.skuKey == null || item.skuKey == 'null'
+            //     ? Image.asset('images/default.png')
+            //     : Image.network(
+            //         '${item.skuKey}',
+            //         fit: BoxFit.fill,
+            //       )
+            // Image.asset('images/icon.png'),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[

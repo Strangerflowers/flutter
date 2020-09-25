@@ -1,5 +1,7 @@
 import 'package:bid/common/inconfont.dart';
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/quotation_model.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -416,19 +418,20 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       child: Row(
         children: <Widget>[
           Container(
-              width: ScreenUtil().setWidth(150),
-              height: ScreenUtil().setHeight(150),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.skuUrl == null ||
-                      item.skuUrl == 'null' ||
-                      item.skuUrl == ''
-                  ? Image.asset('images/default.png')
-                  : Image.network(
-                      '${item.skuUrl}',
-                      fit: BoxFit.fill,
-                    )
-              //  Image.asset('images/icon.png'),
-              ),
+            width: ScreenUtil().setWidth(150),
+            height: ScreenUtil().setHeight(150),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.skuUrl, '')),
+            // child: item.skuUrl == null ||
+            //         item.skuUrl == 'null' ||
+            //         item.skuUrl == ''
+            //     ? Image.asset('images/default.png')
+            //     : Image.network(
+            //         '${item.skuUrl}',
+            //         fit: BoxFit.fill,
+            //       ),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[

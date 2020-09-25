@@ -1,5 +1,7 @@
 import 'package:bid/common/inconfont.dart';
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/sales_order_list_model.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -299,12 +301,14 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             height: ScreenUtil().setHeight(150),
             // width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10, bottom: 10),
-            child: subItem.mainKey == null
-                ? Image.asset('images/default.png')
-                : Image.network(
-                    subItem.mainKey,
-                    fit: BoxFit.fill,
-                  ),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(subItem.mainKey, '')),
+            // child: subItem.mainKey == null
+            //     ? Image.asset('images/default.png')
+            //     : Image.network(
+            //         subItem.mainKey,
+            //         fit: BoxFit.fill,
+            //       ),
           ),
           Expanded(
             child: _right(subItem),

@@ -6,6 +6,7 @@ import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/base/BaseResponseModel.dart';
 import 'package:bid/models/base/DataModel.dart';
 import 'package:bid/models/user_center/CertificationInfoModel.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
@@ -202,13 +203,12 @@ class _CertificationInfoState extends State<CertificationInfo> {
             height: 150,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(16.0),
-            child: dataModel.value == null
-                ? Text('')
-                : Image.network(
-                    dataModel.value,
-                    width: 150,
-                    height: 150,
-                  ),
+            child: ImageWidgetBuilder.loadImage(dataModel.value),
+            // : Image.network(
+            //     dataModel.value,
+            //     width: 150,
+            //     height: 150,
+            //   ),
           ),
         ]),
       );

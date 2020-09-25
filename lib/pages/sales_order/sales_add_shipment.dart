@@ -1,4 +1,6 @@
+import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/sales_add_shipment_model.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -540,21 +542,22 @@ class _ProductInformationState extends State<ProductInformation> {
       child: Row(
         children: <Widget>[
           Container(
-              width: ScreenUtil().setWidth(120),
-              height: ScreenUtil().setHeight(100),
-              padding: EdgeInsets.only(top: 0, right: 10),
-              child: item.skuKey == null ||
-                      item.skuKey == '' ||
-                      item.skuKey == 'null'
-                  ? Image.asset('images/default.png')
-                  : Image.network(
-                      '${item.skuKey}',
-                      fit: BoxFit.cover,
-                      width: ScreenUtil().setWidth(150),
-                      height: ScreenUtil().setHeight(150),
-                    )
-              // Image.asset('images/icon.png'),
-              ),
+            width: ScreenUtil().setWidth(120),
+            height: ScreenUtil().setHeight(100),
+            padding: EdgeInsets.only(top: 0, right: 10),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.skuKey, '')),
+            // child: item.skuKey == null ||
+            //         item.skuKey == '' ||
+            //         item.skuKey == 'null'
+            //     ? Image.asset('images/default.png')
+            //     : Image.network(
+            //         '${item.skuKey}',
+            //         fit: BoxFit.cover,
+            //         width: ScreenUtil().setWidth(150),
+            //         height: ScreenUtil().setHeight(150),
+            //       ),
+          ),
           Expanded(
             child: Column(
               children: <Widget>[
