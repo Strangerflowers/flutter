@@ -425,34 +425,33 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
             Container(
               alignment: Alignment.centerLeft,
               child: TextFormField(
+                inputFormatters: [LengthLimitingTextInputFormatter(200)],
                 decoration: InputDecoration(
-                  errorText: error,
-                ),
+                    // errorText: error,
+                    ),
                 keyboardType: TextInputType.multiline,
-                autovalidate: true,
+                // autovalidate: true,
                 // maxLines: whatever,
                 maxLines: 10,
                 minLines: 1,
                 autofocus: false,
                 onChanged: (value) {
                   if (value.length > 200) {
-                    setState(() {
-                      error = "长度不能超过200个字符";
-                    });
+                    // setState(() {
+                    //   error = "长度不能超过200个字符";
+                    // });
                   } else {
+                    print('value===￥$value');
                     Provide.value<DemandDetailProvide>(context)
                         .remarkFunc(value);
-                    setState(() {
-                      error = null;
-                    });
                   }
                 },
-                validator: (value) {
-                  if (value.length > 200) {
-                    return "长度不能超过200";
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.length > 200) {
+                //     return "长度不能超过200";
+                //   }
+                //   return null;
+                // },
                 // controller: _unameController,
               ),
             )
