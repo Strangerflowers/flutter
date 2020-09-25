@@ -327,7 +327,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    '请求：${actionType[item.action]}',
+                    '请求：${item.action == 'null' ? '' : actionType[item.action]}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                     ),
@@ -337,7 +337,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '状态：${auditStatusType[item.auditStatus]}',
+                      '状态：${item.auditStatus == 'null' || item.auditStatus == null ? '' : auditStatusType[item.auditStatus]}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                       ),
