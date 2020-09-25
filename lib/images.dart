@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/toast.dart';
-import 'package:bid/config/config_reader.dart';
-import 'package:bid/config/environment.dart';
-import 'package:bid/config/service_url_holder.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:dio/dio.dart';
@@ -13,36 +10,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sy_flutter_qiniu_storage/sy_flutter_qiniu_storage.dart';
-
-var businessLicenseIssuedKey = '';
-var url = '';
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await ConfigReader.initialize(Environment.DEV);
-  // 初始化api接口地址定义
-  ServiceUrlHolder.initialize();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: '测试图片组件',
-      theme: new ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('测试图片组件'),
-        ),
-        body: MyImage(businessLicenseIssuedKey, url, (val) {
-          print(val);
-        }),
-      ),
-    );
-  }
-}
 
 class MyImage extends StatefulWidget {
   // 七牛云的key
@@ -83,7 +50,6 @@ class _MyImageState extends State<MyImage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334);
     return Center(
       child: Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -124,32 +90,30 @@ class _MyImageState extends State<MyImage> {
   /// 加载图片
   /// ----------------------
   Widget _loadingImage() {
-    // if (url != '') {
-    //   return Container(
-    //       width: ScreenUtil().setWidth(200),
-    //       height: ScreenUtil().setHeight(200),
-    //       child: ImageWidgetBuilder.loadImage(url,
-    //           context: context,
-    //           width: double.parse('200'),
-    //           height: double.parse('200')));
-    // } else
+    // 用户操作上传动作会初始化_image变量
     if (_image != null) {
       return Column(children: [
+        // 加入隐藏的组件用以判断图片是否上传成功!
         Visibility(
             visible: false,
             child: ImageWidgetBuilder.loadImage(url,
-                context: context, noDefaultErrBuilder: false)),
+                context: context, openToast: true, noDefaultErrBuilder: false)),
+        // UI展示通过访问文件系统的图片资源加快展示.
         Image.file(
           _image,
           width: 200,
           height: 100,
         )
       ]);
-      // return Image.file(
-      //   _image,
-      //   width: 200,
-      //   height: 100,
-      // );
+    } else if (url != '') {
+      // 指定url初始化本组件将以下面的方式加载.
+      return Container(
+          width: ScreenUtil().setWidth(200),
+          height: ScreenUtil().setHeight(200),
+          child: ImageWidgetBuilder.loadImage(url,
+              context: context,
+              width: double.parse('200'),
+              height: double.parse('200')));
     } else if ('0.0' != _uploadProcessPrecent) {
       return Container(
         width: ScreenUtil().setWidth(100),
