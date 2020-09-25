@@ -1,10 +1,13 @@
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
 
 class ImageWidgetBuilder {
   static String TAG = "ImageWidgetBuilder";
   static Widget loadImage(
     url, {
+    BuildContext context,
+    noDefaultErrBuilder = true,
     Key key,
     double scale = 1.0,
     frameBuilder,
@@ -33,10 +36,12 @@ class ImageWidgetBuilder {
         key: key,
         scale: scale,
         frameBuilder: frameBuilder,
-        loadingBuilder: loadingBuilder, errorBuilder:
-            (BuildContext context, Object exception, StackTrace stackTrace) {
-      return defaultImage;
-    },
+        loadingBuilder: loadingBuilder,
+        errorBuilder: noDefaultErrBuilder
+            ? (BuildContext context, Object exception, StackTrace stackTrace) {
+                return defaultImage;
+              }
+            : errorBuilder != null ? errorBuilder : null,
         semanticLabel: semanticLabel,
         excludeFromSemantics: excludeFromSemantics,
         width: width,
@@ -57,6 +62,10 @@ class ImageWidgetBuilder {
     final ImageStream stream = image.image.resolve(ImageConfiguration.empty);
     stream.addListener(ImageStreamListener((_, __) {
       LogUtils.debug(TAG, "=======> 图片加载成功!.", StackTrace.current);
+      Toast.toast(
+        context,
+        msg: '文件上传成功!',
+      );
     }, onError: (dynamic exception, StackTrace stackTrace) {
       LogUtils.debug(
           TAG, '=======> 图片加载失败! enter onError start', StackTrace.current);
@@ -64,6 +73,12 @@ class ImageWidgetBuilder {
       LogUtils.debug(TAG, stackTrace, StackTrace.current);
       LogUtils.debug(
           TAG, '=======> 图片加载失败! enter onError end', StackTrace.current);
+      if (url != '') {
+        Toast.toast(
+          context,
+          msg: '文件上传失败!',
+        );
+      }
     }));
 
     return image;

@@ -153,7 +153,7 @@ Handler withdrawAddressPageHandler = Handler(
 // 修改密码
 Handler modifyPasswordPageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  LogUtils.d('跳转[修改密码]', '接收到参数$params');
+  LogUtils.debug(TAG, '跳转[修改密码]: 接收到参数$params', StackTrace.current);
   //String id = params['id'].first;
   return ModifyPassword();
 });
@@ -219,7 +219,7 @@ Handler addWithdrawAddressPageHandler = Handler(
 // 通过验证码修改密码
 Handler modifyPasswordByCodePageHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  LogUtils.d('跳转[修改密码]]', '接收到参数$params');
+  LogUtils.debug(TAG, '跳转[修改密码]]:接收到参数$params', StackTrace.current);
   //String id = params['id'].first;
   return ModifyPasswordByCode();
 });
