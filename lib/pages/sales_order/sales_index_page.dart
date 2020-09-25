@@ -154,56 +154,69 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
 
   // 商品列表
   Widget _goodsList(result) {
-    try {
-      if (pageNum == 1) {
-        // 如果列表page==1，列表位置放到最顶部
-        scorllController.jumpTo(0.0);
+    if (_itemList != null && _itemList.length > 0) {
+      try {
+        if (pageNum == 1) {
+          // 如果列表page==1，列表位置放到最顶部
+          scorllController.jumpTo(0.0);
+        }
+      } catch (e) {
+        print('进入页面第一次初始化：${e}');
       }
-    } catch (e) {
-      print('进入页面第一次初始化：${e}');
-    }
-    return Container(
-      child: Expanded(
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(height: .0),
+      return Container(
+        child: Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(height: .0),
 
-          itemCount: result.length + 1,
-          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-          // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-          itemBuilder: (contex, index) {
-            //如果到了表尾
-            if (index > (result.length - 1)) {
-              //不足100条，继续获取数据
-              if (pageNum < totalPage) {
-                print('获取更多$pageNum====$totalPage');
-                //获取数据
-                pageNum++;
-                _getSaleasOrderList();
-                //加载时显示loading
-                return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                      width: 24.0,
-                      height: 24.0,
-                      child: CircularProgressIndicator(strokeWidth: 2.0)),
-                );
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    "没有更多了",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                );
+            itemCount: result.length + 1,
+            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+            itemBuilder: (contex, index) {
+              //如果到了表尾
+              if (index > (result.length - 1)) {
+                //不足100条，继续获取数据
+                if (pageNum < totalPage) {
+                  print('获取更多$pageNum====$totalPage');
+                  //获取数据
+                  pageNum++;
+                  _getSaleasOrderList();
+                  //加载时显示loading
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: 24.0,
+                        height: 24.0,
+                        child: CircularProgressIndicator(strokeWidth: 2.0)),
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "没有更多了",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
               }
-            }
-            return _mergeWidget(result[index]);
-          },
+              return _mergeWidget(result[index]);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container(
+        height: MediaQuery.of(context).size.height / 2,
+        child: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation(Colors.blue),
+            value: .7,
+          ),
+        ),
+      );
+    }
   }
 
   // 循环组件整个item（包括公司以及所属产品）

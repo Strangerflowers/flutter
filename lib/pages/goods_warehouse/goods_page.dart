@@ -72,19 +72,25 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('商品库'),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _goodsPage(list),
-            _goodsList(_itemList),
-          ],
+    if (_itemList != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('商品库'),
         ),
-      ),
-    );
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              _goodsPage(list),
+              _goodsList(_itemList),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text('暂无数据'),
+      );
+    }
   }
 
   Widget _goodsPage(list) {
@@ -162,7 +168,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   }
 
   Widget _goodsList(result) {
-    if (result != null) {
+    if (result != null && _itemList.length > 0) {
       try {
         if (pageNum == 1) {
           // 如果列表page==1，列表位置放到最顶部

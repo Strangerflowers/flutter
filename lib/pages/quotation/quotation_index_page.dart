@@ -180,7 +180,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
 
   // 一级
   Widget _recommedList(list) {
-    if (list != null) {
+    if (list != null && list.length > 0) {
       return Container(
         // height: ScreenUtil().setHeight(1000),
         child: Expanded(
@@ -225,8 +225,18 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       );
     } else {
       return Container(
-        child: Text('暂无数据'),
+        height: MediaQuery.of(context).size.height / 2,
+        child: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation(Colors.blue),
+            value: .7,
+          ),
+        ),
       );
+      // return Container(
+      //   child: Text('暂无数据'),
+      // );
     }
   }
 
