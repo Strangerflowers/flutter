@@ -295,9 +295,16 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     var categoryType;
     if (typeList != null) {
       categoryType = typeList.split('/');
-      categoryone = categoryType[0];
-      categorytwo = categoryType[1];
-      categorythree = categoryType[2];
+      if (categoryType.length == 1) {
+        categoryone = categoryType[0];
+      } else if (categoryType.length == 2) {
+        categoryone = categoryType[0];
+        categorytwo = categoryType[1];
+      } else {
+        categoryone = categoryType[0];
+        categorytwo = categoryType[1];
+        categorythree = categoryType[2];
+      }
     } else {
       categoryone = '';
       categorytwo = '';
