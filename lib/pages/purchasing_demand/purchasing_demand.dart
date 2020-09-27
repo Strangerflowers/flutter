@@ -52,16 +52,17 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       }
     };
     await request('listDemand', formData: formData).then((val) {
-      Purchasing goodsList = Purchasing.fromJson(val);
-      totalPage = goodsList.result.totalPage;
+      // Purchasing goodsList = Purchasing.fromJson(val);
+      var goodsList = val;
+      totalPage = goodsList['result']['totalPage'];
 
       if (pageNum == 1) {
         setState(() {
-          _itemList = goodsList.result.list;
+          _itemList = goodsList['result']['list'];
         });
       } else {
         setState(() {
-          _itemList.addAll(goodsList.result.list);
+          _itemList.addAll(goodsList['result']['list']);
         });
       }
     });
@@ -304,7 +305,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
         },
         child: Column(
           children: <Widget>[
-            _title(item.name),
+            _title(item['name']),
             _attributes(item),
             _company(item),
           ],
@@ -336,7 +337,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
 
   // 产品属性合并
   Widget _attributes(item) {
-    var arr = item.categoryMap.values.toList();
+    var arr = item['categoryMap'].values;
     // print('修改bug====${item.categoryMap.toJson().values.toList()}');
     return Container(
       alignment: Alignment.bottomLeft,
@@ -430,7 +431,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
           Expanded(
             child: Container(
               child: Text(
-                '${item.orgName}',
+                '${item['orgName']}',
                 style: TextStyle(
                   color: Color(0xFFA1A0A3),
                 ),
@@ -440,7 +441,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              '${item.announceTimeStr}',
+              '${item['announceTimeStr']}',
               style: TextStyle(
                 color: Color(0xFFA1A0A3),
               ),
@@ -489,15 +490,15 @@ class _DemandContentState extends State<DemandContent> {
       }
     };
     await request('listDemand', formData: formData).then((val) {
-      Purchasing goodsList = Purchasing.fromJson(val);
-      totalPage = goodsList.result.totalPage;
+      var goodsList = val;
+      totalPage = goodsList['result']['totalPage'];
 
       if (pageNum == 1) {
         setState(() {
-          _itemList = goodsList.result.list;
+          _itemList = goodsList['result']['list'];
         });
       } else {
-        _itemList.addAll(goodsList.result.list);
+        _itemList.addAll(goodsList['result']['list']);
       }
     });
   }
@@ -655,7 +656,7 @@ class _DemandContentState extends State<DemandContent> {
 
   // 产品属性合并
   Widget _attributes(item) {
-    var arr = item.categoryMap.values.toList();
+    var arr = item.categoryMap.values;
     // print('修改bug====${item.categoryMap.toJson().values.toList()}');
     return Container(
       alignment: Alignment.bottomLeft,
