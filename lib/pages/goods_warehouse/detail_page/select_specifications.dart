@@ -1,4 +1,5 @@
 import 'package:bid/common/inconfont.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../../../provide/goods_detail_provide.dart';
@@ -15,6 +16,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   List<String> skuldataList = new List();
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   var selectGoodsResult; //存放动态商品数据
+  int spuStock;
 
   List<String> selectedItemsList = List(); //存放选中的规格
   String showSelectItem; //展示最后确定的规格
@@ -26,6 +28,8 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
       if (goodsInfo != null) {
         skuldataList = [];
         skulObjectData = [];
+        print('编辑12345--￥${goodsInfo.spuStock}');
+        spuStock = goodsInfo.spuStock;
         goodsInfo.skuList.forEach((ele) {
           var valueArr = [];
           ele.items.forEach((subele) {
@@ -130,7 +134,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
             alignment: Alignment.centerLeft,
             child: selectGoodsItem == null
                 ? Text(
-                    '库存  999999',
+                    '库存：  ${spuStock}',
                     maxLines: 2,
                   )
                 : Text(
@@ -141,7 +145,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
           Row(
             children: <Widget>[
               Text(
-                '￥${selectGoodsItem == null ? goodsItem.priceRange : selectGoodsItem.price}',
+                '￥${selectGoodsItem == null ? goodsItem.priceRange == 'null' ? '' : goodsItem.priceRange : MoneyUtil.changeYWithUnit((selectGoodsItem.price / 100).toString(), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
             ],

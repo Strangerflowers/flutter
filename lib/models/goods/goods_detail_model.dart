@@ -48,6 +48,7 @@ class GoodsDetailResult {
   String remark;
   int status;
   int auditStatus;
+  int spuStock;
   int scaleLeft;
   int scaleRight;
   String createTime;
@@ -76,6 +77,7 @@ class GoodsDetailResult {
       this.remark,
       this.status,
       this.auditStatus,
+      this.spuStock,
       this.scaleLeft,
       this.scaleRight,
       this.createTime,
@@ -104,6 +106,7 @@ class GoodsDetailResult {
     remark = json['remark'];
     status = json['status'];
     auditStatus = json['auditStatus'];
+    spuStock = json['spuStock'];
     scaleLeft = json['scaleLeft'];
     scaleRight = json['scaleRight'];
     createTime = json['createTime'];
@@ -139,6 +142,7 @@ class GoodsDetailResult {
     data['remark'] = this.remark;
     data['status'] = this.status;
     data['auditStatus'] = this.auditStatus;
+    data['spuStock'] = this.spuStock;
     data['scaleLeft'] = this.scaleLeft;
     data['scaleRight'] = this.scaleRight;
     data['createTime'] = this.createTime;

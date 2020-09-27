@@ -1,5 +1,6 @@
 import 'package:bid/common/string_utils.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -293,7 +294,6 @@ class ProductInformation extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          // _productTitle(item),
           _goodsItem(item),
           _sumPrice(item),
         ],
@@ -434,6 +434,17 @@ class ProductInformation extends StatelessWidget {
                   padding: EdgeInsets.only(top: 3, bottom: 3),
                   child: Text(
                     '数量：${item.number} ${item.unit}',
+                    style: TextStyle(
+                      color: Color(0xFFCCCCCC),
+                      fontSize: ScreenUtil().setSp(30),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 3, bottom: 3),
+                  child: Text(
+                    '价格：${MoneyUtil.changeYWithUnit((item.price / 100).toString(), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)} 元/${item.unit}',
                     style: TextStyle(
                       color: Color(0xFFCCCCCC),
                       fontSize: ScreenUtil().setSp(30),
