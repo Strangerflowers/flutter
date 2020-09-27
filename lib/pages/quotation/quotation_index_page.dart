@@ -123,14 +123,17 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
     //         : false);
     return InkWell(
       onTap: () {
-        setState(() {
-          currentTabs = index;
-          preTabs = currentTabs;
-          pageNum = 1;
-        });
-        // Provide.value<QuotationGoodsListProvide>(context)
-        //     .changeChildIndex(index);
-        _getQuotationList();
+        // setState(() {
+        preTabs = currentTabs;
+        currentTabs = index;
+
+        pageNum = 1;
+        // });
+        if (preTabs != currentTabs) {
+          setState(() {});
+          _getQuotationList();
+        }
+
         // _getGoodsList(item.mallSubId);
         // setState(() {
         //   listIndex = index;

@@ -124,13 +124,18 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
     return Container(
       child: InkWell(
         onTap: () {
-          setState(() {
-            currentTabs = index;
-            preTabs = currentTabs;
-            pageNum = 1;
-          });
+          // setState(() {
+          preTabs = currentTabs;
+          currentTabs = index;
+
+          pageNum = 1;
+          // });
           // scorllController.jumpTo(0.0);
-          _getGoodsList();
+          if (preTabs != currentTabs) {
+            setState(() {});
+            print('查看是否执行该程序$preTabs----$currentTabs');
+            _getGoodsList();
+          }
         },
         child: Container(
           // flex: 1,

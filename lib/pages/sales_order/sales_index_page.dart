@@ -113,12 +113,16 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
     isClick = (index == currentTabs ? true : false);
     return InkWell(
       onTap: () {
-        setState(() {
-          pageNum = 1;
-          // statuss = Provide.value<SalesOrderListProvide>(context).status;
-          currentTabs = index;
-        });
-        _getSaleasOrderList();
+        // setState(() {
+        preTabs = currentTabs;
+        pageNum = 1;
+        // statuss = Provide.value<SalesOrderListProvide>(context).status;
+        currentTabs = index;
+        // });
+        if (preTabs != currentTabs) {
+          setState(() {});
+          _getSaleasOrderList();
+        }
       },
       child: Container(
         child: Container(
