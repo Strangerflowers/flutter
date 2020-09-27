@@ -9,6 +9,7 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' as My;
 
 class AddContactInfo extends StatefulWidget {
   @override
@@ -67,12 +68,12 @@ class _AddContactInfo extends State<AddContactInfo> {
           //垂直布局
           child: Column(
             children: [
-              _wrapExpanded(_buildContactPeopleRow()),
-              _wrapExpanded(_buildMobileRow()),
-              _wrapExpanded(_buildAreaRow()),
-              _wrapExpanded(_buildAddrressDetailRow()),
-              _wrapExpanded(_buildEmailRow()),
-              _wrapExpanded(_buildFaxRow()),
+              _buildContactPeopleRow(),
+              _buildMobileRow(),
+              _buildAreaRow(),
+              _buildAddrressDetailRow(),
+              _buildEmailRow(),
+              _buildFaxRow(),
               Container(
                 height: 40,
                 width: double.infinity,
@@ -127,261 +128,253 @@ class _AddContactInfo extends State<AddContactInfo> {
       //设置上下左右的margin
       margin: EdgeInsets.all(10),
       //账号输入框
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '联系人',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: TextFormField(
-                //合法检测回调
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '联系人不能为空';
-                  }
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.contactName = value.trim();
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+      child: Expanded(
+        child: TextFormField(
+          controller:
+              new TextEditingController(text: contactInfoModel.contactName),
+          //合法检测回调
+          validator: (value) {
+            if (value.isEmpty) {
+              return '联系人不能为空';
+            }
+            return null;
+          },
+          //表单数据保存
+          onSaved: (value) {
+            contactInfoModel.contactName = value;
+          },
+          decoration: InputDecoration(
+            prefixIcon: Container(
+              width: My.ScreenUtil().setWidth(160.0),
+              child: Center(
+                child: RichText(
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    text: '*',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: '联系人',
+                        style: TextStyle(
+                          fontSize: My.ScreenUtil().setSp(32),
+                          decoration: TextDecoration.none,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+            border: InputBorder.none,
+            hintText: '请输入',
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildMobileRow() {
-    return Container(
+    return
+        //设置上下左右的margin
+        Container(
+      padding: EdgeInsets.all(10),
+      // height: 30.0,
       decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
-      //设置上下左右的margin
-      margin: EdgeInsets.all(10),
-      //账号输入框
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
+          //border: new Border.all(color: Colors.red),
           ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '电话',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: TextFormField(
-                //合法检测回调
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '电话不能为空!';
-                  }
-                  if (!RegexUtil.isMobileSimple(value.trim())) {
-                    return '电话格式不合法!';
-                  }
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.mobile = value.trim();
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+      child: TextFormField(
+        //合法检测回调
+        validator: (value) {
+          if (value.isEmpty) {
+            return '电话不能为空!';
+          }
+          if (!RegexUtil.isMobileSimple(value.trim())) {
+            return '电话格式不合法!';
+          }
+          return null;
+        },
+        //表单数据保存
+        onSaved: (value) {
+          contactInfoModel.mobile = value.trim();
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Container(
+            width: My.ScreenUtil().setWidth(160.0),
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                  text: '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '电话',
+                      style: TextStyle(
+                        fontSize: My.ScreenUtil().setSp(32),
+                        decoration: TextDecoration.none,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ],
+          hintText: '请输入',
+        ),
       ),
     );
   }
 
   Widget _buildAddrressDetailRow() {
     return Container(
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
-      //设置上下左右的margin
-      margin: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '详细地址',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: TextFormField(
-                maxLines: 3,
-                //合法检测回调
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '详细地址不能为空';
-                  }
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.address = value.trim();
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+      padding: EdgeInsets.all(10),
+      //decoration: BoxDecoration(),
+      child: TextFormField(
+        maxLines: 1,
+        //合法检测回调
+        validator: (value) {
+          if (value.isEmpty) {
+            return '详细地址不能为空';
+          }
+          return null;
+        },
+        //表单数据保存
+        onSaved: (value) {
+          contactInfoModel.address = value.trim();
+        },
+        decoration: InputDecoration(
+          prefixIcon: Container(
+            width: My.ScreenUtil().setWidth(160.0),
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                  text: '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '详细地址',
+                      style: TextStyle(
+                        fontSize: My.ScreenUtil().setSp(32),
+                        decoration: TextDecoration.none,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+                  ],
                 ),
-                /*  onChanged: (value) {
-                                int len = value.toString().length;
-                                if (len > 11) {
-                                  setState(() {
-                                    maxline = 3;
-                                  });
-                                } else {
-                                  setState(() {
-                                    maxline = 1;
-                                  });
-                                }
-                              }, */
               ),
             ),
           ),
-        ],
+          hintText: '请输入详细地址',
+        ),
       ),
     );
   }
 
   Widget _buildEmailRow() {
     return Container(
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
-      //设置上下左右的margin
       margin: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '邮箱',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: TextFormField(
-                //合法检测回调
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '邮箱不能为空';
-                  }
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.email = value.trim();
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+      child: TextFormField(
+        //合法检测回调
+        validator: (value) {
+          if (value.isEmpty) {
+            return '邮箱不能为空';
+          }
+          return null;
+        },
+        //表单数据保存
+        onSaved: (value) {
+          contactInfoModel.email = value.trim();
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Container(
+            width: My.ScreenUtil().setWidth(160.0),
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                  text: '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '邮箱',
+                      style: TextStyle(
+                        fontSize: My.ScreenUtil().setSp(32),
+                        decoration: TextDecoration.none,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ],
+          hintText: '请输入邮箱',
+        ),
+        maxLines: 1, //最大行数
+        autocorrect: true, //是否自动更正
+        autofocus: false, //是否自动对焦
+        // autovalidate: autoValidate,
+        textAlign: TextAlign.left, //文本对齐方式
+        style: TextStyle(
+            // fontSize: 20.0,
+            ),
       ),
     );
   }
 
   Widget _buildFaxRow() {
     return Container(
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
-      //设置上下左右的margin
       margin: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '传真',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: TextFormField(
-                //合法检测回调
-                validator: (value) {
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.fax = value;
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+      child: TextFormField(
+        //合法检测回调
+        validator: (value) {
+          return null;
+        },
+        //表单数据保存
+        onSaved: (value) {
+          contactInfoModel.fax = value;
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Container(
+            width: My.ScreenUtil().setWidth(160.0),
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                  text: '传真',
+                  style: TextStyle(
+                    fontSize: My.ScreenUtil().setSp(32),
+                    decoration: TextDecoration.none,
+                    color: Color(0xFF222222),
+                  ),
                 ),
               ),
             ),
           ),
-        ],
+          hintText: '请输入',
+        ),
+        maxLines: 1, //最大行数
+        autocorrect: true, //是否自动更正
+        autofocus: false, //是否自动对焦
+        // autovalidate: autoValidate,
+        textAlign: TextAlign.left, //文本对齐方式
+        style: TextStyle(
+            // fontSize: 20.0,
+            ),
       ),
     );
   }
@@ -463,12 +456,6 @@ class _AddContactInfo extends State<AddContactInfo> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _wrapExpanded(Widget toWrap) {
-    return Expanded(
-      child: toWrap,
     );
   }
 

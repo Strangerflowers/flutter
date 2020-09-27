@@ -9,6 +9,7 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' as My;
 
 class EditContactInfo extends StatefulWidget {
   String id;
@@ -136,12 +137,12 @@ class _EditContactInfo extends State<EditContactInfo> {
         //垂直布局
         child: Column(
           children: [
-            _wrapExpanded(_buildContactPeopleRow()),
-            _wrapExpanded(_buildMobileRow()),
-            _wrapExpanded(_buildAreaRow()),
-            _wrapExpanded(_buildAddrressDetailRow()),
-            _wrapExpanded(_buildEmailRow()),
-            _wrapExpanded(_buildFaxRow()),
+            _buildContactPeopleRow(),
+            _buildMobileRow(),
+            _buildAreaRow(),
+            _buildAddrressDetailRow(),
+            _buildEmailRow(),
+            _buildFaxRow(),
             Container(
               height: 40,
               width: double.infinity,
@@ -169,9 +170,7 @@ class _EditContactInfo extends State<EditContactInfo> {
     );
   }
 
-  /**
-                 * 构建导航栏
-                 */
+  /// 构建导航栏
   Widget _buildAppBar() {
     return AppBar(
       iconTheme: IconThemeData.fallback(),
@@ -197,43 +196,46 @@ class _EditContactInfo extends State<EditContactInfo> {
       //账号输入框
       child: Row(
         children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '联系人',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
           Expanded(
-            child: Container(
-              child: TextFormField(
-                controller: new TextEditingController(
-                    text: contactInfoModel.contactName),
-                //合法检测回调
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '联系人不能为空';
-                  }
-                  return null;
-                },
-                //表单数据保存
-                onSaved: (value) {
-                  contactInfoModel.contactName = value;
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入',
+            child: TextFormField(
+              controller:
+                  new TextEditingController(text: contactInfoModel.contactName),
+              //合法检测回调
+              validator: (value) {
+                if (value.isEmpty) {
+                  return '联系人不能为空';
+                }
+                return null;
+              },
+              //表单数据保存
+              onSaved: (value) {
+                contactInfoModel.contactName = value;
+              },
+              decoration: InputDecoration(
+                prefixIcon: Container(
+                  width: My.ScreenUtil().setWidth(160.0),
+                  child: Center(
+                    child: RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                        text: '*',
+                        style: TextStyle(),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '联系人',
+                            style: TextStyle(
+                              fontSize: My.ScreenUtil().setSp(32),
+                              decoration: TextDecoration.none,
+                              color: Color(0xFF222222),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
+                border: InputBorder.none,
+                hintText: '请输入',
               ),
             ),
           ),
