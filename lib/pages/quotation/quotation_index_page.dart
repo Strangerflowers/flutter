@@ -221,14 +221,20 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                         child: CircularProgressIndicator(strokeWidth: 2.0)),
                   );
                 } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "没有更多了",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
+                  if (list.length == 0) {
+                    return Center(
+                      child: Text('暂无数据'),
+                    );
+                  } else {
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "没有更多了",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
                 }
               }
 

@@ -99,7 +99,8 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
       return Container(
         // padding: EdgeInsets.only(left: 20, right: 20),
         child: SizedBox(
-          child: ListView.builder(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(height: .0),
             itemCount: list.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: AlwaysScrollableScrollPhysics(),
@@ -122,14 +123,20 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
                         child: CircularProgressIndicator(strokeWidth: 2.0)),
                   );
                 } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "没有更多了",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
+                  if (list.length == 0) {
+                    return Center(
+                      child: Text('暂无数据'),
+                    );
+                  } else {
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "没有更多了",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
                 }
               }
               // return _mergeWidget(result[index]);

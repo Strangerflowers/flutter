@@ -15,7 +15,7 @@ class DetailsSelectArea extends StatefulWidget {
 }
 
 class _DetailsSelectAreaState extends State<DetailsSelectArea> {
-  List<String> skuldataList = new List();
+  List<Map> skuldataList;
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   var selectGoodsResult; //存放动态商品数据
   int spuStock;
@@ -47,8 +47,12 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
             "price": ele.price,
           };
           skulObjectData.add(obj);
-          skuldataList.add(valueArr.join(',').replaceAll(",", "-"));
 
+          var itemObj = {
+            "skul": valueArr.join(',').replaceAll(",", "-"),
+            "status": ele.status
+          };
+          skuldataList.add(itemObj);
           return;
         });
 
@@ -314,7 +318,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
 
 // 单独写一个管理状态的组件
 class MultiSelectChip extends StatefulWidget {
-  final List<String> reportList;
+  final List<Map> reportList;
   String selectItem;
   final Function(List<String>) onSelectionChanged;
 
@@ -344,16 +348,23 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
-          label: Text(item),
-          selected: selectedChoices.contains(item),
+          label: item['status'] == 0
+              ? Text(item['skul'], style: TextStyle(color: Color(0XFFCCCCCC)))
+              : Text(item['skul']),
+          backgroundColor:
+              item['status'] == 0 ? Color(0XFFEEEEEE) : Color(0XFFCCCCCC),
+          selected: selectedChoices.contains(item['skul']),
           onSelected: (selected) {
             selectedChoices = [];
+            if (item['status'] == 0) {
+              return;
+            }
             setState(() {
               if (selectedChoices.contains(item)) {
                 selectedChoices.remove(item);
               } else {
                 selectedChoices = [];
-                selectedChoices.add(item);
+                selectedChoices.add(item['skul']);
               }
               print('object$selectedChoices');
               widget.onSelectionChanged(selectedChoices);
