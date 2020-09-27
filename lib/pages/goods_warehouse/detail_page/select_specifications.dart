@@ -1,4 +1,6 @@
 import 'package:bid/common/inconfont.dart';
+import 'package:bid/common/string_utils.dart';
+import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
@@ -17,6 +19,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
   List skulObjectData = new List(); //在该数组存放规格对应商品信息；
   var selectGoodsResult; //存放动态商品数据
   int spuStock;
+  String imageUrl;
 
   List<String> selectedItemsList = List(); //存放选中的规格
   String showSelectItem; //展示最后确定的规格
@@ -30,6 +33,7 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
         skulObjectData = [];
         print('编辑12345--￥${goodsInfo.spuStock}');
         spuStock = goodsInfo.spuStock;
+        imageUrl = goodsInfo.imageUrl;
         goodsInfo.skuList.forEach((ele) {
           var valueArr = [];
           ele.items.forEach((subele) {
@@ -77,14 +81,16 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
           Container(
             width: ScreenUtil().setWidth(120),
             padding: EdgeInsets.only(top: 0, right: 10, left: 10),
-            child: selectGoodsItem == null
-                ? Image.asset('images/icon.png')
-                : (selectGoodsItem.image == null
-                    ? Text(
-                        '暂无图片',
-                        style: TextStyle(fontSize: ScreenUtil().setSp(20)),
-                      )
-                    : Image.network(selectGoodsItem.image)),
+            child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(imageUrl, '')),
+            // child: selectGoodsItem == null
+            //     ? Image.asset('images/icon.png')
+            //     : (selectGoodsItem.image == null
+            //         ? Text(
+            //             '暂无图片',
+            //             style: TextStyle(fontSize: ScreenUtil().setSp(20)),
+            //           )
+            //         : Image.network(selectGoodsItem.imageUrl)),
           ),
           Expanded(
             child: _right(selectGoodsItem, goodsItem),

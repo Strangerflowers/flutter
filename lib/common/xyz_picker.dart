@@ -95,6 +95,7 @@ class AddressPickerState extends State<AddressPicker>
         "id": widget.supplierType ?? '',
         "name": widget.district ?? ''
       };
+      setState(() {});
       _provinceList = widget.provinceList ?? [];
       _cityList = widget.cityList ?? [];
       _districtList = widget.districtList ?? [];
