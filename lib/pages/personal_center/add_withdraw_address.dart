@@ -16,17 +16,23 @@ class AddWithdrawAddress extends StatefulWidget {
 class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
   final addressFormKey = GlobalKey<FormState>();
   bool autoValidate = false;
-  String areaCode, companyAddressName;
+  // String areaCode, companyAddressName;
   bool check = false;
   String addressErroeText = '';
-  var params = {
-    'receiverName': '',
-    'mobile': '',
-    'address': '',
-    'defaultAddress': 1,
-    'areaCode': '',
-    'companyAddressName': ''
-  };
+  String receiverName,
+      mobile,
+      address,
+      defaultAddress,
+      areaCode,
+      companyAddressName;
+  // var params = {
+  //   'receiverName': '',
+  //   'mobile': '',
+  //   'address': '',
+  //   'defaultAddress': 1,
+  //   'areaCode': '',
+  //   'companyAddressName': ''
+  // };
 
   @override
   Widget build(BuildContext context) {
@@ -73,157 +79,345 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
   }
 
   Widget _buildModifyPwdTextForm() {
-    final _labels = new List<Object>();
-    _labels.add({"label": "收件人:", "value": 'receiverName'});
-    _labels.add({"label": "手机号码:", "value": 'mobile'});
-    // _labels.add("所在地区:");
-    _labels.add({"label": "详细地址:", "value": 'address'});
-    List<Widget> list = [];
-    for (Map label in _labels) {
-      list.add(_buildRow(label));
-    }
-    list.insert(2, _selectAddress("所在地区:"));
-    // list.insert(4, _checkBox());
-    // 确认按钮
-    list.add(_buildSubmitBtn());
     return Form(
       key: addressFormKey,
       child: ListView(
-        children: list,
-      ),
-    );
-  }
-
-  Widget _buildRow(item) {
-    return new Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        // border: Border(
-        //   bottom: BorderSide(
-        //     width: 1,
-        //     color: Color(0xffe5e5e5),
-        //   ),
-        // ),
-      ),
-      child: new Row(
-        children: [
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(15),
-              // height: 30.0,
-              decoration: BoxDecoration(
-                  //border: new Border.all(color: Colors.red),
-                  ),
-              // child: new Expanded(
-              child: TextFormField(
-                controller: TextEditingController.fromValue(
-                  TextEditingValue(
-                    text:
-                        '${params[item['value']] == null ? "" : params[item['value']]}',
-                  ),
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: TextFormField(
+              controller: TextEditingController.fromValue(
+                TextEditingValue(
+                  text: '${receiverName == null ? "" : receiverName}',
                 ),
-                decoration: InputDecoration(
-                  prefixIcon: Container(
-                    width: ScreenUtil().setWidth(140.0),
-                    // padding: EdgeInsets.only(right: 20),
-                    child: Center(
-                      child: RichText(
-                        textAlign: TextAlign.left,
-                        text: TextSpan(
-                          text: '*',
-                          style:
-                              TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '${item['label']}',
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                color: Color(0xFF888888),
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                //fontFamily: defaultFontFamily,
-                              ),
+              ),
+              decoration: InputDecoration(
+                hintText: '请输入收件人',
+                prefixIcon: Container(
+                  width: ScreenUtil().setWidth(140.0),
+                  child: Center(
+                    child: RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                        text: '*',
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '收件人',
+                            style: TextStyle(
+                              decoration: TextDecoration.none,
+                              color: Color(0xFF333333),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  // border: InputBorder.none,
                 ),
-                //controller: controller,
-                //maxLength: 30, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
-                maxLines: null, //最大行数
-                autocorrect: true, //是否自动更正
-                autofocus: false, //是否自动对焦
-                autovalidate: autoValidate,
-                obscureText: false, //是否是密码
-                textAlign: TextAlign.left, //文本对齐方式
-                style: TextStyle(
-                  fontSize: 20.0,
-                ), //输入文本的样式
-                //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
-                onChanged: (value) {},
-                onSaved: (val) {
-                  var key = item['value'];
-                  setState(() {
-                    params[key] = val;
-                  });
-                },
-                validator: (value) {
-                  if (item['value'] == 'mobile') {
-                    // 正则匹配手机号
-                    RegExp exp = RegExp(
-                        r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
-                    if (value.isEmpty) {
-                      print('手机校验为空');
-                      return '手机号码不能为空';
-                    } else {
-                      if (!exp.hasMatch(value)) {
-                        print('手机校验规则不对');
-                        return '请输入正确的账号';
-                      } else {
-                        return null;
-                      }
-                    }
+                // border: InputBorder.none,
+              ),
+              maxLines: null, //最大行数
+              autocorrect: true, //是否自动更正
+              autofocus: false, //是否自动对焦
+              autovalidate: autoValidate,
+              obscureText: false, //是否是密码
+              textAlign: TextAlign.left, //文本对齐方式
+
+              onChanged: (value) {},
+              onSaved: (val) {
+                receiverName = val;
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return '收件人不能为空';
+                } else if (value.length > 20) {
+                  return '长度不能超过20个字符';
+                } else {
+                  return null;
+                }
+              },
+              enabled: true, //是否禁用
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(15),
+            // height: 30.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+
+            child: TextFormField(
+              controller: TextEditingController.fromValue(
+                TextEditingValue(
+                  text: '${mobile == null ? "" : mobile}',
+                ),
+              ),
+              decoration: InputDecoration(
+                hintText: '请输入手机号码',
+                prefixIcon: Container(
+                  width: ScreenUtil().setWidth(140.0),
+                  // padding: EdgeInsets.only(right: 20),
+                  child: Center(
+                    child: RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                        text: '*',
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '手机号码',
+                            style: TextStyle(
+                              decoration: TextDecoration.none,
+                              color: Color(0xFF333333),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // border: InputBorder.none,
+              ),
+              maxLines: null, //最大行数
+              autocorrect: true, //是否自动更正
+              autofocus: false, //是否自动对焦
+              autovalidate: autoValidate,
+              obscureText: false, //是否是密码
+              textAlign: TextAlign.left, //文本对齐方式
+              onChanged: (value) {},
+              onSaved: (val) {
+                mobile = val;
+              },
+              validator: (value) {
+                RegExp exp = RegExp(
+                    r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
+                if (value.isEmpty) {
+                  return '手机号码不能为空';
+                } else {
+                  if (!exp.hasMatch(value)) {
+                    return '请输入正确的手机号码';
                   } else {
-                    if (value.isEmpty) {
-                      return "不能为空";
-                    }
                     return null;
                   }
-                },
-                enabled: true, //是否禁用
-              ),
+                }
+              },
+              enabled: true, //是否禁用
             ),
-            // ),
           ),
+          _selectAddress('所属地区'),
+          Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            // child: new Expanded(
+            child: TextFormField(
+              controller: TextEditingController.fromValue(
+                TextEditingValue(
+                  text: '${address == null ? "" : address}',
+                ),
+              ),
+              decoration: InputDecoration(
+                hintText: '请输入详细地址',
+                prefixIcon: Container(
+                  width: ScreenUtil().setWidth(140.0),
+                  // padding: EdgeInsets.only(right: 20),
+                  child: Center(
+                    child: RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                        text: '*',
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '详细地址',
+                            style: TextStyle(
+                              decoration: TextDecoration.none,
+                              color: Color(0xFF333333),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // border: InputBorder.none,
+              ),
+              maxLines: null, //最大行数
+              autocorrect: true, //是否自动更正
+              autofocus: false, //是否自动对焦
+              autovalidate: autoValidate,
+              obscureText: false, //是否是密码
+              onChanged: (value) {},
+              onSaved: (val) {
+                address = val;
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return '详细地址不能为空';
+                } else {
+                  if (value.length > 50) {
+                    return '长度不能超过50个字符';
+                  } else {
+                    return null;
+                  }
+                }
+              },
+              enabled: true, //是否禁用
+            ),
+          ),
+          _buildSubmitBtn()
         ],
       ),
     );
   }
 
+  // Widget _buildRow(item) {
+  //   return new Container(
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       // border: Border(
+  //       //   bottom: BorderSide(
+  //       //     width: 1,
+  //       //     color: Color(0xffe5e5e5),
+  //       //   ),
+  //       // ),
+  //     ),
+  //     child: new Row(
+  //       children: [
+  //         new Expanded(
+  //           child: new Container(
+  //             padding: EdgeInsets.all(15),
+  //             // height: 30.0,
+  //             decoration: BoxDecoration(
+  //                 //border: new Border.all(color: Colors.red),
+  //                 ),
+  //             // child: new Expanded(
+  //             child: TextFormField(
+  //               controller: TextEditingController.fromValue(
+  //                 TextEditingValue(
+  //                   text:
+  //                       '${params[item['value']] == null ? "" : params[item['value']]}',
+  //                 ),
+  //               ),
+  //               decoration: InputDecoration(
+  //                 prefixIcon: Container(
+  //                   width: ScreenUtil().setWidth(140.0),
+  //                   // padding: EdgeInsets.only(right: 20),
+  //                   child: Center(
+  //                     child: RichText(
+  //                       textAlign: TextAlign.left,
+  //                       text: TextSpan(
+  //                         text: '*',
+  //                         style:
+  //                             TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+  //                         children: <TextSpan>[
+  //                           TextSpan(
+  //                             text: '${item['label']}',
+  //                             style: TextStyle(
+  //                               decoration: TextDecoration.none,
+  //                               color: Color(0xFF888888),
+  //                               fontSize: 14,
+  //                               fontWeight: FontWeight.bold,
+  //                               //fontFamily: defaultFontFamily,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 // border: InputBorder.none,
+  //               ),
+  //               //controller: controller,
+  //               //maxLength: 30, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
+  //               maxLines: null, //最大行数
+  //               autocorrect: true, //是否自动更正
+  //               autofocus: false, //是否自动对焦
+  //               autovalidate: autoValidate,
+  //               obscureText: false, //是否是密码
+  //               textAlign: TextAlign.left, //文本对齐方式
+  //               style: TextStyle(
+  //                 fontSize: 20.0,
+  //               ), //输入文本的样式
+  //               //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
+  //               onChanged: (value) {},
+  //               onSaved: (val) {
+  //                 var key = item['value'];
+  //                 setState(() {
+  //                   params[key] = val;
+  //                 });
+  //               },
+  //               validator: (value) {
+  //                 if (item['value'] == 'mobile') {
+  //                   // 正则匹配手机号
+  //                   RegExp exp = RegExp(
+  //                       r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
+  //                   if (value.isEmpty) {
+  //                     print('手机校验为空');
+  //                     return '手机号码不能为空';
+  //                   } else {
+  //                     if (!exp.hasMatch(value)) {
+  //                       print('手机校验规则不对');
+  //                       return '请输入正确的账号';
+  //                     } else {
+  //                       return null;
+  //                     }
+  //                   }
+  //                 } else {
+  //                   if (value.isEmpty) {
+  //                     return "不能为空";
+  //                   }
+  //                   return null;
+  //                 }
+  //               },
+  //               enabled: true, //是否禁用
+  //             ),
+  //           ),
+  //           // ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   // 下拉选择所在地区
   Widget _selectAddress(label) {
     return new Container(
       decoration: BoxDecoration(
+          color: Colors.white,
           border:
               Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
       child: Column(
         children: <Widget>[
           new Row(
             children: [
-              new Container(
-                color: Colors.white,
-                padding: EdgeInsets.all(15),
-                child: new Text(
-                  label,
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Color(0xFF888888),
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    //fontFamily: defaultFontFamily,
+              Container(
+                // padding: EdgeInsets.only(left: 20),
+                width: ScreenUtil().setWidth(160),
+                child: RichText(
+                  textAlign: TextAlign.right,
+                  text: TextSpan(
+                    text: '*',
+                    style: TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: label,
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Color(0xFF333333),
+                          // fontSize: 14,
+                          // fontWeight: FontWeight.bold,
+                          //fontFamily: defaultFontFamily,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -244,8 +438,13 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                       ),
                       child: ListTile(
                         title: Text(
-                          companyAddressName == null ? '' : companyAddressName,
-                          style: TextStyle(color: Colors.black),
+                          companyAddressName == null
+                              ? '请选择'
+                              : companyAddressName,
+                          style: TextStyle(
+                              color: companyAddressName == null
+                                  ? Color(0xFF999999)
+                                  : Colors.black),
                         ),
                         trailing: Icon(
                           Icons.keyboard_arrow_right,
@@ -290,26 +489,26 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
     return content;
   }
 
-  Widget _checkBox() {
-    return Row(
-      children: <Widget>[
-        new Checkbox(
-          value: this.check,
-          activeColor: Colors.blue,
-          onChanged: (bool val) {
-            // val 是布尔值
-            this.setState(() {
-              this.check = !this.check;
-              params['defaultAddress'] = val == true ? 1 : 0;
-            });
-          },
-        ),
-        Container(
-          child: Text('设为默认地址'),
-        ),
-      ],
-    );
-  }
+  // Widget _checkBox() {
+  //   return Row(
+  //     children: <Widget>[
+  //       new Checkbox(
+  //         value: this.check,
+  //         activeColor: Colors.blue,
+  //         onChanged: (bool val) {
+  //           // val 是布尔值
+  //           this.setState(() {
+  //             this.check = !this.check;
+  //             params['defaultAddress'] = val == true ? 1 : 0;
+  //           });
+  //         },
+  //       ),
+  //       Container(
+  //         child: Text('设为默认地址'),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildSubmitBtn() {
     return Container(
@@ -344,10 +543,10 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                 }
                 print('校验不通过时是否执行');
                 var formData = {
-                  "receiverName": params['receiverName'],
-                  "mobile": params['mobile'],
+                  "receiverName": receiverName,
+                  "mobile": mobile,
                   "areaCode": areaCode,
-                  "address": params['address'],
+                  "address": address,
                   "defaultAddress": 1
                 };
                 LogUtils.d('[确认修改按钮]', formData);

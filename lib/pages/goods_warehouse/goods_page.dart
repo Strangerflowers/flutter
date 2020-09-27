@@ -455,7 +455,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
       print('上下架状态$val');
       if (val['code'] == 0) {
         Fluttertoast.showToast(
-          msg: val['message'],
+          msg: '操作成功!',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
