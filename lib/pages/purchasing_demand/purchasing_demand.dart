@@ -223,7 +223,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   }
 
   Widget _goodsList() {
-    if (_itemList != null) {
+    if (_itemList != null && _itemList.length >= 0) {
       return Container(
         child: _demandListView(_itemList),
       );

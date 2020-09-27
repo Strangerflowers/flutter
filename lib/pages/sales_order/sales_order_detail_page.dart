@@ -734,9 +734,9 @@ class DeliveryArrangement extends StatelessWidget {
     } else {
       return InkWell(
         onTap: () {
-          // 跳转到详情页面
           if (item.status == 0) {
-            Application.router.navigateTo(context, "/add?id=${item.id}");
+            Application.router
+                .navigateTo(context, "/add?id=${item.id}&detailId=$goodsId");
             print('跳转到更新发货信息');
           }
         },

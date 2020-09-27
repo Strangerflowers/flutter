@@ -47,7 +47,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
   void _getQuotationList() async {
     if (pageNum == 1) {
       setState(() {
-        _itemList = [];
+        _itemList = null;
       });
     }
     var data = {
@@ -193,7 +193,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
 
   // 一级
   Widget _recommedList(list) {
-    if (list != null && list.length > 0) {
+    if (list != null && list.length >= 0) {
       return Container(
         // height: ScreenUtil().setHeight(1000),
         child: Expanded(

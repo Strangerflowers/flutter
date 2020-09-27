@@ -44,7 +44,7 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
   void _getSaleasOrderList() async {
     if (pageNum == 1) {
       setState(() {
-        _itemList = [];
+        _itemList = null;
       });
     }
     var data = {
@@ -168,7 +168,7 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
 
   // 商品列表
   Widget _goodsList(result) {
-    if (_itemList != null && _itemList.length > 0) {
+    if (_itemList != null && _itemList.length >= 0) {
       try {
         if (pageNum == 1) {
           // 如果列表page==1，列表位置放到最顶部

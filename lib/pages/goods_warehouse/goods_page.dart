@@ -44,9 +44,8 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   void _getGoodsList() async {
     if (pageNum == 1) {
       setState(() {
-        _itemList = [];
+        _itemList = null;
       });
-      print('获取长度￥${_itemList.length}');
     }
     var formData = {
       'pageNum': pageNum,
@@ -79,28 +78,28 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_itemList != null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('商品库'),
-        ),
-        body: RefreshIndicator(
-          onRefresh: _handleRefresh,
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                _goodsPage(list),
-                _goodsList(_itemList),
-              ],
-            ),
+    // if (_itemList != null) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('商品库'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _goodsPage(list),
+              _goodsList(_itemList),
+            ],
           ),
         ),
-      );
-    } else {
-      return Container(
-        child: Text('暂无数据'),
-      );
-    }
+      ),
+    );
+    // } else {
+    //   return Container(
+    //     child: Text('暂无数据'),
+    //   );
+    // }
   }
 
   Widget _goodsPage(list) {
@@ -183,7 +182,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   }
 
   Widget _goodsList(result) {
-    if (result != null && _itemList.length > 0) {
+    if (_itemList != null && _itemList.length >= 0) {
       try {
         if (pageNum == 1) {
           // 如果列表page==1，列表位置放到最顶部
