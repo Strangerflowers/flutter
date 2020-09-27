@@ -38,6 +38,11 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
     super.initState();
   }
 
+  Future<void> _handleRefresh() async {
+    pageNum = 1;
+    await _getQuotationList();
+  }
+
   // 获取列表数据
   void _getQuotationList() async {
     if (pageNum == 1) {
@@ -78,14 +83,17 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       appBar: AppBar(
         title: Text('报价单'),
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _tabs(list),
-            _recommedList(_itemList),
-            // QuotationTabs(),
-            // QuotationGoodsList(),
-          ],
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _tabs(list),
+              _recommedList(_itemList),
+              // QuotationTabs(),
+              // QuotationGoodsList(),
+            ],
+          ),
         ),
       ),
     );
@@ -192,6 +200,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
           child: ListView.separated(
             separatorBuilder: (context, index) => Divider(height: .0),
             itemCount: list.length + 1,
+            physics: AlwaysScrollableScrollPhysics(),
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             itemBuilder: (contex, index) {
               //如果到了表尾

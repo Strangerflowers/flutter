@@ -41,7 +41,7 @@ class LookResult {
   String consigneeKey;
   int status;
   List<LookDispatchItemVos> dispatchItemVos;
-  Null consigneeUrls;
+  List consigneeUrls;
 
   LookResult(
       {this.id,

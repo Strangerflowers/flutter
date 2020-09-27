@@ -72,6 +72,11 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
     });
   }
 
+  Future<void> _handleRefresh() async {
+    pageNum = 1;
+    await _getGoodsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_itemList != null) {
@@ -79,12 +84,15 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
         appBar: AppBar(
           title: Text('商品库'),
         ),
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              _goodsPage(list),
-              _goodsList(_itemList),
-            ],
+        body: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _goodsPage(list),
+                _goodsList(_itemList),
+              ],
+            ),
           ),
         ),
       );
@@ -191,6 +199,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
             controller: scorllController,
             itemCount: result.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               //如果到了表尾
               if (index > (result.length - 1)) {

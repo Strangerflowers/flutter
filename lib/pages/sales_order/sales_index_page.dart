@@ -35,6 +35,11 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
     super.initState();
   }
 
+  Future<void> _handleRefresh() async {
+    pageNum = 1;
+    await _getSaleasOrderList();
+  }
+
   // 获取列表数据
   void _getSaleasOrderList() async {
     if (pageNum == 1) {
@@ -73,14 +78,17 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
       appBar: AppBar(
         title: Text('销售订单'),
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _salesTabs(list),
-            _goodsList(_itemList),
-            // SalesTabs(),
-            // SalesGoodsList(),
-          ],
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _salesTabs(list),
+              _goodsList(_itemList),
+              // SalesTabs(),
+              // SalesGoodsList(),
+            ],
+          ),
         ),
       ),
     );
@@ -176,6 +184,7 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
 
             itemCount: result.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            physics: AlwaysScrollableScrollPhysics(),
             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾

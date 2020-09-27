@@ -68,16 +68,24 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
     });
   }
 
+  Future<void> _handleRefresh() async {
+    pageNum = 1;
+    await _getdata();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _orderType(inputText),
-            _goodsList()
-            // DemandContent(inputText),
-          ],
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              _orderType(inputText),
+              _goodsList()
+              // DemandContent(inputText),
+            ],
+          ),
         ),
       ),
     );
@@ -244,6 +252,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             separatorBuilder: (context, index) => Divider(height: .0),
             itemCount: result.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            physics: AlwaysScrollableScrollPhysics(),
             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾
@@ -301,7 +310,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       child: InkWell(
         onTap: () {
           // 跳转到详情页面
-          Application.router.navigateTo(context, "/demanddetail?id=${item.id}");
+          Application.router
+              .navigateTo(context, "/demanddetail?id=${item['id']}");
         },
         child: Column(
           children: <Widget>[
@@ -563,6 +573,7 @@ class _DemandContentState extends State<DemandContent> {
             separatorBuilder: (context, index) => Divider(height: .0),
             itemCount: result.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+            physics: AlwaysScrollableScrollPhysics(),
             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾
@@ -620,7 +631,8 @@ class _DemandContentState extends State<DemandContent> {
       child: InkWell(
         onTap: () {
           // 跳转到详情页面
-          Application.router.navigateTo(context, "/demanddetail?id=${item.id}");
+          Application.router
+              .navigateTo(context, "/demanddetail?id=${item['id']}");
         },
         child: Column(
           children: <Widget>[

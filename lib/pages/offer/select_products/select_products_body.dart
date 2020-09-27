@@ -25,6 +25,12 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
     _getBackDetailInfo();
   }
 
+  Future<void> _handleRefresh() async {
+    print('下拉刷新');
+    pageNum = 1;
+    await _getBackDetailInfo();
+  }
+
   var flag = false;
   void _getBackDetailInfo() async {
     print('商品列表选择============');
@@ -67,12 +73,15 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
     return Provide<DemandQuotationProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandQuotationProvide>(context).goodsList;
       if (goodsInfo != null) {
-        return SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                _checkboxTitleListView(goodsInfo.result.list),
-              ],
+        return RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  _checkboxTitleListView(goodsInfo.result.list),
+                ],
+              ),
             ),
           ),
         );
@@ -93,7 +102,8 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
           child: ListView.builder(
             itemCount: list.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-            physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+            physics: AlwaysScrollableScrollPhysics(),
+            // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾
               if (index > (list.length - 1)) {
