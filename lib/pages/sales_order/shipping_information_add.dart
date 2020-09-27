@@ -16,16 +16,18 @@ import '../../pages/sales_order/sales_index_page.dart';
 
 class SaleaUpdate extends StatefulWidget {
   final String id;
-
-  SaleaUpdate(this.id);
+  final String detailId;
+  SaleaUpdate(this.id, this.detailId);
   @override
   _SaleaUpdateState createState() => _SaleaUpdateState();
 }
 
 class _SaleaUpdateState extends State<SaleaUpdate> {
   String id;
+  String detailId;
   var _getBackDetailInfo;
   void initState() {
+    detailId = widget.detailId;
     id = widget.id;
     _getBackDetailInfo = _getDate();
     super.initState();
@@ -63,7 +65,7 @@ class _SaleaUpdateState extends State<SaleaUpdate> {
                       AddHeader(data.result),
                       // DatePickerWidget(),
                       ProductInformation(data.result.dispatchItemVos),
-                      OkBotton(data.result),
+                      OkBotton(data.result, detailId),
                     ],
                   ),
                 ),
@@ -340,11 +342,12 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 // 确定按钮
 class OkBotton extends StatelessWidget {
   final data;
+  final String detailId;
   // final String mainOrderId;
   // final String goodsId;
   // final String len;
   // final String returnId;
-  OkBotton(this.data);
+  OkBotton(this.data, this.detailId);
 
   @override
   Widget build(BuildContext context) {
@@ -435,14 +438,7 @@ class OkBotton extends StatelessWidget {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return SalesIndexPage();
-            },
-          ),
-        );
+        Application.router.navigateTo(context, "/salesdetail?id=${detailId}");
       } else {
         Fluttertoast.showToast(
           msg: val['message'],

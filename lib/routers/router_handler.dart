@@ -83,10 +83,10 @@ Handler saleAddShipmentHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   print('跳转参数获取$params');
   String id = params['id'].first;
-  // String mainOrderId = params['mainOrderId'].first;
+  String detailId = params['detailId'].first;
   // String len = params['len'].first;
   // String returnId = params['returnId'].first;
-  return SaleaUpdate(id);
+  return SaleaUpdate(id, detailId);
 });
 
 // 跳转到销售订单列表页面
