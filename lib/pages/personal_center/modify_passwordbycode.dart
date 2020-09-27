@@ -138,8 +138,8 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                 errorText: errorMobileText,
                 hintText: "请输入手机号",
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(160.0),
-                  // padding: EdgeInsets.only(right: 20),
+                  width: ScreenUtil().setWidth(150),
+                  // margin: EdgeInsets.only(top: 10.0, right: 5.0),
                   child: Center(
                     child: RichText(
                       textAlign: TextAlign.left,
@@ -152,7 +152,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                           TextSpan(
                             text: '账号',
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(32),
+                              // fontSize: ScreenUtil().setSp(32),
                               decoration: TextDecoration.none,
                               color: Color(0xFF222222),
                             ),
@@ -162,22 +162,24 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                     ),
                   ),
                 ),
-                suffixIcon: Container(
-                  child: FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        mobile = '';
-                      });
+                suffixIcon: mobile == null || mobile == ''
+                    ? Text('')
+                    : Container(
+                        child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              mobile = '';
+                            });
 
-                      // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
-                    },
-                    child: new Image.asset(
-                      'images/clear.png',
-                      width: 20.0,
-                      height: 20.0,
-                    ),
-                  ),
-                ),
+                            // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
+                          },
+                          child: new Image.asset(
+                            'images/clear.png',
+                            width: 20.0,
+                            height: 20.0,
+                          ),
+                        ),
+                      ),
                 // border: InputBorder.none,
               ),
               //controller: controller,
@@ -233,8 +235,8 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
               ),
               decoration: InputDecoration(
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(160.0),
-                  // padding: EdgeInsets.only(right: 20),
+                  width: ScreenUtil().setWidth(150),
+                  // margin: EdgeInsets.only(top: 10.0, right: 5.0),
                   child: Center(
                     child: RichText(
                       textAlign: TextAlign.left,
@@ -245,7 +247,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                           TextSpan(
                             text: '验证码',
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(32),
+                              // fontSize: ScreenUtil().setSp(32),
                               decoration: TextDecoration.none,
                               color: Color(0xFF222222),
                             ),
@@ -313,8 +315,8 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
               ),
               decoration: InputDecoration(
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(160.0),
-                  // padding: EdgeInsets.only(right: 20),
+                  width: ScreenUtil().setWidth(150),
+                  // margin: EdgeInsets.only(top: 10.0, right: 5.0),
                   child: Center(
                     child: RichText(
                       textAlign: TextAlign.left,
@@ -325,7 +327,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                           TextSpan(
                             text: '登录密码',
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(32),
+                              // fontSize: ScreenUtil().setSp(32),
                               decoration: TextDecoration.none,
                               color: Color(0xFF222222),
                             ),
@@ -336,22 +338,24 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                   ),
                 ),
                 hintText: "请输入登录密码",
-                suffixIcon: Container(
-                  child: FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        newPwd = '';
-                      });
+                suffixIcon: newPwd == null || newPwd == ''
+                    ? Text('')
+                    : Container(
+                        child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              newPwd = '';
+                            });
 
-                      // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
-                    },
-                    child: new Image.asset(
-                      'images/clear.png',
-                      width: 20.0,
-                      height: 20.0,
-                    ),
-                  ),
-                ),
+                            // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
+                          },
+                          child: new Image.asset(
+                            'images/clear.png',
+                            width: 20.0,
+                            height: 20.0,
+                          ),
+                        ),
+                      ),
                 // border: InputBorder.none,
               ),
               maxLines: 1, //最大行数
@@ -366,6 +370,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
               //输入文本的样式
               //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
               onChanged: (v) {
+                setState(() {});
                 newPwd = v;
               },
               onSaved: (val) {
@@ -403,7 +408,9 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
               ),
               decoration: InputDecoration(
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(160.0),
+                  width: ScreenUtil().setWidth(150),
+                  // margin: EdgeInsets.only(top: 10.0, right: 5.0),
+                  // width: ScreenUtil().setWidth(160.0),
                   // padding: EdgeInsets.only(right: 20),
                   child: Center(
                     child: RichText(
@@ -415,7 +422,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                           TextSpan(
                             text: '确认密码',
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(32),
+                              // fontSize: ScreenUtil().setSp(32),
                               decoration: TextDecoration.none,
                               color: Color(0xFF222222),
                             ),
@@ -426,22 +433,24 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                   ),
                 ),
                 hintText: "请输入确认密码",
-                suffixIcon: Container(
-                  child: FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        confirmNewpwd = '';
-                      });
+                suffixIcon: confirmNewpwd == null || confirmNewpwd == ''
+                    ? Text('')
+                    : Container(
+                        child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              confirmNewpwd = '';
+                            });
 
-                      // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
-                    },
-                    child: new Image.asset(
-                      'images/clear.png',
-                      width: 20.0,
-                      height: 20.0,
-                    ),
-                  ),
-                ),
+                            // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
+                          },
+                          child: new Image.asset(
+                            'images/clear.png',
+                            width: 20.0,
+                            height: 20.0,
+                          ),
+                        ),
+                      ),
                 // border: InputBorder.none,
               ),
               maxLines: 1, //最大行数
@@ -456,6 +465,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
               //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],//允许的输入格式
               onChanged: (v) {
                 confirmNewpwd = v;
+                setState(() {});
               },
               onSaved: (val) {
                 confirmNewpwd = val;
