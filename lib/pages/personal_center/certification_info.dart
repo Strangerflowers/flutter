@@ -232,7 +232,7 @@ class _CertificationInfoState extends State<CertificationInfo> {
               //color: Colors.grey,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(16.0),
-              child: Expanded(
+              child: Container(
                   child: new Text(
                 dataModel.value,
                 maxLines: 50,

@@ -269,6 +269,7 @@ class ProductInformation extends StatelessWidget {
               ),
             ),
             Container(
+              alignment: Alignment.centerLeft,
               child: Text(
                 '${item.remark == null || item.remark == 'null' ? '' : item.remark}',
                 style: TextStyle(
