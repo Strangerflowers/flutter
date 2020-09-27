@@ -109,6 +109,7 @@ class LookDispatchItemVos {
   String specification;
   int number;
   String totalActualDeliveryNumber;
+  String mainKey;
   String skuKey;
 
   LookDispatchItemVos(
@@ -122,6 +123,7 @@ class LookDispatchItemVos {
       this.specification,
       this.number,
       this.totalActualDeliveryNumber,
+      this.mainKey,
       this.skuKey});
 
   LookDispatchItemVos.fromJson(Map<String, dynamic> json) {
@@ -135,6 +137,7 @@ class LookDispatchItemVos {
     specification = json['specification'];
     number = json['number'];
     totalActualDeliveryNumber = json['totalActualDeliveryNumber'].toString();
+    mainKey = json['mainKey'];
     skuKey = json['skuKey'];
   }
 
@@ -151,6 +154,7 @@ class LookDispatchItemVos {
     data['number'] = this.number;
     data['totalActualDeliveryNumber'] = this.totalActualDeliveryNumber;
     data['skuKey'] = this.skuKey;
+    data['mainKey'] = this.mainKey;
     return data;
   }
 }

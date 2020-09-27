@@ -546,7 +546,7 @@ class _ProductInformationState extends State<ProductInformation> {
             height: ScreenUtil().setHeight(100),
             padding: EdgeInsets.only(top: 0, right: 10),
             child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(item.skuKey, '')),
+                StringUtils.defaultIfEmpty(item.mainKey, '')),
             // child: item.skuKey == null ||
             //         item.skuKey == '' ||
             //         item.skuKey == 'null'

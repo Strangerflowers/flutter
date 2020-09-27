@@ -246,7 +246,7 @@ class ProductInformation extends StatelessWidget {
             height: ScreenUtil().setHeight(150),
             padding: EdgeInsets.only(top: 0, right: 10),
             child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(item.skuKey, '')),
+                StringUtils.defaultIfEmpty(item.mainKey, '')),
             // child: item.skuKey == null || item.skuKey == 'null'
             //     ? Image.asset('images/default.png')
             //     : Image.network(
