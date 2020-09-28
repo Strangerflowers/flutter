@@ -8,4 +8,5 @@ class Environment {
   static String DEV = 'dev';
   static String TEST = 'test';
   static String PROD = 'prod';
+  static String PRE = 'pre';
 }

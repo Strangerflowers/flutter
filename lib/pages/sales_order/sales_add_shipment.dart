@@ -401,7 +401,8 @@ class OkBotton extends StatelessWidget {
           fontSize: 16.0,
         );
         // Navigator.pop(context);
-        Application.router.navigateTo(context, "/salesdetail?id=$returnId");
+        Application.router
+            .navigateTo(context, "/salesdetail?id=$returnId", replace: true);
       } else {
         Fluttertoast.showToast(
           msg: val['message'],

@@ -123,7 +123,8 @@ class SalesOrderBasic extends StatelessWidget {
         child: InkWell(
           onTap: () {
             // 跳转到报价单详情页面
-            Application.router.navigateTo(context, "/detail?id=$id");
+            Application.router
+                .navigateTo(context, "/detail?id=$id", replace: true);
             // Application.router.navigateTo(context, "/plan?id=$id");
             print('点击跳转采购页面');
           },
@@ -735,8 +736,9 @@ class DeliveryArrangement extends StatelessWidget {
       return InkWell(
         onTap: () {
           if (item.status == 0) {
-            Application.router
-                .navigateTo(context, "/add?id=${item.id}&detailId=$goodsId");
+            Application.router.navigateTo(
+                context, "/add?id=${item.id}&detailId=$goodsId",
+                replace: true);
             print('跳转到更新发货信息');
           }
         },
@@ -825,7 +827,8 @@ class DeliveryArrangement extends StatelessWidget {
           ),
           onTap: () {
             if (item.status == 0) {
-              Application.router.navigateTo(context, "/add?id=${item.id}");
+              Application.router
+                  .navigateTo(context, "/add?id=${item.id}", replace: true);
             } else {
               // 跳转到详情页面
               Application.router.navigateTo(context, "/look?id=${item.id}");
@@ -1023,7 +1026,8 @@ class DeliveryArrangement extends StatelessWidget {
           // 跳转到详情页面
 
           Application.router.navigateTo(context,
-              "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId");
+              "/addshipment?id=${item.id}&len=$len&mainOrderId=${item.mainOrderId}&returnId=$goodsId",
+              replace: true);
           print('点击跳转采购页面');
         },
         child: Container(

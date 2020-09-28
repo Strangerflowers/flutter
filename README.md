@@ -106,6 +106,12 @@ flutter run -t lib/main_dev.dart
 flutter run -t lib/main_test.dart
 ```
 
+该命令启动高保真环境
+
+```
+flutter run -t lib/main_pre.dart
+```
+
 ## 批处理脚本方式
 
 该命令默认启动开发环境
@@ -142,6 +148,11 @@ flutter build apk -t lib/main_dev.dart
 
 ```
 flutter build apk -t lib/main_test.dart
+```
+高保真环境打包:
+
+```
+flutter build apk -t lib/main_pre.dart
 ```
 
 生产环境打包:
