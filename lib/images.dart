@@ -45,6 +45,7 @@ class _MyImageState extends State<MyImage> {
   @override
   void dispose() {
     widget.businessLicenseIssuedKey = key;
+    _getUploadToken();
     super.dispose();
   }
 
@@ -71,7 +72,7 @@ class _MyImageState extends State<MyImage> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    _getUploadToken();
+                    //  _getUploadToken();
                     _onUpload();
                     //_onUploadBySyFlutterQiniuStorage();
                   },
