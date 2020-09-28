@@ -369,19 +369,16 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   Widget _buttom(item) {
     String text;
     String url;
-    if (item.status == 0 && item.auditStatus == -1 && item.action == 'null') {
+    if (item.status == 0 &&
+        (item.auditStatus == null || item.auditStatus == -1)) {
       text = '上架';
       url = 'online';
     } else if (item.status == 1 &&
-        item.auditStatus == 1 &&
-        item.action == 'online') {
-      // text = '上架';
-      // url = 'online';
+        (item.auditStatus == 1 || item.auditStatus == -1)) {
       text = '下架';
       url = 'offline';
     } else if (item.status == -1 &&
-        item.auditStatus == 1 &&
-        item.action == 'offline') {
+        (item.auditStatus == 1 || item.auditStatus == -1)) {
       text = '上架';
       url = 'online';
     } else {

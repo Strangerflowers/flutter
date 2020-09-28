@@ -1,4 +1,5 @@
 // import 'package:bid/pages/component/showPicker.dart';
+import 'package:bid/common/toast.dart';
 import 'package:bid/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,18 +53,23 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       }
     };
     await request('listDemand', formData: formData).then((val) {
-      // Purchasing goodsList = Purchasing.fromJson(val);
-      var goodsList = val;
-      totalPage = goodsList['result']['totalPage'];
+      if (val['code'] == 0) {
+        // Purchasing goodsList = Purchasing.fromJson(val);
+        var goodsList = val;
+        totalPage = goodsList['result']['totalPage'];
 
-      if (pageNum == 1) {
-        setState(() {
-          _itemList = goodsList['result']['list'];
-        });
+        if (pageNum == 1) {
+          setState(() {
+            _itemList = goodsList['result']['list'];
+          });
+        } else {
+          setState(() {
+            _itemList.addAll(goodsList['result']['list']);
+          });
+        }
       } else {
-        setState(() {
-          _itemList.addAll(goodsList['result']['list']);
-        });
+        _itemList = [];
+        Toast.toast(context, msg: val['message']);
       }
     });
   }
@@ -223,80 +229,85 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   }
 
   Widget _goodsList() {
+    print(
+        '信息异常=========================================================----========================$_itemList');
     if (_itemList != null && _itemList.length >= 0) {
       return Container(
         child: _demandListView(_itemList),
       );
     } else {
-      return Container(
-        height: MediaQuery.of(context).size.height / 2,
-        child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-            valueColor: AlwaysStoppedAnimation(Colors.blue),
-            value: .7,
-          ),
-        ),
+      return Center(
+        child: Text('暂无数据'),
       );
+      // return Container(
+      //   height: MediaQuery.of(context).size.height / 2,
+      //   child: Center(
+      //     child: CircularProgressIndicator(
+      //       backgroundColor: Colors.grey[200],
+      //       valueColor: AlwaysStoppedAnimation(Colors.blue),
+      //       value: .7,
+      //     ),
+      //   ),
+      // );
     }
   }
 
   // 一级
   Widget _demandListView(result) {
     return Provide<PurchasingListProvide>(builder: (context, child, data) {
-      // if (data.goodsList != null) {
-      return Container(
-        // height: ScreenUtil().setHeight(1000),
-        child: Expanded(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(height: .0),
-            itemCount: result.length + 1,
-            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-            physics: AlwaysScrollableScrollPhysics(),
-            // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-            itemBuilder: (contex, index) {
-              //如果到了表尾
-              if (index > (result.length - 1)) {
-                //不足100条，继续获取数据
-                if (pageNum < totalPage) {
-                  print('获取更多$pageNum====$totalPage');
-                  //获取数据
-                  pageNum++;
-                  _getdata();
-                  //加载时显示loading
-                  return Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        width: 24.0,
-                        height: 24.0,
-                        child: CircularProgressIndicator(strokeWidth: 2.0)),
-                  );
-                } else {
-                  if (result.length == 0) {
-                    return Center(child: Text('暂无数据'));
-                  } else {
+      if (result.length > 0) {
+        return Container(
+          // height: ScreenUtil().setHeight(1000),
+          child: Expanded(
+            child: ListView.separated(
+              separatorBuilder: (context, index) => Divider(height: .0),
+              itemCount: result.length + 1,
+              shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+              physics: AlwaysScrollableScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+              itemBuilder: (contex, index) {
+                //如果到了表尾
+                if (index > (result.length - 1)) {
+                  //不足100条，继续获取数据
+                  if (pageNum < totalPage) {
+                    print('获取更多$pageNum====$totalPage');
+                    //获取数据
+                    pageNum++;
+                    _getdata();
+                    //加载时显示loading
                     return Container(
+                      padding: const EdgeInsets.all(16.0),
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        "没有更多了",
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                      child: SizedBox(
+                          width: 24.0,
+                          height: 24.0,
+                          child: CircularProgressIndicator(strokeWidth: 2.0)),
                     );
+                  } else {
+                    if (result.length == 0) {
+                      return Center(child: Text('暂无数据'));
+                    } else {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          "没有更多了",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      );
+                    }
                   }
                 }
-              }
-              return _demandItem(result[index], context);
-            },
+                return _demandItem(result[index], context);
+              },
+            ),
           ),
-        ),
-      );
-      // } else {
-      //   return Container(
-      //     child: Text('暂无数据'),
-      //   );
-      // }
+        );
+      } else {
+        return Container(
+          child: Text('暂无数据'),
+        );
+      }
     });
   }
 
