@@ -165,6 +165,8 @@ class _CertificationInfoState extends State<CertificationInfo> {
       "companyDetailAddr": StringUtils.preprocessText,
       "businessScope": StringUtils.preprocessText,
       "supplierTypeName": StringUtils.preprocessText,
+      "companyName": StringUtils.preprocessText,
+      "companyNum": StringUtils.preprocessText,
     };
     dataModel.value = preprocessMap.containsKey(dataModel.code)
         ? preprocessMap[dataModel.code](dataModel.value, 15)
