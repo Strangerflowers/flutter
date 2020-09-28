@@ -26,6 +26,10 @@ class SelectProductsPage extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             Container(
+              constraints: BoxConstraints(
+                // minWidth: 180,
+                minHeight: MediaQuery.of(context).size.height - 126,
+              ),
               child: SelectProductsBody(id),
               // child: Container(
               //   margin: EdgeInsets.only(bottom: 80),

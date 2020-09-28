@@ -7,11 +7,13 @@ import 'package:bid/models/base/BaseResponseModel.dart';
 import 'package:bid/models/base/DataModel.dart';
 import 'package:bid/models/user_center/CertificationInfoModel.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
+import 'package:bid/pages/component/picture_preview.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:photo_view/photo_view.dart';
 
 class CertificationInfo extends StatefulWidget {
   @override
@@ -197,19 +199,32 @@ class _CertificationInfoState extends State<CertificationInfo> {
               alignment: Alignment.centerRight,
               padding: const EdgeInsets.all(16.0),
               child: Text(dataModel.label)),
-          Container(
-            //color: Colors.yellowAccent,
-            width: 150,
-            height: 150,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(16.0),
-            child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(dataModel.value, '')),
-            // : Image.network(
-            //     dataModel.value,
-            //     width: 150,
-            //     height: 150,
-            //   ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return PicturePreview(dataModel.value);
+                  },
+                ),
+              );
+            },
+            child: Container(
+              //color: Colors.yellowAccent,
+              width: 150,
+              height: 150,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.all(16.0),
+              child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(dataModel.value, ''),
+              ),
+              // : Image.network(
+              //     dataModel.value,
+              //     width: 150,
+              //     height: 150,
+              //   ),
+            ),
           ),
         ]),
       );
@@ -280,5 +295,36 @@ class _CertificationInfoState extends State<CertificationInfo> {
       DataModel(code: 'contactMobile', label: '手机号码', value: ''),
     ];
     return dataModelList;
+  }
+}
+
+class PicturePreview extends StatelessWidget {
+  final String url;
+  PicturePreview(this.url);
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+        // 触摸收起键盘
+        // FocusScope.of(context).requestFocus(FocusNode());
+      },
+      behavior: HitTestBehavior.opaque,
+      // behavior: HitTestBehavior.translucent,
+      child: Center(
+        child: Container(
+          child: PhotoView(
+            onTapDown:
+                (BuildContext, TapDownDetails, PhotoViewControllerValue) {
+              print('点击图片');
+            },
+            imageProvider: url == '' || url == 'null' || url == null
+                ? AssetImage("images/default.png")
+                : NetworkImage(url),
+          ),
+        ),
+      ),
+    );
   }
 }
