@@ -110,7 +110,8 @@ class _EditContactInfo extends State<EditContactInfo> {
                 '============>[baseResponseModel]: %s', [baseResponseModel]),
             StackTrace.current);
         contactInfoModel = baseResponseModel.result;
-        contactInfoVo.areaName = contactInfoModel.areaCode;
+        contactInfoVo.areaName = contactInfoModel.areaName;
+        contactInfoVo.areaCode = contactInfoModel.areaCode;
         if (null != contactInfoModel) {
           loaded = true;
           return _buildBody();

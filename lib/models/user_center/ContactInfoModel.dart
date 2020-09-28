@@ -10,6 +10,7 @@ class ContactInfoModel {
   String email;
   String fax;
   String areaCode;
+  String areaName;
   String address;
   int defaultContact;
   String createTime;
@@ -26,6 +27,7 @@ class ContactInfoModel {
       this.email,
       this.fax,
       this.areaCode,
+      this.areaName,
       this.address,
       this.defaultContact,
       this.createTime,
@@ -42,6 +44,7 @@ class ContactInfoModel {
     email = json['email'];
     fax = json['fax'];
     areaCode = json['areaCode'];
+    areaName = json['areaName'];
     address = json['address'];
     defaultContact = json['defaultContact'];
     createTime = json['createTime'];
@@ -60,6 +63,7 @@ class ContactInfoModel {
     data['email'] = this.email;
     data['fax'] = this.fax;
     data['areaCode'] = this.areaCode;
+    data['areaName']=this.areaName;
     data['address'] = this.address;
     data['defaultContact'] = this.defaultContact;
     data['createTime'] = this.createTime;
