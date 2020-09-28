@@ -52,6 +52,9 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
         mobile = null;
         // Toast.toast(context, msg: value['message']);
       }
+      setState(() {
+        changeCount = validateMibile(mobile.toString()) == null ? true : false;
+      });
       return mobile;
       // mobile =
     });
