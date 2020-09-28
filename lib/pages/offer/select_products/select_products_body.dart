@@ -14,14 +14,18 @@ class SelectProductsBody extends StatefulWidget {
 }
 
 class _SelectProductsBodyState extends State<SelectProductsBody> {
+  var scorllController = new ScrollController();
+  QuotataionData goodsList = null;
   String id;
   int pageNum = 1;
   int totalPage;
   var quotationData;
   void initState() {
-    super.initState();
-    pageNum = 1;
     id = widget.id;
+    pageNum = 1;
+    setState(() {});
+    super.initState();
+
     _getBackDetailInfo();
   }
 
@@ -33,10 +37,16 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
 
   var flag = false;
   void _getBackDetailInfo() async {
+    if (pageNum == 1) {
+      setState(() {
+        goodsList = null;
+        // Provide.value<DemandQuotationProvide>(context).getList([]);
+      });
+    }
     print('商品列表选择============');
     var formData = {
       "isAll": true,
-      "limit": 10,
+      "limit": 15,
       "order": "string",
       "page": pageNum,
       "params": {"productCategroy": id}
@@ -47,7 +57,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
     await request('selectGoodsByProductId', formData: formData).then((val) {
       print('商品列表$val');
       if (val['code'] == 0) {
-        QuotataionData goodsList = QuotataionData.fromJson(val);
+        goodsList = QuotataionData.fromJson(val);
         totalPage = goodsList.result.totalPage;
 
         quotationData = goodsList.result.list;
@@ -56,9 +66,11 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
           ele.checkBoxFlag = false;
         });
         if (pageNum == 1) {
+          setState(() {});
           Provide.value<DemandQuotationProvide>(context).getList(goodsList);
         } else {
           Provide.value<DemandQuotationProvide>(context).aAddList(goodsList);
+          setState(() {});
         }
       }
     });
@@ -70,6 +82,14 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
 
   @override
   Widget build(BuildContext context) {
+    try {
+      if (pageNum == 1) {
+        // 如果列表page==1，列表位置放到最顶部
+        scorllController.jumpTo(0.0);
+      }
+    } catch (e) {
+      print('进入页面第一次初始化：${e}');
+    }
     return Provide<DemandQuotationProvide>(builder: (context, child, val) {
       var goodsInfo = Provide.value<DemandQuotationProvide>(context).goodsList;
       if (goodsInfo != null) {
@@ -102,14 +122,16 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
           child: ListView.separated(
             separatorBuilder: (context, index) => Divider(height: .0),
             itemCount: list.length + 1,
+            controller: scorllController,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: AlwaysScrollableScrollPhysics(),
             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾
-              print('判断是否到了未部$index======${list.length - 1}');
+
               if (index > (list.length - 1)) {
                 //不足100条，继续获取数=据
+                print('判断是否到了未部$index======${list.length - 1}');
                 if (pageNum < totalPage) {
                   //获取数据
                   pageNum++;
