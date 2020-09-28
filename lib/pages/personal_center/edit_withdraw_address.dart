@@ -7,6 +7,7 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
 import '../../common/log_utils.dart';
+import 'package:bid/common/toast.dart';
 
 class EditWithdrawAddress extends StatefulWidget {
   final String id;
@@ -79,7 +80,59 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
         ),
       ),
       backgroundColor: Colors.white,
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            "删除退货地址",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          onPressed: () {
+            showDelete(context);
+          },
+        )
+      ],
     );
+  }
+
+  void showDelete(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('确认提示'),
+            content: Text('确定删除该退货地址？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+
+                  _delete();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  void _delete() {
+    var formData = {"id": addressId};
+    requestGet('deleteAddress', formData: formData).then((value) {
+      if (value['code'] == 0) {
+        // Navigator.pop(context);
+        Application.router.navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+      } else {
+        Toast.toast(context, msg: value['message']);
+      }
+    });
   }
 
   void _showSelect() async {
@@ -501,13 +554,14 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
             disabledColor: Colors.grey,
             disabledTextColor: Colors.black,
             onPressed: () {
-              setState(() {
-                autoValidate = true;
-              });
+              // setState(() {
+              autoValidate = true;
+              // });
 
               editressFormKey.currentState.save();
               if ((editressFormKey.currentState as FormState).validate()) {
                 var formData = {
+                  "id": addressId,
                   "receiverName": receiverName,
                   "mobile": mobile,
                   "areaCode": areaCode,
@@ -515,10 +569,12 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
                   "defaultAddress": 1
                 };
                 LogUtils.d('[确认修改按钮]', formData);
-                request('saveAddress', formData: formData).then((value) {
+                request('updateAddress', formData: formData).then((value) {
                   if (value['code'] == 0) {
                     Application.router
                         .navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+                  } else {
+                    Toast.toast(context, msg: value['message']);
                   }
                   LogUtils.d('[返回值]', value);
                 });

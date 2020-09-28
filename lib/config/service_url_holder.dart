@@ -90,5 +90,7 @@ class ServiceUrlMapper {
     'resetPwdByCode': '/os_kernel_userorgctr/app/user/resetPwdByCode', //修改密码
     "checkNameAndMobile":
         "/os_kernel_bid/app/suppliers/checkNameAndMobile", //校验手机号码与公司名称是否重复
+    "deleteAddress": "/os_kernel_bid/app/address/delete", //删除退货地址
+    "deleteContacts": "/os_kernel_bid/app/contacts/delete", //删除联系人
   };
 }

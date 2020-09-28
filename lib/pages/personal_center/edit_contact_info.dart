@@ -10,6 +10,8 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as My;
+import 'package:bid/common/toast.dart';
+import 'package:bid/routers/routers.dart';
 
 class EditContactInfo extends StatefulWidget {
   String id;
@@ -41,7 +43,8 @@ class _EditContactInfo extends State<EditContactInfo> {
         LogUtils.debug(TAG, res, StackTrace.current);
         Widget content;
         if (null != res && res['code'] == 0) {
-          Application.router.pop(context);
+          Application.router.navigateTo(context, Routes.CONTACT_INFO_PAGE);
+          // Application.router.pop(context);
         } else {
           content = new Text('编辑失败!');
           showDialog(
@@ -183,7 +186,59 @@ class _EditContactInfo extends State<EditContactInfo> {
         ),
       ),
       backgroundColor: Colors.white,
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            "删除联系人",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          onPressed: () {
+            showDelete(context);
+          },
+        )
+      ],
     );
+  }
+
+  void showDelete(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('确认提示'),
+            content: Text('确定删除该联系人？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+
+                  _delete();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  void _delete() {
+    var formData = {"id": this.id};
+    requestGet('deleteContacts', formData: formData).then((value) {
+      if (value['code'] == 0) {
+        // Navigator.pop(context);
+        Application.router.navigateTo(context, Routes.CONTACT_INFO_PAGE);
+      } else {
+        Toast.toast(context, msg: value['message']);
+      }
+    });
   }
 
   Widget _buildContactPeopleRow() {
