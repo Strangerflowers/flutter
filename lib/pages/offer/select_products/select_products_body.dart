@@ -75,14 +75,14 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
       if (goodsInfo != null) {
         return RefreshIndicator(
           onRefresh: _handleRefresh,
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  _checkboxTitleListView(goodsInfo.result.list),
-                ],
-              ),
-            ),
+          child: Expanded(
+            // child: Container(
+            //   child: Column(
+            //     children: <Widget>[
+            child: _checkboxTitleListView(goodsInfo.result.list),
+            //   ],
+            // ),
+            // ),
           ),
         );
       } else {

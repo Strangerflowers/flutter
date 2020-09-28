@@ -25,39 +25,40 @@ class SelectProductsPage extends StatelessWidget {
         ),
         body: Stack(
           children: <Widget>[
-            SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 80),
-                constraints: BoxConstraints(
-                  // minWidth: 180,
-                  minHeight: MediaQuery.of(context).size.height - 126,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          color: Colors.white,
-                          padding:
-                              EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                          alignment: Alignment.centerLeft,
-                          child: InkWell(
-                            child: Text('请选择报价产品:'),
-                            onTap: () {
-                              Application.router
-                                  .navigateTo(context, "/addproduct?id='1'");
-                            },
-                          ),
-                        ),
-                        SelectProductsBody(id),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            Container(
+              child: SelectProductsBody(id),
+              // child: Container(
+              //   margin: EdgeInsets.only(bottom: 80),
+              //   constraints: BoxConstraints(
+              //     // minWidth: 180,
+              //     minHeight: MediaQuery.of(context).size.height - 126,
+              //   ),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: <Widget>[
+              //       Column(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: <Widget>[
+              //           Container(
+              //             color: Colors.white,
+              //             padding:
+              //                 EdgeInsets.only(left: 20, top: 20, bottom: 20),
+              //             alignment: Alignment.centerLeft,
+              //             child: InkWell(
+              //               child: Text('请选择报价产品:'),
+              //               onTap: () {
+              //                 Application.router
+              //                     .navigateTo(context, "/addproduct?id='1'");
+              //               },
+              //             ),
+              //           ),
+              //           SelectProductsBody(id),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ),
             Positioned(
               bottom: -5,
