@@ -18,7 +18,9 @@ class SelectProductsPage extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Application.router
+                  .navigateTo(context, "/addproduct?id=1", replace: true);
+              // Navigator.pop(context);
             },
           ),
           title: Text('选择产品'),
@@ -26,9 +28,10 @@ class SelectProductsPage extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             Container(
+              margin: EdgeInsets.only(bottom: 80),
               constraints: BoxConstraints(
                 // minWidth: 180,
-                minHeight: MediaQuery.of(context).size.height - 126,
+                minHeight: MediaQuery.of(context).size.height,
               ),
               child: SelectProductsBody(id),
               // child: Container(

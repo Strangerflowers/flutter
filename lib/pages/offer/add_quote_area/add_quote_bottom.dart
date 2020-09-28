@@ -156,7 +156,8 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                     //   fontSize: 16.0,
                     // );
                     Application.router.navigateTo(context,
-                        "/demanddetail?id=${Provide.value<DemandDetailProvide>(context).goodsList.result.id}");
+                        "/demanddetail?id=${Provide.value<DemandDetailProvide>(context).goodsList.result.id}",
+                        replace: true);
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) {
                     //   return IndexPage();

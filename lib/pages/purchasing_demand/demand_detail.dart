@@ -16,6 +16,14 @@ class DemandDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     // Application.router
+        //     //     .navigateTo(context, "/addproduct?id=1", replace: true);
+        //     // Navigator.pop(context);
+        //   },
+        // ),
         title: Text('需求详情'),
       ),
       body: FutureBuilder(

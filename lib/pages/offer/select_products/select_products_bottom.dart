@@ -77,10 +77,11 @@ class SelectProductsBottom extends StatelessWidget {
             if (productData.length <= 0) {
               return;
             }
-            Provide.value<DemandDetailProvide>(context)
-                .changeorderPageData(offerPageData);
-            Navigator.pop(context);
-            // Application.router.navigateTo(context, "/addproduct?id=1");
+            // Provide.value<DemandDetailProvide>(context)
+            //     .changeorderPageData(offerPageData);
+            // Navigator.pop(context);
+            Application.router
+                .navigateTo(context, "/addproduct?id=1", replace: true);
           },
         ),
       );
