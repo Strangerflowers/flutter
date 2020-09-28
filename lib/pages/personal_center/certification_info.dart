@@ -161,11 +161,11 @@ class _CertificationInfoState extends State<CertificationInfo> {
   Widget _buildRow(DataModel dataModel) {
     // 需要预处理显示文本的字段
     var preprocessMap = {
-      "companyDetailAddr": StringUtils.preprocessText,
-      "businessScope": StringUtils.preprocessText,
-      "supplierTypeName": StringUtils.preprocessText,
-      "companyName": StringUtils.preprocessText,
-      "companyNum": StringUtils.preprocessText,
+      // "companyDetailAddr": StringUtils.preprocessText,
+      // "businessScope": StringUtils.preprocessText,
+      // "supplierTypeName": StringUtils.preprocessText,
+      // "companyName": StringUtils.preprocessText,
+      // "companyNum": StringUtils.preprocessText,
     };
     dataModel.value = preprocessMap.containsKey(dataModel.code)
         ? preprocessMap[dataModel.code](dataModel.value, 15)
@@ -181,10 +181,13 @@ class _CertificationInfoState extends State<CertificationInfo> {
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.all(16.0),
             child: Text(dataModel.label)),
-        Container(
+        Expanded(
+          child: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(16.0),
-            child: Text(dataModel.value)),
+            child: Text(dataModel.value),
+          ),
+        ),
       ]),
     );
 
