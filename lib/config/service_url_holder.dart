@@ -92,6 +92,7 @@ class ServiceUrlMapper {
         "/os_kernel_bid/app/suppliers/checkNameAndMobile", //校验手机号码与公司名称是否重复
     "deleteAddress": "/os_kernel_bid/app/address/delete", //删除退货地址
     "deleteContacts": "/os_kernel_bid/app/contacts/delete", //删除联系人
-    "getMobile":"/os_kernel_userorgctr/userInfoByToken",//获取手机号码等的信息，用于记住当前账号的手机号码
+    "getMobile":
+        "/os_kernel_userorgctr/app/user/userInfoByToken", //获取手机号码等的信息，用于记住当前账号的手机号码
   };
 }

@@ -19,17 +19,43 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
   bool changeCount = false;
   bool autoValidate = false;
   bool mobileValidate = false;
+  bool disenabled = true;
   final setPawwordFormKey = GlobalKey<FormState>();
   String mobile, checkCode, newPwd, confirmNewpwd;
+  var token;
   var params = {
     'mobile': '',
     'checkCode': '',
     'newPwd': '',
     'confirmNewpwd': ''
   };
+  var getback;
+  void initState() {
+    _getMobile();
+    super.initState();
+  }
 
   var errorMobileText;
   // String mobile;
+  Future _getMobile() async {
+    final prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token') ?? '';
+
+    requestGet('getMobile').then((value) {
+      if (value['code'] == 0) {
+        setState(() {});
+        mobile = value['result']['mobile'];
+        if (token != '') {
+          disenabled = false;
+        }
+      } else {
+        mobile = null;
+        // Toast.toast(context, msg: value['message']);
+      }
+      return mobile;
+      // mobile =
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,24 +188,28 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                     ),
                   ),
                 ),
-                suffixIcon: mobile == null || mobile == ''
-                    ? Text('')
-                    : Container(
-                        child: FlatButton(
-                          onPressed: () {
-                            setState(() {
-                              mobile = '';
-                            });
+                suffixIcon: token != ''
+                    ? Container(
+                        child: Text(''),
+                      )
+                    : (mobile == null || mobile == ''
+                        ? Text('')
+                        : Container(
+                            child: FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  mobile = '';
+                                });
 
-                            // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
-                          },
-                          child: new Image.asset(
-                            'images/clear.png',
-                            width: 20.0,
-                            height: 20.0,
-                          ),
-                        ),
-                      ),
+                                // LogUtils.d(sprintf("[%s]", params), "被点击了删除按钮!");
+                              },
+                              child: new Image.asset(
+                                'images/clear.png',
+                                width: 20.0,
+                                height: 20.0,
+                              ),
+                            ),
+                          )),
                 // border: InputBorder.none,
               ),
               //controller: controller,
@@ -215,7 +245,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                   return null;
                 }
               },
-              enabled: true, //是否禁用
+              enabled: disenabled, //是否禁用
             ),
           ),
           Container(

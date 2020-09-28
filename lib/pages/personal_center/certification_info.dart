@@ -7,7 +7,6 @@ import 'package:bid/models/base/BaseResponseModel.dart';
 import 'package:bid/models/base/DataModel.dart';
 import 'package:bid/models/user_center/CertificationInfoModel.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
-import 'package:bid/pages/component/picture_preview.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
