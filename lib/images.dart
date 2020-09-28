@@ -38,6 +38,7 @@ class _MyImageState extends State<MyImage> {
     key = widget.businessLicenseIssuedKey;
     url = widget.url;
     super.initState();
+    _getUploadToken();
     LogUtils.debug(
         TAG, '初始化MyImage组件, url: ${url}, key: ${key}', StackTrace.current);
   }
@@ -45,7 +46,7 @@ class _MyImageState extends State<MyImage> {
   @override
   void dispose() {
     widget.businessLicenseIssuedKey = key;
-    _getUploadToken();
+
     super.dispose();
   }
 
@@ -72,7 +73,7 @@ class _MyImageState extends State<MyImage> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    //  _getUploadToken();
+                    // _getUploadToken();
                     _onUpload();
                     //_onUploadBySyFlutterQiniuStorage();
                   },
