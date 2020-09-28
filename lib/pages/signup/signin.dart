@@ -315,10 +315,21 @@ class _FormPageState extends State<FormPage> {
         if (val['result']['auditStatus'] == 0) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/indexPage");
-        } else {
+        } else if (val['result']['auditStatus'] == 2 ||
+            val['result']['auditStatus'] == 3) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/authentication");
+        } else if (val['result']['auditStatus'] == 1) {
+          Application.router
+              .navigateTo(context, "/certificateInfo", replace: true);
         }
+        // if (val['result']['auditStatus'] == 0) {
+        //   Navigator.pop(context);
+        //   Application.router.navigateTo(context, "/indexPage");
+        // } else {
+        //   Navigator.pop(context);
+        //   Application.router.navigateTo(context, "/authentication");
+        // }
       } else {
         Toast.toast(
           context,
@@ -744,9 +755,13 @@ class _MobileFormPageState extends State<MobileFormPage> {
         if (val['result']['auditStatus'] == 0) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/indexPage");
-        } else {
+        } else if (val['result']['auditStatus'] == 2 ||
+            val['result']['auditStatus'] == 3) {
           Navigator.pop(context);
           Application.router.navigateTo(context, "/authentication");
+        } else if (val['result']['auditStatus'] == 1) {
+          Application.router
+              .navigateTo(context, "/certificateInfo", replace: true);
         }
       } else {
         Toast.toast(
