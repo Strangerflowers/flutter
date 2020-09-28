@@ -1,4 +1,5 @@
 import 'package:bid/common/log_utils.dart';
+import 'package:bid/common/toast.dart';
 import 'package:bid/models/demand_quotation/demand_quotation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,6 +44,12 @@ class SelectProductsBottom extends StatelessWidget {
                 productData.add(ele);
               }
             });
+            print(
+                '提交控制$productData====${productData.length}----${productData.length <= 0}');
+            if (productData.length <= 0) {
+              Toast.toast(context, msg: '请选择商品');
+              return;
+            }
 
             offerPageData.forEach((offer) {
               if (offer['demandDetailDtoList'].length > 0) {
@@ -74,9 +81,6 @@ class SelectProductsBottom extends StatelessWidget {
                 });
               }
             });
-            if (productData.length <= 0) {
-              return;
-            }
             // Provide.value<DemandDetailProvide>(context)
             //     .changeorderPageData(offerPageData);
             // Navigator.pop(context);

@@ -75,7 +75,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
       if (goodsInfo != null) {
         return RefreshIndicator(
           onRefresh: _handleRefresh,
-          child: Expanded(
+          child: Container(
             // child: Container(
             //   child: Column(
             //     children: <Widget>[
@@ -107,6 +107,7 @@ class _SelectProductsBodyState extends State<SelectProductsBody> {
             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
               //如果到了表尾
+              print('判断是否到了未部$index======${list.length - 1}');
               if (index > (list.length - 1)) {
                 //不足100条，继续获取数=据
                 if (pageNum < totalPage) {
