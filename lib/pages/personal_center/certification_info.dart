@@ -308,27 +308,18 @@ class PicturePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-        // 触摸收起键盘
-        // FocusScope.of(context).requestFocus(FocusNode());
-      },
-      behavior: HitTestBehavior.opaque,
-      // behavior: HitTestBehavior.translucent,
-      child: Center(
-        child: Container(
-          child: PhotoView(
-            onTapDown:
-                (BuildContext, TapDownDetails, PhotoViewControllerValue) {
-              print('点击图片');
-            },
-            imageProvider: url == '' || url == 'null' || url == null
-                ? AssetImage("images/default.png")
-                : NetworkImage(url),
-          ),
+    return Center(
+      child: Container(
+        child: PhotoView(
+          onTapDown: (BuildContext, TapDownDetails, PhotoViewControllerValue) {
+            Navigator.pop(context);
+          },
+          imageProvider: url == '' || url == 'null' || url == null
+              ? AssetImage("images/default.png")
+              : NetworkImage(url),
         ),
       ),
+      // ),
     );
   }
 }
