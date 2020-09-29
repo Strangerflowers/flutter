@@ -1,4 +1,4 @@
 {
-  "appOsApiUrl": "http://osapi-prod.gtland.cn",
-  "appApiUrl": "http://api-prod.gtland.cn"
+  "appOsApiUrl": "https://osapi.myutopa.com",
+  "appApiUrl": "https://api.myutopa.com"
 }
