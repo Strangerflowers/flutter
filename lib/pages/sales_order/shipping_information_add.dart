@@ -3,6 +3,7 @@ import 'package:bid/models/sales_order/add_infomation_model.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -273,42 +274,61 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     });
   }
 
+  _change(formatString) {}
+
+  _onConfirm(formatString) {
+    return (_date) {
+      setState(() {
+        dayTime = _date.toString().substring(0, 10);
+        Provide.value<SalesAddPage>(context)
+            .changeDayTime(_date.toString().substring(0, 10));
+      });
+    };
+  }
+
   // 选择时间
   Widget _onClick(context) {
     return Container(
       child: InkWell(
         onTap: () {
-          showDatePicker(
-            // 设置禁用时间
-            // selectableDayPredicate: (DateTime day) {
-            //   return day.difference(DateTime.now()).inDays < 2;
-            // },
+          MyPicker.showPicker(
             context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2020),
-            locale: Locale('zh', 'CH'),
-            // locale: Locale('zh'),
-            lastDate: DateTime(2030),
-          ).then((DateTime val) {
-            if (val != null) {
-              setState(() {
-                dayTime = val.toString().substring(0, 10);
-                Provide.value<SalesAddPage>(context)
-                    .changeDayTime(val.toString().substring(0, 10));
-              });
-            }
-            print(val); // 2018-07-12 00:00:00.000
-          }).catchError((err) {
-            print(err);
-          });
-          // setState(() {
-          //   dayTime = result.toString().substring(0, 10);
-          //   Provide.value<SalesAddPage>(context)
-          //       .changeDayTime(result.toString().substring(0, 10));
+            current: DateTime.now(),
+            mode: MyPickerMode.date,
+            onChange: _change('yyyy-MM-dd'),
+            onConfirm: _onConfirm('yyyy-MM-dd'),
+          );
+          // showDatePicker(
+          //   // 设置禁用时间
+          //   // selectableDayPredicate: (DateTime day) {
+          //   //   return day.difference(DateTime.now()).inDays < 2;
+          //   // },
+          //   context: context,
+          //   initialDate: DateTime.now(),
+          //   firstDate: DateTime(2020),
+          //   locale: Locale('zh', 'CH'),
+          //   // locale: Locale('zh'),
+          //   lastDate: DateTime(2030),
+          // ).then((DateTime val) {
+          //   if (val != null) {
+          //     setState(() {
+          //       dayTime = val.toString().substring(0, 10);
+          //       Provide.value<SalesAddPage>(context)
+          //           .changeDayTime(val.toString().substring(0, 10));
+          //     });
+          //   }
+          //   print(val); // 2018-07-12 00:00:00.000
+          // }).catchError((err) {
+          //   print(err);
           // });
-          // print('选择时间12345678--${result.toString().substring(0, 10)}');
-          // 跳转到详情页面
-          // Application.router.navigateTo(context, "/plan?id=$id");
+          // // setState(() {
+          // //   dayTime = result.toString().substring(0, 10);
+          // //   Provide.value<SalesAddPage>(context)
+          // //       .changeDayTime(result.toString().substring(0, 10));
+          // // });
+          // // print('选择时间12345678--${result.toString().substring(0, 10)}');
+          // // 跳转到详情页面
+          // // Application.router.navigateTo(context, "/plan?id=$id");
         },
         child: Row(
           children: <Widget>[
@@ -438,6 +458,10 @@ class OkBotton extends StatelessWidget {
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        // 清空状态
+        Provide.value<SalesAddPage>(context).changeDayTime(null);
+        Provide.value<SalesAddPage>(context).changeCompanyName(null);
+        Provide.value<SalesAddPage>(context).changeCompanyNumber(null);
         Application.router
             .navigateTo(context, "/salesdetail?id=${detailId}", replace: true);
       } else {
