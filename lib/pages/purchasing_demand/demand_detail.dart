@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -14,68 +15,70 @@ class DemandDetails extends StatelessWidget {
   DemandDetails(this.demandId);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     // Application.router
-        //     //     .navigateTo(context, "/addproduct?id=1", replace: true);
-        //     // Navigator.pop(context);
-        //   },
-        // ),
-        title: Text('需求详情'),
-      ),
-      body: FutureBuilder(
-        future: _getBackDetailInfo(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            print(
-                'snapshot.hasData====================================>${Provide.value<DemandDetailProvide>(context).goodsList}');
-            // if (snapshot.data != null) {
-            return Stack(
-              children: <Widget>[
-                SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 40),
-                    constraints: BoxConstraints(
-                      // minWidth: 180,
-                      minHeight: MediaQuery.of(context).size.height - 126,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        ExpansionTileDome(),
-                        ProductInformation(),
-                      ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //     // Application.router
+          //     //     .navigateTo(context, "/addproduct?id=1", replace: true);
+          //     // Navigator.pop(context);
+          //   },
+          // ),
+          title: Text('需求详情'),
+        ),
+        body: FutureBuilder(
+          future: _getBackDetailInfo(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              print(
+                  'snapshot.hasData====================================>${Provide.value<DemandDetailProvide>(context).goodsList}');
+              // if (snapshot.data != null) {
+              return Stack(
+                children: <Widget>[
+                  SingleChildScrollView(
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 40),
+                      constraints: BoxConstraints(
+                        // minWidth: 180,
+                        minHeight: MediaQuery.of(context).size.height - 126,
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          ExpansionTileDome(),
+                          ProductInformation(),
+                        ],
+                      ),
                     ),
                   ),
+                  Positioned(
+                    bottom: -5,
+                    left: 0,
+                    right: 0,
+                    child: DemandDetailBottom(demandId),
+                  )
+                ],
+              );
+              // } else {
+              //   return Text('暂无数据');
+              // }
+            }
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  value: .7,
                 ),
-                Positioned(
-                  bottom: -5,
-                  left: 0,
-                  right: 0,
-                  child: DemandDetailBottom(demandId),
-                )
-              ],
-            );
-            // } else {
-            //   return Text('暂无数据');
-            // }
-          }
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-                value: .7,
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

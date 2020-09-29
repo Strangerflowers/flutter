@@ -7,6 +7,7 @@ import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:bid/pages/goods_warehouse/goods_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -79,18 +80,20 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   @override
   Widget build(BuildContext context) {
     // if (_itemList != null) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('商品库'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _goodsPage(list),
-              _goodsList(_itemList),
-            ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('商品库'),
+        ),
+        body: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _goodsPage(list),
+                _goodsList(_itemList),
+              ],
+            ),
           ),
         ),
       ),
