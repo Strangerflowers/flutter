@@ -1,5 +1,6 @@
 import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import './signin.dart';
@@ -19,20 +20,22 @@ class SetPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     print('设置密码页面$mobile==$companyName===$companyShort');
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            "设置密码",
+          ),
         ),
-        title: Text(
-          "设置密码",
+        body: SingleChildScrollView(
+          child: PasswordForm(mobile, companyName, companyShort),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: PasswordForm(mobile, companyName, companyShort),
       ),
     );
   }
@@ -56,6 +59,7 @@ TextEditingController _comPasswordController = new TextEditingController();
 GlobalKey<FormState> _setFormKey = GlobalKey<FormState>();
 
 class _PasswordFormState extends State<PasswordForm> {
+  bool disableBtn = false;
   bool autovalidatePwd = false;
   bool btnFlag = false;
   var params;
@@ -212,6 +216,10 @@ class _PasswordFormState extends State<PasswordForm> {
     // });
     print('注册信息$formData');
     if ((_setFormKey.currentState as FormState).validate()) {
+      if (disableBtn) {
+        return;
+      }
+      disableBtn = true;
       await request('register', formData: formData).then((val) {
         print('----------------------$val');
         if (val['code'] == 0) {
@@ -227,10 +235,12 @@ class _PasswordFormState extends State<PasswordForm> {
                 },
               ),
             );
+            disableBtn = false;
           });
 
           // Application.router.navigateTo(context, "/setPassword?item=$item");
         } else {
+          disableBtn = false;
           Toast.toast(context, msg: val['message']);
           // setState(() {
           //   btnFlag = false;
