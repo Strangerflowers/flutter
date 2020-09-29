@@ -129,8 +129,8 @@ class MyApp extends StatelessWidget {
         if (Global.profile.token == null) {
           firstPage = FormTestRoute();
         } else if (Global.profile.token != null &&
-                Global.profile.auditStatus == 2 ||
-            Global.profile.auditStatus == 3) {
+            (Global.profile.auditStatus == 2 ||
+                Global.profile.auditStatus == 3)) {
           firstPage = Authentication();
         } else if (Global.profile.token != null &&
             Global.profile.auditStatus != 0) {
