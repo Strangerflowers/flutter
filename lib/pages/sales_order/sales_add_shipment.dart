@@ -11,6 +11,10 @@ import 'package:provide/provide.dart';
 import '../../service/service_method.dart';
 import '../../provide/sales_add_shipment_provide.dart';
 import '../../routers/application.dart';
+import 'package:flutter_my_picker/flutter_my_picker.dart';
+
+// 日期操作，需要时引入
+import 'package:flutter_my_picker/common/date.dart';
 
 class AddShipmentSchedule extends StatefulWidget {
   final String mainOrderId;
@@ -186,50 +190,85 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     });
   }
 
+  _change(formatString) {
+    // return (_date) {
+    //   setState(() {
+    //     print('$_date');
+    //     dayTime = _date.toString().substring(0, 10);
+    //     Provide.value<SalesOrderAddProvide>(context)
+    //         .changeDayTime(_date.toString().substring(0, 10));
+    //   });
+    //   // date = _date;
+    //   // dateStr = MyDate.format(formatString, _date);
+    //   // });
+    // };
+  }
+
+  _onConfirm(formatString) {
+    return (_date) {
+      setState(() {
+        print('$_date');
+        dayTime = _date.toString().substring(0, 10);
+        Provide.value<SalesOrderAddProvide>(context)
+            .changeDayTime(_date.toString().substring(0, 10));
+      });
+      // date = _date;
+      // dateStr = MyDate.format(formatString, _date);
+      // });
+    };
+  }
+
   // 采购计划
   Widget _onClick(context) {
     return Container(
       child: InkWell(
         onTap: () async {
-          showDatePicker(
+          MyPicker.showPicker(
             context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2020),
-            locale: Locale('zh', 'CH'),
-            lastDate: DateTime(2030),
-          ).then((DateTime val) {
-            if (val != null) {
-              setState(() {
-                dayTime = val.toString().substring(0, 10);
-                Provide.value<SalesOrderAddProvide>(context)
-                    .changeDayTime(val.toString().substring(0, 10));
-              });
-            }
-            print(val); // 2018-07-12 00:00:00.000
-          }).catchError((err) {
-            print(err);
-          });
-          // var result = await showDatePicker(
-          //   // selectableDayPredicate: (DateTime day) {
-          //   //   return day.difference(DateTime.now()).inDays < 2;
-          //   // },
+            current: DateTime.now(),
+            mode: MyPickerMode.date,
+            onChange: _change('yyyy-MM-dd'),
+            onConfirm: _onConfirm('yyyy-MM-dd'),
+          );
+          // showDatePicker(
           //   context: context,
           //   initialDate: DateTime.now(),
           //   firstDate: DateTime(2020),
-          //   locale: Locale('zh'),
+          //   locale: Locale('zh', 'CH'),
           //   lastDate: DateTime(2030),
-          // );
-          // if (result != null) {
-          //   setState(() {
-          //     dayTime = result.toString().substring(0, 10);
-          //     Provide.value<SalesOrderAddProvide>(context)
-          //         .changeDayTime(result.toString().substring(0, 10));
-          //   });
-          // }
+          // ).then((DateTime val) {
+          //   if (val != null) {
+          //     setState(() {
+          //       dayTime = val.toString().substring(0, 10);
+          //       Provide.value<SalesOrderAddProvide>(context)
+          //           .changeDayTime(val.toString().substring(0, 10));
+          //     });
+          //   }
+          //   print(val); // 2018-07-12 00:00:00.000
+          // }).catchError((err) {
+          //   print(err);
+          // });
+          // // var result = await showDatePicker(
+          // //   // selectableDayPredicate: (DateTime day) {
+          // //   //   return day.difference(DateTime.now()).inDays < 2;
+          // //   // },
+          // //   context: context,
+          // //   initialDate: DateTime.now(),
+          // //   firstDate: DateTime(2020),
+          // //   locale: Locale('zh'),
+          // //   lastDate: DateTime(2030),
+          // // );
+          // // if (result != null) {
+          // //   setState(() {
+          // //     dayTime = result.toString().substring(0, 10);
+          // //     Provide.value<SalesOrderAddProvide>(context)
+          // //         .changeDayTime(result.toString().substring(0, 10));
+          // //   });
+          // // }
 
-          // print('选择时间12345678--${result.toString().substring(0, 10)}');
-          // 跳转到详情页面
-          // Application.router.navigateTo(context, "/plan?id=$id");
+          // // print('选择时间12345678--${result.toString().substring(0, 10)}');
+          // // 跳转到详情页面
+          // // Application.router.navigateTo(context, "/plan?id=$id");
         },
         child: Row(
           children: <Widget>[
