@@ -3,6 +3,7 @@ import 'package:bid/models/sales_order/add_infomation_model.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -46,46 +47,48 @@ class _SaleaUpdateState extends State<SaleaUpdate> {
   @override
   Widget build(BuildContext context) {
     // _getBackDetailInfo(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('填写发货信息'),
-      ),
-      body: FutureBuilder(
-        future: _getBackDetailInfo,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            var data = SalesAdd.fromJson(snapshot.data);
-            if (data.result != null) {
-              return SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      AddHeader(data.result),
-                      // DatePickerWidget(),
-                      ProductInformation(data.result.dispatchItemVos),
-                      OkBotton(data.result, detailId),
-                    ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('填写发货信息'),
+        ),
+        body: FutureBuilder(
+          future: _getBackDetailInfo,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              var data = SalesAdd.fromJson(snapshot.data);
+              if (data.result != null) {
+                return SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        AddHeader(data.result),
+                        // DatePickerWidget(),
+                        ProductInformation(data.result.dispatchItemVos),
+                        OkBotton(data.result, detailId),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else {
-              return Text('暂无数据');
+                );
+              } else {
+                return Text('暂无数据');
+              }
             }
-          }
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-                value: .7,
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  value: .7,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -368,6 +371,7 @@ class OkBotton extends StatelessWidget {
   // final String len;
   // final String returnId;
   OkBotton(this.data, this.detailId);
+  bool disableBtn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -436,7 +440,11 @@ class OkBotton extends StatelessWidget {
       "logisticsNumber": Provide.value<SalesAddPage>(context).logisticsNumber,
       "dispatchItems": dispatchItems
     };
-    print('获取更新参数======$formData');
+    print('获取更新参数======ata');
+    if (disableBtn) {
+      return;
+    }
+    disableBtn = true;
     request('update', formData: formData).then((val) {
       // Application.router.navigateTo(context, "/saleslist?status=2");
       // Navigator.push(
@@ -462,9 +470,12 @@ class OkBotton extends StatelessWidget {
         Provide.value<SalesAddPage>(context).changeDayTime(null);
         Provide.value<SalesAddPage>(context).changeCompanyName(null);
         Provide.value<SalesAddPage>(context).changeCompanyNumber(null);
+
         Application.router
             .navigateTo(context, "/salesdetail?id=${detailId}", replace: true);
+        disableBtn = false;
       } else {
+        disableBtn = false;
         Fluttertoast.showToast(
           msg: val['message'],
           toastLength: Toast.LENGTH_SHORT,

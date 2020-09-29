@@ -2,6 +2,7 @@ import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/sales_add_shipment_model.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,50 +55,52 @@ class _AddShipmentScheduleState extends State<AddShipmentSchedule> {
 //   AddShipmentSchedule(this.goodsId, this.mainOrderId, this.len, this.returnId);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('添加发货安排'),
-      ),
-      body: FutureBuilder(
-        future: _getBackDetailInfo,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            var data = AddDeliverArrange.fromJson(snapshot.data);
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('添加发货安排'),
+        ),
+        body: FutureBuilder(
+          future: _getBackDetailInfo,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              var data = AddDeliverArrange.fromJson(snapshot.data);
 
-            if (data.result != null) {
-              return SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      ShipmentBatch(len),
-                      DatePickerWidget(),
-                      ProductInformation(data.result),
-                      OkBotton(
-                          mainOrderId, goodsId, len, returnId, data.result),
-                    ],
+              if (data.result != null) {
+                return SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        ShipmentBatch(len),
+                        DatePickerWidget(),
+                        ProductInformation(data.result),
+                        OkBotton(
+                            mainOrderId, goodsId, len, returnId, data.result),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else {
-              return Container(
-                child: Text('暂无数据'),
-              );
+                );
+              } else {
+                return Container(
+                  child: Text('暂无数据'),
+                );
+              }
             }
-          }
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-                value: .7,
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  value: .7,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -373,7 +376,7 @@ class OkBotton extends StatelessWidget {
   final String returnId;
   final data;
   OkBotton(this.mainOrderId, this.goodsId, this.len, this.returnId, this.data);
-
+  bool disableBtn = false;
   @override
   Widget build(BuildContext context) {
     return Provide<SalesOrderAddProvide>(builder: (context, child, val) {
@@ -427,7 +430,10 @@ class OkBotton extends StatelessWidget {
       "batch": int.parse(len) + 1,
       "dispatchItems": dispatchItems,
     };
-
+    if (disableBtn) {
+      return;
+    }
+    disableBtn = true;
     request('dispatchAdd', formData: formData).then((val) {
       print('响应数据---$val');
       if (val['code'] == 0) {
@@ -444,6 +450,7 @@ class OkBotton extends StatelessWidget {
         Application.router
             .navigateTo(context, "/salesdetail?id=$returnId", replace: true);
       } else {
+        disableBtn = false;
         Fluttertoast.showToast(
           msg: val['message'],
           toastLength: Toast.LENGTH_SHORT,
