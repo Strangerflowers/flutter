@@ -7,6 +7,7 @@ import 'package:bid/common/xyz_picker.dart';
 import 'package:bid/routers/application.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,45 +37,47 @@ class _AuthenticationState extends State<Authentication> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 750, height: 1334);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("资料认证"),
-      ),
-      body: FutureBuilder(
-          future: _futureBuilderFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              var data = snapshot.data;
-              print('响应数据====>${snapshot.data}');
-              if (snapshot.hasData) {
-                return ListView(children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 50),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          _headerData(data['result']),
-                          AuthenticationForm(data['result']),
-                        ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("资料认证"),
+        ),
+        body: FutureBuilder(
+            future: _futureBuilderFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var data = snapshot.data;
+                print('响应数据====>${snapshot.data}');
+                if (snapshot.hasData) {
+                  return ListView(children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 50),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            _headerData(data['result']),
+                            AuthenticationForm(data['result']),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ]);
-              } else {
-                return Container(child: Text('暂无数据'));
+                  ]);
+                } else {
+                  return Container(child: Text('暂无数据'));
+                }
               }
-            }
-            return Container(
-              height: MediaQuery.of(context).size.height / 2,
-              child: Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.grey[200],
-                  valueColor: AlwaysStoppedAnimation(Colors.blue),
-                  value: .7,
+              return Container(
+                height: MediaQuery.of(context).size.height / 2,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.grey[200],
+                    valueColor: AlwaysStoppedAnimation(Colors.blue),
+                    value: .7,
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 
@@ -146,6 +149,7 @@ typedef MyOnChange = Function(int index, String id, String name);
 class _AuthenticationFormState extends State<AuthenticationForm> {
   String TAG = "_AuthenticationFormState";
   bool isValider = false;
+  bool disableBtn = false;
   Map<String, Object> categoryTree = new LinkedHashMap();
   var companyAddressName; //显示公司地区名称
   var auditStatus = 1;
@@ -1353,8 +1357,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               "companyCityCode": companyCityCode
             };
 
-            print(
-                'fdff-----------------------------------------------------------------------------------------------------------dfd=====>${formData}');
+            if (disableBtn) {
+              return;
+            }
+            disableBtn = true;
+
             await request('suppliersUpdate', formData: formData).then((val) {
               if (val['code'] == 0) {
                 prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
@@ -1367,7 +1374,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                   Navigator.pop(context);
                   Application.router.navigateTo(context, "/certificateInfo");
                 }
+                // disableBtn = false;
               } else {
+                disableBtn = false;
                 Toast.toast(context, msg: val['message']);
               }
             });
