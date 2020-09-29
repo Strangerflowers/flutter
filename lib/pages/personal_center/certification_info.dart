@@ -178,7 +178,7 @@ class _CertificationInfoState extends State<CertificationInfo> {
       child: new Row(children: [
         Container(
             width: ScreenUtil().setWidth(260),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(16.0),
             child: Text(dataModel.label)),
         Expanded(
@@ -200,7 +200,7 @@ class _CertificationInfoState extends State<CertificationInfo> {
         child: new Row(children: [
           Container(
               width: ScreenUtil().setWidth(260),
-              alignment: Alignment.centerRight,
+              alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(16.0),
               child: Text(dataModel.label)),
           InkWell(
@@ -243,7 +243,7 @@ class _CertificationInfoState extends State<CertificationInfo> {
         child: new Row(children: [
           Container(
               width: ScreenUtil().setWidth(260),
-              alignment: Alignment.centerRight,
+              alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(16.0),
               child: Text(dataModel.label)),
           Container(
