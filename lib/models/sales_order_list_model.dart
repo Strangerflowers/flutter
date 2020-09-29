@@ -96,6 +96,7 @@ class SalesRoderList {
   Null approvalState;
   Null key;
   int totalNumber;
+  bool isOpen;
 
   SalesRoderList(
       {this.id,
@@ -120,6 +121,7 @@ class SalesRoderList {
       this.orderItems,
       this.processInstanceId,
       this.approvalState,
+      this.isOpen,
       this.key,
       this.totalNumber});
 
@@ -152,6 +154,7 @@ class SalesRoderList {
     }
     processInstanceId = json['processInstanceId'];
     approvalState = json['approvalState'];
+    isOpen = json['isOpen'];
     key = json['key'];
     totalNumber = json['totalNumber'];
   }
@@ -182,6 +185,7 @@ class SalesRoderList {
     }
     data['processInstanceId'] = this.processInstanceId;
     data['approvalState'] = this.approvalState;
+    data['isOpen'] = this.isOpen;
     data['key'] = this.key;
     data['totalNumber'] = this.totalNumber;
     return data;

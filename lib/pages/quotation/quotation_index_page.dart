@@ -65,10 +65,16 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
         totalPage = goodsList.result.totalPage;
 
         if (pageNum == 1) {
+          goodsList.result.list.forEach((element) {
+            element.isOpen = false;
+          });
           setState(() {
             _itemList = goodsList.result.list;
           });
         } else {
+          goodsList.result.list.forEach((element) {
+            element.isOpen = false;
+          });
           setState(() {
             _itemList.addAll(goodsList.result.list);
           });
@@ -272,6 +278,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
         child: Column(
           children: <Widget>[
             _information(item, index),
+            _expandedBotton(item),
           ],
         ),
       ),
@@ -374,20 +381,20 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
               ],
             ),
           ),
-          _goodlsList(item.detailList),
+          _goodlsList(item.detailList, item),
         ],
       ),
     );
   }
 
   // 二级
-  Widget _goodlsList(arr) {
+  Widget _goodlsList(arr, item) {
     if (arr.length > 0) {
       return Container(
         // height: ScreenUtil().setHeight(1000),
         child: SizedBox(
           child: ListView.builder(
-            itemCount: arr.length,
+            itemCount: item.isOpen ? arr.length : 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: new NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
@@ -399,6 +406,39 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
     } else {
       return Container(
         child: Text('暂无数据'),
+      );
+    }
+  }
+
+  // 收起展开按钮
+  Widget _expandedBotton(item) {
+    if (item.detailList != null && item.detailList.length > 1) {
+      return Container(
+        width: ScreenUtil().setWidth(750),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              item.isOpen = !item.isOpen;
+            });
+          },
+          // child: Icon(Iconfont.down),
+          child: item.isOpen
+              ? Icon(
+                  Icons.keyboard_arrow_up,
+                  size: 35,
+                  color: Color(0xFFCCCCCC),
+                )
+              : Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Color(0xFFCCCCCC),
+                  size: 35,
+                ),
+        ),
+      );
+    } else {
+      return Container(
+        height: 0,
+        child: Text(''),
       );
     }
   }

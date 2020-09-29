@@ -84,6 +84,7 @@ class QuotationHomeList {
   String linkPhone;
   String totalAmount;
   String remark;
+  bool isOpen;
   int categoryNum;
   int total;
   int status;
@@ -102,6 +103,7 @@ class QuotationHomeList {
       this.linkPhone,
       this.totalAmount,
       this.remark,
+      this.isOpen,
       this.categoryNum,
       this.total,
       this.status,
@@ -120,6 +122,7 @@ class QuotationHomeList {
     linkPhone = json['linkPhone'];
     totalAmount = json['totalAmount'].toString(); ////这里强制转换为String 统一接受即可
     remark = json['remark'];
+    isOpen = json['isOpen'];
     categoryNum = json['categoryNum'];
     total = json['total'];
     status = json['status'];
@@ -145,6 +148,7 @@ class QuotationHomeList {
     data['linkPhone'] = this.linkPhone;
     data['totalAmount'] = this.totalAmount;
     data['remark'] = this.remark;
+    data['isOpen'] = this.isOpen;
     data['categoryNum'] = this.categoryNum;
     data['total'] = this.total;
     data['status'] = this.status;

@@ -60,11 +60,17 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
       totalPage = goodsList.result.totalPage;
 
       if (pageNum == 1) {
+        goodsList.result.list.forEach((element) {
+          element.isOpen = false;
+        });
         setState(() {
           _itemList = goodsList.result.list;
         });
         print('拿到的字段￥${_itemList}');
       } else {
+        goodsList.result.list.forEach((element) {
+          element.isOpen = false;
+        });
         setState(() {
           _itemList.addAll(goodsList.result.list);
         });
@@ -279,7 +285,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
         child: Column(
           children: <Widget>[
             _company(item),
-            _secondLevelListView(item.orderItems),
+            _secondLevelListView(item.orderItems, item),
+            _expandedBotton(item),
           ],
         ),
       ),
@@ -287,12 +294,12 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
   }
 
   // 遍历二级
-  Widget _secondLevelListView(subList) {
+  Widget _secondLevelListView(subList, item) {
     if (subList.length > 0) {
       return Container(
         child: SizedBox(
           child: ListView.builder(
-            itemCount: subList.length,
+            itemCount: item.isOpen ? subList.length : 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
@@ -335,6 +342,40 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
         ],
       ),
     );
+  }
+
+  // 收起展开按钮
+  Widget _expandedBotton(item) {
+    if (item.orderItems != null && item.orderItems.length > 1) {
+      return Container(
+        width: ScreenUtil().setWidth(750),
+        child: InkWell(
+          onTap: () {
+            print('点击展开收起${item.isOpen}');
+            setState(() {
+              item.isOpen = !item.isOpen;
+            });
+          },
+          // child: Icon(Iconfont.down),
+          child: item.isOpen
+              ? Icon(
+                  Icons.keyboard_arrow_up,
+                  size: 35,
+                  color: Color(0xFFCCCCCC),
+                )
+              : Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Color(0xFFCCCCCC),
+                  size: 35,
+                ),
+        ),
+      );
+    } else {
+      return Container(
+        height: 0,
+        child: Text(''),
+      );
+    }
   }
 
   // 需求公司
