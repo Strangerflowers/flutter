@@ -15,6 +15,7 @@ class ModifyPasswordByCode extends StatefulWidget {
 }
 
 class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
+  bool disableBtn = false;
   static String TAG = "_ModifyPasswordByCodeState";
   bool changeCount = false;
   bool autoValidate = false;
@@ -568,9 +569,14 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
       };
 
       print('修改密码$data');
+      if (disableBtn) {
+        return;
+      }
+      disableBtn = true;
       await request('resetPwdByCode', formData: data).then((val) {
         print('----------------------$val');
         if (val['code'] == 0) {
+          disableBtn = false;
           showDialog(
               context: context,
               builder: (context) {
@@ -593,6 +599,7 @@ class _ModifyPasswordByCodeState extends State<ModifyPasswordByCode> {
                 );
               });
         } else {
+          disableBtn = false;
           Toast.toast(
             context,
             msg: val['message'],
