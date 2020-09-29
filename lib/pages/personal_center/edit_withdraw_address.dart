@@ -18,6 +18,7 @@ class EditWithdrawAddress extends StatefulWidget {
 }
 
 class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
+  bool disableBtn = false;
   String addressId;
   var addressInfo;
   void initState() {
@@ -572,12 +573,18 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
                   "defaultAddress": 1
                 };
                 LogUtils.d('[确认修改按钮]', formData);
+                if (disableBtn) {
+                  return;
+                }
+                disableBtn = true;
                 request('updateAddress', formData: formData).then((value) {
                   if (value['code'] == 0) {
                     Application.router
                         .navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+                    disableBtn = false;
                   } else {
                     Toast.toast(context, msg: value['message']);
+                    disableBtn = false;
                   }
                   LogUtils.d('[返回值]', value);
                 });

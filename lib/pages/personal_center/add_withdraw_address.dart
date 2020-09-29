@@ -15,6 +15,7 @@ class AddWithdrawAddress extends StatefulWidget {
 }
 
 class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
+  bool disableBtn = false;
   final addressFormKey = GlobalKey<FormState>();
   bool autoValidate = false;
   // String areaCode, companyAddressName;
@@ -553,11 +554,18 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                   "defaultAddress": 1
                 };
                 LogUtils.d('[确认修改按钮]', formData);
+                if (disableBtn) {
+                  return;
+                }
+                disableBtn = true;
                 request('saveAddress', formData: formData).then((value) {
                   if (value['code'] == 0) {
                     Application.router.navigateTo(
                         context, Routes.WITHDRAW_ADDRESS_PAGE,
                         replace: true);
+                    disableBtn = false;
+                  } else {
+                    disableBtn = false;
                   }
                   LogUtils.d('[返回值]', value);
                 });
