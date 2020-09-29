@@ -328,7 +328,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
           Row(
             children: <Widget>[
               Text(
-                '${item.priceRange}',
+                '￥${item.priceRange == null || item.priceRange == 'null' ? '' : item.priceRange}',
                 style: TextStyle(color: Color(0xFFF0B347)),
               ),
               _buttom(item),
