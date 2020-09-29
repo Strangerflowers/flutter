@@ -3,6 +3,7 @@ import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/sales_order_list_model.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -80,20 +81,22 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('销售订单'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _salesTabs(list),
-              _goodsList(_itemList),
-              // SalesTabs(),
-              // SalesGoodsList(),
-            ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('销售订单'),
+        ),
+        body: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _salesTabs(list),
+                _goodsList(_itemList),
+                // SalesTabs(),
+                // SalesGoodsList(),
+              ],
+            ),
           ),
         ),
       ),

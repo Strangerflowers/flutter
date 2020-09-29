@@ -1,5 +1,6 @@
 import 'package:bid/common/string_utils.dart';
 import 'package:bid/pages/component/ImageWidgetBuilder.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,29 +18,31 @@ class ShippingInformationLook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // _getBackDetailInfo(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('发货信息'),
-      ),
-      body: FutureBuilder(
-        future: _getBackDetailInfo(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    LookHeader(),
-                    ProductInformation(),
-                    Quotation(),
-                  ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('发货信息'),
+        ),
+        body: FutureBuilder(
+          future: _getBackDetailInfo(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      LookHeader(),
+                      ProductInformation(),
+                      Quotation(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return Text('加载中......');
-          }
-        },
+              );
+            } else {
+              return Text('加载中......');
+            }
+          },
+        ),
       ),
     );
   }
