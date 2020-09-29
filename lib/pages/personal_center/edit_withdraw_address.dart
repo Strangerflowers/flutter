@@ -2,6 +2,7 @@ import 'package:bid/common/log_utils.dart';
 import 'package:bid/routers/application.dart';
 import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
@@ -41,21 +42,23 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: FutureBuilder(
-          future: _getShowEdit(),
-          builder: (context, snapshot) {
-            var data = snapshot.data;
-            print('回显退货地址====>${snapshot.data}');
-            if (snapshot.hasData) {
-              return _buildModifyPwdTextForm(data['result']);
-            } else {
-              return Container(
-                child: Text('暂无数据'),
-              );
-            }
-          }),
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: FutureBuilder(
+            future: _getShowEdit(),
+            builder: (context, snapshot) {
+              var data = snapshot.data;
+              print('回显退货地址====>${snapshot.data}');
+              if (snapshot.hasData) {
+                return _buildModifyPwdTextForm(data['result']);
+              } else {
+                return Container(
+                  child: Text('暂无数据'),
+                );
+              }
+            }),
+      ),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sprintf/sprintf.dart';
 import '../../common/log_utils.dart';
@@ -36,9 +37,11 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildModifyPwdTextForm(),
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: _buildModifyPwdTextForm(),
+      ),
     );
   }
 
