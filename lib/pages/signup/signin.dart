@@ -4,6 +4,7 @@ import 'package:bid/common/toast.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,128 +48,132 @@ class _FormTestRouteState extends State<FormTestRoute> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '注册页面',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("登录"),
-          centerTitle: true,
-        ),
-        body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pop(context); //销毁当前页面
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            // return FormTestRoute();
-                            return Register();
-                          },
-                        ),
-                      );
-                    },
-                    child: Container(
-                      child: Text('注册'),
-                      alignment: Alignment.topRight,
+      home: FlutterEasyLoading(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("登录"),
+            centerTitle: true,
+          ),
+          body: Container(
+            color: Colors.white,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pop(context); //销毁当前页面
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              // return FormTestRoute();
+                              return Register();
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        child: Text('注册'),
+                        alignment: Alignment.topRight,
+                      ),
                     ),
-                  ),
 
-                  new Image.asset('images/icon.png'),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        // Mysignup(),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                currentIndex = 0;
-                              });
-                              print("点击了 title $context");
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
-                              decoration: BoxDecoration(
-                                border: currentIndex == 0
-                                    ? Border(
-                                        bottom: BorderSide(
-                                            color: Colors.blue, width: 2.0),
-                                      )
-                                    : null,
-                              ),
-                              child: Text(
-                                '账号密码登录',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: currentIndex == 0
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                  fontSize: 18.0,
-                                  height: 1.2,
-                                  fontFamily: "Courier",
+                    new Image.asset('images/icon.png'),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          // Mysignup(),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 0;
+                                });
+                                print("点击了 title $context");
+                              },
+                              child: Container(
+                                padding:
+                                    EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
+                                decoration: BoxDecoration(
+                                  border: currentIndex == 0
+                                      ? Border(
+                                          bottom: BorderSide(
+                                              color: Colors.blue, width: 2.0),
+                                        )
+                                      : null,
+                                ),
+                                child: Text(
+                                  '账号密码登录',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: currentIndex == 0
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                    fontSize: 18.0,
+                                    height: 1.2,
+                                    fontFamily: "Courier",
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        //垂直分割线
-                        SizedBox(
-                          width: 1,
-                          height: 12,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(color: Colors.grey),
+                          //垂直分割线
+                          SizedBox(
+                            width: 1,
+                            height: 12,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(color: Colors.grey),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                currentIndex = 1;
-                              });
-                              LogUtils.debug(
-                                  TAG, "点击了 title 手机验证码登录", StackTrace.current);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
-                              decoration: BoxDecoration(
-                                border: currentIndex == 1
-                                    ? Border(
-                                        bottom: BorderSide(
-                                            color: Colors.blue, width: 2.0),
-                                      )
-                                    : null,
-                              ),
-                              child: Text(
-                                '手机验证码登录',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: currentIndex == 1
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                  fontSize: 18.0,
-                                  height: 1.2,
-                                  fontFamily: "Courier",
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 1;
+                                });
+                                LogUtils.debug(TAG, "点击了 title 手机验证码登录",
+                                    StackTrace.current);
+                              },
+                              child: Container(
+                                padding:
+                                    EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
+                                decoration: BoxDecoration(
+                                  border: currentIndex == 1
+                                      ? Border(
+                                          bottom: BorderSide(
+                                              color: Colors.blue, width: 2.0),
+                                        )
+                                      : null,
+                                ),
+                                child: Text(
+                                  '手机验证码登录',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: currentIndex == 1
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                    fontSize: 18.0,
+                                    height: 1.2,
+                                    fontFamily: "Courier",
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: tabBodies[currentIndex],
-                  ),
-                  // FormPage() //form表单
-                ],
+                    Container(
+                      child: tabBodies[currentIndex],
+                    ),
+                    // FormPage() //form表单
+                  ],
+                ),
+                // ),
               ),
-              // ),
             ),
           ),
         ),
