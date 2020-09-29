@@ -2,6 +2,7 @@ import 'package:bid/common/count_down.dart';
 import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../routers/application.dart';
@@ -13,12 +14,14 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("注册新账号"),
-      ),
-      body: SingleChildScrollView(
-        child: HomeContent(),
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("注册新账号"),
+        ),
+        body: SingleChildScrollView(
+          child: HomeContent(),
+        ),
       ),
     );
   }
@@ -54,6 +57,7 @@ class FormDemo extends StatefulWidget {
 }
 
 class FormDemoState extends State<FormDemo> {
+  bool disableBtn = false;
   bool changeCount = false;
   bool autovalidateMobile = false;
   bool autovalidateOther = false;
@@ -95,6 +99,10 @@ class FormDemoState extends State<FormDemo> {
 
       // checkNameAndMobile
       LogUtils.debug(TAG, '校验公司名称$item', StackTrace.current);
+      if (disableBtn) {
+        return;
+      }
+      disableBtn = true;
       await request('checkNameAndMobile', formData: item).then((ele) {
         LogUtils.debug(
             TAG, '校验公司名称$ele====${ele['code'] == 0}', StackTrace.current);
@@ -106,8 +114,10 @@ class FormDemoState extends State<FormDemo> {
               LogUtils.debug(TAG, '判断是否跑进校验', StackTrace.current);
               Application.router.navigateTo(context,
                   "/setPassword?mobile=$mobile&companyName=${Uri.encodeComponent(companyName)}&companyShort=${Uri.encodeComponent(companyShort)}");
+              disableBtn = false;
               // Application.router.navigateTo(context, "/setPassword?item=$item");
             } else {
+              disableBtn = false;
               Toast.toast(
                 context,
                 msg: val['message'],
@@ -115,6 +125,7 @@ class FormDemoState extends State<FormDemo> {
             }
           });
         } else {
+          disableBtn = false;
           Toast.toast(
             context,
             msg: ele['message'],
