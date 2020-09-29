@@ -31,6 +31,7 @@ import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -159,7 +160,7 @@ class MyApp extends StatelessWidget {
                 '/loginPage': (ctx) => FormTestRoute(),
                 // '/homePage': (ctx) => MainPage(),
               },
-              home: firstPage),
+              home: FlutterEasyLoading(child: firstPage)),
         );
       },
     );

@@ -64,6 +64,7 @@ dependencies:
   device_info: ^0.4.1+1
   photo_view: ^0.10.2
   flutter_my_picker: ^1.0.3
+  flutter_easyloading: ^2.0.0
   
   
 

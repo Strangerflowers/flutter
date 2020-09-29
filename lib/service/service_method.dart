@@ -5,6 +5,7 @@ import 'package:bid/common/log_utils.dart';
 import 'package:bid/common/network.dart';
 import 'package:bid/config/service_url_holder.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -19,7 +20,7 @@ Future request(
   try {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-
+    EasyLoading.show(status: 'loading...');
     Options options = new Options();
     options.headers = {
       Constants.X_OS_KERNEL_TOKEN: token,
@@ -42,8 +43,10 @@ Future request(
         options: options,
       );
     }
+    EasyLoading.dismiss();
     return responseData;
   } catch (e) {
+    EasyLoading.dismiss();
     LogUtils.error(TAG, 'request请求发生异常: ', StackTrace.current, e: e);
   }
 }
@@ -56,7 +59,7 @@ Future requestPostSpl(
   try {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-
+    EasyLoading.show(status: 'loading...');
     Options options = new Options();
     options.headers = {
       Constants.X_OS_KERNEL_TOKEN: token,
@@ -80,8 +83,10 @@ Future requestPostSpl(
         options: options,
       );
     }
+    EasyLoading.dismiss();
     return responseData;
   } catch (e) {
+    EasyLoading.dismiss();
     LogUtils.error(TAG, 'requestPostSpl请求发生异常: ', StackTrace.current, e: e);
   }
 }
@@ -94,7 +99,7 @@ Future requestPostGetSpl(
   try {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-
+    EasyLoading.show(status: 'loading...');
     Options options = new Options();
     options.headers = {
       Constants.X_OS_KERNEL_TOKEN: token,
@@ -118,8 +123,10 @@ Future requestPostGetSpl(
         options: options,
       );
     }
+    EasyLoading.dismiss();
     return responseData;
   } catch (e) {
+    EasyLoading.dismiss();
     LogUtils.error(TAG, 'requestPostSpl请求发生异常: ', StackTrace.current, e: e);
   }
 }
@@ -129,7 +136,7 @@ Future requestNoHeader(url, {formData}) async {
   try {
     Options options = new Options();
     options.contentType = "application/json";
-
+    EasyLoading.show(status: 'loading...');
     String requestUrl = ServiceUrlHolder.getUrl(url);
     LogUtils.debug(
         TAG,
@@ -148,8 +155,10 @@ Future requestNoHeader(url, {formData}) async {
         data: formData,
       );
     }
+    EasyLoading.dismiss();
     return responseData;
   } catch (e) {
+    EasyLoading.dismiss();
     LogUtils.error(TAG, 'requestNoHeader请求发生异常: ', StackTrace.current, e: e);
   }
 }
@@ -159,7 +168,7 @@ Future requestGet(url, {formData}) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-
+    EasyLoading.show(status: 'loading...');
     Options options = new Options();
     options.headers = {
       Constants.X_OS_KERNEL_TOKEN: token,
@@ -183,8 +192,10 @@ Future requestGet(url, {formData}) async {
         queryParameters: formData,
       );
     }
+    EasyLoading.dismiss();
     return responseData;
   } catch (e) {
+    EasyLoading.dismiss();
     LogUtils.error(TAG, 'requestGet请求发生异常: ', StackTrace.current, e: e);
   }
 }
