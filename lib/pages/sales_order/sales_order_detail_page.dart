@@ -1105,6 +1105,8 @@ class DeliveryArrangement extends StatelessWidget {
       print('响应数据---$val');
       if (val['code'] == 0) {
         Toast.toast(context, msg: '发送成功!');
+        Application.router
+            .navigateTo(context, "/salesdetail?id=$goodsId", replace: true);
         // Fluttertoast.showToast(
         //   msg: '发送成功!',
         //   toastLength: Toast.LENGTH_SHORT,
