@@ -75,7 +75,8 @@ class _AddContactInfo extends State<AddContactInfo> {
     return Scaffold(
         appBar: _buildAppBar(),
         body: SingleChildScrollView(
-          child: Center(
+          child: Container(
+            color: Colors.white,
             child: Form(
               //表单和GlobalKey绑定
               key: _formKey,
@@ -154,6 +155,9 @@ class _AddContactInfo extends State<AddContactInfo> {
             }
             return null;
           },
+          onChanged: (value) {
+            contactInfoModel.contactName = value;
+          },
           //表单数据保存
           onSaved: (value) {
             contactInfoModel.contactName = value;
@@ -173,7 +177,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                       TextSpan(
                         text: '联系人',
                         style: TextStyle(
-                          fontSize: My.ScreenUtil().setSp(32),
+                          // fontSize: My.ScreenUtil().setSp(32),
                           decoration: TextDecoration.none,
                           color: Color(0xFF222222),
                         ),
@@ -212,6 +216,9 @@ class _AddContactInfo extends State<AddContactInfo> {
           }
           return null;
         },
+        onChanged: (value) {
+          contactInfoModel.mobile = value.trim();
+        },
         //表单数据保存
         onSaved: (value) {
           contactInfoModel.mobile = value.trim();
@@ -232,7 +239,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                     TextSpan(
                       text: '电话',
                       style: TextStyle(
-                        fontSize: My.ScreenUtil().setSp(32),
+                        // fontSize: My.ScreenUtil().setSp(32),
                         decoration: TextDecoration.none,
                         color: Color(0xFF222222),
                       ),
@@ -250,6 +257,7 @@ class _AddContactInfo extends State<AddContactInfo> {
 
   Widget _buildAddrressDetailRow() {
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.all(10),
       //decoration: BoxDecoration(),
       child: TextFormField(
@@ -261,6 +269,9 @@ class _AddContactInfo extends State<AddContactInfo> {
             return '详细地址不能为空';
           }
           return null;
+        },
+        onChanged: (value) {
+          contactInfoModel.address = value.trim();
         },
         //表单数据保存
         onSaved: (value) {
@@ -281,7 +292,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                     TextSpan(
                       text: '详细地址',
                       style: TextStyle(
-                        fontSize: My.ScreenUtil().setSp(32),
+                        // fontSize: My.ScreenUtil().setSp(32),
                         decoration: TextDecoration.none,
                         color: Color(0xFF222222),
                       ),
@@ -299,6 +310,7 @@ class _AddContactInfo extends State<AddContactInfo> {
 
   Widget _buildEmailRow() {
     return Container(
+      color: Colors.white,
       margin: EdgeInsets.all(10),
       child: TextFormField(
         autovalidate: autoVadiler,
@@ -308,6 +320,9 @@ class _AddContactInfo extends State<AddContactInfo> {
             return '邮箱不能为空';
           }
           return null;
+        },
+        onChanged: (value) {
+          contactInfoModel.email = value.trim();
         },
         //表单数据保存
         onSaved: (value) {
@@ -329,7 +344,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                     TextSpan(
                       text: '邮箱',
                       style: TextStyle(
-                        fontSize: My.ScreenUtil().setSp(32),
+                        // fontSize: My.ScreenUtil().setSp(32),
                         decoration: TextDecoration.none,
                         color: Color(0xFF222222),
                       ),
@@ -362,6 +377,9 @@ class _AddContactInfo extends State<AddContactInfo> {
         validator: (value) {
           return null;
         },
+        onChanged: (value) {
+          contactInfoModel.fax = value;
+        },
         //表单数据保存
         onSaved: (value) {
           contactInfoModel.fax = value;
@@ -376,7 +394,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                 text: TextSpan(
                   text: '传真',
                   style: TextStyle(
-                    fontSize: My.ScreenUtil().setSp(32),
+                    // fontSize: My.ScreenUtil().setSp(32),
                     decoration: TextDecoration.none,
                     color: Color(0xFF222222),
                   ),
@@ -422,7 +440,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                 child: Text(
                   '所在地区',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: My.ScreenUtil().setSp(28),
                   ),
                 ),
               ),

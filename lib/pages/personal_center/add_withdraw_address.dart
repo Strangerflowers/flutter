@@ -552,8 +552,9 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
                 LogUtils.d('[确认修改按钮]', formData);
                 request('saveAddress', formData: formData).then((value) {
                   if (value['code'] == 0) {
-                    Application.router
-                        .navigateTo(context, Routes.WITHDRAW_ADDRESS_PAGE);
+                    Application.router.navigateTo(
+                        context, Routes.WITHDRAW_ADDRESS_PAGE,
+                        replace: true);
                   }
                   LogUtils.d('[返回值]', value);
                 });
