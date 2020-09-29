@@ -9,6 +9,7 @@ import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as My;
 
@@ -20,6 +21,7 @@ class AddContactInfo extends StatefulWidget {
 }
 
 class _AddContactInfo extends State<AddContactInfo> {
+  bool disableBtn = false;
   static const String TAG = "AddContactInfo";
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ContactInfoModel contactInfoModel;
@@ -45,14 +47,20 @@ class _AddContactInfo extends State<AddContactInfo> {
           (json) => ContactInfoVo.fromJson(json));
       LogUtils.debug(
           TAG, sprintf('请求payload:%s', [payload]), StackTrace.current);
+      if (disableBtn) {
+        return;
+      }
+      disableBtn = true;
       request('saveContactInfo', formData: payload).then((res) {
         LogUtils.debug(TAG, sprintf('响应:%s', [res]), StackTrace.current);
         Widget content;
         if (null != res && res['code'] == 0) {
           Application.router
               .navigateTo(context, Routes.CONTACT_INFO_PAGE, replace: true);
+          disableBtn = false;
           // Application.router.pop(context);/contactInfo
         } else {
+          disableBtn = false;
           content = new Text('新增失败!');
           showDialog(
               context: context,
@@ -72,7 +80,8 @@ class _AddContactInfo extends State<AddContactInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return FlutterEasyLoading(
+      child: Scaffold(
         appBar: _buildAppBar(),
         body: SingleChildScrollView(
           child: Container(
@@ -114,7 +123,9 @@ class _AddContactInfo extends State<AddContactInfo> {
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   /**

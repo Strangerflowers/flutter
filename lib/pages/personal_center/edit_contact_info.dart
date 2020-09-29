@@ -8,6 +8,7 @@ import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as My;
 import 'package:bid/common/toast.dart';
@@ -24,6 +25,7 @@ class EditContactInfo extends StatefulWidget {
 }
 
 class _EditContactInfo extends State<EditContactInfo> {
+  bool disableBtn = false;
   String id;
   static const String TAG = "EditContactInfo";
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
@@ -39,13 +41,20 @@ class _EditContactInfo extends State<EditContactInfo> {
       form.save();
       LogUtils.debug(TAG, contactInfoModel, StackTrace.current);
       //contactInfoModel.defaultContact = 2;
+      if (disableBtn) {
+        return;
+      }
+      disableBtn = true;
       request('editContactInfo', formData: contactInfoModel).then((res) {
         LogUtils.debug(TAG, res, StackTrace.current);
         Widget content;
         if (null != res && res['code'] == 0) {
-          Application.router.navigateTo(context, Routes.CONTACT_INFO_PAGE);
+          Application.router
+              .navigateTo(context, Routes.CONTACT_INFO_PAGE, replace: true);
+          disableBtn = false;
           // Application.router.pop(context);
         } else {
+          disableBtn = false;
           content = new Text('编辑失败!');
           showDialog(
               context: context,
@@ -65,9 +74,11 @@ class _EditContactInfo extends State<EditContactInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildCacheableBody(),
+    return FlutterEasyLoading(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: _buildCacheableBody(),
+      ),
     );
   }
 
