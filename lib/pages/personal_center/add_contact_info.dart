@@ -4,6 +4,7 @@ import 'package:bid/common/string_utils.dart';
 import 'package:bid/models/user_center/ContactInfoModel.dart';
 import 'package:bid/models/vo/ContactInfoVo.dart';
 import 'package:bid/routers/application.dart';
+import 'package:bid/routers/routers.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
@@ -23,9 +24,19 @@ class _AddContactInfo extends State<AddContactInfo> {
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ContactInfoModel contactInfoModel;
   ContactInfoVo contactInfoVo;
+  bool autoVadiler = false;
+  String addressErroeText = '';
 
   void _onSubmit() {
     final form = _formKey.currentState;
+    setState(() {
+      autoVadiler = true;
+    });
+    if (contactInfoModel.areaCode == null) {
+      setState(() {
+        addressErroeText = "不能为空";
+      });
+    }
     if (form.validate()) {
       form.save();
       ContactInfoVo payload = BeanUtils.copyProperties(
@@ -38,7 +49,9 @@ class _AddContactInfo extends State<AddContactInfo> {
         LogUtils.debug(TAG, sprintf('响应:%s', [res]), StackTrace.current);
         Widget content;
         if (null != res && res['code'] == 0) {
-          Application.router.pop(context);
+          Application.router
+              .navigateTo(context, Routes.CONTACT_INFO_PAGE, replace: true);
+          // Application.router.pop(context);/contactInfo
         } else {
           content = new Text('新增失败!');
           showDialog(
@@ -60,46 +73,47 @@ class _AddContactInfo extends State<AddContactInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: Center(
-        child: Form(
-          //表单和GlobalKey绑定
-          key: _formKey,
-          //垂直布局
-          child: Column(
-            children: [
-              _buildContactPeopleRow(),
-              _buildMobileRow(),
-              _buildAreaRow(),
-              _buildAddrressDetailRow(),
-              _buildEmailRow(),
-              _buildFaxRow(),
-              Container(
-                height: 40,
-                width: double.infinity,
-                margin: EdgeInsets.all(10),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: Colors.blue,
-                  child: Text(
-                    '保存',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                  onPressed: () {
-                    LogUtils.debug(
-                        TAG,
-                        '保存按钮:' + contactInfoModel.toJson().toString(),
-                        StackTrace.current);
-                    _onSubmit();
-                  },
-                ),
-              )
-            ],
+        appBar: _buildAppBar(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Form(
+              //表单和GlobalKey绑定
+              key: _formKey,
+              //垂直布局
+              child: Column(
+                children: [
+                  _buildContactPeopleRow(),
+                  _buildMobileRow(),
+                  _buildAreaRow(),
+                  _buildAddrressDetailRow(),
+                  _buildEmailRow(),
+                  _buildFaxRow(),
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    margin: EdgeInsets.all(10),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      color: Colors.blue,
+                      child: Text(
+                        '保存',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                      onPressed: () {
+                        LogUtils.debug(
+                            TAG,
+                            '保存按钮:' + contactInfoModel.toJson().toString(),
+                            StackTrace.current);
+                        _onSubmit();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   /**
@@ -122,14 +136,15 @@ class _AddContactInfo extends State<AddContactInfo> {
 
   Widget _buildContactPeopleRow() {
     return Container(
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+      // decoration: BoxDecoration(
+      //     border:
+      //         Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
       //设置上下左右的margin
       margin: EdgeInsets.all(10),
       //账号输入框
-      child: Expanded(
+      child: Container(
         child: TextFormField(
+          autovalidate: autoVadiler,
           controller:
               new TextEditingController(text: contactInfoModel.contactName),
           //合法检测回调
@@ -168,7 +183,7 @@ class _AddContactInfo extends State<AddContactInfo> {
                 ),
               ),
             ),
-            border: InputBorder.none,
+            // border: InputBorder.none,
             hintText: '请输入',
           ),
         ),
@@ -186,6 +201,7 @@ class _AddContactInfo extends State<AddContactInfo> {
           //border: new Border.all(color: Colors.red),
           ),
       child: TextFormField(
+        autovalidate: autoVadiler,
         //合法检测回调
         validator: (value) {
           if (value.isEmpty) {
@@ -201,7 +217,7 @@ class _AddContactInfo extends State<AddContactInfo> {
           contactInfoModel.mobile = value.trim();
         },
         decoration: InputDecoration(
-          border: InputBorder.none,
+          // border: InputBorder.none,
           prefixIcon: Container(
             width: My.ScreenUtil().setWidth(160.0),
             child: Center(
@@ -237,6 +253,7 @@ class _AddContactInfo extends State<AddContactInfo> {
       padding: EdgeInsets.all(10),
       //decoration: BoxDecoration(),
       child: TextFormField(
+        autovalidate: autoVadiler,
         maxLines: 1,
         //合法检测回调
         validator: (value) {
@@ -284,6 +301,7 @@ class _AddContactInfo extends State<AddContactInfo> {
     return Container(
       margin: EdgeInsets.all(10),
       child: TextFormField(
+        autovalidate: autoVadiler,
         //合法检测回调
         validator: (value) {
           if (value.isEmpty) {
@@ -296,7 +314,7 @@ class _AddContactInfo extends State<AddContactInfo> {
           contactInfoModel.email = value.trim();
         },
         decoration: InputDecoration(
-          border: InputBorder.none,
+          // border: InputBorder.none,
           prefixIcon: Container(
             width: My.ScreenUtil().setWidth(160.0),
             child: Center(
@@ -339,6 +357,7 @@ class _AddContactInfo extends State<AddContactInfo> {
     return Container(
       margin: EdgeInsets.all(10),
       child: TextFormField(
+        autovalidate: autoVadiler,
         //合法检测回调
         validator: (value) {
           return null;
@@ -348,7 +367,7 @@ class _AddContactInfo extends State<AddContactInfo> {
           contactInfoModel.fax = value;
         },
         decoration: InputDecoration(
-          border: InputBorder.none,
+          // border: InputBorder.none,
           prefixIcon: Container(
             width: My.ScreenUtil().setWidth(160.0),
             child: Center(
@@ -386,26 +405,28 @@ class _AddContactInfo extends State<AddContactInfo> {
               Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
       //设置上下左右的margin
       margin: EdgeInsets.all(10),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
+          Row(
+            children: [
+              Container(
+                child: Text(
+                  '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '所在地区',
-              style: TextStyle(
-                fontSize: 15,
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  '所在地区',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
               ),
-            ),
-          ),
-          /* Expanded(
+              /* Expanded(
             child: Container(
               child: TextFormField(
                   //合法检测回调
@@ -425,38 +446,66 @@ class _AddContactInfo extends State<AddContactInfo> {
                   )),
             ),
           ), */
-          Expanded(
-            child: InkWell(
-              onTap: _showSelect,
-              child: StatefulBuilder(builder: (context, StateSetter setState) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Color(0xFFD7D7D7),
+              Expanded(
+                child: InkWell(
+                  onTap: _showSelect,
+                  child:
+                      StatefulBuilder(builder: (context, StateSetter setState) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: Color(0xFFD7D7D7),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      StringUtils.defaultIfEmpty(
-                          contactInfoVo.areaName, StringUtils.EMPTY),
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    trailing: Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color(0xFFD1D1D1),
-                    ),
-                  ),
-                );
-              }),
-            ),
+                      child: ListTile(
+                        title: Text(
+                          StringUtils.defaultIfEmpty(
+                              contactInfoVo.areaName, StringUtils.EMPTY),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Color(0xFFD1D1D1),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
           ),
+          _showErrorText(),
         ],
       ),
     );
+  }
+
+  // 所选地区报错提示
+  Widget _showErrorText() {
+    var content;
+    if (addressErroeText != '') {
+      //如果数据不为空，则显示Text
+      content = Container(
+        alignment: Alignment.bottomLeft,
+        padding: EdgeInsets.only(left: 20),
+        child: new Text(
+          '数据不为空',
+          style: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      );
+    } else {
+      //当数据为空我们需要隐藏这个Text
+      //我们又不能返回一个null给当前的Widget Tree
+      //只能返回一个长宽为0的widget占位
+      content = new Container(height: 0.0, width: 0.0);
+    }
+    return content;
   }
 
   void _showSelect() async {
@@ -473,6 +522,7 @@ class _AddContactInfo extends State<AddContactInfo> {
       contactInfoModel.areaCode = result.areaId;
       contactInfoVo.areaName =
           result.provinceName + result.cityName + result.areaName;
+      addressErroeText = "";
       LogUtils.debug(
           TAG,
           sprintf('contactInfoModel:%s', [contactInfoModel.toString()]),

@@ -55,8 +55,9 @@ class _ContactInfo extends State<ContactInfo> {
               ),
             ),
             onPressed: () {
-              Application.router
-                  .navigateTo(context, Routes.ADD_CONTATCT_INFO_PAGE);
+              Application.router.navigateTo(
+                  context, Routes.ADD_CONTATCT_INFO_PAGE,
+                  replace: true);
             })
       ],
     );
@@ -185,7 +186,8 @@ class _ContactInfo extends State<ContactInfo> {
                     context,
                     Routes.EDIT_CONTATCT_INFO_PAGE +
                         "?id=" +
-                        contactInfoModel.id.toString());
+                        contactInfoModel.id.toString(),
+                    replace: true);
               },
             ),
           ),
