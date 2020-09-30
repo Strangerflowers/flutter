@@ -8,6 +8,7 @@ import 'package:bid/pages/personal_center/edit_withdraw_address.dart';
 import 'package:bid/pages/personal_center/modify_password.dart';
 import 'package:bid/pages/personal_center/modify_passwordbycode.dart';
 import 'package:bid/pages/personal_center/withdraw_address.dart';
+import 'package:bid/pages/purchasing_demand/purchasing_demand.dart';
 import 'package:bid/pages/signup/authentication.dart';
 import 'package:bid/pages/signup/signin.dart';
 import 'package:fluro/fluro.dart';
@@ -222,4 +223,12 @@ Handler modifyPasswordByCodePageHandler = Handler(
   LogUtils.debug(TAG, '跳转[修改密码]]:接收到参数$params', StackTrace.current);
   //String id = params['id'].first;
   return ModifyPasswordByCode();
+});
+
+// 需求列表首页
+Handler demandListHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  // LogUtils.debug(TAG, '跳转[修改密码]]:接收到参数$params', StackTrace.current);
+  //String id = params['id'].first;
+  return PurchasingDemand();
 });

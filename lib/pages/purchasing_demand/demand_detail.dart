@@ -18,14 +18,14 @@ class DemandDetails extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(
-          //   icon: Icon(Icons.arrow_back),
-          //   onPressed: () {
-          //     // Application.router
-          //     //     .navigateTo(context, "/addproduct?id=1", replace: true);
-          //     // Navigator.pop(context);
-          //   },
-          // ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Application.router
+                  .navigateTo(context, "/demandList", clearStack: true);
+              // Navigator.pop(context);
+            },
+          ),
           title: Text('需求详情'),
         ),
         body: FutureBuilder(

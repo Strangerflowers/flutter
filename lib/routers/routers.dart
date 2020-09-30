@@ -54,6 +54,8 @@ class Routes {
   static String INDEX_PAGE = '/indexPage';
   // 登录
   static String SIGIN = '/sigin';
+  // 需求列表页面
+  static String DEMAND_LIST = '/demandList';
   // 资料认证
   static String AUTHENTICATION = '/authentication';
   static void configureRoutes(Router router) {
@@ -90,5 +92,6 @@ class Routes {
     router.define(AUTHENTICATION, handler: authenticationHandler);
     router.define(MODIFY_PASSWORD_BY_CODE_PAGE,
         handler: modifyPasswordByCodePageHandler);
+    router.define(DEMAND_LIST, handler: demandListHandler);
   }
 }
