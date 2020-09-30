@@ -253,16 +253,19 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
         ),
       );
     } else {
-      return Container(
-        height: MediaQuery.of(context).size.height / 2,
-        child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-            valueColor: AlwaysStoppedAnimation(Colors.blue),
-            value: .7,
-          ),
-        ),
+      return Center(
+        child: Text('暂无数据'),
       );
+      // return Container(
+      //   height: MediaQuery.of(context).size.height / 2,
+      //   child: Center(
+      //     child: CircularProgressIndicator(
+      //       backgroundColor: Colors.grey[200],
+      //       valueColor: AlwaysStoppedAnimation(Colors.blue),
+      //       value: .7,
+      //     ),
+      //   ),
+      // );
       // return Container(
       //   child: Text('暂无数据'),
       // );
