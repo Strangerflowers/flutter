@@ -2,6 +2,7 @@
 import 'package:bid/common/toast.dart';
 import 'package:bid/images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -81,16 +82,18 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _orderType(inputText),
-              _goodsList()
-              // DemandContent(inputText),
-            ],
+    return FlutterEasyLoading(
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _orderType(inputText),
+                _goodsList()
+                // DemandContent(inputText),
+              ],
+            ),
           ),
         ),
       ),

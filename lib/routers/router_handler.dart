@@ -230,5 +230,5 @@ Handler demandListHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   // LogUtils.debug(TAG, '跳转[修改密码]]:接收到参数$params', StackTrace.current);
   //String id = params['id'].first;
-  return PurchasingDemand();
+  return IndexPage();
 });

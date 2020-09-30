@@ -7,6 +7,7 @@ import 'package:bid/routers/application.dart';
 import 'package:bid/service/service_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,50 +23,52 @@ class PersonalCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map<String, Object>> listTitles = _initPageRouteMap();
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('会员中心'),
-      //   centerTitle: true, //文字居中
-      // ),
-      body: FutureBuilder(
-          future: requestGet('getCertificationInfo'),
-          builder: (context, snapshot) {
-            //请求完成
-            if (snapshot.connectionState == ConnectionState.done) {
-              LogUtils.d('snapshot', snapshot);
-              LogUtils.d('snapshot.data', snapshot.data.toString());
-              //发生错误
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              }
-              result = snapshot.data['result'];
-              var data = snapshot.data['result'];
+    return FlutterEasyLoading(
+      child: Scaffold(
+        // appBar: AppBar(
+        //   title: Text('会员中心'),
+        //   centerTitle: true, //文字居中
+        // ),
+        body: FutureBuilder(
+            future: requestGet('getCertificationInfo'),
+            builder: (context, snapshot) {
+              //请求完成
+              if (snapshot.connectionState == ConnectionState.done) {
+                LogUtils.d('snapshot', snapshot);
+                LogUtils.d('snapshot.data', snapshot.data.toString());
+                //发生错误
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                result = snapshot.data['result'];
+                var data = snapshot.data['result'];
 
-              if (null != data) {
-                return ListView(
-                  children: <Widget>[
-                    _topHeader(data),
-                    _actionList(context, listTitles),
-                    _logout(context),
-                  ],
-                );
-              } else {
-                return Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "查无数据!",
-                      style: TextStyle(color: Colors.grey),
-                    ));
+                if (null != data) {
+                  return ListView(
+                    children: <Widget>[
+                      _topHeader(data),
+                      _actionList(context, listTitles),
+                      _logout(context),
+                    ],
+                  );
+                } else {
+                  return Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "查无数据!",
+                        style: TextStyle(color: Colors.grey),
+                      ));
+                }
               }
-            }
-            // }
-            //请求未完成时弹出loading
-            return SizedBox(
-                width: 24.0,
-                height: 24.0,
-                child: CircularProgressIndicator(strokeWidth: 2.0));
-          }),
+              // }
+              //请求未完成时弹出loading
+              return SizedBox(
+                  width: 24.0,
+                  height: 24.0,
+                  child: CircularProgressIndicator(strokeWidth: 2.0));
+            }),
+      ),
     );
   }
 

@@ -41,7 +41,7 @@ class SalesOrderDetails extends StatelessWidget {
                 ),
               );
             } else {
-              return Text('加载中......');
+              return Text('暂无数据');
             }
           },
         ),
@@ -86,8 +86,8 @@ class SalesOrderBasic extends StatelessWidget {
           ),
         );
       } else {
-        return Container(
-          child: Text('正在加载11...'),
+        return Center(
+          child: Text('暂无数据'),
         );
       }
     });
@@ -254,7 +254,7 @@ class ProductInformation extends StatelessWidget {
           ),
         );
       } else {
-        return Container(child: Text('加载中......'));
+        return Container(child: Text(''));
       }
     });
   }
@@ -577,7 +577,7 @@ class DeliveryArrangement extends StatelessWidget {
           ),
         );
       } else {
-        return Container(child: Text('加载中......'));
+        return Container(child: Text(''));
       }
     });
   }
