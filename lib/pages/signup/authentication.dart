@@ -1336,12 +1336,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
           });
           authFormKey.currentState.save();
           if ((authFormKey.currentState as FormState).validate()) {
-            if (supplierType == '' &&
-                categoryoneId == '' &&
-                categorytwoId == '') {
-              Toast.toast(context, msg: '供应商类型不能为空');
-              return;
-            }
+            // if (supplierType == '' &&
+            //     categoryoneId == '' &&
+            //     categorytwoId == '') {
+            //   Toast.toast(context, msg: '供应商类型不能为空');
+            //   return;
+            // }
             var supplierTypeId;
             if (categoryoneId != null) {
               supplierTypeId = categoryoneId;
@@ -1349,6 +1349,18 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
               supplierTypeId = categorytwoId;
             } else if (supplierType != null) {
               supplierTypeId = supplierType;
+            }
+            if (supplierTypeId == null ||
+                supplierTypeId == '' ||
+                supplierTypeId == 'null') {
+              Toast.toast(context, msg: '供应商类型不能为空');
+              return;
+            }
+            if (companyCode == null ||
+                companyCode == '' ||
+                companyCode == 'null') {
+              Toast.toast(context, msg: '公司地址不能为空');
+              return;
             }
             var formData = {
               "auditStatus": 1,
