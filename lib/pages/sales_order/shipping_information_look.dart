@@ -214,7 +214,7 @@ class ProductInformation extends StatelessWidget {
             Row(
               children: <Widget>[
                 Container(
-                  child: Text('实际收获数量'),
+                  child: Text('收货数量'),
                 ),
                 Expanded(
                   child: Container(
