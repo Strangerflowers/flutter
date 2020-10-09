@@ -603,6 +603,7 @@ class _EditContactInfo extends State<EditContactInfo> {
     LogUtils.debug(TAG, '点击弹窗类型选着框', StackTrace.current);
     Result result = await CityPickers.showCityPicker(
         context: context,
+        locationCode: contactInfoModel.areaCode,
         cancelWidget: Text('取消', style: TextStyle(color: Colors.black54)),
         confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
     LogUtils.debug(

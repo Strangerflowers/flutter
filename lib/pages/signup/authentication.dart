@@ -589,6 +589,7 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
     print('点击弹窗类型选着框');
     Result result = await CityPickers.showCityPicker(
         context: context,
+        locationCode: companyCode,
         cancelWidget: Text('取消', style: TextStyle(color: Colors.black54)),
         confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
     print('result==$result');

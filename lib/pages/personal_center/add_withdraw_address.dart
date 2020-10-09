@@ -68,6 +68,7 @@ class _AddWithdrawAddressState extends State<AddWithdrawAddress> {
     print('点击弹窗类型选着框');
     Result result = await CityPickers.showCityPicker(
         context: context,
+        locationCode: areaCode,
         cancelWidget: Text('取消', style: TextStyle(color: Colors.black54)),
         confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
 
