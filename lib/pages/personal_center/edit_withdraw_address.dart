@@ -21,15 +21,17 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
   bool disableBtn = false;
   String addressId;
   var addressInfo;
+  var getEditData;
+  var data; //声明一个变量用于存放数据，防止修改时页面重渲染，刷新了之前的更改
   void initState() {
-    // _getShowEdit();
-    addressId = widget.id;
-    print('地址id$addressId');
-
     super.initState();
+    addressId = widget.id;
+    getEditData = _getShowEdit();
+
+    // print('地址id$addressId');
   }
 
-  final editressFormKey = GlobalKey<FormState>();
+  final _editressFormKey = GlobalKey<FormState>();
   String receiverName, mobile, address, areaCode, companyAddressName;
   bool autoValidate = false;
   var params = {
@@ -47,12 +49,12 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
       child: Scaffold(
         appBar: _buildAppBar(),
         body: FutureBuilder(
-            future: _getShowEdit(),
+            future: getEditData,
             builder: (context, snapshot) {
-              var data = snapshot.data;
-              print('回显退货地址====>${snapshot.data}');
+              data = snapshot.data['result'];
+              // print('回显退货地址====>${snapshot.data}');
               if (snapshot.hasData) {
-                return _buildModifyPwdTextForm(data['result']);
+                return _buildModifyPwdTextForm(data);
               } else {
                 return Container(
                   child: Text('暂无数据'),
@@ -147,10 +149,17 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
         confirmWidget: Text("确定", style: TextStyle(color: Colors.blue)));
 
     setState(() {
-      editressFormKey.currentState.save();
+      _editressFormKey.currentState.save();
+
       areaCode = result.areaId;
       companyAddressName =
           result.provinceName + result.cityName + result.areaName;
+
+      data['receiverName'] = receiverName;
+      data['mobile'] = mobile;
+      data['address'] = address;
+      data['areaCode'] = areaCode;
+      data['areaName'] = companyAddressName;
     });
   }
 
@@ -164,21 +173,8 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
 
     areaCode = result['areaCode'];
     companyAddressName = result['areaName'];
-
-    // final _labels = new List<Object>();
-    // _labels.add({"label": "收件人:", "value": 'receiverName'});
-    // _labels.add({"label": "手机号码:", "value": 'mobile'});
-    // // _labels.add("所在地区:");
-    // _labels.add({"label": "详细地址:", "value": 'address'});
-    // List<Widget> list = [];
-    // for (Map label in _labels) {
-    //   list.add(_buildRow(label));
-    // }
-    // list.insert(2, _selectAddress("所在地区:", result));
-    // // 确认按钮
-    // list.add(_buildSubmitBtn());
     return Form(
-      key: editressFormKey,
+      key: _editressFormKey,
       autovalidate: true,
       child: ListView(
         children: <Widget>[
@@ -562,8 +558,8 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
               autoValidate = true;
               // });
 
-              editressFormKey.currentState.save();
-              if ((editressFormKey.currentState as FormState).validate()) {
+              _editressFormKey.currentState.save();
+              if ((_editressFormKey.currentState as FormState).validate()) {
                 var formData = {
                   "id": addressId,
                   "receiverName": receiverName,

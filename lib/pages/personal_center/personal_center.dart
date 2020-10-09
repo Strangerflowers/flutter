@@ -62,11 +62,10 @@ class PersonalCenter extends StatelessWidget {
                 }
               }
               // }
-              //请求未完成时弹出loading
-              return SizedBox(
-                  width: 24.0,
-                  height: 24.0,
-                  child: CircularProgressIndicator(strokeWidth: 2.0));
+              //数据还没有返回的时候先显然，防止页面报错
+              return Container(
+                child: Text(''),
+              );
             }),
       ),
     );
