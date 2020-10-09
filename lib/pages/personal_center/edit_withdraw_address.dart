@@ -179,7 +179,8 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
       child: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(15),
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 15, 0, 15),
             decoration: BoxDecoration(
               color: Colors.white,
             ),
@@ -192,10 +193,11 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
               decoration: InputDecoration(
                 hintText: '请输入收件人',
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(140.0),
+                  // alignment: Alignment.centerLeft,
+                  width: ScreenUtil().setWidth(160.0),
                   child: Center(
                     child: RichText(
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.left,
                       text: TextSpan(
                         text: '*',
                         style:
@@ -221,7 +223,6 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
               autovalidate: autoValidate,
               obscureText: false, //是否是密码
               textAlign: TextAlign.left, //文本对齐方式
-
               onChanged: (value) {},
               onSaved: (val) {
                 receiverName = val;
@@ -239,7 +240,7 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.fromLTRB(5, 15, 0, 15),
             // height: 30.0,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -254,11 +255,11 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
               decoration: InputDecoration(
                 hintText: '请输入手机号码',
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(140.0),
+                  width: ScreenUtil().setWidth(160.0),
                   // padding: EdgeInsets.only(right: 20),
                   child: Center(
                     child: RichText(
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.left,
                       text: TextSpan(
                         text: '*',
                         style:
@@ -306,7 +307,8 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
           ),
           _selectAddress('所属地区'),
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.fromLTRB(5, 15, 0, 15),
+
             decoration: BoxDecoration(
               color: Colors.white,
             ),
@@ -320,11 +322,10 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
               decoration: InputDecoration(
                 hintText: '请输入详细地址',
                 prefixIcon: Container(
-                  width: ScreenUtil().setWidth(140.0),
-                  // padding: EdgeInsets.only(right: 20),
+                  width: ScreenUtil().setWidth(160.0),
                   child: Center(
                     child: RichText(
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.left,
                       text: TextSpan(
                         text: '*',
                         style:
@@ -388,7 +389,7 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
         children: [
           new Expanded(
             child: new Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
               // height: 30.0,
               decoration: BoxDecoration(
                   //border: new Border.all(color: Colors.red),
@@ -403,9 +404,10 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
                 ),
                 decoration: InputDecoration(
                   prefixIcon: Container(
-                    width: ScreenUtil().setWidth(140.0),
+                    alignment: Alignment.bottomLeft,
+                    width: ScreenUtil().setWidth(160.0),
                     // padding: EdgeInsets.only(right: 20),
-                    child: Center(
+                    child: Container(
                       child: RichText(
                         textAlign: TextAlign.left,
                         text: TextSpan(
@@ -493,15 +495,25 @@ class _EditWithdrawAddressState extends State<EditWithdrawAddress> {
       child: new Row(
         children: [
           new Container(
-            padding: EdgeInsets.all(15),
-            child: new Text(
-              '$label',
-              style: TextStyle(
-                decoration: TextDecoration.none,
-                color: Color(0xFF888888),
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                //fontFamily: defaultFontFamily,
+            padding: EdgeInsets.only(left: 10.0),
+            width: ScreenUtil().setWidth(160),
+            child: RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                text: '*',
+                style: TextStyle(color: Color.fromRGBO(255, 113, 66, 1)),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: label,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Color(0xFF333333),
+                      // fontSize: 14,
+                      // fontWeight: FontWeight.bold,
+                      //fontFamily: defaultFontFamily,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
