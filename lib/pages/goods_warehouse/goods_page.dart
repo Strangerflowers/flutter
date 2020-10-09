@@ -434,22 +434,53 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('${text}提示'),
+          // title: Text('${text}提示'),
           content: Text('${text}需提交审核，确定要$text吗？'),
           actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop('cancel');
-              },
-            ),
-            FlatButton(
-              child: Text('确认'),
-              onPressed: () {
-                _onOrOffline(item.id, url);
-                Navigator.of(context).pop('cancel');
-                // }
-              },
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: 1,
+                    color: Colors.black12,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      // border: new Border.all(width: 1, color: Colors.red),
+                      border: Border(
+                        right: BorderSide(
+                          width: 1,
+                          color: Colors.black12,
+                        ),
+                      ),
+                    ),
+                    // color: Colors.red,
+                    width: ScreenUtil().setWidth(270),
+                    child: FlatButton(
+                      child: Text('取消'),
+                      onPressed: () {
+                        Navigator.of(context).pop('cancel');
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: ScreenUtil().setWidth(270),
+                    child: FlatButton(
+                      child: Text('确认'),
+                      onPressed: () {
+                        _onOrOffline(item.id, url);
+                        Navigator.of(context).pop('cancel');
+                        // }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         );
