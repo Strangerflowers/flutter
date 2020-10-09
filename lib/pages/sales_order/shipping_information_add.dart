@@ -67,8 +67,9 @@ class _SaleaUpdateState extends State<SaleaUpdate> {
                       children: <Widget>[
                         AddHeader(data.result),
                         // DatePickerWidget(),
-                        ProductInformation(data.result.dispatchItemVos),
-                        OkBotton(data.result, detailId),
+                        ProductInformation(
+                            data.result.dispatchItemVos, data.result, detailId),
+                        // OkBotton(data.result, detailId),
                       ],
                     ),
                   ),
@@ -189,13 +190,13 @@ class _UpdateFormState extends State<UpdateForm> {
                 ),
               ),
               onChanged: (value) {
-                this.logisticsCompanyName = value;
+                logisticsCompanyName = value;
                 Provide.value<SalesAddPage>(context)
-                    .changeCompanyName(this.logisticsCompanyName);
+                    .changeCompanyName(logisticsCompanyName);
                 // print('当前输入的公司名称----$username');
               },
               onSaved: (value) {
-                this.logisticsCompanyName = value;
+                logisticsCompanyName = value;
               },
               validator: (value) {
                 if (value.isEmpty) {
@@ -218,13 +219,13 @@ class _UpdateFormState extends State<UpdateForm> {
                 ),
               ),
               onChanged: (value) {
-                this.logisticsNumber = value;
+                logisticsNumber = value;
                 Provide.value<SalesAddPage>(context)
-                    .changeCompanyNumber(this.logisticsNumber);
+                    .changeCompanyNumber(logisticsNumber);
                 // print('当前输入的公司名称----$username');
               },
               onSaved: (value) {
-                this.logisticsNumber = value;
+                logisticsNumber = value;
               },
               validator: (value) {
                 if (value.isEmpty) {
@@ -494,22 +495,32 @@ class OkBotton extends StatelessWidget {
 // 产品信息
 class ProductInformation extends StatefulWidget {
   final data;
-  ProductInformation(this.data);
+  final result;
+  final String detailId;
+  ProductInformation(this.data, this.result, this.detailId);
   @override
   _ProductInformationState createState() => _ProductInformationState();
 }
 
 class _ProductInformationState extends State<ProductInformation> {
   var data;
+  var result;
+  String detailId;
+
+  bool disableBtn = false;
   void initState() {
     data = widget.data;
+    result = widget.result;
+    detailId = widget.detailId;
+
     super.initState();
   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
+  // var data;
+  // bool disableBtn = false;
+  // void initState() {
+  //   data = widget.data;
+  //   super.initState();
+  // }
 
 // class ProductInformation extends StatelessWidget {
   @override
@@ -519,10 +530,14 @@ class _ProductInformationState extends State<ProductInformation> {
       // if (goodsInfo != null) {
       return SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(bottom: 20),
-          color: Colors.white,
-          child: _recommedList(data),
-        ),
+            margin: EdgeInsets.only(bottom: 20),
+            color: Colors.white,
+            child: Column(
+              children: [
+                _recommedList(data),
+                _submit(),
+              ],
+            )),
       );
       // } else {
       //   return Container(child: Text(''));
@@ -703,6 +718,119 @@ class _ProductInformationState extends State<ProductInformation> {
       ),
     );
   }
+
+  Widget _submit() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: FlatButton(
+                //自定义按钮颜色
+                color: Color(0xFF2A83FF),
+                highlightColor: Colors.blue[700],
+                colorBrightness: Brightness.dark,
+                splashColor: Colors.blue,
+                child: Text("确认"),
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                onPressed: () {
+                  var dispatchItems = [];
+
+                  result.dispatchItemVos.forEach((element) {
+                    dispatchItems.add({
+                      'id': element.id,
+                      'actualDeliveryNumber': element.actualDeliveryNumber
+                    });
+                  });
+                  _dispatchAdd(dispatchItems, result, context);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _dispatchAdd(dispatchItems, result, context) {
+    DateTime now = new DateTime.now();
+    var dayTime = now.toString().substring(0, 10);
+
+    // if (Provide.value<SalesAddPage>(context).logisticsCompanyName == null ||
+    //     Provide.value<SalesAddPage>(context).logisticsNumber == null) {
+    //   Fluttertoast.showToast(
+    //     msg: '物流公司名称以及快递单号不能为空',
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+    //     textColor: Colors.white,
+    //     fontSize: 16.0,
+    //   );
+    //   return '请填写完整信息';
+    // }
+    var formData = {
+      "id": result.id,
+      "actualDeliveryTime":
+          Provide.value<SalesAddPage>(context).actualDeliveryTime == null
+              ? dayTime
+              : Provide.value<SalesAddPage>(context).actualDeliveryTime,
+      "logisticsCompanyName":
+          Provide.value<SalesAddPage>(context).logisticsCompanyName,
+      "logisticsNumber": Provide.value<SalesAddPage>(context).logisticsNumber,
+      "dispatchItems": dispatchItems
+    };
+    print('获取更新参数======ata');
+    if (disableBtn) {
+      return;
+    }
+    disableBtn = true;
+    request('update', formData: formData).then((val) {
+      // Application.router.navigateTo(context, "/saleslist?status=2");
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) {
+      //       return SalesIndexPage();
+      //     },
+      //   ),
+      // );
+      // Navigator.pop(context, "我是返回值");
+      print('响应数据---$val');
+      if (val['code'] == 0) {
+        Fluttertoast.showToast(
+          msg: '成功填写发货信息',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        // 清空状态
+        Provide.value<SalesAddPage>(context).changeDayTime(null);
+        Provide.value<SalesAddPage>(context).changeCompanyName(null);
+        Provide.value<SalesAddPage>(context).changeCompanyNumber(null);
+
+        Application.router
+            .navigateTo(context, "/salesdetail?id=${detailId}", replace: true);
+        disableBtn = false;
+      } else {
+        disableBtn = false;
+        Fluttertoast.showToast(
+          msg: val['message'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+      // goodsList = AddDeliverArrange.fromJson(val);
+      // print('详情数据$goodsList');
+    });
+  }
 }
 
 // 数量增加减少按钮
@@ -812,7 +940,7 @@ class _CartCountState extends State<CartCount> {
           return;
         }
         setState(() {
-          item.actualDeliveryNumber += 1;
+          item.actualDeliveryNumber = item.actualDeliveryNumber + 1;
         });
         num = item.number -
                     item.totalActualDeliveryNumber -
@@ -885,22 +1013,33 @@ class _CartCountState extends State<CartCount> {
             widget.changed(1);
           } else {
             if (v.length >= 6) {
-              showNum = int.parse(v.substring(0, 6));
-              print('输入${showNum}');
+              // showNum = int.parse(v.substring(0, 6));
+              setState(() {
+                item.actualDeliveryNumber = int.parse(v.substring(0, 6));
+              });
+              widget.changed(1);
+              // print('输入${showNum}');
             } else {
-              showNum = int.parse(v);
+              // showNum = int.parse(v);
+              setState(() {
+                item.actualDeliveryNumber = int.parse(v);
+              });
+              widget.changed(1);
             }
-
-            // if (showNum > 999999) {
-            //   showNum = 999999;
-            // }
-            setState(() {
-              item.actualDeliveryNumber = showNum;
-            });
           }
 
-          widget.changed(1);
           print('v====${item.actualDeliveryNumber}');
+        },
+        onSaved: (value) {
+          if (value == '') {
+            item.actualDeliveryNumber = 0;
+          } else {
+            if (value.length >= 6) {
+              item.actualDeliveryNumber = int.parse(value.substring(0, 6));
+            } else {
+              item.actualDeliveryNumber = int.parse(value);
+            }
+          }
         },
         validator: (value) {
           if (int.parse(value) >= 999999) {
