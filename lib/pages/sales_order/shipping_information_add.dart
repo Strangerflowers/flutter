@@ -50,6 +50,14 @@ class _SaleaUpdateState extends State<SaleaUpdate> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Application.router.navigateTo(
+                  context, "/salesdetail?id=${detailId}",
+                  replace: true);
+            },
+          ),
           title: Text('填写发货信息'),
         ),
         body: FutureBuilder(

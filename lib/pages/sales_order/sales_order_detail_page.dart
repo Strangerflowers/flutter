@@ -174,13 +174,16 @@ class SalesOrderBasic extends StatelessWidget {
                         padding: EdgeInsets.only(right: 20),
                         child: Text(item.consigneeName),
                       ),
-                      Container(
-                        child: Text(item.consigneeMobile),
+                      Expanded(
+                        child: Container(
+                          child: Text(item.consigneeMobile),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
+                  alignment: Alignment.bottomLeft,
                   child: Text(item.consigneeAdress),
                 ),
               ],
@@ -201,10 +204,12 @@ class SalesOrderBasic extends StatelessWidget {
             width: ScreenUtil().setWidth(200),
             child: Text('$title'),
           ),
-          Container(
-            child:
-                Text('${content == 'null' || content == null ? '' : content}'),
-          )
+          Expanded(
+            child: Container(
+              child: Text(
+                  '${content == 'null' || content == null ? '' : content}'),
+            ),
+          ),
         ],
       ),
     );
