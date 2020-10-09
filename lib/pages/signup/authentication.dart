@@ -7,6 +7,7 @@ import 'package:bid/common/xyz_picker.dart';
 import 'package:bid/routers/application.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -42,41 +43,48 @@ class _AuthenticationState extends State<Authentication> {
         appBar: AppBar(
           title: Text("资料认证"),
         ),
-        body: FutureBuilder(
-            future: _futureBuilderFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                var data = snapshot.data;
-                print('响应数据====>${snapshot.data}');
-                if (snapshot.hasData) {
-                  return ListView(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 50),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            _headerData(data['result']),
-                            AuthenticationForm(data['result']),
-                          ],
+        body: GestureDetector(
+          onTap: () {
+            //隐藏键盘
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+            // 失去焦点
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: FutureBuilder(
+              future: _futureBuilderFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  var data = snapshot.data;
+                  if (snapshot.hasData) {
+                    return ListView(children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 50),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              _headerData(data['result']),
+                              AuthenticationForm(data['result']),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ]);
-                } else {
-                  return Container(child: Text('暂无数据'));
+                    ]);
+                  } else {
+                    return Container(child: Text('暂无数据'));
+                  }
                 }
-              }
-              return Container(
-                height: MediaQuery.of(context).size.height / 2,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.grey[200],
-                    valueColor: AlwaysStoppedAnimation(Colors.blue),
-                    value: .7,
+                return Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation(Colors.blue),
+                      value: .7,
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+        ),
       ),
     );
   }
@@ -474,105 +482,110 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             ],
           ),
           // XYZAddressPickerTestPage(),
-          InkWell(
-              onTap: () => _showBottomSheetCate(
-                    categoryoneId: categoryoneId,
-                    categorytwoId: categorytwoId,
-                    categoryone: categoryone,
-                    categorytwo: categorytwo,
-                    categorythree: categorythree,
-                    categoryoneList: categoryoneList,
-                    categorytwoList: categorytwoList,
-                    categorythreeList: categorythreeList,
-                    supplierType: supplierType,
-                    context: context,
-                    onChnage: (int index, String id, String name) {
-                      if (index == 0) {
-                        var arr = [];
-                        // setState(() {
-                        res.forEach((ele) {
-                          if (ele['id'] == id) {
-                            return arr = ele['subCategorys'];
-                          }
-                          // });
-                        });
-                        setState(() {
-                          categorytwoList = arr;
-                        });
-                        // addressPickerState.currentState.checkedTab(index);
-                      }
-                      if (index == 1) {
-                        categorytwoList.forEach((element) {
-                          if (element['id'] == id) {
-                            return categorythreeList = element['subCategorys'];
-                          }
-                        });
-                      }
-                      switch (index) {
-                        case 0:
-                          setState(() {
-                            typeList = name;
-                            categoryone = name;
-                            categoryoneId = id;
-                            categorytwo = '';
-                            categorytwoId = '';
-                            categorythree = '';
-                            supplierType = '';
-                          });
-                          break;
-                        case 1:
-                          setState(() {
-                            categorytwo = name;
-                            categorytwoId = id;
-                            typeList = categoryone + '/' + name;
-                            categorythree = '';
-                            supplierType = '';
-                          });
-                          break;
-                        case 2:
-                          setState(() {
-                            categorythree = name;
-                            supplierType = id;
-                            typeList =
-                                categoryone + '/' + categorytwo + '/' + name;
-                          });
-                          break;
-                      }
-                    },
+          InkWell(onTap: () {
+            //隐藏键盘
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+            FocusScope.of(context).requestFocus(FocusNode());
+
+            _showBottomSheetCate(
+              categoryoneId: categoryoneId,
+              categorytwoId: categorytwoId,
+              categoryone: categoryone,
+              categorytwo: categorytwo,
+              categorythree: categorythree,
+              categoryoneList: categoryoneList,
+              categorytwoList: categorytwoList,
+              categorythreeList: categorythreeList,
+              supplierType: supplierType,
+              context: context,
+              onChnage: (int index, String id, String name) {
+                if (index == 0) {
+                  var arr = [];
+                  // setState(() {
+                  res.forEach((ele) {
+                    if (ele['id'] == id) {
+                      return arr = ele['subCategorys'];
+                    }
+                    // });
+                  });
+                  setState(() {
+                    categorytwoList = arr;
+                  });
+                  // addressPickerState.currentState.checkedTab(index);
+                }
+                if (index == 1) {
+                  categorytwoList.forEach((element) {
+                    if (element['id'] == id) {
+                      return categorythreeList = element['subCategorys'];
+                    }
+                  });
+                }
+                switch (index) {
+                  case 0:
+                    setState(() {
+                      typeList = name;
+                      categoryone = name;
+                      categoryoneId = id;
+                      categorytwo = '';
+                      categorytwoId = '';
+                      categorythree = '';
+                      supplierType = '';
+                    });
+                    break;
+                  case 1:
+                    setState(() {
+                      categorytwo = name;
+                      categorytwoId = id;
+                      typeList = categoryone + '/' + name;
+                      categorythree = '';
+                      supplierType = '';
+                    });
+                    break;
+                  case 2:
+                    setState(() {
+                      categorythree = name;
+                      supplierType = id;
+                      typeList = categoryone + '/' + categorytwo + '/' + name;
+                    });
+                    break;
+                }
+              },
+            );
+          }, child: StatefulBuilder(builder: (context, StateSetter setState) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1,
+                    color: Color(0xFFD7D7D7),
                   ),
-              child: StatefulBuilder(builder: (context, StateSetter setState) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Color(0xFFD7D7D7),
-                      ),
-                    ),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      typeList == null ? '请选择类别' : typeList.toString(),
-                      style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
-                          color: typeList != null
-                              ? Colors.black
-                              : Color(0xFF888888)),
-                    ),
-                    trailing: Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color(0xFFD1D1D1),
-                    ),
-                  ),
-                );
-              }))
+                ),
+              ),
+              child: ListTile(
+                title: Text(
+                  typeList == null ? '请选择类别' : typeList.toString(),
+                  style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                      color:
+                          typeList != null ? Colors.black : Color(0xFF888888)),
+                ),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Color(0xFFD1D1D1),
+                ),
+              ),
+            );
+          }))
         ],
       ),
     );
   }
 
   void _showSelect() async {
+    //隐藏键盘
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusScope.of(context).requestFocus(FocusNode());
     print('点击弹窗类型选着框');
     Result result = await CityPickers.showCityPicker(
         context: context,
@@ -1382,197 +1395,6 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             });
           }
         },
-      ),
-    );
-  }
-}
-
-class ImagePickerPage extends StatefulWidget {
-  @override
-  _ImagePickerPageState createState() => _ImagePickerPageState();
-}
-
-class _ImagePickerPageState extends State<ImagePickerPage> {
-  /// 待上传的图片列表
-  List<Asset> _images = [];
-
-  List<Asset> images = List<Asset>();
-  String _error = 'No error Dectected';
-  @override
-  void initState() {
-    super.initState();
-  }
-  // StreamController _imageListStreamCtrl = StreamController();
-  // set _imageStream(List<Asset> list) {
-  //   _imageList.addAll(list);
-  //   _imageListStreamCtrl.sink.add(_imageList);
-  // }
-
-  // get _imageStream => _imageListStreamCtrl.stream;
-  // @override
-  // void dispose() {
-  //   _imageListStreamCtrl.close();
-  //   super.dispose();
-  //   // super.dispose();
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
-              Text('营业执照')
-            ],
-          ),
-          // buildGridView(),
-          FloatingActionButton(
-            onPressed: () {
-              _multiImage();
-            },
-            tooltip: 'Pick Image',
-            child: Icon(Icons.add_a_photo),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildGridView() {
-    return GridView.count(
-      crossAxisCount: 3,
-      children: List.generate(images.length, (index) {
-        Asset asset = images[index];
-        return AssetThumb(
-          asset: asset,
-          width: 300,
-          height: 300,
-        );
-      }),
-    );
-  }
-
-  /// 图片上传
-  Future<void> _multiImage() async {
-    List<Asset> resultList = List<Asset>();
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 9, // 最多9张图片
-        enableCamera: true, // 允许使用照相机
-        selectedAssets: _images,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "图片上传",
-          allViewTitle: "所有图片",
-          //okButtonDrawable: 'OK',
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-    } on Exception catch (e) {
-      print(e);
-    }
-    if (!mounted) return; // 未挂载到widget树中
-    setState(() {
-      _images = resultList;
-      print('****图片列表***' + resultList.toString());
-    });
-  }
-
-  /// 从Asset中获取Image
-  /// 返回List<AssetThumb>集合
-  List<Widget> _getImagesFromAsset(List<Asset> assets) {
-    // 没有选择图片
-    if (assets.isEmpty) {
-      return null;
-    }
-    print('图片集合$assets');
-    return assets.map((asset) {
-      return Container(
-        width: 30,
-        height: 30,
-        child: AssetThumb(asset: asset, width: 150, height: 150),
-      );
-    }).toList();
-  }
-
-  // 调接口
-  getImages() async {
-    List<Asset> resultList = List<Asset>();
-    String error = 'No error Dectected';
-    // 调本地接口
-    // var data = {
-    //   'token':
-    //       'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdGVzdCIsInVzZXJfbmFtZSI6InB0ZXN0IiwiX3VzZXJfbmFtZSI6ImhpbnMiLCJleHAiOjE1OTk5NzUwMzcsInVzZXJJZCI6IjBlMDhlMTUzYjA0YTExZTliMzFiYjA2ZWJmMTRhNDc2In0.lMd37OTGQ-TQB-fAT6II3d0Ckd62Xyf55YIcCt5QJkQ'
-    // };
-
-    // await request('getpictrueToken', formData: data).then(
-    //   (value) {
-    //     print('获取图片上传的token${value['upToken']}');
-    //     var keys = {'token': value['upToken']};
-    //     requestNoHeader('getKey', formData: data).then(
-    //       (value) {
-    //         print('获取图片上传的token$value');
-    //       },
-    //     );
-    //   },
-    // );
-
-    // try {
-    //   resultList = await MultiImagePicker.pickImages(
-    //     maxImages: 300,
-    //     enableCamera: true,
-    //     selectedAssets: images,
-    //     cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-    //     materialOptions: MaterialOptions(
-    //       actionBarColor: "#abcdef",
-    //       actionBarTitle: "Example App",
-    //       allViewTitle: "All Photos",
-    //       useDetailsView: false,
-    //       selectCircleStrokeColor: "#000000",
-    //     ),
-    //   );
-    //   print('图片上传成功$resultList');
-    // } on Exception catch (e) {
-    //   error = e.toString();
-    //   print('图片上传错误');
-    // }
-    // if (!mounted) return;
-
-    // setState(() {
-    //   images = resultList;
-    //   _error = error;
-    //   print('获取本地图片后$images-----错误$_error');
-    // });
-  }
-}
-
-class _imageTile extends StatelessWidget {
-  final Asset imageAsset;
-  _imageTile(this.imageAsset);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          AssetThumb(asset: imageAsset, width: 100, height: 100),
-          FutureBuilder(
-            // ignore: deprecated_member_use
-            // future: imageAsset.requestMetadata(),
-            future: imageAsset.getByteData(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return Container();
-              Metadata imageMatadata = snapshot.data;
-              return Text('${imageMatadata.exif.artist}');
-            },
-          )
-        ],
       ),
     );
   }
