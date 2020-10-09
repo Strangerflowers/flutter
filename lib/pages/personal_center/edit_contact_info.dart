@@ -375,7 +375,7 @@ class _EditContactInfo extends State<EditContactInfo> {
           border:
               Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
       //设置上下左右的margin
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.only(left: 10),
       child: Row(
         children: [
           Container(
@@ -413,6 +413,8 @@ class _EditContactInfo extends State<EditContactInfo> {
                   contactInfoModel.address = value;
                 },
                 decoration: InputDecoration(
+                  //输入框内边距
+                  contentPadding: EdgeInsets.only(top: 35),
                   border: InputBorder.none,
                   hintText: '请输入',
                 ),
