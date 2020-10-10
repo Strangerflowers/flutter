@@ -83,6 +83,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
         body: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: Container(
+            color: Color(0xFFF5F6F8),
             child: Column(
               children: <Widget>[
                 _orderType(inputText),
@@ -246,7 +247,10 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
           // height: ScreenUtil().setHeight(1000),
           child: Expanded(
             child: ListView.separated(
-              separatorBuilder: (context, index) => Divider(height: .0),
+              separatorBuilder: (context, index) => Divider(
+                height: 0,
+                color: Color(0XFFF5F6F8),
+              ),
               itemCount: result.length + 1,
               shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
               physics: AlwaysScrollableScrollPhysics(),
@@ -275,7 +279,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
                     } else {
                       return Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.only(bottom: 16.0, top: 6),
                         child: Text(
                           "没有更多了",
                           style: TextStyle(color: Colors.grey),
@@ -301,8 +305,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   Widget _demandItem(item, context) {
     // var str = '我需要卓越Q3电子产品采购咨询价需求紧急尽快报价主要需求需要耳机和笔记本电脑';
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
-      padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
+      padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(5),
@@ -329,18 +333,18 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   Widget _title(title) {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       color: Colors.white,
       child: Text(
         title,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Color(0xFF252527),
-          fontSize: 16.0,
-          height: 1.3,
-          fontWeight: FontWeight.w500,
-          fontFamily: "Courier",
+          color: Color(0xFF242526),
+          fontSize: ScreenUtil().setSp(28),
+          // height: 1.3,
+          fontWeight: FontWeight.bold,
+          // fontFamily: "Courier",
         ),
       ),
     );
@@ -364,19 +368,20 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
     item.forEach((val) {
       tiles.add(Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFE9E2EE)),
+          border: Border.all(color: Color(0xFFEAECF0)),
           borderRadius: BorderRadius.circular(5),
-          color: Color(0xFFECECEE),
+          color: Color(0xFFEAECF0),
         ),
         margin: EdgeInsets.only(right: 5.0, bottom: 5),
-        padding: EdgeInsets.all(3.0),
+        padding: EdgeInsets.all(4.0),
         child: Container(
           // alignment: Alignment.centerLeft,
           child: Text(
             '${val}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: Color(0xFF78777A),
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF656769),
             ),
           ),
         ),
@@ -409,15 +414,15 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   // 需求公司
   Widget _company(item) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: <Widget>[
           Container(
               padding: EdgeInsets.only(right: 10.0),
               child: Image.asset(
                 'images/companyLabel.png',
-                width: 20,
-                height: 20,
+                width: ScreenUtil().setWidth(32),
+                height: ScreenUtil().setHeight(32),
               )
               // Icon(Iconfont.companyLabel,
               //     color: Color.fromARGB(
@@ -433,7 +438,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
               child: Text(
                 '${item['orgName']}',
                 style: TextStyle(
-                  color: Color(0xFFA1A0A3),
+                  fontSize: ScreenUtil().setSp(24),
+                  color: Color(0xFF9C9FA2),
                 ),
               ),
             ),
@@ -443,7 +449,8 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             child: Text(
               '${item['announceTimeStr']}',
               style: TextStyle(
-                color: Color(0xFFA1A0A3),
+                fontSize: ScreenUtil().setSp(24),
+                color: Color(0xFF9C9FA2),
               ),
             ),
           )
