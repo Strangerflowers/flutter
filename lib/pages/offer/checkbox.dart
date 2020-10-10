@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import './round_checkbox.dart';
 import '../../provide/demand_detail_provide.dart';
@@ -50,7 +51,7 @@ class _SwitchAndCheckBoxTestRouteState
         ),
       );
     } else {
-      return Container(
+      return Center(
         child: Text('暂无发货数据'),
       );
     }
@@ -95,6 +96,7 @@ class _SwitchAndCheckBoxTestRouteState
   Widget _checkboxTitle(item, index) {
     var parent = false;
     return Container(
+      padding: EdgeInsets.only(top: 5, bottom: 5),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -123,7 +125,10 @@ class _SwitchAndCheckBoxTestRouteState
             child: Container(
               child: Text(
                 '${item.productCategroyPath}',
-                style: TextStyle(fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0XFF242526),
+                    fontSize: ScreenUtil().setSp(32)),
               ),
             ),
           ),
@@ -135,6 +140,7 @@ class _SwitchAndCheckBoxTestRouteState
   // 子单选框
   Widget _checkboxContent(item) {
     return Container(
+      padding: EdgeInsets.only(top: 5, bottom: 5),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -151,14 +157,23 @@ class _SwitchAndCheckBoxTestRouteState
           ),
           Expanded(
             child: Container(
-              child: Text('${item.productDescript}'),
+              child: Text(
+                '${item.productDescript}',
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Color(0XFF242526),
+                    fontSize: ScreenUtil().setSp(28)),
+              ),
             ),
           ),
           Container(
             padding: EdgeInsets.only(right: 20),
             child: Text(
               '${item.num}${item.type}',
-              style: TextStyle(color: Colors.black26),
+              style: TextStyle(
+                color: Color(0XFF9C9FA2),
+                fontSize: ScreenUtil().setSp(28),
+              ),
             ),
           ),
         ],

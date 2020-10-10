@@ -31,7 +31,13 @@ class ChoiceBottom extends StatelessWidget {
                             .selectAll(flag);
                       },
                     ),
-                    Text('全选')
+                    Text(
+                      '全选',
+                      style: TextStyle(
+                        color: Color(0xFF242526),
+                        // fontSize: ScreenUtil().setSp(28),
+                      ),
+                    )
                   ],
                 ),
               ),
