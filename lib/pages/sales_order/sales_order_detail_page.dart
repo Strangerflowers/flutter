@@ -167,17 +167,16 @@ class SalesOrderBasic extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container(
-                  child: Row(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    spacing: 8.0, //chip之间的间距大小
+                    runSpacing: 4.0, //行之间的间距大小
                     children: <Widget>[
-                      Container(
-                        alignment: Alignment.bottomLeft,
-                        padding: EdgeInsets.only(right: 20),
-                        child: Text(item.consigneeName),
+                      Text(
+                        item.consigneeName,
                       ),
-                      Expanded(
-                        child: Container(
-                          child: Text(item.consigneeMobile),
-                        ),
+                      Text(
+                        item.consigneeMobile,
                       ),
                     ],
                   ),
