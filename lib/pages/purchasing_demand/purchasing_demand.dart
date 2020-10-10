@@ -105,7 +105,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
       padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 10.0),
       decoration: new BoxDecoration(
         gradient:
-            new LinearGradient(colors: [Color(0xFF53AEFE), Color(0xFF2B85FF)]),
+            new LinearGradient(colors: [Color(0xFF4CAEFF), Color(0xFF2A83FF)]),
         boxShadow: [
           new BoxShadow(
             color: Color(0xFF2B85FF),
