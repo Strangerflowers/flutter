@@ -404,7 +404,6 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
         });
   }
 
-  // 备注
   Widget _planMark(context) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
@@ -427,6 +426,8 @@ class _AddQuoteBodyState extends State<AddQuoteBody> {
             Container(
               alignment: Alignment.centerLeft,
               child: TextFormField(
+                initialValue:
+                    Provide.value<DemandDetailProvide>(context).remark,
                 inputFormatters: [LengthLimitingTextInputFormatter(200)],
                 decoration: InputDecoration(
                     // errorText: error,

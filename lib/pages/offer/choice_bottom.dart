@@ -96,6 +96,7 @@ class ChoiceBottom extends StatelessWidget {
                 Application.router.navigateTo(context, "/addproduct?id=1");
                 // 点击下一步的时候清空当前页面的勾选
                 Provide.value<DemandDetailProvide>(context).cleanCheck();
+                Provide.value<DemandDetailProvide>(context).remarkFunc(null);
                 // addproduct
                 // applyBoxFit(fit, inputSize, outputSize)
               },

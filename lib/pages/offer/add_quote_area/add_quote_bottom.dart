@@ -147,6 +147,9 @@ class _AddQuoteBottomState extends State<AddQuoteBottom> {
                     .then((val) {
                   if (val['code'] == 0) {
                     Toast.toast(context, msg: '提交成功');
+                    // 提交成功之后清除之前的备注
+                    Provide.value<DemandDetailProvide>(context)
+                        .remarkFunc(null);
                     // Fluttertoast.showToast(
                     //   msg: '提交成功',
                     //   toastLength: Toast.LENGTH_SHORT,
