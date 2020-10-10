@@ -74,15 +74,18 @@ class _AuthenticationState extends State<Authentication> {
                   }
                 }
                 return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation(Colors.blue),
-                      value: .7,
-                    ),
-                  ),
+                  child: Text(''),
                 );
+                // return Container(
+                //   height: MediaQuery.of(context).size.height / 2,
+                //   child: Center(
+                //     child: CircularProgressIndicator(
+                //       backgroundColor: Colors.grey[200],
+                //       valueColor: AlwaysStoppedAnimation(Colors.blue),
+                //       value: .7,
+                //     ),
+                //   ),
+                // );
               }),
         ),
       ),
