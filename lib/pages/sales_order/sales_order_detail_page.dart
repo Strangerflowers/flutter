@@ -23,7 +23,26 @@ class SalesOrderDetails extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('销售订单详情'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color(0xFF242526),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '销售订单详情',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('销售订单详情'),
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo(context),
