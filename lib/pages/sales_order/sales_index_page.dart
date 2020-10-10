@@ -84,11 +84,31 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('销售订单'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color(0xFF242526),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '销售订单',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('销售订单'),
         ),
         body: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: Container(
+            color: Color(0xFFF5F6F8),
             child: Column(
               children: <Widget>[
                 _salesTabs(list),
@@ -105,7 +125,7 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
 
   Widget _salesTabs(list) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 10),
       height: ScreenUtil().setHeight(93),
       // width: ScreenUtil().setWidth(750),
       decoration: BoxDecoration(
@@ -153,9 +173,9 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
                 child: Text(
                   item,
                   style: TextStyle(
-                    color: isClick ? Color(0xFF4389ED) : Colors.black,
+                    color: isClick ? Color(0xFF2A83FF) : Color(0XFF9C9FA2),
                     // decoration: TextDecoration.underline, //给文字添加下划线
-                    fontSize: ScreenUtil().setSp(30),
+                    fontSize: ScreenUtil().setSp(28),
                     // height: 1.5,
                   ),
                 ),
@@ -189,7 +209,10 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
       return Container(
         child: Expanded(
           child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(height: .0),
+            separatorBuilder: (context, index) => Divider(
+              height: .0,
+              color: Color(0XFFF5F6F8),
+            ),
 
             itemCount: result.length + 1,
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
@@ -280,6 +303,7 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
   // 合并一级组件
   Widget _mergeWidget(item) {
     return Container(
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       padding: EdgeInsets.all(10),
       child: InkWell(
@@ -309,7 +333,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
             physics: NeverScrollableScrollPhysics(), //禁用滑动事件
             itemBuilder: (contex, index) {
-              return _mergeSecondLevel(subList[index]);
+              return _mergeSecondLevel(
+                  subList[index], index, subList.length, item.isOpen);
               // return Text('商品列表');
             },
           ),
@@ -324,28 +349,32 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
   }
 
   // 合并二级组件
-  Widget _mergeSecondLevel(subItem) {
+  Widget _mergeSecondLevel(subItem, index, len, isflag) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: ScreenUtil().setWidth(150),
-            height: ScreenUtil().setHeight(150),
-            // width: ScreenUtil().setWidth(120),
-            padding: EdgeInsets.only(top: 0, right: 10, bottom: 10),
-            child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(subItem.mainKey, '')),
-            // child: subItem.mainKey == null
-            //     ? Image.asset('images/default.png')
-            //     : Image.network(
-            //         subItem.mainKey,
-            //         fit: BoxFit.fill,
-            //       ),
-          ),
-          Expanded(
-            child: _right(subItem),
-          ),
-        ],
+      padding: EdgeInsets.only(top: 16),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              width: ScreenUtil().setWidth(140),
+              height: ScreenUtil().setHeight(140),
+              // width: ScreenUtil().setWidth(120),
+              padding: EdgeInsets.only(right: 10, bottom: 10),
+              child: ImageWidgetBuilder.loadImage(
+                  StringUtils.defaultIfEmpty(subItem.mainKey, '')),
+              // child: subItem.mainKey == null
+              //     ? Image.asset('images/default.png')
+              //     : Image.network(
+              //         subItem.mainKey,
+              //         fit: BoxFit.fill,
+              //       ),
+            ),
+            Expanded(
+              child: _right(subItem, index, len, isflag),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -394,8 +423,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             padding: EdgeInsets.only(right: 10.0),
             child: Image.asset(
               'images/companyLabel.png',
-              width: 20,
-              height: 20,
+              width: ScreenUtil().setWidth(32),
+              height: ScreenUtil().setHeight(32),
             ),
             // child: Icon(Iconfont.companyLabel,
             //     color: Color.fromARGB(
@@ -411,9 +440,9 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
               child: Text(
                 '${item.demanderDeptName}',
                 style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF242526),
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -423,7 +452,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             child: Text(
               '共${item.orderItems.length}种${item.totalNumber}件',
               style: TextStyle(
-                color: Color(0xFFA1A0A3),
+                fontSize: ScreenUtil().setSp(24),
+                color: Color(0xFF9C9FA2),
               ),
             ),
           )
@@ -432,8 +462,18 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
     );
   }
 
-  Widget _right(subItem) {
+  Widget _right(subItem, index, len, isflag) {
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+              width: 1,
+              color: isflag
+                  ? index == len - 1 ? Colors.white : Color(0XFFEAECF0)
+                  : Colors.white),
+        ),
+      ),
       // width: ScreenUtil().setWidth(600),
       child: Column(
         children: <Widget>[
@@ -441,6 +481,10 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             alignment: Alignment.centerLeft,
             child: Text(
               '${subItem.productName}',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: Color(0xFF242526),
+              ),
               maxLines: 2,
             ),
           ),
@@ -450,8 +494,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
               // '规格：${item.skuValueList}',
               '规格：${subItem.specification}',
               style: TextStyle(
-                color: Color(0xFFCCCCCC),
-                fontSize: ScreenUtil().setSp(30),
+                color: Color(0xFF9C9FA2),
+                fontSize: ScreenUtil().setSp(24),
               ),
             ),
           ),
@@ -460,8 +504,8 @@ class _SalesIndexPageState extends State<SalesIndexPage> {
             child: Text(
               '数量：${subItem.number}',
               style: TextStyle(
-                color: Color(0xFFCCCCCC),
-                fontSize: ScreenUtil().setSp(30),
+                color: Color(0xFF9C9FA2),
+                fontSize: ScreenUtil().setSp(24),
               ),
             ),
           ),
