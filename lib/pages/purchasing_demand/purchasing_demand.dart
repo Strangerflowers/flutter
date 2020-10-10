@@ -90,8 +90,7 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
             child: Column(
               children: <Widget>[
                 _orderType(inputText),
-                _goodsList()
-                // DemandContent(inputText),
+                _goodsList(),
               ],
             ),
           ),
@@ -481,326 +480,326 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
   }
 }
 
-// 获取需求列表数据
-// 需求列表
-class DemandContent extends StatefulWidget {
-  final inputText;
-  DemandContent(this.inputText);
-  @override
-  _DemandContentState createState() => _DemandContentState();
-}
+// // 获取需求列表数据
+// // 需求列表
+// class DemandContent extends StatefulWidget {
+//   final inputText;
+//   DemandContent(this.inputText);
+//   @override
+//   _DemandContentState createState() => _DemandContentState();
+// }
 
-class _DemandContentState extends State<DemandContent> {
-  int totalPage;
-  var _itemList;
-  int pageNum = 1;
-  var currentText;
-  @override
-  void initState() {
-    _getdata();
-    super.initState();
-  }
+// class _DemandContentState extends State<DemandContent> {
+//   int totalPage;
+//   var _itemList;
+//   int pageNum = 1;
+//   var currentText;
+//   @override
+//   void initState() {
+//     _getdata();
+//     super.initState();
+//   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     super.dispose();
+//   }
 
-  // 获取响应数据
-  void _getdata() async {
-    var formData = {
-      "isAll": true,
-      "limit": 10,
-      "order": "string",
-      "page": pageNum,
-      "params": {
-        "name": currentText,
-      }
-    };
-    await request('listDemand', formData: formData).then((val) {
-      var goodsList = val;
-      totalPage = goodsList['result']['totalPage'];
+//   // 获取响应数据
+//   void _getdata() async {
+//     var formData = {
+//       "isAll": true,
+//       "limit": 10,
+//       "order": "string",
+//       "page": pageNum,
+//       "params": {
+//         "name": currentText,
+//       }
+//     };
+//     await request('listDemand', formData: formData).then((val) {
+//       var goodsList = val;
+//       totalPage = goodsList['result']['totalPage'];
 
-      if (pageNum == 1) {
-        setState(() {
-          _itemList = goodsList['result']['list'];
-        });
-      } else {
-        _itemList.addAll(goodsList['result']['list']);
-      }
-    });
-  }
+//       if (pageNum == 1) {
+//         setState(() {
+//           _itemList = goodsList['result']['list'];
+//         });
+//       } else {
+//         _itemList.addAll(goodsList['result']['list']);
+//       }
+//     });
+//   }
 
-// class DemandContent extends StatelessWidget {
-  var hasToken;
-  @override
-  Widget build(BuildContext context) {
-    if (_itemList != null) {
-      return Container(
-        child: _demandListView(_itemList),
-      );
-    } else {
-      return Container(
-        height: MediaQuery.of(context).size.height / 2,
-        child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-            valueColor: AlwaysStoppedAnimation(Colors.blue),
-            value: .7,
-          ),
-        ),
-      );
-    }
-  }
+// // class DemandContent extends StatelessWidget {
+//   var hasToken;
+//   @override
+//   Widget build(BuildContext context) {
+//     if (_itemList != null) {
+//       return Container(
+//         child: _demandListView(_itemList),
+//       );
+//     } else {
+//       return Container(
+//         height: MediaQuery.of(context).size.height / 2,
+//         child: Center(
+//           child: CircularProgressIndicator(
+//             backgroundColor: Colors.grey[200],
+//             valueColor: AlwaysStoppedAnimation(Colors.blue),
+//             value: .7,
+//           ),
+//         ),
+//       );
+//     }
+//   }
 
-  // 获取响应数据
-  Future _getBackDetailInfo(BuildContext context) async {
-    hasToken = null;
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
-    hasToken = token;
-    var formData = {
-      "isAll": true,
-      "limit": 10,
-      "order": "string",
-      "page": 1,
-      "params": {
-        "name": "",
-      }
-    };
-    await request('listDemand', formData: formData).then((val) {
-      // var data = json.decode(val.toString());
-      // print('采购需求转换数据json.decode$data');
-      Purchasing goodsList = Purchasing.fromJson(val);
-      Provide.value<PurchasingListProvide>(context)
-          .getGoodsList(goodsList.result.list);
+//   // 获取响应数据
+//   Future _getBackDetailInfo(BuildContext context) async {
+//     hasToken = null;
+//     final prefs = await SharedPreferences.getInstance();
+//     final token = prefs.getString('token') ?? '';
+//     hasToken = token;
+//     var formData = {
+//       "isAll": true,
+//       "limit": 10,
+//       "order": "string",
+//       "page": 1,
+//       "params": {
+//         "name": "",
+//       }
+//     };
+//     await request('listDemand', formData: formData).then((val) {
+//       // var data = json.decode(val.toString());
+//       // print('采购需求转换数据json.decode$data');
+//       Purchasing goodsList = Purchasing.fromJson(val);
+//       Provide.value<PurchasingListProvide>(context)
+//           .getGoodsList(goodsList.result.list);
 
-      // return Provide.value<PurchasingListProvide>(context).goodsList;
-      return "加载完成";
-    });
-  }
+//       // return Provide.value<PurchasingListProvide>(context).goodsList;
+//       return "加载完成";
+//     });
+//   }
 
-  // 一级
-  Widget _demandListView(result) {
-    return Provide<PurchasingListProvide>(builder: (context, child, data) {
-      // if (data.goodsList != null) {
-      return Container(
-        // height: ScreenUtil().setHeight(1000),
-        child: Expanded(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(height: .0),
-            itemCount: result.length + 1,
-            shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-            physics: AlwaysScrollableScrollPhysics(),
-            // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-            itemBuilder: (contex, index) {
-              //如果到了表尾
-              if (index > (result.length - 1)) {
-                //不足100条，继续获取数据
-                if (pageNum < totalPage) {
-                  print('获取更多$pageNum====$totalPage');
-                  //获取数据
-                  pageNum++;
-                  _getdata();
-                  //加载时显示loading
-                  return Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        width: 24.0,
-                        height: 24.0,
-                        child: CircularProgressIndicator(strokeWidth: 2.0)),
-                  );
-                } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "没有更多了",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
-              }
-              return _demandItem(result[index], context);
-            },
-          ),
-        ),
-      );
-      // } else {
-      //   return Container(
-      //     child: Text('暂无数据'),
-      //   );
-      // }
-    });
-  }
+//   // 一级
+//   Widget _demandListView(result) {
+//     return Provide<PurchasingListProvide>(builder: (context, child, data) {
+//       // if (data.goodsList != null) {
+//       return Container(
+//         // height: ScreenUtil().setHeight(1000),
+//         child: Expanded(
+//           child: ListView.separated(
+//             separatorBuilder: (context, index) => Divider(height: .0),
+//             itemCount: result.length + 1,
+//             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+//             physics: AlwaysScrollableScrollPhysics(),
+//             // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+//             itemBuilder: (contex, index) {
+//               //如果到了表尾
+//               if (index > (result.length - 1)) {
+//                 //不足100条，继续获取数据
+//                 if (pageNum < totalPage) {
+//                   print('获取更多$pageNum====$totalPage');
+//                   //获取数据
+//                   pageNum++;
+//                   _getdata();
+//                   //加载时显示loading
+//                   return Container(
+//                     padding: const EdgeInsets.all(16.0),
+//                     alignment: Alignment.center,
+//                     child: SizedBox(
+//                         width: 24.0,
+//                         height: 24.0,
+//                         child: CircularProgressIndicator(strokeWidth: 2.0)),
+//                   );
+//                 } else {
+//                   return Container(
+//                     alignment: Alignment.center,
+//                     padding: EdgeInsets.all(16.0),
+//                     child: Text(
+//                       "没有更多了",
+//                       style: TextStyle(color: Colors.grey),
+//                     ),
+//                   );
+//                 }
+//               }
+//               return _demandItem(result[index], context);
+//             },
+//           ),
+//         ),
+//       );
+//       // } else {
+//       //   return Container(
+//       //     child: Text('暂无数据'),
+//       //   );
+//       // }
+//     });
+//   }
 
-  // 单项列表数据
-  Widget _demandItem(item, context) {
-    // var str = '我需要卓越Q3电子产品采购咨询价需求紧急尽快报价主要需求需要耳机和笔记本电脑';
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white,
-      ),
-      child: InkWell(
-        onTap: () {
-          // 跳转到详情页面
-          Application.router
-              .navigateTo(context, "/demanddetail?id=${item['id']}");
-        },
-        child: Column(
-          children: <Widget>[
-            _title(item.name),
-            _attributes(item),
-            _company(item),
-          ],
-        ),
-      ),
-    );
-  }
+//   // 单项列表数据
+//   Widget _demandItem(item, context) {
+//     // var str = '我需要卓越Q3电子产品采购咨询价需求紧急尽快报价主要需求需要耳机和笔记本电脑';
+//     return Container(
+//       margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
+//       padding: EdgeInsets.all(10.0),
+//       decoration: BoxDecoration(
+//         border: Border.all(color: Colors.white),
+//         borderRadius: BorderRadius.circular(5),
+//         color: Colors.white,
+//       ),
+//       child: InkWell(
+//         onTap: () {
+//           // 跳转到详情页面
+//           Application.router
+//               .navigateTo(context, "/demanddetail?id=${item['id']}");
+//         },
+//         child: Column(
+//           children: <Widget>[
+//             _title(item.name),
+//             _attributes(item),
+//             _company(item),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  // 标题内容
-  Widget _title(title) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      color: Colors.white,
-      child: Text(
-        title,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Color(0xFF252527),
-          fontSize: 16.0,
-          height: 1.3,
-          fontWeight: FontWeight.w500,
-          fontFamily: "Courier",
-        ),
-      ),
-    );
-  }
+//   // 标题内容
+//   Widget _title(title) {
+//     return Container(
+//       alignment: Alignment.centerLeft,
+//       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+//       color: Colors.white,
+//       child: Text(
+//         title,
+//         maxLines: 2,
+//         overflow: TextOverflow.ellipsis,
+//         style: TextStyle(
+//           color: Color(0xFF252527),
+//           fontSize: 16.0,
+//           height: 1.3,
+//           fontWeight: FontWeight.w500,
+//           fontFamily: "Courier",
+//         ),
+//       ),
+//     );
+//   }
 
-  // 产品属性合并
-  Widget _attributes(item) {
-    var arr = item.categoryMap.values;
-    // print('修改bug====${item.categoryMap.toJson().values.toList()}');
-    return Container(
-      alignment: Alignment.bottomLeft,
-      child: _attributesItem(arr),
-    );
-  }
+//   // 产品属性合并
+//   Widget _attributes(item) {
+//     var arr = item.categoryMap.values;
+//     // print('修改bug====${item.categoryMap.toJson().values.toList()}');
+//     return Container(
+//       alignment: Alignment.bottomLeft,
+//       child: _attributesItem(arr),
+//     );
+//   }
 
-  //单个产品属性
-  Widget _attributesItem(item) {
-    List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
-    Widget content; //单独一个widget组件，用于返回需要生成的内容widget
-    var arr = [];
-    item.forEach((val) {
-      tiles.add(Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFE9E2EE)),
-          borderRadius: BorderRadius.circular(5),
-          color: Color(0xFFECECEE),
-        ),
-        margin: EdgeInsets.only(right: 5.0, bottom: 5),
-        padding: EdgeInsets.all(3.0),
-        child: Container(
-          // alignment: Alignment.centerLeft,
-          child: Text(
-            '${val}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: Color(0xFF78777A),
-            ),
-          ),
-        ),
-      ));
-    });
-    content = new Wrap(
-        children: tiles //重点在这里，因为用编辑器写Column生成的children后面会跟一个<Widget>[]，
-        //此时如果我们直接把生成的tiles放在<Widget>[]中是会报一个类型不匹配的错误，把<Widget>[]删了就可以了
-        );
-    return content;
+//   //单个产品属性
+//   Widget _attributesItem(item) {
+//     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
+//     Widget content; //单独一个widget组件，用于返回需要生成的内容widget
+//     var arr = [];
+//     item.forEach((val) {
+//       tiles.add(Container(
+//         decoration: BoxDecoration(
+//           border: Border.all(color: Color(0xFFE9E2EE)),
+//           borderRadius: BorderRadius.circular(5),
+//           color: Color(0xFFECECEE),
+//         ),
+//         margin: EdgeInsets.only(right: 5.0, bottom: 5),
+//         padding: EdgeInsets.all(3.0),
+//         child: Container(
+//           // alignment: Alignment.centerLeft,
+//           child: Text(
+//             '${val}',
+//             style: TextStyle(
+//               fontSize: ScreenUtil().setSp(24),
+//               color: Color(0xFF78777A),
+//             ),
+//           ),
+//         ),
+//       ));
+//     });
+//     content = new Wrap(
+//         children: tiles //重点在这里，因为用编辑器写Column生成的children后面会跟一个<Widget>[]，
+//         //此时如果我们直接把生成的tiles放在<Widget>[]中是会报一个类型不匹配的错误，把<Widget>[]删了就可以了
+//         );
+//     return content;
 
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     border: Border.all(color: Color(0xFFE9E2EE)),
-    //     borderRadius: BorderRadius.circular(5),
-    //     color: Color(0xFFECECEE),
-    //   ),
-    //   margin: EdgeInsets.only(right: 5.0),
-    //   padding: EdgeInsets.all(3.0),
-    //   child: Text(
-    //     '${arr.toString()}',
-    //     style: TextStyle(
-    //       color: Color(0xFF78777A),
-    //     ),
-    //   ),
-    // );
-    // }
-  }
+//     // return Container(
+//     //   decoration: BoxDecoration(
+//     //     border: Border.all(color: Color(0xFFE9E2EE)),
+//     //     borderRadius: BorderRadius.circular(5),
+//     //     color: Color(0xFFECECEE),
+//     //   ),
+//     //   margin: EdgeInsets.only(right: 5.0),
+//     //   padding: EdgeInsets.all(3.0),
+//     //   child: Text(
+//     //     '${arr.toString()}',
+//     //     style: TextStyle(
+//     //       color: Color(0xFF78777A),
+//     //     ),
+//     //   ),
+//     // );
+//     // }
+//   }
 
-  Widget _text(item) {
-    return Container(
-      child: Text(
-        '1232',
-        style: TextStyle(
-          color: Color(0xFF78777A),
-        ),
-      ),
-    );
-  }
+//   Widget _text(item) {
+//     return Container(
+//       child: Text(
+//         '1232',
+//         style: TextStyle(
+//           color: Color(0xFF78777A),
+//         ),
+//       ),
+//     );
+//   }
 
-  // 需求公司
-  Widget _company(item) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Row(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 10.0),
-            child: Image.asset(
-              'images/companyLabel.png',
-              width: 20,
-              height: 20,
-            ),
-            // child: Icon(Iconfont.companyLabel,
-            //     color: Color.fromARGB(
-            //       255,
-            //       82,
-            //       160,
-            //       255,
-            //     ),
-            //     size: 20.0),
-          ),
-          Expanded(
-            child: Container(
-              child: Text(
-                '${item.orgName}',
-                style: TextStyle(
-                  color: Color(0xFFA1A0A3),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '${item.announceTimeStr}',
-              style: TextStyle(
-                color: Color(0xFFA1A0A3),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+//   // 需求公司
+//   Widget _company(item) {
+//     return Container(
+//       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+//       child: Row(
+//         children: <Widget>[
+//           Container(
+//             padding: EdgeInsets.only(right: 10.0),
+//             child: Image.asset(
+//               'images/companyLabel.png',
+//               width: 20,
+//               height: 20,
+//             ),
+//             // child: Icon(Iconfont.companyLabel,
+//             //     color: Color.fromARGB(
+//             //       255,
+//             //       82,
+//             //       160,
+//             //       255,
+//             //     ),
+//             //     size: 20.0),
+//           ),
+//           Expanded(
+//             child: Container(
+//               child: Text(
+//                 '${item.orgName}',
+//                 style: TextStyle(
+//                   color: Color(0xFFA1A0A3),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Container(
+//             alignment: Alignment.centerRight,
+//             child: Text(
+//               '${item.announceTimeStr}',
+//               style: TextStyle(
+//                 color: Color(0xFFA1A0A3),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class Search extends StatefulWidget {
   final inputText;
