@@ -406,17 +406,6 @@ class _PurchasingDemandState extends State<PurchasingDemand> {
     // }
   }
 
-  Widget _text(item) {
-    return Container(
-      child: Text(
-        '1232',
-        style: TextStyle(
-          color: Color(0xFF78777A),
-        ),
-      ),
-    );
-  }
-
   // 需求公司
   Widget _company(item) {
     return Container(
