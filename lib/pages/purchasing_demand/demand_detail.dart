@@ -18,15 +18,27 @@ class DemandDetails extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
               Application.router
                   .navigateTo(context, "/demandList", clearStack: true);
               // Navigator.pop(context);
             },
           ),
-          title: Text('需求详情'),
+          title: Text(
+            '需求详情',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          backgroundColor: Colors.white,
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo(context),
@@ -104,7 +116,11 @@ class ExpansionTileDome extends StatelessWidget {
             child: ExpansionTile(
               title: Text(
                 '基础信息',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: Color(0XFF242526),
+                  fontSize: ScreenUtil().setSp(32),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               backgroundColor: Colors.white,
               children: <Widget>[
