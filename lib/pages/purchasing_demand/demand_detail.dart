@@ -54,6 +54,7 @@ class DemandDetails extends StatelessWidget {
                 children: <Widget>[
                   SingleChildScrollView(
                     child: Container(
+                      color: Color(0XFFF5F6F8),
                       margin: EdgeInsets.only(bottom: 40),
                       constraints: BoxConstraints(
                         // minWidth: 180,
@@ -112,21 +113,48 @@ class ExpansionTileDome extends StatelessWidget {
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            child: ExpansionTile(
-              title: Text(
-                '基础信息',
-                style: TextStyle(
-                  color: Color(0XFF242526),
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              backgroundColor: Colors.white,
+            color: Colors.white,
+            margin: EdgeInsets.only(bottom: 10, top: 10),
+            child: Column(
+              // title: Text(
+              //   '基础信息',
+              //   style: TextStyle(
+              //     color: Color(0XFF242526),
+              //     fontSize: ScreenUtil().setSp(32),
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // backgroundColor: Colors.white,
               children: <Widget>[
+                Stack(
+                  children: [
+                    Positioned(
+                      left: 0,
+                      top: 16,
+                      bottom: 0,
+                      child: Container(
+                        width: ScreenUtil().setWidth(10),
+                        color: Color(0xFF2A83FF),
+                        child: Text(''),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, top: 16, bottom: 10),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '基础信息',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff242526),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 _mergeInformation(goodsInfo.result, context),
               ],
-              initiallyExpanded: true, //是否默认打开？
+              // initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );
@@ -162,7 +190,14 @@ class ExpansionTileDome extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0XFF242526),
+                fontSize: ScreenUtil().setSp(28),
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           Expanded(
             child: Container(
@@ -185,18 +220,44 @@ class ProductInformation extends StatelessWidget {
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
-            child: ExpansionTile(
-              title: Text(
-                '需求产品',
-                style: TextStyle(color: Colors.black),
-              ),
-
-              backgroundColor: Colors.white,
+            color: Colors.white,
+            child: Column(
+              // title: Text(
+              //   '需求产品',
+              //   style: TextStyle(color: Colors.black),
+              // ),
+              // backgroundColor: Colors.white,
               children: <Widget>[
+                Stack(
+                  children: [
+                    Positioned(
+                      left: 0,
+                      top: 16,
+                      bottom: 0,
+                      child: Container(
+                        width: ScreenUtil().setWidth(10),
+                        color: Color(0xFF2A83FF),
+                        child: Text(''),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, top: 16),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '需求产品',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff242526),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 _recommedList(goodsInfo.result.demandSkuDtoList),
                 _planMark(goodsInfo.result),
               ],
-              initiallyExpanded: true, //是否默认打开？
+              // initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );
@@ -235,7 +296,7 @@ class ProductInformation extends StatelessWidget {
   // 合并一二级
   Widget _mergePlan(item, index) {
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10, top: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -261,9 +322,9 @@ class ProductInformation extends StatelessWidget {
       child: Text(
         '${item.productCategroyPath}',
         style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: ScreenUtil().setSp(32),
-          color: Color(0xFF423F42),
+          fontWeight: FontWeight.bold,
+          fontSize: ScreenUtil().setSp(28),
+          color: Color(0xFF242526),
         ),
       ),
     );
@@ -279,8 +340,9 @@ class ProductInformation extends StatelessWidget {
             child: Text(
               '${item.productDescript}',
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                color: Color(0xFF969497),
+                fontWeight: FontWeight.w400,
+                fontSize: ScreenUtil().setSp(28),
+                color: Color(0xFF242526),
               ),
             ),
           ),
@@ -290,8 +352,9 @@ class ProductInformation extends StatelessWidget {
               child: Text(
                 '${item.num}${item.type}',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  color: Color(0xFF969497),
+                  fontWeight: FontWeight.w400,
+                  fontSize: ScreenUtil().setSp(28),
+                  color: Color(0xFF9C9FA2),
                 ),
               ),
             ),
@@ -322,7 +385,7 @@ class ProductInformation extends StatelessWidget {
   // 备注
   Widget _planMark(item) {
     return Container(
-        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        padding: EdgeInsets.fromLTRB(20, 16, 20, 5),
         margin: EdgeInsets.only(bottom: 40),
         // padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
@@ -334,8 +397,9 @@ class ProductInformation extends StatelessWidget {
               child: Text(
                 '备注',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: Color(0xFF423F42),
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil().setSp(28),
+                  color: Color(0xFF242526),
                 ),
               ),
             ),
@@ -344,8 +408,8 @@ class ProductInformation extends StatelessWidget {
               child: Text(
                 '${item.remark == 'null' || item.remark == null ? '' : item.remark}',
                 style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: Color(0xFF575558),
+                    fontSize: ScreenUtil().setSp(28),
+                    color: Color(0xFF242526),
                     height: 1.5),
               ),
             )
