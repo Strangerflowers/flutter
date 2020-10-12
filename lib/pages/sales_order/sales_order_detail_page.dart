@@ -86,21 +86,38 @@ class SalesOrderBasic extends StatelessWidget {
           child: Container(
             color: Colors.white,
             margin: EdgeInsets.only(bottom: 20),
-            child: ExpansionTile(
-              title: Text(
-                '基础信息',
-                style: TextStyle(color: Colors.black),
-              ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
-              // leading: Icon(Icons.ac_unit),
-              backgroundColor: Colors.white,
-              children: <Widget>[
-                _mergeInformation(goodsInfo.result, context),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 19,
+                  // bottom: 15,
+                  child: Container(
+                    height: ScreenUtil().setHeight(46),
+                    width: ScreenUtil().setWidth(10),
+                    color: Color(0xFF2A83FF),
+                    child: Text(''),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: ExpansionTile(
+                    title: Text(
+                      '基础信息',
+                      style: TextStyle(
+                        color: Color(0XFF242526),
+                        fontSize: ScreenUtil().setSp(32),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                    children: <Widget>[
+                      _mergeInformation(goodsInfo.result, context),
+                    ],
+                    initiallyExpanded: true, //是否默认打开？
+                  ),
+                ),
               ],
-              initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );
@@ -154,10 +171,22 @@ class SalesOrderBasic extends StatelessWidget {
             children: <Widget>[
               Container(
                 width: ScreenUtil().setWidth(200),
-                child: Text('$title'),
+                child: Text(
+                  '$title',
+                  style: TextStyle(
+                    color: Color(0XFF242526),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
               ),
               Expanded(
-                child: Text('${content == 'null' ? '' : content}'),
+                child: Text(
+                  '${content == 'null' ? '' : content}',
+                  style: TextStyle(
+                    color: Color(0XFF242526),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
               ),
               Container(
                 alignment: Alignment.centerRight,
@@ -180,7 +209,13 @@ class SalesOrderBasic extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0XFF242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Expanded(
             child: Column(
@@ -193,16 +228,32 @@ class SalesOrderBasic extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         item.consigneeName,
+                        style: TextStyle(
+                          color: Color(0XFF242526),
+                          fontSize: ScreenUtil().setSp(28),
+                          height: 1.1,
+                        ),
                       ),
                       Text(
                         item.consigneeMobile,
+                        style: TextStyle(
+                          color: Color(0XFF242526),
+                          fontSize: ScreenUtil().setSp(28),
+                          height: 1.1,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   alignment: Alignment.bottomLeft,
-                  child: Text(item.consigneeAdress),
+                  child: Text(
+                    item.consigneeAdress,
+                    style: TextStyle(
+                      color: Color(0XFF242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -220,12 +271,23 @@ class SalesOrderBasic extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0XFF242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Expanded(
             child: Container(
               child: Text(
-                  '${content == 'null' || content == null ? '' : content}'),
+                '${content == 'null' || content == null ? '' : content}',
+                style: TextStyle(
+                  color: Color(0XFF242526),
+                  fontSize: ScreenUtil().setSp(28),
+                ),
+              ),
             ),
           ),
         ],
@@ -245,34 +307,43 @@ class ProductInformation extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 20),
             color: Colors.white,
-            child: ExpansionTile(
-              title: Text(
-                '产品信息',
-                style: TextStyle(color: Colors.black),
-              ),
-              trailing: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.black,
-              ),
-              // Container(
-              //   width: ScreenUtil().setWidth(80),
-              //   child: Row(
-              //     children: <Widget>[
-              //       Text('收起'),
-              //       Icon(
-              //         Icons.keyboard_arrow_down,
-              //         color: Colors.black,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
-              backgroundColor: Colors.white,
-              children: <Widget>[
-                _recommedList(goodsInfo.result.orderItems),
-                _sumAllPrice(goodsInfo.result),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 19,
+                  // bottom: 15,
+                  child: Container(
+                    height: ScreenUtil().setHeight(46),
+                    width: ScreenUtil().setWidth(10),
+                    color: Color(0xFF2A83FF),
+                    child: Text(''),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: ExpansionTile(
+                    title: Text(
+                      '产品信息',
+                      style: TextStyle(
+                        color: Color(0XFF242526),
+                        fontSize: ScreenUtil().setSp(32),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black,
+                    ),
+                    backgroundColor: Colors.white,
+                    children: <Widget>[
+                      _recommedList(goodsInfo.result.orderItems),
+                      _sumAllPrice(goodsInfo.result),
+                    ],
+                    initiallyExpanded: true, //是否默认打开？
+                  ),
+                ),
               ],
-              initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );

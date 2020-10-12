@@ -130,10 +130,11 @@ class ExpansionTileDome extends StatelessWidget {
                   children: [
                     Positioned(
                       left: 0,
-                      top: 16,
-                      bottom: 0,
+                      top: 17,
+                      // bottom: 10,
                       child: Container(
                         width: ScreenUtil().setWidth(10),
+                        height: ScreenUtil().setHeight(46),
                         color: Color(0xFF2A83FF),
                         child: Text(''),
                       ),
@@ -232,10 +233,11 @@ class ProductInformation extends StatelessWidget {
                   children: [
                     Positioned(
                       left: 0,
-                      top: 16,
-                      bottom: 0,
+                      top: 17,
+                      // bottom: 0,
                       child: Container(
                         width: ScreenUtil().setWidth(10),
+                        height: ScreenUtil().setHeight(46),
                         color: Color(0xFF2A83FF),
                         child: Text(''),
                       ),
