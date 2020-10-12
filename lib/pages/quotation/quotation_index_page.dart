@@ -376,7 +376,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '￥${double.parse(item.totalAmount) / 100}（共${item.categoryNum}种${item.total}件）',
+                      '￥${(double.parse(item.totalAmount) / 100).toStringAsFixed(2)}（共${item.categoryNum}种${item.total}件）',
                       style: TextStyle(
                         color: Color(0xFF333333),
                         height: 1.5,

@@ -373,7 +373,7 @@ class ProductInformation extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(top: 3, bottom: 3),
                   child: Text(
-                    '￥${item.amount / 100}',
+                    '￥${(item.amount / 100).toStringAsFixed(2)}',
                     // '${item.productDescript}',
                     maxLines: 2,
                     style: TextStyle(
