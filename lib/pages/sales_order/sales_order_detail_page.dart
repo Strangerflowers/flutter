@@ -50,6 +50,7 @@ class SalesOrderDetails extends StatelessWidget {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Container(
+                  color: Color(0xFFF5F6F8),
                   child: Column(
                     children: <Widget>[
                       SalesOrderBasic(),
@@ -386,7 +387,7 @@ class ProductInformation extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: Colors.black12,
+            color: Color(0xFFEAECF0),
           ),
         ),
       ),
@@ -459,100 +460,77 @@ class ProductInformation extends StatelessWidget {
 
   // 商品信息
   Widget _goodsItem(item) {
-    // String str = '';
-    // if (item.skuValueList.length > 0) {
-    //   str = (item.skuValueList.join(",")).replaceAll(",", "-");
-    //   print('字符串拼接$str');
-    // }
     return Container(
       padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      child: Row(
-        children: <Widget>[
-          Container(
-            // alignment: Alignment.topCenter,
-            width: ScreenUtil().setWidth(150),
-            height: ScreenUtil().setHeight(150),
-            padding: EdgeInsets.only(top: 0, right: 10),
-            child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(item.mainKey, '')),
-            // child: item.mainKey == 'null'
-            //     ? Image.asset(
-            //         'images/default.png',
-            //         fit: BoxFit.fill,
-            //       )
-            //     : Image.network(
-            //         '${item.mainKey}',
-            //         fit: BoxFit.fill,
-            //         // width: ScreenUtil().setWidth(150),
-            //         // height: ScreenUtil().setHeight(150),
-            //       )
-            // Image.asset('images/icon.png'),
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    // '12323',
-                    '${item.productName}',
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-                // Container(
-                //   alignment: Alignment.centerLeft,
-                //   padding: EdgeInsets.only(top: 3, bottom: 3),
-                //   child: Text(
-                //     '￥${item.amount}',
-                //     // '${item.productDescript}',
-                //     maxLines: 2,
-                //     style: TextStyle(
-                //       fontSize: ScreenUtil().setSp(30),
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    // '规格：${item.skuValueList}',
-                    '规格：${item.specification}',
-                    style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    '数量：${item.number} ${item.unit}',
-                    style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    '价格：${MoneyUtil.changeYWithUnit((item.price / 100).toString(), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)} 元/${item.unit}',
-                    style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-              ],
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              // alignment: Alignment.topCenter,
+              width: ScreenUtil().setWidth(140),
+              height: ScreenUtil().setHeight(140),
+              padding: EdgeInsets.only(right: 10),
+              child: ImageWidgetBuilder.loadImage(
+                StringUtils.defaultIfEmpty(item.mainKey, ''),
+              ),
             ),
-          )
-        ],
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      // '12323',
+                      '${item.productName}',
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Color(0XFF242526),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      '￥ ${MoneyUtil.changeYWithUnit((item.price / 100).toString(), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)} 元/${item.unit}',
+                      style: TextStyle(
+                        color: Color(0xFF242526),
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      // '规格：${item.skuValueList}',
+                      '规格：${item.specification}',
+                      style: TextStyle(
+                        color: Color(0xFF9C9FA2),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      '数量：${item.number} ${item.unit}',
+                      style: TextStyle(
+                        color: Color(0xFF9C9FA2),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -561,7 +539,8 @@ class ProductInformation extends StatelessWidget {
   Widget _sumPrice(item) {
     double sum = 0.0;
     sum = item.number * item.price;
-    print('计算${item.number}*${item.price}=${sum}');
+    var priceSum = (sum / 100).toStringAsFixed(2).split('.');
+    // print('计算${item.number}*${item.price}=${sum}');
     return Container(
       padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
       alignment: Alignment.bottomRight,
@@ -569,12 +548,32 @@ class ProductInformation extends StatelessWidget {
       child: RichText(
         text: TextSpan(
             text: '小计：',
-            style: TextStyle(color: Color(0xFF333333)),
+            style: TextStyle(
+              color: Color(0xFF242526),
+              fontSize: ScreenUtil().setSp(24),
+            ),
             children: <TextSpan>[
               TextSpan(
-                text: '￥${(sum / 100).toStringAsFixed(2)}',
+                text: '￥',
                 style: TextStyle(
-                  color: Color(0xFFF2A631),
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(24),
+                ),
+              ),
+              TextSpan(
+                // text: '${(sum / 100).toStringAsFixed(2)}',
+                text: '${priceSum[0]}.',
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              ),
+              TextSpan(
+                // text: '${(sum / 100).toStringAsFixed(2)}',
+                text: priceSum[1],
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(24),
                 ),
               ),
             ]),
@@ -597,19 +596,38 @@ class ProductInformation extends StatelessWidget {
 
   // 共计
   Widget _sumAllPrice(item) {
+    var totalSum = (item.totalMoney / 100).toStringAsFixed(2).split('.');
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
       alignment: Alignment.bottomRight,
       width: ScreenUtil().setWidth(750),
       child: RichText(
         text: TextSpan(
             text: '共计：',
-            style: TextStyle(color: Color(0xFF333333)),
+            style: TextStyle(
+              color: Color(0xFF242526),
+              fontSize: ScreenUtil().setSp(24),
+            ),
             children: <TextSpan>[
               TextSpan(
-                text: '￥${(item.totalMoney / 100).toStringAsFixed(2)}',
+                text: '￥',
                 style: TextStyle(
-                  color: Color(0xFFF2A631),
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(24),
+                ),
+              ),
+              TextSpan(
+                text: '${totalSum[0]}.',
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              ),
+              TextSpan(
+                text: '${totalSum[1]}',
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(24),
                 ),
               ),
             ]),
@@ -651,22 +669,45 @@ class DeliveryArrangement extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 20),
             color: Colors.white,
-            child: ExpansionTile(
-              title: Text(
-                '发货安排',
-                style: TextStyle(color: Colors.black),
-              ),
-              trailing: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.black,
-              ),
-              backgroundColor: Colors.white,
-              children: <Widget>[
-                _deliverList(goodsInfo.result.dispatchVos, goodsInfo.result),
-                _addShipment(goodsInfo.result, context, len),
-                _shipmentButtom(context, goodsInfo.result),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 19,
+                  // bottom: 15,
+                  child: Container(
+                    height: ScreenUtil().setHeight(46),
+                    width: ScreenUtil().setWidth(10),
+                    color: Color(0xFF2A83FF),
+                    child: Text(''),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: ExpansionTile(
+                    title: Text(
+                      '发货安排',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(32),
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF242526),
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black,
+                    ),
+                    backgroundColor: Colors.white,
+                    children: <Widget>[
+                      _deliverList(
+                          goodsInfo.result.dispatchVos, goodsInfo.result),
+                      _addShipment(goodsInfo.result, context, len),
+                      _shipmentButtom(context, goodsInfo.result),
+                    ],
+                    initiallyExpanded: true, //是否默认打开？
+                  ),
+                )
               ],
-              initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );
@@ -709,10 +750,11 @@ class DeliveryArrangement extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: Colors.black12,
+            color: Color(0XFFEAECF0),
           ),
         ),
       ),
+      margin: EdgeInsets.only(bottom: 10),
       child: Column(
         children: <Widget>[
           _productTitle(item, index, context, result),
@@ -738,15 +780,27 @@ class DeliveryArrangement extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           // padding: EdgeInsets.only(top: 5, bottom: 5),
-                          width: ScreenUtil().setWidth(300),
-                          child: Text('第${item.batch}次计划发货时间:'),
+                          // width: ScreenUtil().setWidth(300),
+                          child: Text(
+                            '第${item.batch}次计划发货时间:',
+                            style: TextStyle(
+                              color: Color(0xFF242526),
+                              fontSize: ScreenUtil().setSp(28),
+                              height: 1.1,
+                            ),
+                          ),
                         ),
+                        SizedBox(width: 5), // 50宽度
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             // width: ScreenUtil().setWidth(350),
                             child: Text(
                               '${item.planDeliveryTime}',
+                              style: TextStyle(
+                                color: Color(0xFF242526),
+                                fontSize: ScreenUtil().setSp(28),
+                              ),
                               maxLines: 1,
                             ),
                           ),
@@ -790,6 +844,7 @@ class DeliveryArrangement extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.only(top: 5),
                     height: item.status == 0 ? 0 : null,
                     child: Row(
                       children: <Widget>[
@@ -847,17 +902,20 @@ class DeliveryArrangement extends StatelessWidget {
             //设置四周边框
             border: new Border.all(
               width: 1,
-              color: Color(0xFFDAEDFE),
+              color: item.status == 0 ? Color(0xFF2A83FF) : Color(0xFFDCEEFC),
             ),
-            color: Color(0xFFDAEDFE),
+            // color: Color(0xFFDAEDFE),
+            color: item.status == 0 ? Color(0xFFFFFFFF) : Color(0xFFDCEEFC),
           ),
           margin: EdgeInsets.only(right: 10, top: 10),
-          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+          padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
           // width: ScreenUtil().setWidth(120),
           child: Text(
             '${statusType[item.status]}',
             style: TextStyle(
-                color: Color(0xFF5696D2), fontSize: ScreenUtil().setSp(24)),
+              color: Color(0xFF2A83FF),
+              fontSize: ScreenUtil().setSp(28),
+            ),
             maxLines: 1,
           ),
         ),
@@ -883,7 +941,7 @@ class DeliveryArrangement extends StatelessWidget {
           "复制",
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: Color(0xFF5696D2),
+            color: Color(0xFF2A83FF),
           ),
         ),
       );
@@ -919,7 +977,7 @@ class DeliveryArrangement extends StatelessWidget {
             "查看发货信息",
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: Color(0xFF5696D2),
+              color: Color(0xFF2A83FF),
             ),
           ),
           onTap: () {
@@ -1037,80 +1095,90 @@ class DeliveryArrangement extends StatelessWidget {
     //   print('字符串拼接$str');
     // }
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      child: Row(
-        children: <Widget>[
-          Container(
-            // alignment: Alignment.topCenter,
-            width: ScreenUtil().setWidth(150),
-            height: ScreenUtil().setHeight(150),
-            padding: EdgeInsets.only(top: 0, right: 10),
-            child: ImageWidgetBuilder.loadImage(
-                StringUtils.defaultIfEmpty(item.mainKey, '')),
-            // child: item.mainKey == 'null'
-            //     ? Image.asset('images/default.png')
-            //     : Image.network(
-            //         '${item.mainKey}',
-            //         fit: BoxFit.cover,
-            //         width: ScreenUtil().setWidth(150),
-            //         height: ScreenUtil().setHeight(150),
-            //       )
-            // Image.asset('images/icon.png'),
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    // '12323',
-                    '${item.productName}',
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-                // Container(
-                //   alignment: Alignment.centerLeft,
-                //   padding: EdgeInsets.only(top: 3, bottom: 3),
-                //   child: Text(
-                //     '￥${item.amount}',
-                //     // '${item.productDescript}',
-                //     maxLines: 2,
-                //     style: TextStyle(
-                //       fontSize: ScreenUtil().setSp(30),
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    // '规格：${item.skuValueList}',
-                    '规格：${item.specification}',
-                    style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 3, bottom: 3),
-                  child: Text(
-                    '数量：${item.number}',
-                    style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
-                  ),
-                ),
-              ],
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xffF5F6F8)),
+        borderRadius: BorderRadius.circular(5),
+        color: Color(0xffF5F6F8),
+      ),
+      margin: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              // alignment: Alignment.topCenter,
+              width: ScreenUtil().setWidth(140),
+              height: ScreenUtil().setHeight(140),
+              padding: EdgeInsets.only(top: 0, right: 10),
+              child: ImageWidgetBuilder.loadImage(
+                  StringUtils.defaultIfEmpty(item.mainKey, '')),
+              // child: item.mainKey == 'null'
+              //     ? Image.asset('images/default.png')
+              //     : Image.network(
+              //         '${item.mainKey}',
+              //         fit: BoxFit.cover,
+              //         width: ScreenUtil().setWidth(150),
+              //         height: ScreenUtil().setHeight(150),
+              //       )
+              // Image.asset('images/icon.png'),
             ),
-          )
-        ],
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      // '12323',
+                      '${item.productName}',
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Color(0xFF242526),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                  // Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   padding: EdgeInsets.only(top: 3, bottom: 3),
+                  //   child: Text(
+                  //     '￥${item.amount}',
+                  //     // '${item.productDescript}',
+                  //     maxLines: 2,
+                  //     style: TextStyle(
+                  //       fontSize: ScreenUtil().setSp(30),
+                  //     ),
+                  //   ),
+                  // ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      // '规格：${item.skuValueList}',
+                      '规格：${item.specification}',
+                      style: TextStyle(
+                        color: Color(0xFF9C9FA2),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 3, bottom: 3),
+                    child: Text(
+                      '数量：${item.number}',
+                      style: TextStyle(
+                        color: Color(0xFF9C9FA2),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
