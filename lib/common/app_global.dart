@@ -78,7 +78,7 @@ class Git {
   static Future checkAuditStatus() async {
     _prefs = await SharedPreferences.getInstance();
     try {
-      var val = await requestGet('checkAuditStatus');
+      var val = await requestNoLoadingGet('checkAuditStatus');
       if (val['code'] == 0) {
         _prefs.remove("auditStatusStatus");
         _prefs.setInt('auditStatusStatus', val['result']['auditStatus']);
@@ -90,17 +90,5 @@ class Git {
     } catch (e) {
       print(e);
     }
-
-    //  .then((val) {
-    //     print('全局调用方法');
-    //     if (val['code'] == 0) {
-    //       Reop auditstatue = Reop.fromJson(val['result']);
-    //       _prefs.setInt('auditStatusStatus', auditstatue.auditStatus);
-    //     } else if (val['code'] == 13001010) {
-    //       print('token 失效');
-    //       _prefs.clear();
-    //     }
-    //   });
-    // }
   }
 }
