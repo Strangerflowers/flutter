@@ -50,15 +50,27 @@ class _SaleaUpdateState extends State<SaleaUpdate> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
               Application.router.navigateTo(
                   context, "/salesdetail?id=${detailId}",
                   replace: true);
             },
           ),
-          title: Text('填写发货信息'),
+          title: Text(
+            '填写发货信息',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo,
@@ -159,10 +171,23 @@ class AddHeader extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xFF242526),
+                fontSize: ScreenUtil().setSp(28),
+                height: 1.1,
+              ),
+            ),
           ),
           Container(
-            child: Text('$content'),
+            child: Text(
+              '$content',
+              style: TextStyle(
+                color: Color(0xFF242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           )
         ],
       ),
@@ -189,11 +214,17 @@ class _UpdateFormState extends State<UpdateForm> {
                 prefixIcon: Container(
                   width: ScreenUtil().setWidth(200),
                   margin: EdgeInsets.only(top: 13.0, right: 5.0),
-                  child: Text('物流公司'),
+                  child: Text(
+                    '物流公司',
+                    style: TextStyle(
+                      color: Color(0xFF242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 ),
                 hintText: "请输入物流公司名称",
                 hintStyle: TextStyle(
-                  color: Colors.grey,
+                  color: Color(0xff9C9FA2),
                   fontSize: ScreenUtil().setSp(28),
                 ),
               ),
@@ -218,11 +249,17 @@ class _UpdateFormState extends State<UpdateForm> {
                 prefixIcon: Container(
                   width: ScreenUtil().setWidth(200),
                   margin: EdgeInsets.only(top: 13.0, right: 5.0),
-                  child: Text('快递单号'),
+                  child: Text(
+                    '快递单号',
+                    style: TextStyle(
+                      color: Color(0xFF242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 ),
                 hintText: "请填写快递单号",
                 hintStyle: TextStyle(
-                  color: Colors.grey,
+                  color: Color(0xff9C9FA2),
                   fontSize: ScreenUtil().setSp(28),
                 ),
               ),
@@ -352,10 +389,23 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             Container(
               width: ScreenUtil().setWidth(200),
-              child: Text('实际发货时间'),
+              child: Text(
+                '实际发货时间',
+                style: TextStyle(
+                  color: Color(0xFF242526),
+                  fontSize: ScreenUtil().setSp(28),
+                  height: 1.1,
+                ),
+              ),
             ),
             Expanded(
-              child: Text('$dayTime'),
+              child: Text(
+                '$dayTime',
+                style: TextStyle(
+                  color: Color(0xFF242526),
+                  fontSize: ScreenUtil().setSp(28),
+                ),
+              ),
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -576,19 +626,31 @@ class _ProductInformationState extends State<ProductInformation> {
   // 计划发货数量
   Widget _actualDelivery(title, item) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+      padding: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Container(
-                child: Text('$title'),
+                child: Text(
+                  '$title',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: Color(0xff242526),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomRight,
                   // padding: EdgeInsets.only(right: 20),
-                  child: Text('${item.planDeliveryNumber}'),
+                  child: Text(
+                    '${item.planDeliveryNumber}',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      color: Color(0xff242526),
+                    ),
+                  ),
                   // child: CartCount(item, index),
                 ),
               )
@@ -608,7 +670,13 @@ class _ProductInformationState extends State<ProductInformation> {
           Row(
             children: <Widget>[
               Container(
-                child: Text('实际发货数量'),
+                child: Text(
+                  '实际发货数量',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: Color(0xff242526),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
@@ -626,7 +694,12 @@ class _ProductInformationState extends State<ProductInformation> {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-                '已安排${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber <= 0 ? 0 : item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber}'),
+              '已安排${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber <= 0 ? 0 : item.number - item.totalActualDeliveryNumber - item.actualDeliveryNumber}',
+              style: TextStyle(
+                color: Color(0xff656769),
+                fontSize: ScreenUtil().setSp(24),
+              ),
+            ),
             // child: Text(
             //     '已发${item.totalActualDeliveryNumber}，剩余${item.number - item.totalActualDeliveryNumber}'),
           )
@@ -692,7 +765,8 @@ class _ProductInformationState extends State<ProductInformation> {
                     '${item.productName}',
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                      fontSize: ScreenUtil().setSp(24),
+                      color: Color(0xff242526),
                     ),
                   ),
                 ),
@@ -703,8 +777,8 @@ class _ProductInformationState extends State<ProductInformation> {
                     // '规格：${item.skuValueList}',
                     '规格：${item.specification}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -714,8 +788,8 @@ class _ProductInformationState extends State<ProductInformation> {
                   child: Text(
                     '数量：${item.number}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
