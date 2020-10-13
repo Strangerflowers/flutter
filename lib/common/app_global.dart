@@ -42,6 +42,7 @@ class Global {
         print(e);
       }
     }
+    await Git.checkAuditStatus();
 
     var oldauditstatue = _prefs.getInt('auditStatusStatus');
     if (oldauditstatue != null) {
@@ -51,7 +52,6 @@ class Global {
         print(e);
       }
     }
-    await Git.checkAuditStatus();
   }
 
   // 持久化Profile信息
