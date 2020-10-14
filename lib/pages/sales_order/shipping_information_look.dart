@@ -21,7 +21,26 @@ class ShippingInformationLook extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('发货信息'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '发货信息',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('发货信息'),
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo(context),
@@ -29,6 +48,7 @@ class ShippingInformationLook extends StatelessWidget {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Container(
+                  color: Color(0xffF5F6F8),
                   child: Column(
                     children: <Widget>[
                       LookHeader(),
@@ -62,6 +82,7 @@ class LookHeader extends StatelessWidget {
       if (goodsInfo != null) {
         var result = goodsInfo.result;
         return Container(
+          margin: EdgeInsets.only(top: 10),
           color: Colors.white,
           padding: EdgeInsets.only(left: 20, right: 20),
           child: Column(
@@ -98,10 +119,23 @@ class LookHeader extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xFF242526),
+                fontSize: ScreenUtil().setSp(28),
+                height: 1.1,
+              ),
+            ),
           ),
           Container(
-            child: Text('${content == 'null' ? '' : content}'),
+            child: Text(
+              '${content == 'null' ? '' : content}',
+              style: TextStyle(
+                color: Color(0xFF242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           )
         ],
       ),
@@ -118,14 +152,14 @@ class ProductInformation extends StatelessWidget {
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: EdgeInsets.only(bottom: 10),
             color: Colors.white,
             child: _recommedList(
                 goodsInfo.result.dispatchItemVos, goodsInfo.result),
           ),
         );
       } else {
-        return Container(child: Text('加载中......'));
+        return Container(child: Text('暂无数据'));
       }
     });
   }
@@ -160,13 +194,25 @@ class ProductInformation extends StatelessWidget {
           Row(
             children: <Widget>[
               Container(
-                child: Text('$title'),
+                child: Text(
+                  '$title',
+                  style: TextStyle(
+                    color: Color(0xff242526),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomRight,
                   // padding: EdgeInsets.only(right: 20),
-                  child: Text('${text == 'null' ? '' : text}'),
+                  child: Text(
+                    '${text == 'null' ? '' : text}',
+                    style: TextStyle(
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                   // child: CartCount(item, index),
                 ),
               )
@@ -214,14 +260,25 @@ class ProductInformation extends StatelessWidget {
             Row(
               children: <Widget>[
                 Container(
-                  child: Text('收货数量'),
+                  child: Text(
+                    '收货数量',
+                    style: TextStyle(
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Container(
                     alignment: Alignment.bottomRight,
                     // padding: EdgeInsets.only(right: 20),
                     child: Text(
-                        '${item.actualConsigneeNumber == 'null' ? '' : item.actualConsigneeNumber}'),
+                      '${item.actualConsigneeNumber == 'null' ? '' : item.actualConsigneeNumber}',
+                      style: TextStyle(
+                        color: Color(0xff242526),
+                        fontSize: ScreenUtil().setSp(28),
+                      ),
+                    ),
                     // child: CartCount(item, index),
                   ),
                 )
@@ -241,12 +298,12 @@ class ProductInformation extends StatelessWidget {
   // 商品信息
   Widget _goodsItem(item) {
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+      padding: EdgeInsets.all(20),
       child: Row(
         children: <Widget>[
           Container(
-            width: ScreenUtil().setWidth(150),
-            height: ScreenUtil().setHeight(150),
+            width: ScreenUtil().setWidth(140),
+            height: ScreenUtil().setHeight(140),
             padding: EdgeInsets.only(top: 0, right: 10),
             child: ImageWidgetBuilder.loadImage(
                 StringUtils.defaultIfEmpty(item.mainKey, '')),
@@ -269,7 +326,8 @@ class ProductInformation extends StatelessWidget {
                     '${item.productName}',
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF242526),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -280,8 +338,8 @@ class ProductInformation extends StatelessWidget {
                     // '规格：${item.skuValueList}',
                     '规格：${item.specification}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -291,8 +349,8 @@ class ProductInformation extends StatelessWidget {
                   child: Text(
                     '数量：${item.number}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -352,10 +410,22 @@ class Quotation extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Container(
-            child: Text('${content == 'null' ? '' : content}'),
+            child: Text(
+              '${content == 'null' ? '' : content}',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           )
         ],
       ),
@@ -378,13 +448,21 @@ class Quotation extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Container(
-            width: ScreenUtil().setWidth(300),
-            height: ScreenUtil().setHeight(300),
+            width: ScreenUtil().setWidth(200),
+            height: ScreenUtil().setHeight(200),
             child: urls != null
-                ? Image.network(urls[0])
+                ? Image.network(
+                    urls[0],
+                  )
                 : Image.asset('images/icon.png'),
             // child: Image.network('${urls != null ? urls[0] : ''}'),
             // 轮播图
