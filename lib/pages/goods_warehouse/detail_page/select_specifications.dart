@@ -83,7 +83,8 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
       child: Row(
         children: <Widget>[
           Container(
-            width: ScreenUtil().setWidth(120),
+            width: ScreenUtil().setWidth(160),
+            height: ScreenUtil().setHeight(160),
             padding: EdgeInsets.only(top: 0, right: 10, left: 10),
             child: ImageWidgetBuilder.loadImage(
                 StringUtils.defaultIfEmpty(imageUrl, '')),
@@ -118,6 +119,10 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                   Expanded(
                     child: Text(
                       goodsItem.name,
+                      style: TextStyle(
+                        color: Color(0xFF242526),
+                        fontSize: ScreenUtil().setSp(24),
+                      ),
                       maxLines: 2,
                     ),
                   ),
@@ -145,10 +150,18 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
             child: selectGoodsItem == null
                 ? Text(
                     '库存：  ${spuStock}',
+                    style: TextStyle(
+                      color: Color(0xff9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
+                    ),
                     maxLines: 2,
                   )
                 : Text(
                     '库存：${selectGoodsItem.stock}',
+                    style: TextStyle(
+                      color: Color(0xff9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
+                    ),
                     maxLines: 2,
                   ),
           ),
@@ -156,7 +169,10 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
             children: <Widget>[
               Text(
                 '￥${selectGoodsItem == null ? goodsItem.priceRange == 'null' ? '' : goodsItem.priceRange : MoneyUtil.changeYWithUnit((selectGoodsItem.price / 100).toString(), MoneyUnit.NORMAL, format: MoneyFormat.NORMAL)}',
-                style: TextStyle(color: Color(0xFFF0B347)),
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(32),
+                ),
               ),
             ],
           ),
@@ -368,10 +384,10 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           label: item['status'] == 0
-              ? Text(item['skul'], style: TextStyle(color: Color(0XFFCCCCCC)))
+              ? Text(item['skul'], style: TextStyle(color: Color(0XFFF5F6F8)))
               : Text(item['skul']),
           backgroundColor:
-              item['status'] == 0 ? Color(0XFFEEEEEE) : Color(0XFFCCCCCC),
+              item['status'] == 0 ? Color(0XFFEEEEEE) : Color(0XFFF5F6F8),
           selected: selectedChoices.contains(item['skul']),
           onSelected: (selected) {
             selectedChoices = [];
