@@ -18,10 +18,25 @@ class DetailsDescribe extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container(
-                  child: Text('商品描述'),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '商品描述',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 ),
                 Container(
-                  child: Text(goodsInfo.description),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    goodsInfo.description,
+                    style: TextStyle(
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                  ),
                 )
                 // _goodsImage(),
               ],

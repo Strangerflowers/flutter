@@ -184,7 +184,11 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
                   height: ScreenUtil().setHeight(40),
                   child: Text(
                     '规格',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
                   ),
                 ),
                 Stack(
@@ -290,17 +294,32 @@ class _DetailsSelectAreaState extends State<DetailsSelectArea> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(right: 10),
-              child: Text('规格'),
+              child: Text(
+                '规格',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff242526),
+                  fontSize: ScreenUtil().setSp(28),
+                ),
+              ),
             ),
             Expanded(
               child: Container(
-                child:
-                    Text('${showSelectItem == null ? '请选择' : showSelectItem}'),
+                child: Text(
+                  '${showSelectItem == null ? '请选择' : showSelectItem}',
+                  style: TextStyle(
+                    color: Color(0xff9C9FA2),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
               ),
             ),
             Container(
               alignment: Alignment.bottomRight,
-              child: Icon(Icons.keyboard_arrow_right),
+              child: Icon(
+                Icons.keyboard_arrow_right,
+                color: Color(0xff9C9FA2),
+              ),
             ),
             // RaisedButton(
             //   child: Text("显示底部菜单列表"),

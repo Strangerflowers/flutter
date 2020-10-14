@@ -83,11 +83,30 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('商品库'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '商品库',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
         ),
         body: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: Container(
+            color: Color(0xffF5F6F8),
             child: Column(
               children: <Widget>[
                 _goodsPage(list),
@@ -107,7 +126,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
 
   Widget _goodsPage(list) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      // margin: EdgeInsets.only(bottom: 20),
       height: ScreenUtil().setHeight(90),
       // width: ScreenUtil().setWidth(750),
       decoration: BoxDecoration(
@@ -161,9 +180,9 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                   child: Text(
                     item,
                     style: TextStyle(
-                      color: isClick ? Color(0xFF4389ED) : Colors.black,
+                      color: isClick ? Color(0xFF2A83FF) : Color(0xFF9C9FA2),
                       // decoration: TextDecoration.underline, //给文字添加下划线
-                      fontSize: ScreenUtil().setSp(30),
+                      fontSize: ScreenUtil().setSp(28),
                       // height: 1.5,
                     ),
                   ),
@@ -173,7 +192,7 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                   height: 2,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: isClick ? Color(0xFF4389ED) : Colors.white),
+                        color: isClick ? Color(0xFF2A83FF) : Colors.white),
                   ),
                 ),
               ],
@@ -301,8 +320,8 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: ScreenUtil().setWidth(120),
-              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(140),
+              height: ScreenUtil().setHeight(140),
               padding: EdgeInsets.only(right: 10),
               child: ImageWidgetBuilder.loadImage(
                   StringUtils.defaultIfEmpty(item.imageUrl, '')),
@@ -326,7 +345,10 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
             padding: EdgeInsets.only(bottom: 5),
             child: Text(
               '${item.name}',
-              style: TextStyle(fontSize: ScreenUtil().setSp(28)),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: Color(0xff242526),
+              ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -335,7 +357,10 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
             children: <Widget>[
               Text(
                 '￥${item.priceRange == null || item.priceRange == 'null' ? '' : item.priceRange}',
-                style: TextStyle(color: Color(0xFFF0B347)),
+                style: TextStyle(
+                  color: Color(0xFFFF9B00),
+                  fontSize: ScreenUtil().setSp(32),
+                ),
               ),
               _buttom(item),
             ],
@@ -348,7 +373,8 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                   child: Text(
                     '请求：${item.action == 'null' ? '' : actionType[item.action]}',
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      color: Color(0xff656769),
+                      fontSize: ScreenUtil().setSp(28),
                     ),
                   ),
                 ),
@@ -358,7 +384,8 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
                     child: Text(
                       '状态：${item.auditStatus == 'null' || item.auditStatus == null ? '' : auditStatusType[item.auditStatus]}',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
+                        color: Color(0xff656769),
+                        fontSize: ScreenUtil().setSp(28),
                       ),
                     ),
                   ),
@@ -518,116 +545,116 @@ class _GoodsIndexPageState extends State<GoodsIndexPage> {
   }
 }
 
-class GoodsPage extends StatefulWidget {
-  @override
-  _GoodsPageState createState() => _GoodsPageState();
-}
+// class GoodsPage extends StatefulWidget {
+//   @override
+//   _GoodsPageState createState() => _GoodsPageState();
+// }
 
-class _GoodsPageState extends State<GoodsPage> {
-  int currentStatus = 1;
-  @override
-  void initState() {
-    super.initState();
-  }
+// class _GoodsPageState extends State<GoodsPage> {
+//   int currentStatus = 1;
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
 
-  List list = ['售卖中', '未发布', '已下架'];
-  //  {0: '草稿', 1: '售卖中', -1: '已下架'};
-  var strtusType = {0: 1, 1: 0, 2: -1};
-  // int listIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Provide<GoodsWarehose>(builder: (context, child, counter) {
-      if (Provide.value<GoodsWarehose>(context).provideIndex != null &&
-          currentStatus == 1) {
-        Provide.value<GoodsWarehose>(context).activeIndex(0);
-      }
-      return Container(
-        margin: EdgeInsets.only(bottom: 20),
-        height: ScreenUtil().setHeight(90),
-        // width: ScreenUtil().setWidth(750),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(width: 1, color: Colors.black12),
-          ),
-        ),
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return _typeWell(list[index], index);
-          },
-          itemCount: list.length,
-          shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-          scrollDirection: Axis.horizontal,
-        ),
-        // ),
-      );
-    });
-  }
+//   List list = ['售卖中', '未发布', '已下架'];
+//   //  {0: '草稿', 1: '售卖中', -1: '已下架'};
+//   var strtusType = {0: 1, 1: 0, 2: -1};
+//   // int listIndex = 0;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Provide<GoodsWarehose>(builder: (context, child, counter) {
+//       if (Provide.value<GoodsWarehose>(context).provideIndex != null &&
+//           currentStatus == 1) {
+//         Provide.value<GoodsWarehose>(context).activeIndex(0);
+//       }
+//       return Container(
+//         margin: EdgeInsets.only(bottom: 20),
+//         height: ScreenUtil().setHeight(90),
+//         // width: ScreenUtil().setWidth(750),
+//         decoration: BoxDecoration(
+//           color: Colors.white,
+//           border: Border(
+//             bottom: BorderSide(width: 1, color: Colors.black12),
+//           ),
+//         ),
+//         child: ListView.builder(
+//           itemBuilder: (context, index) {
+//             return _typeWell(list[index], index);
+//           },
+//           itemCount: list.length,
+//           shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
+//           scrollDirection: Axis.horizontal,
+//         ),
+//         // ),
+//       );
+//     });
+//   }
 
-  // 获取商品库列表数据
-  void _getGoodsList() async {
-    var formData = {
-      'pageNum': 1,
-      "status": currentStatus,
-      'pageSize': 10,
-    };
-    print('商品库列表数据传参$formData');
-    await requestGet('goodsList', formData: formData).then((val) {
-      // var data = json.decode(val.toString());
-      GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
-      Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
-    });
-  }
+//   // 获取商品库列表数据
+//   void _getGoodsList() async {
+//     var formData = {
+//       'pageNum': 1,
+//       "status": currentStatus,
+//       'pageSize': 10,
+//     };
+//     print('商品库列表数据传参$formData');
+//     await requestGet('goodsList', formData: formData).then((val) {
+//       // var data = json.decode(val.toString());
+//       GoodsSearchList goodsList = GoodsSearchList.fromJson(val);
+//       Provide.value<GoodsWarehose>(context).getGoodsList(goodsList.result.list);
+//     });
+//   }
 
-  Widget _typeWell(item, int index) {
-    bool isClick = false;
-    isClick = (index == Provide.value<GoodsWarehose>(context).provideIndex
-        ? true
-        : false);
-    return Container(
-      child: InkWell(
-        onTap: () {
-          Provide.value<GoodsWarehose>(context).activeIndex(index);
-          setState(() {
-            currentStatus =
-                strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
-          });
-          _getGoodsList();
-        },
-        child: Container(
-          // flex: 1,
-          child: Container(
-            alignment: Alignment.center,
-            width: ScreenUtil().setWidth(250),
-            // padding: EdgeInsets.fromLTRB(5.0, 10.0, 0, 10.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
-                  // padding: EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      color: isClick ? Color(0xFF4389ED) : Colors.black,
-                      // decoration: TextDecoration.underline, //给文字添加下划线
-                      fontSize: ScreenUtil().setSp(30),
-                      // height: 1.5,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                  height: 2,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                        color: isClick ? Color(0xFF4389ED) : Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   Widget _typeWell(item, int index) {
+//     bool isClick = false;
+//     isClick = (index == Provide.value<GoodsWarehose>(context).provideIndex
+//         ? true
+//         : false);
+//     return Container(
+//       child: InkWell(
+//         onTap: () {
+//           Provide.value<GoodsWarehose>(context).activeIndex(index);
+//           setState(() {
+//             currentStatus =
+//                 strtusType[Provide.value<GoodsWarehose>(context).provideIndex];
+//           });
+//           _getGoodsList();
+//         },
+//         child: Container(
+//           // flex: 1,
+//           child: Container(
+//             alignment: Alignment.center,
+//             width: ScreenUtil().setWidth(250),
+//             // padding: EdgeInsets.fromLTRB(5.0, 10.0, 0, 10.0),
+//             child: Column(
+//               children: <Widget>[
+//                 Container(
+//                   padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 8.0),
+//                   // padding: EdgeInsets.only(bottom: 20),
+//                   child: Text(
+//                     item,
+//                     style: TextStyle(
+//                       color: isClick ? Color(0xFF2A83FF) : Color(0xFF9C9FA2),
+//                       // decoration: TextDecoration.underline, //给文字添加下划线
+//                       fontSize: ScreenUtil().setSp(30),
+//                       // height: 1.5,
+//                     ),
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   width: 20,
+//                   height: 2,
+//                   child: DecoratedBox(
+//                     decoration: BoxDecoration(
+//                         color: isClick ? Color(0xFF2A83FF) : Colors.white),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -14,13 +14,25 @@ class GoodsDetailsPage extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text('商品详细页'),
+          title: Text(
+            '商品详细页',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
         ),
         body: FutureBuilder(
           future: _getBackInfo(context),
