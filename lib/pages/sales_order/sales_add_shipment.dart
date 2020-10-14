@@ -58,7 +58,28 @@ class _AddShipmentScheduleState extends State<AddShipmentSchedule> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('添加发货安排'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Application.router.navigateTo(
+                  context, "/salesdetail?id=$returnId",
+                  replace: true);
+            },
+          ),
+          title: Text(
+            '添加发货安排',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('添加发货安排'),
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo,
@@ -72,6 +93,7 @@ class _AddShipmentScheduleState extends State<AddShipmentSchedule> {
               if (data.result != null) {
                 return SingleChildScrollView(
                   child: Container(
+                    color: Color(0xffF5F6F8),
                     child: Column(
                       children: <Widget>[
                         ShipmentBatch(len),
@@ -128,6 +150,7 @@ class ShipmentBatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -152,10 +175,22 @@ class ShipmentBatch extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Container(
-            child: Text('${int.parse(content) + 1}'),
+            child: Text(
+              '${int.parse(content) + 1}',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           )
         ],
       ),
@@ -186,7 +221,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     return Provide<SalesOrderAddProvide>(builder: (context, child, val) {
       return Container(
         padding: EdgeInsets.all(20),
-        margin: EdgeInsets.only(bottom: 20),
+        margin: EdgeInsets.only(bottom: 10),
         color: Colors.white,
         child: _onClick(context),
       );
@@ -283,10 +318,22 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             Container(
               width: ScreenUtil().setWidth(200),
-              child: Text('计划发货时间'),
+              child: Text(
+                '计划发货时间',
+                style: TextStyle(
+                  color: Color(0xff242526),
+                  fontSize: ScreenUtil().setSp(28),
+                ),
+              ),
             ),
             Expanded(
-              child: Text('$dayTime'),
+              child: Text(
+                '$dayTime',
+                style: TextStyle(
+                  color: Color(0xff242526),
+                  fontSize: ScreenUtil().setSp(28),
+                ),
+              ),
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -382,6 +429,7 @@ class OkBotton extends StatelessWidget {
     return Provide<SalesOrderAddProvide>(builder: (context, child, val) {
       // var goodsInfo = Provide.value<SalesOrderAddProvide>(context).salesList;
       return Container(
+        color: Color(0xffFFFFFF),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -496,7 +544,7 @@ class _ProductInformationState extends State<ProductInformation> {
       // if (goodsInfo != null) {
       return SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(bottom: 20),
+          // margin: EdgeInsets.only(bottom: 20),
           color: Colors.white,
           child: _recommedList(data),
         ),
@@ -512,7 +560,7 @@ class _ProductInformationState extends State<ProductInformation> {
   Widget _recommedList(list) {
     // if (list.length > 0) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      // margin: EdgeInsets.only(top: 10),
       // height: ScreenUtil().setHeight(1000),
       child: SizedBox(
         child: ListView.builder(
@@ -531,13 +579,19 @@ class _ProductInformationState extends State<ProductInformation> {
   Widget _shipmentquantity(item, index) {
     var surplusNum;
     return Container(
-      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+      padding: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Container(
-                child: Text('计划发货数量'),
+                child: Text(
+                  '计划发货数量',
+                  style: TextStyle(
+                    color: Color(0xff242526),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
@@ -555,7 +609,12 @@ class _ProductInformationState extends State<ProductInformation> {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-                '已安排${item.totalPlanDeliveryNumber}，剩余${item.number - item.totalPlanDeliveryNumber - item.planDeliveryNumber <= 0 ? 0 : item.number - item.totalPlanDeliveryNumber - item.planDeliveryNumber}'),
+              '已安排${item.totalPlanDeliveryNumber}，剩余${item.number - item.totalPlanDeliveryNumber - item.planDeliveryNumber <= 0 ? 0 : item.number - item.totalPlanDeliveryNumber - item.planDeliveryNumber}',
+              style: TextStyle(
+                color: Color(0xff656769),
+                fontSize: ScreenUtil().setSp(24),
+              ),
+            ),
           )
         ],
       ),
@@ -586,12 +645,12 @@ class _ProductInformationState extends State<ProductInformation> {
   // 商品信息
   Widget _goodsItem(item) {
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Row(
         children: <Widget>[
           Container(
-            width: ScreenUtil().setWidth(120),
-            height: ScreenUtil().setHeight(100),
+            width: ScreenUtil().setWidth(140),
+            height: ScreenUtil().setHeight(140),
             padding: EdgeInsets.only(top: 0, right: 10),
             child: ImageWidgetBuilder.loadImage(
                 StringUtils.defaultIfEmpty(item.mainKey, '')),
@@ -617,7 +676,8 @@ class _ProductInformationState extends State<ProductInformation> {
                     '${item.productName}',
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                      fontSize: ScreenUtil().setSp(24),
+                      color: Color(0xff242526),
                     ),
                   ),
                 ),
@@ -628,8 +688,8 @@ class _ProductInformationState extends State<ProductInformation> {
                     // '规格：${item.skuValueList}',
                     '规格：${item.specification}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -639,8 +699,8 @@ class _ProductInformationState extends State<ProductInformation> {
                   child: Text(
                     '数量：${item.number} ${item.unit}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
