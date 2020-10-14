@@ -511,7 +511,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
           Container(
             width: ScreenUtil().setWidth(140),
             height: ScreenUtil().setHeight(140),
-            padding: EdgeInsets.only(top: 0, right: 10),
+            padding: EdgeInsets.only(right: 10),
             child: ImageWidgetBuilder.loadImage(
                 StringUtils.defaultIfEmpty(item.skuUrl, '')),
             // child: item.skuUrl == null ||
