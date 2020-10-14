@@ -89,11 +89,31 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('报价单'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '报价单',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('报价单'),
         ),
         body: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: Container(
+            color: Color(0xffF5F6F8),
             child: Column(
               children: <Widget>[
                 _tabs(list),
@@ -110,7 +130,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
 
   Widget _tabs(list) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 10),
+      // margin: EdgeInsets.only(bottom: 20),
       height: ScreenUtil().setHeight(93),
       // width: ScreenUtil().setWidth(750),
       decoration: BoxDecoration(
@@ -169,7 +190,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                 child: Text(
                   item,
                   style: TextStyle(
-                    color: isClick ? Color(0xFF4389ED) : Colors.black,
+                    color: isClick ? Color(0xFF2A83FF) : Color(0xff9C9FA2),
                     // decoration: TextDecoration.underline, //给文字添加下划线
                     fontSize: ScreenUtil().setSp(30),
                     // height: 1.5,
@@ -181,7 +202,7 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                 height: 2,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                      color: isClick ? Color(0xFF4389ED) : Colors.white),
+                      color: isClick ? Color(0xFF2A83FF) : Colors.white),
                 ),
               ),
             ],
@@ -207,7 +228,10 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
         // height: ScreenUtil().setHeight(1000),
         child: Expanded(
           child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(height: .0),
+            separatorBuilder: (context, index) => Divider(
+              height: .0,
+              color: Colors.white,
+            ),
             itemCount: list.length + 1,
             physics: AlwaysScrollableScrollPhysics(),
             shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
@@ -313,8 +337,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                   padding: EdgeInsets.only(right: 10.0),
                   child: Image.asset(
                     'images/companyLabel.png',
-                    width: 20,
-                    height: 20,
+                    width: 16,
+                    height: 16,
                   ),
                   // child: Icon(Iconfont.companyLabel,
                   //     color: Color(0xFF5A99FF), size: 20.0),
@@ -324,8 +348,9 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                     child: Text(
                       '${item.orgName}',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: Color(0xFF333333),
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Color(0xFF242526),
+                        fontWeight: FontWeight.bold,
                         height: 1.5,
                       ),
                     ),
@@ -344,9 +369,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                   child: Text(
                     '联系人',
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      color: Color(0xFF3333333),
-                      height: 1.5,
+                      fontSize: ScreenUtil().setSp(28),
+                      color: Color(0xFF242526),
                     ),
                   ),
                 ),
@@ -355,9 +379,10 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                     child: Text(
                       '${item.linkPerson}-${item.linkPhone}',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: Color(0xFF3333333),
-                        height: 1.5,
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Color(0xFF242526),
+                        fontWeight: FontWeight.bold,
+                        height: 1.1,
                       ),
                     ),
                   ),
@@ -378,8 +403,10 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                     child: Text(
                       '￥${(double.parse(item.totalAmount) / 100).toStringAsFixed(2)}（共${item.categoryNum}种${item.total}件）',
                       style: TextStyle(
-                        color: Color(0xFF333333),
-                        height: 1.5,
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Color(0xFF242526),
+                        fontWeight: FontWeight.bold,
+                        height: 1.1,
                       ),
                     ),
                   ),
@@ -482,8 +509,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
       child: Row(
         children: <Widget>[
           Container(
-            width: ScreenUtil().setWidth(150),
-            height: ScreenUtil().setHeight(150),
+            width: ScreenUtil().setWidth(140),
+            height: ScreenUtil().setHeight(140),
             padding: EdgeInsets.only(top: 0, right: 10),
             child: ImageWidgetBuilder.loadImage(
                 StringUtils.defaultIfEmpty(item.skuUrl, '')),
@@ -505,7 +532,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                     '${item.productDescript}',
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xff242526),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -515,8 +543,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                     // '规格：${item.skuValueList}',
                     '规格：$str',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -525,8 +553,8 @@ class _QuotationIndexPageState extends State<QuotationIndexPage> {
                   child: Text(
                     '数量：${item.num}',
                     style: TextStyle(
-                      color: Color(0xFFCCCCCC),
-                      fontSize: ScreenUtil().setSp(30),
+                      color: Color(0xFF9C9FA2),
+                      fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
                 ),
@@ -756,7 +784,7 @@ class _QuotationGoodsListState extends State<QuotationGoodsList> {
   Widget _merge(item, index) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
       child: InkWell(
         onTap: () {
           // 跳转到详情页面
