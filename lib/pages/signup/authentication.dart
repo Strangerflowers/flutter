@@ -306,15 +306,20 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
   void initState() {
     // setState(() {
     data = widget.data;
+    supplierType = data['supplierType'];
     typeList = data['supplierTypeName'];
     var categoryType;
     if (typeList != null) {
       categoryType = typeList.split('/');
       if (categoryType.length == 1) {
         categoryone = categoryType[0];
+        categoryoneId = supplierType;
+        supplierType = null;
       } else if (categoryType.length == 2) {
         categoryone = categoryType[0];
         categorytwo = categoryType[1];
+        categorytwoId = supplierType;
+        supplierType = null;
       } else {
         categoryone = categoryType[0];
         categorytwo = categoryType[1];
@@ -326,10 +331,9 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
       categorythree = '';
     }
 
-    supplierType = data['supplierType'];
+    // supplierType = data['supplierType'];
     companyAddressName = data['companyDistrictName'];
     auditStatus = data['auditStatus'];
-    supplierType = data['supplierType'];
     companyCode = data['companyCode'];
     companyDetailAddr = data['companyDetailAddr']; //详细地址
     companyMobile = data['companyMobile']; //公司电话
@@ -1347,12 +1351,12 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
             //   return;
             // }
             var supplierTypeId;
-            if (categoryoneId != null) {
-              supplierTypeId = categoryoneId;
-            } else if (categorytwoId != null) {
-              supplierTypeId = categorytwoId;
-            } else if (supplierType != null) {
+            if (supplierType != null && supplierType != '') {
               supplierTypeId = supplierType;
+            } else if (categorytwoId != null && categorytwoId != '') {
+              supplierTypeId = categorytwoId;
+            } else if (categoryoneId != null && categoryoneId != '') {
+              supplierTypeId = categoryoneId;
             }
             if (supplierTypeId == null ||
                 supplierTypeId == '' ||
@@ -1365,6 +1369,11 @@ class _AuthenticationFormState extends State<AuthenticationForm> {
                 companyCode == 'null') {
               Toast.toast(context, msg: '公司地址不能为空');
               return;
+            }
+            if (businessLicenseIssuedKey == null ||
+                businessLicenseIssuedKey == '' ||
+                businessLicenseIssuedKey == 'null') {
+              return Toast.toast(context, msg: '营业执照不能为空');
             }
             var formData = {
               "auditStatus": 1,
