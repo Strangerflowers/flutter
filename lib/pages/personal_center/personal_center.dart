@@ -284,9 +284,15 @@ class PersonalCenter extends StatelessWidget {
             ),
             child: ListTile(
               leading: Image.asset('images/${item['code']}.png',
-                  width: 30, height: 30),
+                  width: 24, height: 24),
               // leading: Icon(Iconfont.certificationInfo),
-              title: Text(title),
+              title: Text(
+                title,
+                style: TextStyle(
+                  color: Color(0xff242526),
+                  fontSize: ScreenUtil().setSp(32),
+                ),
+              ),
               trailing: Icon(Icons.keyboard_arrow_right),
             ),
           ),
@@ -307,7 +313,7 @@ class PersonalCenter extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(5),
         decoration: new BoxDecoration(
-          border: new Border.all(width: 1.0, color: Color(0xFFE2B35B)),
+          border: new Border.all(width: 1.0, color: Color(0xFFFF9B00)),
           color: Colors.white,
           borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
         ),
@@ -315,7 +321,7 @@ class PersonalCenter extends StatelessWidget {
           '${asditText[result['auditStatus']]}',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(20),
-            color: Color(0xFFE2B35B),
+            color: Color(0xFFFF9B00),
           ),
         ),
       );
@@ -348,8 +354,8 @@ class PersonalCenter extends StatelessWidget {
         child: Text(
           '退出登录',
           style: TextStyle(
-            color: Color(0xFFD47776),
-            fontSize: ScreenUtil().setSp(40),
+            color: Color(0xFFFF4B4B),
+            fontSize: ScreenUtil().setSp(32),
           ),
         ),
       ),
