@@ -18,7 +18,26 @@ class ProcurementPlan extends StatelessWidget {
     return FlutterEasyLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('采购计划'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '采购计划',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF242526),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          // title: Text('采购计划'),
         ),
         body: FutureBuilder(
           future: _getBackDetailInfo(context),
@@ -59,24 +78,45 @@ class ExpansionTileDome extends StatelessWidget {
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            child: ExpansionTile(
-              title: Text(
-                '基础信息',
-                style: TextStyle(color: Colors.black),
-              ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
-              // leading: Icon(Icons.ac_unit),
-              backgroundColor: Colors.white,
-              children: <Widget>[
-                _mergeInformation(goodsInfo.result, context),
-              ],
-              initiallyExpanded: true, //是否默认打开？
-            ),
-          ),
+              margin: EdgeInsets.only(bottom: 20),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 0,
+                    top: 19,
+                    // bottom: 15,
+                    child: Container(
+                      height: ScreenUtil().setHeight(46),
+                      width: ScreenUtil().setWidth(10),
+                      color: Color(0xFF2A83FF),
+                      child: Text(''),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 5),
+                    child: ExpansionTile(
+                      title: Text(
+                        '基础信息',
+                        style: TextStyle(
+                          color: Color(0XFF242526),
+                          fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // trailing: Icon(
+                      //   Icons.keyboard_arrow_down,
+                      //   color: Colors.black,
+                      // ),
+                      // leading: Icon(Icons.ac_unit),
+                      backgroundColor: Colors.white,
+                      children: <Widget>[
+                        _mergeInformation(goodsInfo.result, context),
+                      ],
+                      initiallyExpanded: true, //是否默认打开？
+                    ),
+                  ),
+                ],
+              )),
         );
       } else {
         return Container(
@@ -111,10 +151,22 @@ class ExpansionTileDome extends StatelessWidget {
         children: <Widget>[
           Container(
             width: ScreenUtil().setWidth(200),
-            child: Text('$title'),
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           ),
           Container(
-            child: Text('$content'),
+            child: Text(
+              '$content',
+              style: TextStyle(
+                color: Color(0xff242526),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
           )
         ],
       ),
@@ -131,22 +183,44 @@ class ProductInformation extends StatelessWidget {
       if (goodsInfo != null) {
         return SingleChildScrollView(
           child: Container(
-            child: ExpansionTile(
-              title: Text(
-                '需求商品',
-                style: TextStyle(color: Colors.black),
-              ),
-              // trailing: Icon(
-              //   Icons.keyboard_arrow_down,
-              //   color: Colors.black,
-              // ),
-              backgroundColor: Colors.white,
-              children: <Widget>[
-                _recommedList(goodsInfo.result.groupDetailList),
-                _planMark(goodsInfo.result)
-                // _productItem(),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 19,
+                  // bottom: 15,
+                  child: Container(
+                    height: ScreenUtil().setHeight(46),
+                    width: ScreenUtil().setWidth(10),
+                    color: Color(0xFF2A83FF),
+                    child: Text(''),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: ExpansionTile(
+                    title: Text(
+                      '需求商品',
+                      style: TextStyle(
+                        color: Color(0xff242526),
+                        fontSize: ScreenUtil().setSp(32),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // trailing: Icon(
+                    //   Icons.keyboard_arrow_down,
+                    //   color: Colors.black,
+                    // ),
+                    backgroundColor: Colors.white,
+                    children: <Widget>[
+                      _recommedList(goodsInfo.result.groupDetailList),
+                      _planMark(goodsInfo.result)
+                      // _productItem(),
+                    ],
+                    initiallyExpanded: true, //是否默认打开？
+                  ),
+                ),
               ],
-              initiallyExpanded: true, //是否默认打开？
             ),
           ),
         );
@@ -212,9 +286,9 @@ class ProductInformation extends StatelessWidget {
       child: Text(
         '${item.productCategoryName}（共${item.categoryNum}种${item.total}件）',
         style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: ScreenUtil().setSp(32),
-          color: Color(0xFF423F42),
+          fontWeight: FontWeight.bold,
+          fontSize: ScreenUtil().setSp(28),
+          color: Color(0xFF242526),
         ),
       ),
     );
@@ -227,8 +301,8 @@ class ProductInformation extends StatelessWidget {
       child: Text(
         '${item.productDescript}（${item.num}${item.typeName}）',
         style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          color: Color(0xFF969497),
+          fontSize: ScreenUtil().setSp(28),
+          color: Color(0xFF656769),
         ),
       ),
     );
@@ -266,8 +340,9 @@ class ProductInformation extends StatelessWidget {
               child: Text(
                 '备注',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: Color(0xFF423F42),
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF242526),
                 ),
               ),
             ),
@@ -276,8 +351,8 @@ class ProductInformation extends StatelessWidget {
               child: Text(
                 '${item.remark == null || item.remark == 'null' ? '' : item.remark}',
                 style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: Color(0xFF575558),
+                    fontSize: ScreenUtil().setSp(28),
+                    color: Color(0xFF242526),
                     height: 1.5),
               ),
             )
