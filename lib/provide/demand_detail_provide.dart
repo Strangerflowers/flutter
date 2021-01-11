@@ -22,9 +22,10 @@ class DemandDetailProvide with ChangeNotifier {
   var arr = [];
   // 从后台获取数据
   getDemandDetailData(String id) {
-    FormData formData = FormData.fromMap({'demandId': id});
+    // FormData formData = FormData.fromMap({'demandId': id});
+    // var formData = {'demandId': id};
     // request('http://osapi-dev.gtland.cn/os_kernel_bid/app/suppliers/demandDetail?demandId=$id')
-    request('demandDetail', formData: formData).then((val) {
+    request1('demandDetail', id: id).then((val) {
       print('获取详情页数据$val');
       if (val['code'] == 0) {
         // goodsList = DemandDetailHome.fromJson(val);

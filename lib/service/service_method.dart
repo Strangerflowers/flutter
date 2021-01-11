@@ -51,6 +51,45 @@ Future request(
   }
 }
 
+// 临时修改后续完善
+Future request1(
+  url, {
+  id,
+}) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    EasyLoading.show(status: 'loading...');
+    Options options = new Options();
+    options.headers = {
+      Constants.X_OS_KERNEL_TOKEN: token,
+    };
+
+    String requestUrl = ServiceUrlHolder.getUrl(url);
+    LogUtils.info(
+        TAG,
+        sprintf('开始获取数据，请求地址:%s, 请求参数:%s  ....', [requestUrl, id]),
+        StackTrace.current);
+    var responseData;
+    if (id == null) {
+      responseData = await Network.post(
+        requestUrl,
+        options: options,
+      );
+    } else {
+      responseData = await Network.post(
+        requestUrl + '?demandId=' + id,
+        options: options,
+      );
+    }
+    EasyLoading.dismiss();
+    return responseData;
+  } catch (e) {
+    EasyLoading.dismiss();
+    LogUtils.error(TAG, 'request请求发生异常: ', StackTrace.current, e: e);
+  }
+}
+
 // 拼接参数
 Future requestPostSpl(
   url, {
